@@ -10,7 +10,7 @@
       <div class="comment__body markdown markdown--small" v-html="item.body"></div>
       <div class="comment__post-data">
         <span class="post-view__post-data-item">
-          <span class="post-view__post-value" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>{{item.payout}}
+          <span class="post-view__post-value" :class="{'payout-declined': item.payout_declined}">{{currencySymbol}}</span>{{item.payout}}
         </span>
         <span class="post-view__post-data-item">
           <a 

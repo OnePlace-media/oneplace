@@ -297,6 +297,11 @@ export default {
                 this.model.username = ''
                 this.model.wif = ''
                 this.processing = false
+          
+                this.$store.commit('setWelcomeChain', this.chain)
+                this.$store.commit('setTagsFormChain', this.chain)
+                this.$store.commit('setWelcomeStep', CONSTANTS.WELCOME.STEPS.SETUP_TAGS)
+                
                 this.$emit('success')
               })
           })

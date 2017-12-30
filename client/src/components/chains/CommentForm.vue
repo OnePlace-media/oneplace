@@ -1,5 +1,5 @@
 <template>
-  <form class="post-view__reply-block" @submit.prevent="onSubmit" novalidate>
+  <form class="post-view__reply-block" @submit.prevent="onSubmit" novalidate autocomplete="off">
     <textarea 
       :id="special ? 'comment-input-root' : `comment-input-${post.permlink}`"
       name="body" 

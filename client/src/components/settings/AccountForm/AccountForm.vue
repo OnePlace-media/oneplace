@@ -1,5 +1,5 @@
 <template>
-<form class="settings__account-action" v-if="view === VIEWS.SETTINGS" @submit.prevent="onSubmit">
+<form class="settings__account-action" v-if="view === VIEWS.SETTINGS" @submit.prevent="onSubmit" autocomplete="off">
   <p class="login-form__text login-form__text--settings">{{$t('settings.addBlockChainAccount')}}:</p>
   <chain-choose :is-settings="true" :chain.sync="chain"></chain-choose>
   <div class="login-form__wrapper">
@@ -52,7 +52,7 @@
   </div>
 </form>
 
-<form @submit.prevent="onSubmit" class="login-form__body"  v-else-if="view === VIEWS.WELCOME">
+<form @submit.prevent="onSubmit" class="login-form__body"  v-else-if="view === VIEWS.WELCOME" autocomplete="off">
   <p class="login-form__text">{{$t('welcome.attachChainStep.help')}}</p>
   <chain-choose :is-settings="true" :chain.sync="chain"></chain-choose>
 
@@ -108,7 +108,7 @@
   </div>
 </form>
 
-<form @submit.prevent="onSubmit" class="login-form__body"  v-else-if="view === VIEWS.ADD_ACCOUNT">
+<form @submit.prevent="onSubmit" class="login-form__body"  v-else-if="view === VIEWS.ADD_ACCOUNT" autocomplete="off">
   <p class="login-form__text">{{$t('addAccount.help')}}</p>
   <div class="login-form__wrapper">
     <div class="login-form__item">

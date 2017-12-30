@@ -85,7 +85,7 @@ export default {
   <header class="login-form__header login-form__header--large">
     <h2 class="h2 login-form__title">{{$t('auth.reset.header')}}</h2>
   </header>
-  <form class="login-form__body" @submit.prevent="onSubmit" novalidate>
+  <form class="login-form__body" @submit.prevent="onSubmit" novalidate autocomplete="off">
     <p class="login-form__text">{{$t('auth.reset.help')}}:</p>
     <div class="login-form__item">
       <input autocomplete="off" v-model="model.password" v-validate="'required'" name="password" type="password" :placeholder="$t('common.placeholders.password')" class="login-form__input" :class="{'login-form__input--error':errors.has('password')}">

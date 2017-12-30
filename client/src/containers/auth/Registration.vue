@@ -82,7 +82,7 @@ export default {
 <template>
 <div class="login-form" v-if="!formSuccessSubmitted">
   <auth-header></auth-header>
-  <form class="login-form__body" @submit.prevent="onSubmit" novalidate>
+  <form class="login-form__body" @submit.prevent="onSubmit" novalidate autocomplete="off">
     <div class="login-form__item">
       <input 
         id="email-input"

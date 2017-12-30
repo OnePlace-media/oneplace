@@ -1,5 +1,5 @@
 <template>
-<form @submit.prevent="onSubmit" class="settings__account-action">
+<form @submit.prevent="onSubmit" class="settings__account-action" autocomplete="off">
     <div class="login-form__wrapper">
       <div class="login-form__item" >
           <input 

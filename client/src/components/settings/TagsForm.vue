@@ -1,5 +1,5 @@
 <template>
-  <form class="tags-setup__form" @submit.prevent="onSubmit" v-if="view === 'welcome'">
+  <form class="tags-setup__form" @submit.prevent="onSubmit" v-if="view === 'welcome'" autocomplete="off">
     <h2 class="h2 tags-setup__title">{{$t('welcome.setupTagsStep.header')}}</h2>
     <div class="tags-setup__input-wrapper">
       <div class="tags-setup__input-text">

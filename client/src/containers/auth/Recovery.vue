@@ -72,7 +72,7 @@ export default {
   <header class="login-form__header login-form__header--large">
     <h2 class="h2 login-form__title">{{$t('auth.recovery.header')}}</h2>
   </header>
-  <form class="login-form__body" @submit.prevent="onSubmit" novalidate>
+  <form class="login-form__body" @submit.prevent="onSubmit" novalidate autocomplete="off">
     <p class="login-form__text">{{$t('auth.recovery.help')}}</p>
     <div class="login-form__item">
       <input v-model="model.email" @keydown="errors.remove('email')" v-validate="'required|email'" name="email" type="email" :placeholder="$t('common.placeholders.email')" class="login-form__input" :class="{'login-form__input--error':errors.has('email')}">

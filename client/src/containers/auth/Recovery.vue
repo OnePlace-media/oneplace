@@ -81,7 +81,7 @@ export default {
       <div v-show="errors.firstByRule('email', 'verified')" id="vError-email-verified" class="login-form__alert">{{$t('common.validate.emailVerified')}}</div>
       <div v-show="errors.firstByRule('email', 'notfound')" id="vError-email-notfound" class="login-form__alert">{{$t('common.validate.emailNotFound')}}</div>
     </div>
-    <button type="submit" class="btn login-form__btn" :disabled="processing">{{$t('auth.ResetPassword')}}</button>
+    <button type="submit" class="btn login-form__btn btn--large" :disabled="processing">{{$t('auth.ResetPassword')}}</button>
   </form>
 </div>
 

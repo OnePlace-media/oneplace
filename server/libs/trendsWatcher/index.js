@@ -92,9 +92,6 @@ async function getReplies(chain, post) {
   const replies = await blockChains.getContentReplies(chain, {author: post.author, permlink: post.permlink})
   const _replies = []
   for (let replie of replies) {
-    if (replie.author === 'photographer2') {
-      console.log(replie)
-    }
     const _replie = {}
     _replie.body = chainUtils.prepareHTML(replie.body, chain, replie.json_metadata)
     _replie.author = replie.author

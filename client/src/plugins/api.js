@@ -31,5 +31,8 @@ export default {
   },
   vote(chain, voter, author, permlink, weight) {
     return Vue.axios.post(`/posts/${chain}/vote`, {voter, author, permlink, weight})
+  },
+  updateUser(id, data) {
+    return Vue.axios.patch(`/users/${id}`, data)
   }
 }

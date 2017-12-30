@@ -56,6 +56,7 @@ Vue.filter('unGolosTag', require('./filters/golos.tag').unGolosTag)
 Vue.filter('toLowerCase', function(input) {return input.toLowerCase()})
 
 const CONSTANTS = require('@oneplace/constants')
+
 export function createApp(ssrContext) {
   const i18n = new VueI18n({
     locale: 'en',

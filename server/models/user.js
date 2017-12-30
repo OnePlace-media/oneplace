@@ -130,7 +130,7 @@ module.exports = Model => {
         if (err) reject(err)
         else {
           const {posting, memo_key, json_metadata} = chainAcount
-          const CLIENT_ID = Model.app.get('postingWrapper.username')
+          const CLIENT_ID = Model.app.get('postingWrapper').username
           const persmissionExists = !!~posting.account_auths.findIndex(item => item[0] === CLIENT_ID)
           if (result[0].cnt > 1 || !persmissionExists) {
             mysql.execute('DELETE FROM `useraccount`WHERE userId=? AND accountId=?', [id, accountId], (err, result) => {

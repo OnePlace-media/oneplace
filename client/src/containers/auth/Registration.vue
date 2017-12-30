@@ -13,7 +13,8 @@ export default {
     return {
       model: {
         email: '',
-        password: ''
+        password: '',
+        lang: ''
       },
       error: null,
       passwordRepeat: '',
@@ -46,9 +47,12 @@ export default {
             if (this.errors.any()) throw new Error('INVALID_FORM')
             this.formSubmitted = true
             this.error = {
-              url: `users?redirect=${encodeURIComponent(window.location.origin)}`,
+              url: `users?redirect=${encodeURIComponent(
+                window.location.origin
+              )}`,
               model: this.model
             }
+            this.model.lang = this.$locale.current()
             return this.axios.post(
               `users?redirect=${encodeURIComponent(window.location.origin)}`,
               this.model

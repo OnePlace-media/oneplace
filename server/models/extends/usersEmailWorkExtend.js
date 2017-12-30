@@ -10,7 +10,7 @@ module.exports = Model => {
     if (Model.app.get('env') !== 'test') {
       const email = Model.app.models.email;
       const AccessToken = Model.app.models.AccessToken;
-
+      console.log(this.lang)
       async.waterfall([
         cbAsync => AccessToken.create({userId: this.id}, cbAsync),
         (token, cbAsync) => {
@@ -20,8 +20,8 @@ module.exports = Model => {
           const options = {
             from: NOREPLY,
             to: this.email,
-            subject: 'Подтверждение E-mail',
-            html: email.getTemplate('emailConfirmation', Model.app).replace('%CONFIRM_LINK%', confirmLink)
+            subject: this.lang === 'ru' ? 'Подтверждение E-mail' : 'Confirm E-mail',
+            html: email.getTemplate(`emailConfirmation_${this.lang}`, Model.app).replace('%CONFIRM_LINK%', confirmLink)
           };
           email.send(options, err => {if (err) {console.log(err);} });
           cbAsync();
@@ -37,6 +37,7 @@ module.exports = Model => {
   Model.on('resetPasswordRequest', info => {
     if (Model.app.get('env') !== 'test') {
       const email = Model.app.models.email;
+      
       let resetLink = Model.app.get('origin') + `/auth/reset/${info.accessToken.id}/${info.user.id}`;
       async.waterfall([
         cbAsync => Model.findById(info.user.id, cbAsync),
@@ -44,8 +45,8 @@ module.exports = Model => {
           const options = {
             from: NOREPLY,
             to: info.email,
-            subject: 'Восстановление доступа',
-            html: email.getTemplate('resetPassword', Model.app).replace('%RESET_LINK%', resetLink)
+            subject: info.user.lang === 'ru' ? 'Восстановление доступа' : 'Reset password',
+            html: email.getTemplate(`resetPassword_${info.user.lang}`, Model.app).replace('%RESET_LINK%', resetLink)
           };
           email.send(options, cbAsync);
         }

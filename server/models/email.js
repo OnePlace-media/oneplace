@@ -3,8 +3,10 @@ const fs    = require('fs');
 // const emailLib = require('../../server/libs/mail');
 module.exports = Email => {
     let templates = {
-        emailConfirmation  : fs.readFileSync(`${__dirname}/../emails/emailConfirmation.html`).toString(),
-        resetPassword      : fs.readFileSync(`${__dirname}/../emails/resetPassword.html`).toString()
+        emailConfirmation_ru : fs.readFileSync(`${__dirname}/../emails/emailConfirmation_ru.html`).toString(),
+        emailConfirmation_en : fs.readFileSync(`${__dirname}/../emails/emailConfirmation_en.html`).toString(),
+        resetPassword_ru      : fs.readFileSync(`${__dirname}/../emails/resetPassword_ru.html`).toString(),
+        resetPassword_en      : fs.readFileSync(`${__dirname}/../emails/resetPassword_en.html`).toString()
     };
 
     Email.getTemplate = function (template, app) {

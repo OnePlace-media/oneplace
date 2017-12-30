@@ -69,6 +69,10 @@
     "ip": {
       "type": "number"
     },
+    "lang": {
+      "type": "string",
+      "default": "en"
+    },
     "realm": null,
     "username": null,
     "credentials": null,

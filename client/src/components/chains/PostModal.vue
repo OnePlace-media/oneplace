@@ -1,17 +1,22 @@
 <template>
   <div class="post-view__overlay" v-if="!processing">
-    <post-view v-on-click-outside="close" v-if="post" :is-modal="true"></post-view>
+    <div class="post-view__modal">
+      <post-view v-on-click-outside="close" v-if="post" :is-modal="true"></post-view>
+      <comments-wrapper :post="post" v-if="post"></comments-wrapper>
+    </div>
   </div>
 </template>
 
 <script>
 import PostView from './PostView.vue'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
+import CommentsWrapper from './CommentsWrapper.vue'
 const KEY_CODE_ESC = 27
 export default {
   name: 'PostModal',
   components: {
-    PostView
+    PostView,
+    CommentsWrapper
   },
   mixins: [onClickOutside],
   mounted() {

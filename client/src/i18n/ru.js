@@ -5,6 +5,7 @@ module.exports = {
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'Вы можете голосовать за записи не чаще одного раза в 3 секунды'
   },
   common: {
+    in: 'в',
     reply: 'Ответить',
     back: 'Назад',
     tags: 'Тэги',

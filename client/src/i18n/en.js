@@ -5,6 +5,7 @@ module.exports = {
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds'
   },
   common: {
+    in: 'in',
     reply: 'Reply',
     back: 'Back',
     tags: 'Tags',
@@ -65,9 +66,9 @@ module.exports = {
     downvotePost: 'Downvote post'
   },
   welcome: {
-	createRegistration: 'Create profile',
-	addSteemOrGolosAccount: 'Add Steem or Golos account',
-	setUpCategories: 'Set up categories',
+    createRegistration: 'Create profile',
+    addSteemOrGolosAccount: 'Add Steem or Golos account',
+    setUpCategories: 'Set up categories',
     chooseChainStep: {
       help: 'Please attach Steem or Golos account. You can later add more accounts in your profile'
     },

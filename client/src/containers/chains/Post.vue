@@ -6,9 +6,9 @@
         <post-view v-if="post" :is-modal="false"></post-view>
       </div>
     </section>
-    <div class="container">
+    <div class="container"  v-if="post">
       <no-ssr>
-        <comments-wrapper v-if="post" :post="post"></comments-wrapper>
+        <comments-wrapper :post="post"></comments-wrapper>
       </no-ssr>
     </div>
   </section>

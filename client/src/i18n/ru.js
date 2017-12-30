@@ -8,14 +8,14 @@ module.exports = {
     in: 'в',
     reply: 'Ответить',
     back: 'Назад',
-    tags: 'Тэги',
+    tags: 'Теги',
     author: 'Автор',
     returnToOnePlace: 'Вернуться на OnePlace',
     validate: {
-      emailRequired: 'Адрес e-mail не может быть пустым',
+      emailRequired: 'Строка "e-mail" не может быть пустой',
       emailFormat: 'Пожалуйста введите действительный адрес e-mail. Пример: username@domain.com',
       emailUniqueness: 'Этот адрес e-mail уже используется',
-      passwordRequired: 'Пароль не может быть пустым',
+      passwordRequired: 'Строка "пароль" не может быть пустой',
       passwordRepeat: 'Пароль не совпадает',
       emailVerified: 'Адрес e-mail не был подтвержден',
       emailNotFound: 'Адрес e-mail не найден',
@@ -23,12 +23,12 @@ module.exports = {
       activeKeyNotPassed: 'Активный ключ не прошел проверку',
       usernameRequired: 'Имя пользователя не может быть пустым',
       usernameNotFound: 'Аккаунта с таким именем не существует',
-      tagRequired: 'Тэг не может быть пустым',
+      tagRequired: 'Тег не может быть пустым',
       tagFormat: 'Используйте только буквы, цифры и один дефис',
-      tagLimited: 'Максимальное число тэгов',
+      tagLimited: 'Максимальное число тегов',
       tagMax: 'Максимальная длина 64',
-      firstIsLetter: 'Тэг должен начинаться с буквы',
-      lastIsLetterOrDigit: 'Тэг должен заканчиваться буквой или цифрой',
+      firstIsLetter: 'Тег должен начинаться с буквы',
+      lastIsLetterOrDigit: 'Тег должен заканчиваться буквой или цифрой',
     },
     timeAgoWithAuthor: '{timeago} {author}',
     headers: {
@@ -66,31 +66,31 @@ module.exports = {
     downvotePost: 'Проголосовать против'
   },
   welcome: {
-    createRegistration: 'Создать профиль',
-    addSteemOrGolosAccount: 'Добавить аккаунт Steem или Golos',
-    setUpCategories: 'Настроить категории',
+    createRegistration: 'Создание профиля',
+    addSteemOrGolosAccount: 'Добавление аккаунта Steem или Golos',
+    setUpCategories: 'Настройка категорий',
     chooseChainStep: {
       help: 'Пожалуйста прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.'
     },
     attachChainStep: {
       header: 'Спасибо за регистрацию!',
-      help: 'Пожалуйста прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
+      help: 'Пожалуйста, прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
       addBlockchainAccount: 'Добавить блокчейн аккаунт',
       addBlockchainAccountReplace: 'Добавить аккаунт {blockchain}',
       skipThisStep: 'Пропустить этот шаг'
     },
     setupTagsStep: {
-      header: 'Пожалуйста выберите интересующие вас категории',
-      startYourJourney: 'Начать путешествие'
+      header: 'Выберите интересующие вас категории',
+      startYourJourney: 'Начать погружение'
     }
   },
   tagsForm: {
     approve: 'Подтвердить',
-    clearAllChainTags: 'Удалить все тэги {blockchain}',
-    addTags: 'Добавить тэги',
-    addTagsWithChain: 'Добавить тэги {blockchain}',
+    clearAllChainTags: 'Удалить все теги {blockchain}',
+    addTags: 'Добавить теги',
+    addTagsWithChain: 'Добавить теги',
     upTo20: 'Не более 20',
-    help: 'Чтобы добавить в свои подписки интересующую вас тему, введите выше её название и нажмите "enter" или выберите из предложенных на картинках наиболее популярных категорий. Тэги будут отображаться в вашей ленте в том же порядке.',
+    help: 'Введите название темы, на которую хотите подписаться, и нажмите "enter" или выберите из предложенных тегов. В вашей ленте порядок категорий сохранится.',
     helpSettings: 'Чтобы добавить в свои подписки интересующую вас тему, введите выше её название и нажмите "enter". Тэги будут отображаться в вашей ленте в том же порядке.'
   },
   accountForm: {
@@ -114,14 +114,14 @@ module.exports = {
   settings: {
     header: 'Настройки профиля',
     blockchainAccounts: 'Управление аккаунтами',
-    addBlockChainAccount: 'Пожалуйста добавьте аккаунт Steem или Golos.',
+    addBlockChainAccount: 'Добавить аккаунт Steem или Golos',
     categoriesList: 'Подписка на категории',
     noAddedAccountsYet: 'Нет добавленных аккаунтов'
   },
   auth: {
     SignIn: 'Войти',
     ResetPassword: 'Сбросить пароль',
-    CreateAccount: 'создать профиль',
+    CreateAccount: 'Создать профиль',
     ChangePassword: 'Изменить пароль',
     recovery: {
       header: 'Восстановление утерянного пароля',
@@ -152,7 +152,7 @@ module.exports = {
     registration: {
       success: {
         header: 'Спасибо за регистрацию!',
-        body1: 'Отправлен e-mail.',
+        body1: 'E-mail отправлен.',
         body2: 'Чтобы завершить процесс регистрации откройте почту и прочтите e-mail с дальнейшими инструкциями'
       }
     }

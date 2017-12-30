@@ -1,27 +1,128 @@
 module.exports = {
+  errors: {
+    UNKNOW_ERROR: 'Something wrong',
+    STEEMIT_MAX_VOTE_CHANGES: 'Voter has used the maximum number of vote changes on this comment',
+    STEEMIT_MIN_VOTE_INTERVAL_SEC: 'Can only vote once every 3 seconds'
+  },
   common: {
-    timeAgoWithAuthor:'{timeago} от {author}',
-    headers:{
-      recentPosts:'Недавние посты'
+    reply: 'Reply',
+    back: 'back',
+    tags: 'Tags',
+    author: 'Author',
+    returnToOnePlace: 'Return to OnePlace',
+    validate: {
+      emailRequired: 'E-mail address can\'t be blank',
+      emailFormat: 'Please enter a valid E-mail address. Example: username@domain.com',
+      emailUniqueness: 'This email address has already been registered',
+      passwordRequired: 'Password address can\'t be blank',
+      passwordRepeat: 'Password doesn\'t match',
+      emailVerified: 'E-mail hasn\'t been verified',
+      emailNotFound: 'E-mail not found',
+      activeKeyRequired: 'Active key can\'t be blank',
+      activeKeyNotPassed: 'Active key not passed',
+      usernameRequired: 'Username can\'t be blank',
+      usernameNotFound: 'Account with this username not found',
+      tagRequired: 'Tag key can\'t be blank',
+      tagFormat: 'Use only letters, digits and one dash',
+      tagLimited: 'Tag limit reached',
+      tagMax: 'Max length 64',
+      firstIsLetter: 'Must begin with a letter',
+      lastIsLetterOrDigit: 'Must end with a letter or a digit',
+    },
+    timeAgoWithAuthor: '{timeago} by {author}',
+    headers: {
+      recentPosts: 'Recent posts'
     },
     placeholders: {
       email: 'E-mail',
-      password: 'Пароль',
-      passwordRepeat: 'Повторить пароль '
+      password: 'Password',
+      passwordRepeat: 'Repeat password',
+      username: 'Username',
+      addAccountUsername: '{blockchain} username',
+      addAccountActiveKey: '{blockchain} active key (private)',
+      activeKey: 'Active key',
+      leaveAComment: 'Leave a comment...'
     }
   },
-  topBar:{
-    addAccount:'Добавить аккаунт',
-    getStarted:'Начать'
+  comment: {
+    header: 'Comments',
+    post: 'Post',
+    cancel: 'Cancel',
+    preview: 'Preview',
+    dislike: 'Dislike',
+    like: 'Like',
+    removeVote: 'Remove vote'
   },
-  footer:{
-    createdBy: 'Создан в 2017 году {link}',
-    language: 'Язык'
+  addAccount: {
+    header: 'It\'s time to add your {blockchain} account!',
+    help: 'Please enter required information in the form below. You can later add more accounts in your profile.',
+    backToOnePlace: 'Back to OnePlace'
+  },
+  chains: {
+    imageIsHidden: 'Image is hidden',
+    emptyCategoryHelp: 'No posts in this category.',
+    removeFlag: 'Remove flag',
+    downvotePost: 'Downvote post'
+  },
+  welcome: {
+    createRegistration:'Create registration',
+    addSteemOrGolosAccount: 'Add Steem or Golos account',
+    setUpCategories:'Set up categories',
+    chooseChainStep: {
+      help: 'Please attach Steem or Golos account. You can later add more accounts in your profile'
+    },
+    attachChainStep: {
+      header: 'Thank you for registration!',
+      help: 'Please attach Steem or Golos account. You can later add more accounts in your profile.',
+      addBlockchainAccount: 'Add blockchain account',
+      addBlockchainAccountReplace: 'Add {blockchain} account',
+      skipThisStep: 'Skip this step',
+      back: 'Back to choose blockchain'
+    },
+    setupTagsStep: {
+      header: 'Please choose topics you\'re interested in',
+      startYourJourney: 'Start your journey'
+    }
+  },
+  tagsForm: {
+    approve: 'Approve',
+    clearAllChainTags: 'Clear all {blockchain} tags',
+    addTags: 'Add tags',
+    addTagsWithChain: 'Add {blockchain} tags',
+    upTo20: 'Up to 20',
+    help: 'Add a topic by typing in the field above or by clicking on one of the popular tags. Tags are displayed in the same order in your feed.',
+    helpSettings: 'Add a topic by typing in the field above and pressing "enter". Tags will be displayed in the same order in your feed.'
+  },
+  accountForm: {
+    removeAccount: 'Remove account',
+    addAccount: 'Add account',
+    cancelRemoveAccount: 'Cancel',
+    backToSelectBlockchain: 'Back to select blockchain',
+    aboutPrivate: '<em>OnePlace does not store your private keys</em>. Once you sign in with your blockchain account you authorize OnePlace app to vote, post and edit comments on your behalf. You can revoke that authority at any time.',
+    aboutRemove: '<em>Remove account</em>. You are going to remove posting authority from oneplace.app. Confirm this operation with your private active key.',
+  },
+  topBar: {
+    addAccount: 'Add account',
+    getStarted: 'Get Started',
+    settings: 'Settings',
+    switchAccount: 'Switch account',
+    logout: 'Logout'
+  },
+  footer: {
+    createdBy: 'Created in 2017 by {link}',
+    language: 'Language'
+  },
+  settings: {
+    header: 'Profile settings',
+    blockchainAccounts: 'Pinned blockchain accounts',
+    addBlockChainAccount: 'Please attach your Steem or Golos account',
+    categoriesList: 'Categories for reading',
+    noAddedAccountsYet: 'No added accounts yet'
   },
   auth: {
-    SignIn: 'Вход',
+    SignIn: 'Log in',
     ResetPassword: 'Reset password',
-    CreateAccount: 'Create account',
+    CreateAccount: 'Create profile',
     ChangePassword: 'Change password',
     header: {
       signInHelp: 'Using Steem, Golos or OnePlace account',
@@ -60,15 +161,6 @@ module.exports = {
         body2: 'To complete the registration process look for an email in your inbox that provides further instructions.',
         getIn: 'Get In'
       }
-    },
-    validate: {
-      emailRequired: 'E-mail address can\'t be blank',
-      emailFormat: 'Please enter a valid E-mail address. Example: username@domain.com',
-      emailUniqueness: 'This email address has already been registered',
-      passwordRequired: 'Password address can\'t be blank',
-      passwordRepeat: 'Password doesn\'t match',
-      emailVerified: 'E-mail hasn\'t been verified',
-      emailNotFound: 'E-mail not found'
     }
   }
 }

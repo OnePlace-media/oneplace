@@ -65,6 +65,9 @@ module.exports = {
     downvotePost: 'Downvote post'
   },
   welcome: {
+    createRegistration:'Create registration',
+    addSteemOrGolosAccount: 'Add Steem or Golos account',
+    setUpCategories:'Set up categories',
     chooseChainStep: {
       help: 'Please attach Steem or Golos account. You can later add more accounts in your profile'
     },

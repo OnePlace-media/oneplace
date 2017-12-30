@@ -10,7 +10,10 @@
     <tags-list :tags="tags.verticalFirst" class="tags-setup__column tags-setup__w1"></tags-list>
     <div class="tags-setup__column tags-setup__w2">
       <tag-wrapper :item="tags.single"></tag-wrapper>
-      <tags-list :tags="tags.verticalSecond" class="tags-setup__column tags-setup__w4"></tags-list>
+      <div class="tags-setup__row tags-setup__w4">
+        <tags-list :tags="tags.verticalSecond" class="tags-setup__column tags-setup__w1"></tags-list>
+        <tags-list :tags="tags.verticalThird" class="tags-setup__column tags-setup__w1"></tags-list>
+      </div>
     </div>
   </div>
 
@@ -20,7 +23,10 @@
         <!-- <setup-tags-form></setup-tags-form> -->
         <tags-form view="welcome"></tags-form>
       </div>
-      <tags-list :tags="tags.top" class="tags-setup__column tags-setup__w3"></tags-list>
+      <div class="tags-setup__row tags-setup__w3">
+        <tags-list :tags="tags.topFirst" class="tags-setup__column tags-setup__w2"></tags-list>
+        <tags-list :tags="tags.topSecond" class="tags-setup__column tags-setup__w1"></tags-list>
+      </div>
     </div>
     <tags-list :tags="tags.bottom" class="tags-setup__row tags-setup__w2"></tags-list>
   </div>
@@ -53,7 +59,9 @@ const TAGS = {
     verticalSecond: [
       { tag: 'food' },
       { tag: 'nature', h2: true },
-      { tag: 'travel' },
+      { tag: 'travel' }
+    ],
+    verticalThird: [
       { tag: 'funny' },
       { tag: 'news' },
       { tag: 'politics' },
@@ -61,10 +69,12 @@ const TAGS = {
     ]
   },
   [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: {
-    top: [
+    topFirst: [
       { tag: 'ru--bitkoin', w2: true },
       { tag: 'ru--blokcheijn', w2: true },
-      { tag: 'ru--znakomstvo', w2: true },
+      { tag: 'ru--znakomstvo', w2: true }
+    ],
+    topSecond: [
       { tag: 'ru--biznes' },
       { tag: 'ru--zhiznx', h2: true }
     ],

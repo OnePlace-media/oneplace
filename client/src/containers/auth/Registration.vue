@@ -137,7 +137,6 @@ export default {
     <p class="login-form__text login-form__text--alert">
       <strong>{{$t('auth.registration.success.body2')}}</strong>
     </p>
-    <!-- <router-link tag="button" :to="{name:'auth-login'}" type="button" class="btn login-form__btn btn--large">{{$t('auth.registration.success.getIn')}}</router-link> -->
   </div>
 </div>
 </template>

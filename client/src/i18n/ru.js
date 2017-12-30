@@ -1,165 +1,158 @@
 module.exports = {
   errors: {
-    UNKNOW_ERROR: 'Something wrong',
-    STEEMIT_MAX_VOTE_CHANGES: 'Voter has used the maximum number of vote changes on this comment',
-    STEEMIT_MIN_VOTE_INTERVAL_SEC: 'Can only vote once every 3 seconds'
+    UNKNOW_ERROR: 'Неизвестная ошибка.',
+    STEEMIT_MAX_VOTE_CHANGES: 'Вы использовали максимальное число изменений голоса для данной записи',
+    STEEMIT_MIN_VOTE_INTERVAL_SEC: 'Вы можете голосовать за записи не чаще одного раза в 3 секунды'
   },
   common: {
-    reply: 'Reply',
-    back: 'back',
-    tags: 'Tags',
-    author: 'Author',
-    returnToOnePlace: 'Return to OnePlace',
+    reply: 'Ответить',
+    back: 'Назад',
+    tags: 'Тэги',
+    author: 'Автор',
+    returnToOnePlace: 'Вернуться на OnePlace',
     validate: {
-      emailRequired: 'E-mail address can\'t be blank',
-      emailFormat: 'Please enter a valid E-mail address. Example: username@domain.com',
-      emailUniqueness: 'This email address has already been registered',
-      passwordRequired: 'Password address can\'t be blank',
-      passwordRepeat: 'Password doesn\'t match',
-      emailVerified: 'E-mail hasn\'t been verified',
-      emailNotFound: 'E-mail not found',
-      activeKeyRequired: 'Active key can\'t be blank',
-      activeKeyNotPassed: 'Active key not passed',
-      usernameRequired: 'Username can\'t be blank',
-      usernameNotFound: 'Account with this username not found',
-      tagRequired: 'Tag key can\'t be blank',
-      tagFormat: 'Use only letters, digits and one dash',
-      tagLimited: 'Tag limit reached',
-      tagMax: 'Max length 64',
-      firstIsLetter: 'Must begin with a letter',
-      lastIsLetterOrDigit: 'Must end with a letter or a digit',
+      emailRequired: 'Адрес e-mail не может быть пустым',
+      emailFormat: 'Пожалуйста введите действительный адрес e-mail. Пример: username@domain.com',
+      emailUniqueness: 'Этот адрес e-mail уже используется',
+      passwordRequired: 'Пароль не может быть пустым',
+      passwordRepeat: 'Пароль не совпадает',
+      emailVerified: 'Адрес e-mail не был подтвержден',
+      emailNotFound: 'Адрес e-mail не найден',
+      activeKeyRequired: 'Активный ключ не может быть пустым',
+      activeKeyNotPassed: 'Активный ключ не прошел проверку',
+      usernameRequired: 'Имя пользователя не может быть пустым',
+      usernameNotFound: 'Аккаунта с таким именем не существует',
+      tagRequired: 'Тэг не может быть пустым',
+      tagFormat: 'Используйте только буквы, цифры и один дефис',
+      tagLimited: 'Максимальное число тэгов',
+      tagMax: 'Максимальная длина 64',
+      firstIsLetter: 'Тэг должен начинаться с буквы',
+      lastIsLetterOrDigit: 'Тэг должен заканчиваться буквой или цифрой',
     },
-    timeAgoWithAuthor: '{timeago} by {author}',
+    timeAgoWithAuthor: '{timeago} {author}',
     headers: {
-      recentPosts: 'Recent posts'
+      recentPosts: 'Свежие записи'
     },
     placeholders: {
       email: 'E-mail',
-      password: 'Password',
-      passwordRepeat: 'Repeat password',
-      username: 'Username',
-      addAccountUsername: '{blockchain} username',
-      addAccountActiveKey: '{blockchain} active key (private)',
-      activeKey: 'Active key',
-      leaveAComment: 'Leave a comment...'
+      password: 'Пароль',
+      passwordRepeat: 'Повторите пароль',
+      username: 'Имя пользователя',
+      addAccountUsername: 'Имя пользователя {blockchain}',
+      addAccountActiveKey: 'Активный приватный ключ',
+      activeKey: 'Активный приватный ключ',
+      leaveAComment: 'Добавить комментарий...'
     }
   },
   comment: {
-    header: 'Comments',
-    post: 'Post',
-    cancel: 'Cancel',
-    preview: 'Preview',
-    dislike: 'Dislike',
-    like: 'Like',
-    removeVote: 'Remove vote'
+    header: 'Комментарии',
+    post: 'Отправить',
+    cancel: 'Отмена',
+    preview: 'Предварительный просмотр',
+    dislike: 'Мне не нравится',
+    like: 'Мне нравится',
+    removeVote: 'Отменить голос'
   },
   addAccount: {
-    header: 'It\'s time to add your {blockchain} account!',
-    help: 'Please enter required information in the form below. You can later add more accounts in your profile.',
-    backToOnePlace: 'Back to OnePlace'
+    header: 'Пришло время добавить ваш {blockchain} аккаунт!',
+    help: 'Пожалуйста введите необходимую информацию в форму ниже. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
+    backToOnePlace: 'Вернуться на OnePlace'
   },
   chains: {
-    imageIsHidden: 'Image is hidden',
-    emptyCategoryHelp: 'No posts in this category.',
-    removeFlag: 'Remove flag',
-    downvotePost: 'Downvote post'
+    imageIsHidden: 'Изображение скрыто. Нажмите, чтобы увидеть изображение.',
+    emptyCategoryHelp: 'Нет записей в данной категории.',
+    removeFlag: 'Отменить флаг',
+    downvotePost: 'Проголосовать против'
   },
   welcome: {
-    createRegistration:'Create registration',
-    addSteemOrGolosAccount: 'Add Steem or Golos account',
-    setUpCategories:'Set up categories',
+    createRegistration: 'Создать профиль',
+    addSteemOrGolosAccount: 'Добавить аккаунт Steem или Golos',
+    setUpCategories: 'Настроить категории',
     chooseChainStep: {
-      help: 'Please attach Steem or Golos account. You can later add more accounts in your profile'
+      help: 'Пожалуйста прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.'
     },
     attachChainStep: {
-      header: 'Thank you for registration!',
-      help: 'Please attach Steem or Golos account. You can later add more accounts in your profile.',
-      addBlockchainAccount: 'Add blockchain account',
-      addBlockchainAccountReplace: 'Add {blockchain} account',
-      skipThisStep: 'Skip this step',
-      back: 'Back to choose blockchain'
+      header: 'Спасибо за регистрацию!',
+      help: 'Пожалуйста прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
+      addBlockchainAccount: 'Добавить блокчейн аккаунт',
+      addBlockchainAccountReplace: 'Добавить аккаунт {blockchain}',
+      skipThisStep: 'Пропустить этот шаг'
     },
     setupTagsStep: {
-      header: 'Please choose topics you\'re interested in',
-      startYourJourney: 'Start your journey'
+      header: 'Пожалуйста выберите интересующие вас категории',
+      startYourJourney: 'Начать путешествие'
     }
   },
   tagsForm: {
-    approve: 'Approve',
-    clearAllChainTags: 'Clear all {blockchain} tags',
-    addTags: 'Add tags',
-    addTagsWithChain: 'Add {blockchain} tags',
-    upTo20: 'Up to 20',
-    help: 'Add a topic by typing in the field above or by clicking on one of the popular tags. Tags are displayed in the same order in your feed.',
-    helpSettings: 'Add a topic by typing in the field above and pressing "enter". Tags will be displayed in the same order in your feed.'
+    approve: 'Подтвердить',
+    clearAllChainTags: 'Удалить все тэги {blockchain}',
+    addTags: 'Добавить тэги',
+    addTagsWithChain: 'Добавить тэги {blockchain}',
+    upTo20: 'Не более 20',
+    help: 'Чтобы добавить в свои подписки интересующую вас тему, введите выше её название и нажмите "enter" или выберите из предложенных на картинках наиболее популярных категорий. Тэги будут отображаться в вашей ленте в том же порядке.',
+    helpSettings: 'Чтобы добавить в свои подписки интересующую вас тему, введите выше её название и нажмите "enter". Тэги будут отображаться в вашей ленте в том же порядке.'
   },
   accountForm: {
-    removeAccount: 'Remove account',
-    addAccount: 'Add account',
-    cancelRemoveAccount: 'Cancel',
-    backToSelectBlockchain: 'Back to select blockchain',
-    aboutPrivate: '<em>OnePlace does not store your private keys</em>. Once you sign in with your blockchain account you authorize OnePlace app to vote, post and edit comments on your behalf. You can revoke that authority at any time.',
-    aboutRemove: '<em>Remove account</em>. You are going to remove posting authority from oneplace.app. Confirm this operation with your private active key.',
+    removeAccount: 'Удалить аккаунт',
+    addAccount: 'Добавить аккаунт',
+    cancelRemoveAccount: 'Отмена',
+    aboutPrivate: '<em>OnePlace не хранит ваш приватный ключ</em>. Добавляя свой блокчейн аккаунт вы авторизуете приложение OnePlace для голосования, публикации и редактирования записей от вашего имени. Вы можете отменить это разрешение в любой момент.',
+    aboutRemove: '<em>Удаление аккаунта</em>. Вы отменяете авторизацию для приложения OnePlace. Подтвердите эту операцию приватным активным ключом.',
   },
   topBar: {
-    addAccount: 'Add account',
-    getStarted: 'Get Started',
-    settings: 'Settings',
-    switchAccount: 'Switch account',
-    logout: 'Logout'
+    addAccount: 'Добавить аккаунт',
+    getStarted: 'Войти',
+    settings: 'Настройки',
+    switchAccount: 'Сменить аккаунт',
+    logout: 'Выйти'
   },
   footer: {
-    createdBy: 'Created in 2017 by {link}',
-    language: 'Language'
+    createdBy: 'Создано 2017 by {link}',
+    language: 'Выбрать язык'
   },
   settings: {
-    header: 'Profile settings',
-    blockchainAccounts: 'Pinned blockchain accounts',
-    addBlockChainAccount: 'Please attach your Steem or Golos account',
-    categoriesList: 'Categories for reading',
-    noAddedAccountsYet: 'No added accounts yet'
+    header: 'Настройки профиля',
+    blockchainAccounts: 'Управление аккаунтами',
+    addBlockChainAccount: 'Пожалуйста добавьте аккаунт Steem или Golos.',
+    categoriesList: 'Подписка на категории',
+    noAddedAccountsYet: 'Нет добавленных аккаунтов'
   },
   auth: {
-    SignIn: 'Log in',
-    ResetPassword: 'Reset password',
-    CreateAccount: 'Create profile',
-    ChangePassword: 'Change password',
-    header: {
-      signInHelp: 'Using Steem, Golos or OnePlace account',
-      createAccountHelp: 'Fast registration to access all functions',
-    },
+    SignIn: 'Войти',
+    ResetPassword: 'Сбросить пароль',
+    CreateAccount: 'создать профиль',
+    ChangePassword: 'Изменить пароль',
     recovery: {
-      header: 'Recover lost password',
-      help: 'Enter your registration e-mail below and we\'ll send you a link to reset your password.',
+      header: 'Восстановление утерянного пароля',
+      help: 'Введите адрес e-mail, использованный при регистрации, и мы отправим вам ссылку для изменения пароля.',
       success: {
-        header: 'Check your inbox',
-        body: 'An e-mail has been sent to your address with instructions on how to reset your password.'
+        header: 'Проверьте вашу почту',
+        body: 'На ваш адрес отправлен e-mail с инструкциями по изменению пароля.'
       }
     },
     reset: {
-      header: 'Your password has been reset',
-      help: 'Please enter your new password',
+      header: 'Ваш пароль был изменен',
+      help: 'Пожалуйста введите новый пароль',
       success: {
-        header: 'Success recovery access',
-        body: 'You will be automatically redirected in 5 seconds.'
+        header: 'Успешное восстановление пароля',
+        body: 'В течение 5 секунд вы будете автоматически перенаправлены.'
       },
       fail: {
-        header: 'Failure recovery access',
-        body: 'Your session has expired, you can repeat {action}.',
-        action: 'the recovery procedure'
+        header: 'Отказ в восстановлении пароля',
+        body: 'Ваша сессия истекла, вы можете повторить {action}.',
+        action: 'процедуру восстановления'
       }
     },
     login: {
-      help: '<strong>Note:</strong> If you use Steem or Golos account for signing in you will not be able to access all functions. To use full functionality please create OnePlace account based on your Steem or Golos account.',
-      forgot: 'Forgot your password?',
-      wrongCredentials: 'The email or password you entered is incorrect'
+      help: '<strong>Note:</strong> If you use Steem or Golos account for signing in you will not be able to access all functions. To use full functionality please create OnePlace account based on your Steem or Golos account.', // removed
+      forgot: 'Забыли пароль?',
+      wrongCredentials: 'Неверный адрес e-mail или пароль'
     },
     registration: {
       success: {
-        header: 'Thank you for registration!',
-        body1: 'Registration email sent.',
-        body2: 'To complete the registration process look for an email in your inbox that provides further instructions.',
-        getIn: 'Get In'
+        header: 'Спасибо за регистрацию!',
+        body1: 'Отправлен e-mail.',
+        body2: 'Чтобы завершить процесс регистрации откройте почту и прочтите e-mail с дальнейшими инструкциями'
       }
     }
   }

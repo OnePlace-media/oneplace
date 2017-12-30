@@ -272,7 +272,6 @@ export default {
         this.$chains.setChain(this.chain)
         addPostingAuthority(this.model, this.$chains.client)
           .then(result => {
-            // console.log('result', result)
             const { Signature } = require('steem/lib/auth/ecc')
             const sign = Signature.sign('test', this.model.wif).toHex()
             const method =

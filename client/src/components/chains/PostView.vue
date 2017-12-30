@@ -34,7 +34,9 @@
       <div class="post-view__post-body markdown" v-html="post.body"></div>
       <div class="post-view__post-info post-view__post-info--bottom">
         <div class="post-view__post-data">
-          <span class="post-view__post-data-item"><span class="post-view__post-value">{{currencySymbol}}</span>{{post.payout}}</span>
+          <span class="post-view__post-data-item">
+            <span class="post-view__post-value" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>{{post.payout}}
+          </span>
           <span class="post-view__post-data-item">
             <a 
               @click.prevent="vote(true)"

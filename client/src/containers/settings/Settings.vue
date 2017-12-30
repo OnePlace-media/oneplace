@@ -116,7 +116,12 @@ export default {
                 <li class="settings__account" v-for="account in accounts" :key="account.id">
                   <span class="settings__account-chain" :class="{'settings__account-chain--steem':account.chain === CHAINS.STEEM, 'settings__account-chain--golos':account.chain === CHAINS.GOLOS}"></span>
                   <span class="settings__account-name">{{account.username}}</span>
-                  <a class="settings__btn settings__btn-remove" @click.prevent="removeAccount(account)" :title="$t('accountForm.removeAccount')"></a>
+                  <a class="settings__remove-btn" 
+                    @click.prevent="removeAccount(account)" :title="$t('accountForm.removeAccount')">
+                    <svg class="settings__icon">
+                      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#delete"></use>
+                      </svg>
+                    </a>
                 </li>
               </ul>
               <div class="settings__no-accounts" v-if="!accounts.length">{{$t('settings.noAddedAccountsYet')}}</div>

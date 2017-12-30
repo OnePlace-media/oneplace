@@ -23,9 +23,9 @@ module.exports = {
       activeKeyNotPassed: 'Активный ключ не прошел проверку',
       usernameRequired: 'Имя пользователя не может быть пустым',
       usernameNotFound: 'Аккаунта с таким именем не существует',
-      tagRequired: 'Тег не может быть пустым',
+      tagRequired: 'Строка тегов не может быть пустой',
       tagFormat: 'Используйте только буквы, цифры и один дефис',
-      tagLimited: 'Максимальное число тегов',
+      tagLimited: 'У вас уже максимальное число тегов',
       tagMax: 'Максимальная длина 64',
       firstIsLetter: 'Тег должен начинаться с буквы',
       lastIsLetterOrDigit: 'Тег должен заканчиваться буквой или цифрой',
@@ -55,8 +55,8 @@ module.exports = {
     removeVote: 'Отменить голос'
   },
   addAccount: {
-    header: 'Пришло время добавить ваш {blockchain} аккаунт!',
-    help: 'Пожалуйста введите необходимую информацию в форму ниже. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
+    header: 'Пришло время добавить ваш {blockchain} аккаунт.',
+    help: 'Пожалуйста, введите необходимую информацию в форму ниже. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
     backToOnePlace: 'Вернуться на OnePlace'
   },
   chains: {
@@ -70,13 +70,13 @@ module.exports = {
     addSteemOrGolosAccount: 'Добавление аккаунта Steem или Golos',
     setUpCategories: 'Настройка категорий',
     chooseChainStep: {
-      help: 'Пожалуйста прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.'
+      help: 'Пожалуйста, прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.'
     },
     attachChainStep: {
       header: 'Спасибо за регистрацию!',
       help: 'Пожалуйста, прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
       addBlockchainAccount: 'Добавить блокчейн аккаунт',
-      addBlockchainAccountReplace: 'Добавить аккаунт {blockchain}',
+      addBlockchainAccountReplace: 'Добавить {blockchain} аккаунт',
       skipThisStep: 'Пропустить этот шаг'
     },
     setupTagsStep: {
@@ -91,13 +91,13 @@ module.exports = {
     addTagsWithChain: 'Добавить теги',
     upTo20: 'Не более 20',
     help: 'Введите название темы, на которую хотите подписаться, и нажмите "enter" или выберите из предложенных тегов. В вашей ленте порядок категорий сохранится.',
-    helpSettings: 'Чтобы добавить в свои подписки интересующую вас тему, введите выше её название и нажмите "enter". Тэги будут отображаться в вашей ленте в том же порядке.'
+    helpSettings: 'Введите название темы, на которую хотите подписаться, и нажмите "enter" или выберите из предложенных тегов. В вашей ленте порядок категорий сохранится.'
   },
   accountForm: {
     removeAccount: 'Удалить аккаунт',
     addAccount: 'Добавить аккаунт',
     cancelRemoveAccount: 'Отмена',
-    aboutPrivate: '<em>OnePlace не хранит ваш приватный ключ</em>. Добавляя свой блокчейн аккаунт вы авторизуете приложение OnePlace для голосования, публикации и редактирования записей от вашего имени. Вы можете отменить это разрешение в любой момент.',
+    aboutPrivate: '<em>OnePlace не хранит ваш приватный ключ</em>. Добавляя свой блокчейн аккаунт, вы авторизуете приложение OnePlace для голосования, публикации и редактирования записей от вашего имени. Вы можете отменить это разрешение в любой момент.',
     aboutRemove: '<em>Удаление аккаунта</em>. Вы отменяете авторизацию для приложения OnePlace. Подтвердите эту операцию приватным активным ключом.',
   },
   topBar: {
@@ -147,7 +147,7 @@ module.exports = {
     login: {
       help: '<strong>Note:</strong> If you use Steem or Golos account for signing in you will not be able to access all functions. To use full functionality please create OnePlace account based on your Steem or Golos account.', // removed
       forgot: 'Забыли пароль?',
-      wrongCredentials: 'Неверный адрес e-mail или пароль'
+      wrongCredentials: 'Неверный e-mail адрес или пароль'
     },
     registration: {
       success: {

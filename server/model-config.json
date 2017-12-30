@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models",
+      "../node_modules/loopback-component-passport/lib/models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./models/extends",
+      "./mixins"
+    ]
+  },
+  "user": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "post": {
+    "public": true,
+    "dataSource": false
+  },
+  "tag": {
+    "public": false,
+    "dataSource": "mysql"
+  },
+  "account": {
+    "public": false,
+    "dataSource": "mysql"
+  },
+  "email": {
+    "dataSource": "email"
+  },
+  "AccessToken": {
+    "dataSource": "mysql",
+    "public": false,
+    "relations": {
+      "user": {
+        "type": "belongsTo",
+        "model": "user",
+        "foreignKey": "userId"
+      }
+    }
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "db",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "db",
+    "public": false
+  }
+}

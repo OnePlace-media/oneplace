@@ -1,0 +1,27 @@
+{
+  "name": "tag",
+  "plural": "tags",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "mysql": {
+      "table": "tags"
+    },
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "id": true,
+      "type": "number"
+    },
+    "text": {
+      "type": "string"
+    },
+    "chain": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "acls": [],
+  "methods": {}
+}

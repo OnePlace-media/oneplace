@@ -1,0 +1,27 @@
+{
+  "name": "account",
+  "plural": "accounts",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "mysql": {
+      "table": "accounts"
+    },
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "id": true,
+      "type": "number"
+    },
+    "username": {
+      "type": "string"
+    },
+    "chain": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "acls": [],
+  "methods": {}
+}

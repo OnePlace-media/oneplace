@@ -1,0 +1,37 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3309,
+    "database": "oneplace",
+    "username": "oneplace",
+    "password": "oneplace",
+    "name": "mysql",
+    "connector": "mysql"
+  },
+  "redis": {
+    "name": "redis",
+    "connector": "redis",
+    "host": "127.0.0.1",
+    "port": 6381
+  },
+  "email": {
+    "name": "email",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "SMTP",
+        "host": "smtp.yandex.com",
+        "secure": true,
+        "port": 465,
+        "auth": {
+          "user": "...",
+          "pass": "..."
+        }
+      }
+    ]
+  }
+}

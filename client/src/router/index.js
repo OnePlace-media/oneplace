@@ -44,7 +44,7 @@ export function createRouter(i18n) {
       {
         path: '/',
         component: MainLayout,
-        redirect: '/g',
+        redirect: '/s',
         children: [{
           name: 'settings',
           path: 'settings',

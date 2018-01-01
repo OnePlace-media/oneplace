@@ -57,7 +57,10 @@ export default {
             this.formSuccessSubmitted = true
             setTimeout(() => {
               Vue.nextTick(() =>
-                this.$router.push({ name: 'auth-token', params: this.$route.params })
+                this.$router.push({
+                  name: 'chain-trend',
+                  params: { chain: 's' }
+                })
               )
             }, 5000)
           })
@@ -95,7 +98,7 @@ export default {
       <input autocomplete="off" v-model="passwordRepeat" v-validate="'required'" name="passwordRepeat" type="password" :placeholder="$t('common.placeholders.passwordRepeat')" class="login-form__input" :class="{'login-form__input--error':errors.has('passwordRepeat')}">
       <div v-show="errors.firstByRule('passwordRepeat', 'repeat')" id="vError-password-repeat" class="login-form__alert">{{$t('common.validate.passwordRepeat')}}</div>
     </div>
-    <button type="submit" class="btn login-form__btn" :disabled="processing">{{$t('auth.ChangePassword')}}</button>
+    <button type="submit" class="btn login-form__btn btn--large" :disabled="processing">{{$t('auth.ChangePassword')}}</button>
   </form>
 </div>
 

@@ -37,7 +37,7 @@ export default {
                 Vue.nextTick(() =>
                   this.$router.push({
                     name: 'chain-trend',
-                    params: { chain: 'g' }
+                    params: { chain: 's' }
                   })
                 )
               },

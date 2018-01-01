@@ -34,5 +34,5 @@ export default {
 }
 </script>
 <template>
-  <div>TOKEN</div>
+  <div></div>
 </template>

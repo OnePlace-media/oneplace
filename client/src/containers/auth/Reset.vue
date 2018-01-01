@@ -58,8 +58,9 @@ export default {
             setTimeout(() => {
               Vue.nextTick(() =>
                 this.$router.push({
-                  name: 'chain-trend',
-                  params: { chain: 's' }
+                  name: 'auth-token',
+                  params: this.$route.params,
+                  query: { reset: 1 }
                 })
               )
             }, 5000)

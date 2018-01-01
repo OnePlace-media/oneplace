@@ -9,15 +9,27 @@ export default {
     this.$auth.refresh({
       success: () => {
         this.$auth.authenticated = true
-        this.$auth.ready(()=>{
-          this.$router.push({ name: 'welcome' })
-        })
-
+        this.goToNext()
       },
       error: () => {
-        this.$router.push({ name: 'welcome' })
+        this.goToNext()
       }
     })
+  },
+  methods: {
+    goToNext() {
+      const target = this.$route.query.reset
+        ? { name: 'chain-trend', params: { chain: 's' } }
+        : { name: 'welcome' }
+
+      if (this.$auth.ready()) {
+        this.$router.push(target)
+      } else {
+        this.$auth.ready(() => {
+          this.$router.push(target)
+        })
+      }
+    }
   }
 }
 </script>

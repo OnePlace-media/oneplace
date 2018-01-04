@@ -22,8 +22,8 @@ export default context => {
           })
         }
       })).then(() => {
-        context.meta = app.$meta()
         context.state = store.state
+        context.meta = app.$meta()
         resolve(app)
       }).catch(reject)
     }, reject)

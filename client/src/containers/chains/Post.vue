@@ -17,6 +17,8 @@
 <script>
 import PostView from '../../components/chains/PostView.vue'
 import CommentsWrapper from '../../components/chains/CommentsWrapper.vue'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Post',
   components: {
@@ -25,7 +27,7 @@ export default {
   },
   metaInfo() {
     return {
-      title: this.post.title,
+      title: this.processing ? 'Loading...' : this.post.title,
       meta: [
         {
           vmid: 'description',
@@ -92,12 +94,10 @@ export default {
     this.$store.commit('setPostViewData', null)
   },
   computed: {
-    post() {
-      return this.$store.state.postView.post
-    },
-    processing() {
-      return this.$store.state.postView.processing
-    }
+    ...mapGetters({
+      post: 'post',
+      processing: 'postIsLoading'
+    })
   }
 }
 </script>

@@ -62,7 +62,7 @@ export default {
 <template>
   <header class="header">
     <div class="header__wrapper container">
-      <router-link :to="{name:'chain-trend', params:{chain:'g'}}" class="header__logo" tag="div"><img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive"></router-link>
+      <router-link :to="{name:'chain-trend', params:{chain:'s'}}" class="header__logo" tag="div"><img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive"></router-link>
       <div class="header__right-panel">
         <div class="header__chain-wrapper">
           <router-link 

@@ -95,6 +95,11 @@ import VueScrollTo from 'vue-scrollto'
 
 export default {
   name: 'Trend',
+  metaInfo() {
+    return {
+      title: `${this.chainName} trends`
+    }
+  },
   watch: {
     $route(to, from) {
       if (to.params.chain !== from.params.chain) {
@@ -119,6 +124,12 @@ export default {
     ...mapState(['trends']),
     chain() {
       return this.$route.params.chain
+    },
+    chainName(){
+      return {
+        s:'Steem',
+        g:'Golos'
+      }[this.chain]
     },
     currencySymbol() {
       return this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? '₽' : '$'

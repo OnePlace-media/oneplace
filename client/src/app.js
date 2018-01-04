@@ -15,10 +15,12 @@ import NoSSR from 'vue-no-ssr'
 import VueTimeago from 'vue-timeago'
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import Chains from './plugins/chains'
+import Meta from 'vue-meta'
 
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 
+Vue.use(Meta)
 Vue.use(Toast, {
   defaultType: 'center',
   duration: 3000,
@@ -42,8 +44,7 @@ Vue.use(VeeValidate, {inject: false, events: 'blur'})
 
 Vue.use(VueAxios, axios)
 
-Vue.axios.defaults.baseURL = `/api/`
-// Vue.axios.defaults.baseURL = `http://127.0.0.1:3001/api/`
+Vue.axios.defaults.baseURL = process.env.BASE_API_URL
 
 Vue.component('pulse-loader', PulseLoader)
 Vue.use(Helper)

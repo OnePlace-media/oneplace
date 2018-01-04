@@ -86,7 +86,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.STEEM_DOMAIN': `"${config.postingWrapper.steemDomain}"`,  // api.steemit.com'
       'process.env.GOLOS_DOMAIN': `"${config.postingWrapper.golosDomain}"`, // 'wss://ws.golos.io' //api.golos.cf'
-      'process.env.APPLICATION_USERNAME': `"${config.postingWrapper.username}"`
+      'process.env.APPLICATION_USERNAME': `"${config.postingWrapper.username}"`,
+      'process.env.BASE_API_URL': `"${process.env.NODE_ENV === 'production' ? '/api/' : 'http://127.0.0.1:3001/api/'}"`
     }),
     new webpack.ContextReplacementPlugin(
       /moment[\/\\]locale$/,

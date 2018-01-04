@@ -17,65 +17,12 @@
 <script>
 import PostView from '../../components/chains/PostView.vue'
 import CommentsWrapper from '../../components/chains/CommentsWrapper.vue'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'Post',
   components: {
     PostView,
     CommentsWrapper
-  },
-  metaInfo() {
-    return {
-      title: this.processing ? 'Loading...' : this.post.title,
-      meta: [
-        {
-          vmid: 'description',
-          name: 'description',
-          content: this.post.preview
-        },
-        {
-          vmid: 'og:title',
-          property: 'og:title',
-          content: this.post.title + ' | OnePlace.media'
-        },
-        { vmid: 'og:type', property: 'og:type', content: 'article' },
-        {
-          vmid: 'article:tag',
-          property: 'article:tag',
-          content: this.post.category
-        },
-        {
-          vmid: 'article:published_time',
-          property: 'article:published_time',
-          content: this.post.created
-        },
-        {
-          vmid: 'og:url',
-          property: 'og:url',
-          content: `https://oneplace.media${this.$route.path}`
-        },
-        { vmid: 'og:image', property: 'og:image', content: this.post.image },
-        {
-          vmid: 'og:description',
-          property: 'og:description',
-          content: this.post.preview
-        },
-        {
-          vmid: 'og:site_name',
-          property: 'og:site_name',
-          content: 'OnePlace.media'
-        }
-      ]
-    }
-  },
-  created() {
-    if (!this.post) {
-      this.$options.asyncData({
-        store: this.$store,
-        route: this.$route
-      })
-    }
   },
   asyncData({ store, route, router }) {
     return store
@@ -94,10 +41,12 @@ export default {
     this.$store.commit('setPostViewData', null)
   },
   computed: {
-    ...mapGetters({
-      post: 'post',
-      processing: 'postIsLoading'
-    })
+    post() {
+      return this.$store.state.postView.post
+    },
+    processing() {
+      return this.$store.state.postView.processing
+    }
   }
 }
 </script>

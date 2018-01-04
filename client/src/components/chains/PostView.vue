@@ -93,6 +93,50 @@ export default {
       comment: null
     }
   },
+  metaInfo() {
+    return {
+      title: this.post.title,
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: this.post.preview
+        },
+        {
+          vmid: 'og:title',
+          property: 'og:title',
+          content: this.post.title + ' | OnePlace.media'
+        },
+        { vmid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          vmid: 'article:tag',
+          property: 'article:tag',
+          content: this.post.category
+        },
+        {
+          vmid: 'article:published_time',
+          property: 'article:published_time',
+          content: this.post.created
+        },
+        {
+          vmid: 'og:url',
+          property: 'og:url',
+          content: `https://oneplace.media${this.$route.path}`
+        },
+        { vmid: 'og:image', property: 'og:image', content: this.post.image },
+        {
+          vmid: 'og:description',
+          property: 'og:description',
+          content: this.post.preview
+        },
+        {
+          vmid: 'og:site_name',
+          property: 'og:site_name',
+          content: 'OnePlace.media'
+        }
+      ]
+    }
+  },
   methods: {
     focusToComment() {
       const commentInputRoot = document.getElementById('comment-input-root')

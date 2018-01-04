@@ -5,6 +5,7 @@ Vue.prototype.$auth = null
 export default context => {
   return new Promise((resolve, reject) => {
     const {app, router, store} = createApp(context)
+    context.meta = app.$meta()
     router.push(context.url)
     router.onReady(() => {
       const matchedComponents = router.getMatchedComponents()

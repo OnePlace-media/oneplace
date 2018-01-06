@@ -94,6 +94,7 @@ export default {
     }
   },
   metaInfo() {
+    const IMAGE = process.env.BASE_API_URL + `img?l=${this.post.image}`
     return {
       title: this.post.title,
       meta: [
@@ -123,7 +124,11 @@ export default {
           property: 'og:url',
           content: `https://oneplace.media${this.$route.path}`
         },
-        { vmid: 'og:image', property: 'og:image', content: this.post.image },
+        {
+          vmid: 'og:image',
+          property: 'og:image',
+          content: IMAGE
+        },
         {
           vmid: 'og:description',
           property: 'og:description',
@@ -133,6 +138,26 @@ export default {
           vmid: 'og:site_name',
           property: 'og:site_name',
           content: 'OnePlace.media'
+        },
+        {
+          vmid: 'twitter:image',
+          name: 'twitter:image',
+          content: IMAGE
+        },
+        {
+          vmid: 'twitter:card',
+          name: 'twitter:site',
+          content: '@oneplace.media'
+        },
+        {
+          vmid: 'twitter:title',
+          name: 'twitter:title',
+          content: this.post.title + ' | OnePlace.media'
+        },
+        {
+          vmid: 'twitter:description',
+          name: 'twitter:description',
+          content: this.post.preview
         }
       ]
     }
@@ -194,7 +219,6 @@ export default {
     currencySymbol() {
       return this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? '₽' : '$'
     },
-
     chain() {
       return this.$route.params.chain || this.$store.state.chain
     },

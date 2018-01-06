@@ -3,14 +3,13 @@
  */
 
 const async = require('async');
-const NOREPLY = 'noreply@oneplace.media';
+const NOREPLY = '"OnePlace" <noreply@oneplace.media>';
 
 module.exports = Model => {
   Model.prototype.sendEmailConfirmation = function(redirect, next) {
     if (Model.app.get('env') !== 'test') {
       const email = Model.app.models.email;
       const AccessToken = Model.app.models.AccessToken;
-      console.log(this.lang)
       async.waterfall([
         cbAsync => AccessToken.create({userId: this.id}, cbAsync),
         (token, cbAsync) => {

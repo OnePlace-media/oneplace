@@ -1,18 +1,8 @@
 version: '3.1'
 services:
-  # golos-full:
-  #   container_name: golos-full
-  #   image: goloschain/golos
-  #   volumes:
-  #     - "/dev/shm:/shm"
-  #     - "./server/data/docker/golos:/var/lib/golosd"
-  #     - "./server/data/docker/golos.config.ini:/etc/golosd/config.ini"
-  #   ports:
-  #     - "2001:2001"
-  #     - "8090:8090"
   mysql:
     container_name: mysql
-    image: mysql:8.0
+    image: mysql:5.7
     volumes:
       - db_data:/var/lib/mysql
     restart: always

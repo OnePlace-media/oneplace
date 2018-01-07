@@ -66,10 +66,10 @@ cp datasources.sample.json datasources.json
 {
   ...,
   "postingWrapper": {
-    "steemDomain": "....",  // steem node with HTTP JSON-RPC
-    "golosDomain": "....",  // golos node with HTTP JSON-RPC
-    "WIF": "APPLICATION POSTING_KEY",   // you APP POSTING KEY
-    "username": "APPLICATION USERNAME"  // APP USERNAME in b`chains. Same name for all b`chains
+    "steemDomain": "steem node with HTTP JSON-RPC",
+    "golosDomain": "golos node with HTTP JSON-RPC",
+    "WIF": "APPLICATION POSTING_KEY",
+    "username": "APPLICATION USERNAME"
   }
 }
 ```

@@ -1,3 +1,5 @@
+const CONFIG = require('../../../server/config.json')
+const APP_DOMAIN = CONFIG.origin.replace('http', '').replace('https://', '')
 const urlChar = '[^\\s"<>\\]\\[\\(\\)]'
 const urlCharEnd = urlChar.replace(/\]$/, '.,\']')
 const imagePath = '(?:(?:\\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs/[a-z\\d]{40,}))'
@@ -12,8 +14,10 @@ const any = (flags = 'i') => new RegExp(urlSet(), flags)
 const youTube = (flags = 'i') => new RegExp(urlSet({domain: '(?:(?:.*\.)?youtube.com|youtu.be)'}), flags)
 const image = (flags = 'i') => new RegExp(urlSet({path: imagePath}), flags)
 const imageFile = (flags = 'i') => new RegExp(imagePath, flags)
+const local = (flags = 'i') => new RegExp(urlSet({domain: '(?:localhost|(?:.*\\.)?' + APP_DOMAIN + ')'}), flags)
 
 module.exports = {
+  local: local(),
   any: any(),
   anyFn: any,
   image: image(),

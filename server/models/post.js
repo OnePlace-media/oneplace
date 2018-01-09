@@ -1,5 +1,5 @@
 const blockChains = require('@oneplace/blockchains-api')
-const chainUtils = require('@oneplace/blockchains-api/utils')
+const chainParser = require('@oneplace/blockchains-api/parser')
 const blockChainsHelper = require('@oneplace/blockchains-api/helper')
 const CONSTANTS = require('@oneplace/constants')
 const moment = require('moment')
@@ -130,7 +130,7 @@ module.exports = Model => {
     }
     result.avatar = await blockChains.getAvatar(chain, author)
     const account = await blockChains.getAccount(chain, author)
-    result.author_rep = chainUtils.convertReputation(account.reputation)
+    result.author_rep = chainParser.convertReputation(account.reputation)
     result.body = md.render(body)
     return result
   }
@@ -178,7 +178,7 @@ module.exports = Model => {
     }
 
     const account = await blockChains.getAccount(chain, author)
-    result.reputation = chainUtils.convertReputation(account.reputation)
+    result.reputation = chainParser.convertReputation(account.reputation)
     return result
   }
 

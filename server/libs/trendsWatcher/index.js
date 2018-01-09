@@ -1,5 +1,5 @@
 const blockChains = require('@oneplace/blockchains-api')
-const chainUtils = require('@oneplace/blockchains-api/utils')
+const chainParser = require('@oneplace/blockchains-api/parser')
 const blockChainsHelper = require('@oneplace/blockchains-api/helper')
 const CONSTANTS = require('@oneplace/constants')
 const moment = require('moment')
@@ -76,26 +76,14 @@ function setImage(chain, metadata) {
   return meta.image && meta.image[0] ? IMG_PREFIX + '/640x400/' + meta.image[0] : DEFAULT_IMG[chain]
 }
 
-function cutLinks(str, length) {
-  str = str.replace(/\r\n/g, ' ').replace(/[\r\n]/g, ' ')
-  while (~str.indexOf('http') && str.indexOf('http') <= length) {
-    const start = str.indexOf('http')
-    const part1 = str.substring(0, start)
-    const end = str.indexOf(' ', start)
-    const part2 = end >= 0 ? str.substring(end) : ''
-    str = part1 + part2
-  }
-  return str
-};
-
 async function getReplies(chain, post) {
   const replies = await blockChains.getContentReplies(chain, {author: post.author, permlink: post.permlink})
   const _replies = []
   for (let replie of replies) {
     const _replie = {}
-    _replie.body = chainUtils.prepareHTML(replie.body, chain, replie.json_metadata)
+    _replie.body = chainParser.prepareHTML(chain, replie.body, replie.json_metadata).html
     _replie.author = replie.author
-    _replie.author_rep = chainUtils.convertReputation(replie.author_reputation)
+    _replie.author_rep = chainParser.convertReputation(replie.author_reputation)
     _replie.avatar = await blockChains.getAvatar(chain, replie.author)
     _replie.permlink = replie.permlink
     _replie.created = replie.created + '+00:00'
@@ -131,13 +119,17 @@ async function _preparePosts(chain, posts, full = false) {
     _post.image = setImage(chain, post.json_metadata)
     _post.nsfw = checkTags(_post.tags)
     _post.votes = post.active_votes
-    if (full) {
+    if (full || _post.image === DEFAULT_IMG[chain]) {
       const profile = await blockChains.getProfile(chain, post.author)
       if (profile) {
         _post.author_about = profile.about
       }
-      _post.author_rep = chainUtils.convertReputation(post.author_reputation)
-      _post.body = chainUtils.prepareHTML(post.body, chain, post.json_metadata)
+      _post.author_rep = chainParser.convertReputation(post.author_reputation)
+      const prepareHTML = chainParser.prepareHTML(chain, post.body, post.json_metadata)
+      _post.body = prepareHTML.html
+      if(_post.image === DEFAULT_IMG[chain]){
+        _post.image = Array.from(prepareHTML.images)[0] || DEFAULT_IMG[chain]
+      }
     }
     const payout = parseFloat(post.pending_payout_value) + parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
     _post.payout = (payout * CURRENCY[chain].q).toFixed(2)
@@ -151,7 +143,7 @@ async function _preparePosts(chain, posts, full = false) {
       let preview = post.body.replace(/<[^>]+>/gm, '')
       preview = decoder.decode(md.render(preview)).replace(/<[^>]+>/gm, '')
       preview = he.decode(preview)
-      preview = cutLinks(preview, PREVIEW_LENGTH).substring(0, PREVIEW_LENGTH)
+      preview = chainParser.cutLinks(preview, PREVIEW_LENGTH).substring(0, PREVIEW_LENGTH)
       _post.preview = preview.length == PREVIEW_LENGTH
         ? preview.substring(0, preview.split('').lastIndexOf(' ')) + '...'
         : preview
@@ -175,7 +167,7 @@ class TrendsWatcher {
   constructor(redis) {
     this.redis = redis;
     const self = this;
-    if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV && !~['test', 'development'].indexOf(process.env.NODE_ENV)) {
       (function updater() {
         console.log('Start update cache', new Date())
         const restart = err => {

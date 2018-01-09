@@ -1,3 +1,6 @@
+/** DEPRECATED */
+
+
 const Remarkable = require('remarkable');
 const md = new Remarkable({
   html: true, // remarkable renders first then sanitize runs...

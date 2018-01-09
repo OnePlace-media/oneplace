@@ -125,10 +125,10 @@ export default {
     chain() {
       return this.$route.params.chain
     },
-    chainName(){
+    chainName() {
       return {
-        s:'Steem',
-        g:'Golos'
+        s: 'Steem',
+        g: 'Golos'
       }[this.chain]
     },
     currencySymbol() {

@@ -4,14 +4,14 @@ export default {
   name: 'AuthLayout',
   components: {
     FooterMini
-  },
+  }
 }
 </script>
 
 <template>
   <div id="app" class="wrapper">
     <div class="login__wrapper">
-      <router-link :to="{name:'chain-trend', params:{chain:'g'}}" tag="div" class="login__logo">
+      <router-link :to="{name:'chain-trend', params:{chain:$route.params.chain || 's'}}" tag="div" class="login__logo">
         <img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive">
       </router-link>
       <router-view></router-view>

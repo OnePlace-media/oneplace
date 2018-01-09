@@ -19,13 +19,3 @@ export default {
     <footer-mini></footer-mini>
   </div>
 </template>
-
-<style>
-.login__logo {
-  cursor: pointer;
-}
-
-.login-form__body > .overlay {
-  margin-top: -30px;
-}
-</style>

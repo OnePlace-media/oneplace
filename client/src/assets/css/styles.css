@@ -725,6 +725,8 @@ hr {
 }
 
 .login__logo {
+  display: block;
+  cursor: pointer;
   width: 168px;
   height: 27px;
   margin: 0 auto 24px;
@@ -1012,6 +1014,10 @@ hr {
 
 .login-form__text--alert {
   border-left: 2px solid #db4c2a;
+}
+
+.login-form__text--error {
+  color: #db4c2a;
 }
 
 .register__steps-wrapper {

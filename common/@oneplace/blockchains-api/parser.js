@@ -21,7 +21,7 @@ function traverse(chain, node, state, depth = 0) {
     const child = node.childNodes[key]
     const tag = child.tagName ? child.tagName.toLowerCase() : null
     if (tag) state.htmltags.add(tag)
-    if (tag === 'img') img(state, child)
+    if (tag === 'img') img(chain, state, child)
     else if (tag === 'iframe') iframe(state, child)
     else if (tag === 'a') link(chain, state, child)
     else if (child.nodeName === '#text') linkifyNode(chain, child, state);
@@ -29,10 +29,17 @@ function traverse(chain, node, state, depth = 0) {
   })
 }
 
-function img(state, child) {
+function img(chain, state, child) {
   const url = child.getAttribute('src')
   if (url) {
     state.images.add(url)
+    let url2 = ipfsPrefix(chain, url)
+    if (/^\/\//.test(url2)) {
+      url2 = "https:" + url2
+    }
+    if (url2 !== url) {
+      child.setAttribute('src', url2)
+    }
   }
 }
 
@@ -128,11 +135,11 @@ function linkify(chain, content, hashtags, usertags, images, links) {
   content = content.replace(linksRe.anyFn('gi'), ln => {
     if (linksRe.image.test(ln)) {
       if (images) images.add(ln);
-      return `<img src="${ln}" />`
+      return `<img src="${ipfsPrefix(chain, ln)}" />`
     }
     if (/\.(zip|exe)$/i.test(ln)) return ln
     if (links) links.add(ln)
-    return `<a href="${ln}" target="_blank">${ln}</a>`
+    return `<a href="${ipfsPrefix(chain, ln)}" target="_blank">${ln}</a>`
   });
   return content
 }
@@ -239,6 +246,22 @@ const IMG_PREFIX = {
   g: 'https://imgp.golos.io'
 }
 
+const IMG_PREFIX_IPFS = {
+  s: 'https://steemitimages.com/640x480',
+  g: 'https://imgp.golos.io/640x480'
+}
+
+function ipfsPrefix(chain, url) {
+  if (/^\/?\/ipfs\//.test(url)) {
+    const slash = url.charAt(1) === '/' ? 1 : 0
+    url = url.substring(slash + '/ipfs/'.length) // start with only 1 /
+    return IMG_PREFIX_IPFS[chain] + '/' + url
+  } else if(/\/ipfs\//.test(url)){
+    return IMG_PREFIX_IPFS[chain] + '/' + url
+  }
+  return url 
+}
+
 function proxifyImages(chain, doc) {
   if (!doc) return
   Array.prototype.slice.call(doc.getElementsByTagName('img')).forEach(node => {
@@ -307,6 +330,10 @@ class Parser {
       str = part1 + part2
     }
     return str
+  }
+
+  static ipfsPrefix(chain, url) {
+    return ipfsPrefix(chain, url)
   }
 }
 

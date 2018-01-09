@@ -73,7 +73,7 @@ function setImage(chain, metadata) {
   }
 
   if (!meta.image && meta.images) meta.image = meta.images
-  return meta.image && meta.image[0] ? IMG_PREFIX + '/640x400/' + meta.image[0] : DEFAULT_IMG[chain]
+  return meta.image && meta.image[0] ? chainParser.ipfsPrefix(chain, meta.image[0]) : DEFAULT_IMG[chain]
 }
 
 async function getReplies(chain, post) {
@@ -127,8 +127,8 @@ async function _preparePosts(chain, posts, full = false) {
       _post.author_rep = chainParser.convertReputation(post.author_reputation)
       const prepareHTML = chainParser.prepareHTML(chain, post.body, post.json_metadata)
       _post.body = prepareHTML.html
-      if(_post.image === DEFAULT_IMG[chain]){
-        _post.image = Array.from(prepareHTML.images)[0] || DEFAULT_IMG[chain]
+      if (_post.image === DEFAULT_IMG[chain] && Array.from(prepareHTML.images).length) {
+        _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.images)[0]) || DEFAULT_IMG[chain]
       }
     }
     const payout = parseFloat(post.pending_payout_value) + parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)

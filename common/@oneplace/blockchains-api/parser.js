@@ -234,13 +234,17 @@ function linkifyNode(chain, child, state) {
   }
 }
 
-const STM_IMG_PREFIX = 'https://steemitimages.com'
-function proxifyImages(doc) {
+const IMG_PREFIX = {
+  s: 'https://steemitimages.com',
+  g: 'https://imgp.golos.io'
+}
+
+function proxifyImages(chain, doc) {
   if (!doc) return
   Array.prototype.slice.call(doc.getElementsByTagName('img')).forEach(node => {
     const url = node.getAttribute('src')
     if (!linksRe.local.test(url))
-      node.setAttribute('src', [STM_IMG_PREFIX, '0x0', url].join('/'))
+      node.setAttribute('src', [IMG_PREFIX[chain], '0x0', url].join('/'))
   })
 }
 
@@ -265,8 +269,7 @@ class Parser {
     try {
       const doc = DOMParser.parseFromString(html, 'text/html');
       traverse(chain, doc, state)
-      proxifyImages(doc)
-      // console.log(state)
+      proxifyImages(chain, doc)
       return {
         html: doc ? XMLSerializer.serializeToString(doc) : '',
         ...state,

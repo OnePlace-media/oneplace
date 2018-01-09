@@ -60,7 +60,7 @@ export default {
 <div class="login-form">
   <auth-header></auth-header>
   <form class="login-form__body" @submit.prevent="onSubmit" novalidate>
-    <p class="login-form__text" v-if="wrongCredentials">{{$t('auth.login.wrongCredentials')}}</p>
+    <p class="login-form__text login-form__text--error" v-if="wrongCredentials">{{$t('auth.login.wrongCredentials')}}</p>
     <div class="login-form__item">
       <input 
         id="email-input"

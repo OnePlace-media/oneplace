@@ -40,6 +40,15 @@ export default {
   beforeDestroy() {
     this.$store.commit('setPostViewData', null)
   },
+  mounted() {
+    if (!this.post) {
+      this.$options.asyncData({
+        store: this.$store,
+        route: this.$route,
+        router: this.$router
+      })
+    }
+  },
   computed: {
     post() {
       return this.$store.state.postView.post

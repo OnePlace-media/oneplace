@@ -3,6 +3,9 @@ import CONSTANTS from '@oneplace/constants'
 export default {
   page404Flag: false,
   chain: null,
+  $router: {
+    from: null
+  },
   user: {
     accounts: {
       [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: {

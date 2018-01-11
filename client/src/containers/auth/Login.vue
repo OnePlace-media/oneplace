@@ -34,12 +34,17 @@ export default {
               data: this.credentials,
               rememberMe: true,
               success: () => {
-                Vue.nextTick(() =>
-                  this.$router.push({
+                Vue.nextTick(() => {
+                  const target = {
                     name: 'chain-trend',
                     params: { chain: 's' }
-                  })
-                )
+                  }
+                  if (this.$store.state.$router.from) {
+                    target.name = this.$store.state.$router.from.name
+                    target.params = this.$store.state.$router.from.params
+                  }
+                  this.$router.push(target)
+                })
               },
               error: res => {
                 this.wrongCredentials = true

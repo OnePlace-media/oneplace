@@ -1,4 +1,6 @@
-const Remarkable = require('remarkable');
+const sanitize = require('sanitize-html')
+const sanitizeConfig = require('./SanitizeConfig')
+const Remarkable = require('remarkable')
 const md = new Remarkable({
   html: true,
   breaks: true,
@@ -35,7 +37,7 @@ function img(chain, state, child) {
     state.images.add(url)
     let url2 = ipfsPrefix(chain, url)
     if (/^\/\//.test(url2)) {
-      url2 = "https:" + url2
+      url2 = "http:" + url2
     }
     if (url2 !== url) {
       child.setAttribute('src', url2)
@@ -90,7 +92,7 @@ function link(chain, state, child) {
     //   child.setAttribute('href', `/${chain}/${username}`)
     // }
 
-    const atricleRegExp = /^((http|https):\/\/)?(golos\.blog|golos\.io|steemit\.com)?(\/[-a-zA-Z0-9]+)?\/(@[-\.a-zA-Z0-9]+)\/([-a-zA-Z0-9]+)$/
+    const atricleRegExp = /^((http|https):\/\/)?(golos\.blog|golos\.io|goldvoice\.club|busy\.org|steemit\.com)?(\/[-a-zA-Z0-9]+)?\/(@[-\.a-zA-Z0-9]+)\/([-a-zA-Z0-9]+)$/
     if (atricleRegExp.test(url)) {
       const matched = url.match(atricleRegExp)
       const domain = matched[3]
@@ -256,10 +258,10 @@ function ipfsPrefix(chain, url) {
     const slash = url.charAt(1) === '/' ? 1 : 0
     url = url.substring(slash + '/ipfs/'.length) // start with only 1 /
     return IMG_PREFIX_IPFS[chain] + '/' + url
-  } else if(/\/ipfs\//.test(url)){
+  } else if (/\/ipfs\//.test(url)) {
     return IMG_PREFIX_IPFS[chain] + '/' + url
   }
-  return url 
+  return url
 }
 
 function proxifyImages(chain, doc) {
@@ -280,6 +282,7 @@ function log10(str) {
 
 class Parser {
   static prepareHTML(chain, body, metadata) {
+    body = sanitize(body, sanitizeConfig({}))
     const state = {
       hashtags: new Set(),
       usertags: new Set(),

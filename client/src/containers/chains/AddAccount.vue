@@ -16,8 +16,8 @@ export default {
   components: {
     AccountForm
   },
-  computed:{
-    chainName(){
+  computed: {
+    chainName() {
       return {
         s: 'Steem',
         g: 'Golos'
@@ -26,10 +26,17 @@ export default {
   },
   methods: {
     success() {
-      this.$router.push({
+      const target = {
         name: 'chain-trend',
         params: { chain: this.$route.params.chain }
-      })
+      }
+
+      if (this.$store.state.$router.from) {
+        target.name = this.$store.state.$router.from.name
+        target.params = this.$store.state.$router.from.params
+      }
+
+      this.$router.push(target)
     }
   }
 }

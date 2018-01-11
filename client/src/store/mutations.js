@@ -102,5 +102,10 @@ export default {
   },
   setPostViewRepliesProcessing(state, flag) {
     state.postView.repliesProcessing = flag
+  },
+
+
+  setRouterFrom(state, {from}){
+    state.$router.from = from
   }
 }

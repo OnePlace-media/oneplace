@@ -192,7 +192,14 @@ export default {
     showPost(post) {
       if (!this.postLoading) {
         this.postLoading = true
-        history.pushState('', 'Title of page', this.makePath(post))
+        const target = {
+          name: 'chain-post-view',
+          params: {
+            chain: this.chain,
+            username: post.author,
+            permlink: post.permlink
+          }
+        }
         this.$store
           .dispatch('fetchPostByPermlink', {
             chain: this.chain,
@@ -200,6 +207,8 @@ export default {
             permlink: post.permlink
           })
           .then(() => {
+            history.pushState('', post.title, this.makePath(post))
+            this.$store.commit('setRouterFrom', { target })
             this.postLoading = false
           })
       }

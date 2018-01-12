@@ -134,7 +134,7 @@ export default {
     })(state.postView.replies)
 
   },
-  setRouterFrom(state, {from}) {
-    state.$router.from = from
+  setRouterFrom(state, {target}) {
+    state.$router.from = target
   }
 }

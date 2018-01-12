@@ -1,5 +1,7 @@
 import Vue from 'vue'
+import moment from 'moment'
 const CONSTANTS = require('@oneplace/constants')
+
 export default {
   /** Common state mutations */
   setChain(state, {chain}) {
@@ -103,9 +105,36 @@ export default {
   setPostViewRepliesProcessing(state, flag) {
     state.postView.repliesProcessing = flag
   },
+  sortPostViewReplies(state, typeOfOrder = CONSTANTS.ORDER_BY_LIST.TRENDING) {
+    function sort(a, b) {
+      let result = 0
+      if (typeOfOrder === CONSTANTS.ORDER_BY_LIST.RECENT_FIRST)
+        result = moment(a.created).unix() < moment(b.created).unix()
+      else if (typeOfOrder === CONSTANTS.ORDER_BY_LIST.OLDEST_FIRTS)
+        result = moment(a.created).unix() > moment(b.created).unix()
+      else if (typeOfOrder === CONSTANTS.ORDER_BY_LIST.TRENDING)
+        result = +a.payout < +b.payout
+      else if (typeOfOrder === CONSTANTS.ORDER_BY_LIST.POPULAR) {
+        const filter = vote => +vote.weight > 0 || +vote.percent > 0
+        result = a.active_votes.filter(filter).length < b.active_votes.filter(filter).length
+      }
 
+      return result === 0 ? 0 : (result ? 1 : -1)
+    }
 
-  setRouterFrom(state, {from}){
+    (function reSort(arr) {
+      arr.sort(sort)
+      arr = arr.map(item => {
+        if (item.replies) {
+          item.replies = reSort(item.replies)
+        }
+        return item
+      })
+      return arr
+    })(state.postView.replies)
+
+  },
+  setRouterFrom(state, {from}) {
     state.$router.from = from
   }
 }

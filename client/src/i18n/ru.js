@@ -5,6 +5,7 @@ module.exports = {
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'Вы можете голосовать за записи не чаще одного раза в 3 секунды'
   },
   common: {
+    orderBy: 'Сортировать по',
     in: 'в',
     reply: 'Ответить',
     back: 'Назад',
@@ -52,7 +53,20 @@ module.exports = {
     preview: 'Предварительный просмотр',
     dislike: 'Мне не нравится',
     like: 'Мне нравится',
-    removeVote: 'Отменить голос'
+    removeVote: 'Отменить голос',
+    orderBy: {
+      trending: 'Популярности',
+      popular: 'Голоса',
+      recent_first: 'Сначала новые',
+      oldest_first: 'Сначала старые'
+    },
+    logIn: 'Войдите',
+    register: 'зарегистрируйтесь',
+    onlyRegisteredCanLeaveComments: 'Только зарегистрированные пользователи со связанным {blockchain} аккаунтом могут оставлять комментарии.',
+    addAccountToReply: '{add-account}, чтобы ответить.',
+    addAccounChain: 'Добавьте {blockchain} аккаунт',
+    loginOrRegisterToReply: '{login-link} или {reg-link}, чтобы ответить.'
+
   },
   addAccount: {
     header: 'Пришло время добавить ваш {blockchain} аккаунт.',

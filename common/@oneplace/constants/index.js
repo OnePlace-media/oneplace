@@ -1,4 +1,10 @@
 module.exports = {
+  ORDER_BY_LIST: {
+    TRENDING: 'trending',
+    POPULAR: 'popular',
+    RECENT_FIRST: 'recent_first',
+    OLDEST_FIRTS: 'oldest_first'
+  },
   WELCOME: {
     STEPS: {
       CHOOSE_CHAIN: 1,

@@ -5,6 +5,7 @@ module.exports = {
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds'
   },
   common: {
+    orderBy: 'Order by',
     in: 'in',
     reply: 'Reply',
     back: 'Back',
@@ -52,7 +53,19 @@ module.exports = {
     preview: 'Preview',
     dislike: 'Dislike',
     like: 'Like',
-    removeVote: 'Remove vote'
+    removeVote: 'Remove vote',
+    orderBy: {
+      trending: 'Trending',
+      popular: 'Popular',
+      recent_first: 'Recent first',
+      oldest_first: 'Oldest first'
+    },
+    register: 'register',
+    logIn: 'Log in',
+    onlyRegisteredCanLeaveComments: 'Only registered users with attached {blockchain} account can leave comments.',
+    addAccountToReply: '{add-account} to reply.',
+    addAccounChain: 'Add {blockchain} account',
+    loginOrRegisterToReply: '{login-link} or {reg-link} to reply.'
   },
   addAccount: {
     header: 'It\'s time to add your {blockchain} account!',

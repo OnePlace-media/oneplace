@@ -157,7 +157,7 @@
       <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
     </button>
     <div style="overflow:hidden">
-      <router-link class="login-form__bottom-link link" :to="{name:'chain-trend', params:{chain: CHAINS.STEEM}}">{{$t('addAccount.backToOnePlace')}}</router-link>
+      <router-link class="login-form__bottom-link link" :to="backRoute">{{$t('addAccount.backToOnePlace')}}</router-link>
     </div>
   </div>
 </form>
@@ -241,6 +241,17 @@ export default {
         s: 'Steem',
         g: 'Golos'
       }[this.chain]
+    },
+    backRoute() {
+      const target = {
+        name: 'chain-trend',
+        params: { chain: this.CHAINS.STEEM }
+      }
+      if (this.$store.state.$router.from) {
+        target.name = this.$store.state.$router.from.name
+        target.params = this.$store.state.$router.from.params
+      }
+      return target
     }
   },
   data() {
@@ -297,11 +308,14 @@ export default {
                 this.model.username = ''
                 this.model.wif = ''
                 this.processing = false
-          
+
                 this.$store.commit('setWelcomeChain', this.chain)
                 this.$store.commit('setTagsFormChain', this.chain)
-                this.$store.commit('setWelcomeStep', CONSTANTS.WELCOME.STEPS.SETUP_TAGS)
-                
+                this.$store.commit(
+                  'setWelcomeStep',
+                  CONSTANTS.WELCOME.STEPS.SETUP_TAGS
+                )
+
                 this.$emit('success')
               })
           })

@@ -1,6 +1,6 @@
 # OnePlace
 
-OnePlace - это web-приложение для взаимодействия с такими блокчейнами как [Steem](https://github.com/steemit/steem) и [Golos](https://github.com/GolosChain/golos). В качестве основы были использованы такие технологии как [Vue](https://vuejs.org) с [SSR](https://ssr.vuejs.org/ru/) модулем для клиентской части проекта и [LoopBack](https://loopback.io/) для реализации серверной составляющей.
+OnePlace - это web-приложение для взаимодействия с блокчейнами [Steem](https://github.com/steemit/steem) и [Golos](https://github.com/GolosChain/golos). В качестве основы были использованы такие технологии как [Vue](https://vuejs.org) с [SSR](https://ssr.vuejs.org/ru/) модулем для клиентской части проекта и [LoopBack](https://loopback.io/) для реализации серверной составляющей.
 
 ## Установка
 
@@ -12,7 +12,7 @@ cd oneplace && npm i
 ```
 
 #### Установка зависимостей
-Данная инструкция ориентирована на пользоватлей linux с debian дистрибутивами
+Данная инструкция ориентирована на пользоватлей linux с debian дистрибутивами.
 
 ##### NodeJS
 Установите NodeJS, мы рекомендуем использовать [**LTS version**](https://nodejs.org/en/) и [**nvm**](https://github.com/creationix/nvm) для установки:
@@ -38,7 +38,7 @@ mysql -u root < ./server/data/mysql/mysql-init.sql
 mysql -u root
 # Создаем нового пользователя
 CREATE USER 'oneplace'@'localhost' IDENTIFIED BY 'password';
-# Настройка привелегий
+# Настройка привилегий
 GRANT ALL PRIVILEGES ON oneplace.* TO 'oneplace'@'localhost'
 ```
 
@@ -60,13 +60,13 @@ bind 127.0.0.1
 port 6379
 ```
 
-После установки зависимостей, вам необходимо создать конфигурационные файлы из шаблонов:
+После установки зависимостей необходимо создать конфигурационные файлы из шаблонов:
 
 ```bash
 cd server
 # Главный config
 cp config.sample.json config.json
-# Параметры к источникам данных(mysql, redis и т.д.)
+# Параметры к источникам данных (mysql, redis и т.д.)
 cp datasources.sample.json datasources.json
 ```
 
@@ -77,14 +77,14 @@ cp datasources.sample.json datasources.json
   "postingWrapper": {
     "steemDomain": "URL до ноды STEEM с HTTP JSON-RPC протоколом",
     "golosDomain": "URL до ноды GOLOS с HTTP JSON-RPC протоколом",
-    "WIF": "ПРИВАТНЫЙ ПОСТИНГ КЛЮЧ ПРИЛОЖЕНИЯ",
-    "username": "USERNAME ПРИЛОЖЕНИЯ В БЛОКЧЕЙНАХ"
+    "WIF": "Приватный постинг ключ аккаунта приложения в блокчейнах STEEM и GOLOS",
+    "username": "Имя аккаунта приложения в блокчейнах STEEM и GOLOS (без @)"
   }
 }
 ```
 
 #### Сборка и запуск
-Мы приготовили несколько команд для быстрой сборки и запуска всех сервисов. Для начала необходимо собрать рабочую версию клиента с готовым конфигом
+Мы приготовили несколько команд для быстрой сборки и запуска всех сервисов. Для начала необходимо собрать рабочую версию клиента с готовым конфигом:
 ```bash
 # Сборка фронт части проекта
 npm run build
@@ -112,7 +112,7 @@ npm run client
 Подробнее см. [package.json](./package.json).
 
 ## После установки
-На данный момент проект не является монолитным приложением, с помощью nginx вы лекго можете объединить интерфейсы VUE с loopback, простой пример:
+На данный момент проект не является монолитным приложением, с помощью nginx вы легко можете объединить интерфейсы VUE с loopback, простой пример:
 ```nginx
 location /api {
   proxy_pass http://127.0.0.1:3001;
@@ -133,15 +133,15 @@ location / {
 ```
 ## В ближайшем будущем
 - Запуск демонов в кластере и soft рестарт с нулевым простоем
-- Полное покрытие Unit тестами (frontend) и BDD(API) тестами с Karma, Mocha и PhantomJS
+- Полное покрытие Unit тестами (frontend) и BDD (API) тестами с Karma, Mocha и PhantomJS
 - Непрерывная интеграция и автоматический деплой
 - Git flow и релизы с change log
 - Полная документация
 
 ## Вопросы
 
-Чтобы сообщить о некритической проблеме, используйте этот GitHub репозиторий.
+Чтобы сообщить о некритической проблеме, создайте issue в этом репозитории.
 
-Если вы обнаружили проблему с безопасностью, пожалуйста, сообщите подробности: [oneplace83@gmail.com](mailto:oneplace83@gmail.com)
+Если вы обнаружили проблему с безопасностью, пожалуйста, отправьте подробное описание на: [oneplace83@gmail.com](mailto:oneplace83@gmail.com)
 
 Мы оценим риск и сделаем патч до возникновения проблемы.

@@ -52,6 +52,14 @@ sudo apt-get install redis
 
 #### Configuration
 
+Edit /etc/redis/redis.conf after instal redis-server for work as daemon on localhost:
+
+```bash
+daemonise yes
+bind 127.0.0.1
+port 6379
+```
+
 After you clone the repository and install dependencies you need to create configuration files.
 ```bash
 cd server
@@ -124,7 +132,7 @@ location / {
 ```
 ## Coming soon
 - Cluster start and graceful reload, with zero downtime
-- Full coverage Unit (frontend side) and BTD(API) test with Karma, Mocha and PhantomJS
+- Full coverage Unit (frontend side) and BDD(API) test with Karma, Mocha and PhantomJS
 - Continuous Integration and Auto Deploy
 - Git flow and release notes
 - Full documentation

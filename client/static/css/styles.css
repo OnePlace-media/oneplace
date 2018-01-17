@@ -2327,6 +2327,10 @@ hr {
   display: block;
 }
 
+.post-view__vote-slider-show {
+  display: block !important;
+}
+
 .post-view__vote-slider {
   position: absolute;
   top: 0;

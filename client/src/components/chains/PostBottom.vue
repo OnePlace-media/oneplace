@@ -2,22 +2,21 @@
   <div class="post-view__post-info post-view__post-info--bottom" v-show="!$store.state.params[chain].processing">
     <div class="post-view__post-data">
       <span class="post-view__post-data-item" :class="{'post-view__post-value-correction': voteIsSliding}">
-        <span class="post-view__post-value" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>
+        <span class="post-view__post-currency" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>
         {{voteIsSliding ? payoutWithVote : post.payout}}
       </span>
       <span class="post-view__post-data-item">
         <a 
           @click.prevent
           class="post-view__post-like" 
+          @mouseout="voteIsSliding=false"
+          @mouseover="voteIsSliding=true"
           :title="isLike ? $t('comment.removeVote') : $t('comment.like')"
           :class="{'post-view__post-like--active': isLike}">
           <svg @click.prevent="$emit('vote', true, voteWeight)" class="post-view__icon post-view__icon-like post-view__icon--disabled">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
           </svg>
-          <slider v-if="voteSliderActive" 
-            :value.sync="voteWeight" 
-            @slide:start="voteIsSliding=true" 
-            @slide:stop="voteIsSliding=false">
+          <slider v-if="voteSliderActive" :value.sync="voteWeight">
           </slider>
         </a>{{likeVotes}}
       </span>
@@ -35,6 +34,7 @@
 <script>
 import Slider from './Slider.vue'
 import CONSTANTS from '@oneplace/constants'
+import moment from 'moment'
 export default {
   name: 'PostBottom',
   props: [
@@ -130,18 +130,27 @@ export default {
         const voteValue = rshares / recent_claims * reward_balance * base
         return (+this.post.payout + voteValue).toFixed(2)
       } else {
-        let net_rshares =
-          this.post.votes.reduce((sum, obj) => {
-            sum = +obj.rshares + sum
-            return sum
-          }, 0) + rshares
+        const lastPayout = moment(this.post.last_payout).unix()
+        const created = moment(this.post.created).unix()
 
-        net_rshares =
-          (net_rshares + CONSTANT_S) * (net_rshares + CONSTANT_S) -
-          CONSTANT_S * CONSTANT_S
-        
-        const votesValue = net_rshares / recent_claims * reward_balance * base
-        return (votesValue * CURRENCY[this.chain]).toFixed(2)
+        const activeRshares = this.post.votes.reduce((sum, vote) => {
+          const time = moment(vote.time + '+00:00').unix()
+          if (lastPayout < created || time > lastPayout) {
+            sum = +vote.rshares + sum
+          }
+          return sum
+        }, 0) + rshares
+
+        const votesValue =
+          calculateVshares(activeRshares) /
+          recent_claims *
+          reward_balance *
+          base
+
+        return (
+          (this.post.total_payout_value + votesValue) *
+          CURRENCY[this.chain]
+        ).toFixed(2)
       }
     }
   }

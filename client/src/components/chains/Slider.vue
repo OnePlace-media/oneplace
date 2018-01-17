@@ -10,7 +10,8 @@ export default {
   },
   data() {
     return {
-      height: MAX_HEIGHT
+      height: MAX_HEIGHT,
+      isSlide: false
     }
   },
   methods: {
@@ -54,7 +55,7 @@ input::-moz-focus-inner {
 </style>
 
 <template>
-<div class="post-view__vote-slider-wrapper" >
+<div class="post-view__vote-slider-wrapper" :class="{'post-view__vote-slider-show':isSlide}">
   <div class="post-view__vote-slider range-slider" title="Set vote weight">
     <div class="post-view__vote-slider-bar" id="post-view__vote-slider-bar">
       <input 
@@ -66,8 +67,8 @@ input::-moz-focus-inner {
         max="10000" 
         :value="value" 
         @input="slide" @change="slide" 
-        @mousedown="$emit('slide:start')" 
-        @mouseup="$emit('slide:stop')"
+        @mousedown="isSlide = true" 
+        @mouseup="isSlide = false"
       />
       <div class="post-view__vote-slider-fill" :style="`height: ${height}px;`"></div>
       <div class="post-view__vote-slider-handle" :style="`bottom: ${height}px;`"></div>

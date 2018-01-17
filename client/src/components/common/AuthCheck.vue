@@ -20,15 +20,8 @@ export default {
   methods: {
     handleRedirect() {
       this.$auth.options.checkAuthenticated.call(this.$auth, () => {
-        if (this.$route.meta && this.$route.meta.auth) {
-          if (this.$auth.check()) {
-            // console.log('You are authorized')
-          } else {
-            // console.log('You are not authorized')
-            this.$router.replace(this.$auth.options.authRedirect.path)
-          }
-        } else {
-          // console.log('No need to check auth')
+        if (this.$route.meta && this.$route.meta.auth && !this.$auth.check()) {
+          this.$router.replace(this.$auth.options.authRedirect.path)
         }
         this.ready = true
       })

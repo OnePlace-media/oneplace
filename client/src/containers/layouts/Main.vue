@@ -50,7 +50,7 @@ export default {
   
   <div id="app" class="wrapper" v-else>
     <div class="login__wrapper">
-      <router-link :to="{name:'chain-trend', params:{chain:'g'}}" tag="div" class="login__logo">
+      <router-link :to="{name:'chain-trend', params:{chain:'s'}}" tag="div" class="login__logo">
         <img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive">
       </router-link>
       <not-found></not-found>

@@ -91,7 +91,7 @@ export default {
     }
   },
   metaInfo() {
-    const IMAGE = process.env.BASE_API_URL + `img?l=${this.post.image}`
+    const IMAGE = process.env.BASE_API_URL + `img?l=${encodeURIComponent(this.post.image)}`
     return {
       title: this.post.title,
       meta: [

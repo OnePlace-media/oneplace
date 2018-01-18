@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     showPayoutWithVote() {
-      return this.voteIsSliding && !this.isLike && this.account.username // && this.payoutWithVote !== this.post.payout
+      return this.voteIsSliding && !this.isLike && this.account.username && this.payoutWithVote !== this.post.payout
     },
     voteSliderActive() {
       return (

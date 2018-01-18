@@ -16,7 +16,7 @@
           <svg @click.prevent="$emit('vote', true, voteWeight)" class="post-view__icon post-view__icon-like post-view__icon--disabled">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
           </svg>
-          <slider v-if="voteSliderActive && !isLike" :value.sync="voteWeight" :max="voteWeightMax">
+          <slider v-if="voteSliderActive && !isLike" :value.sync="voteWeight">
           </slider>
         </a>{{likeVotes}}
       </span>

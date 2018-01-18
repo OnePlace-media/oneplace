@@ -1,9 +1,9 @@
 <template>
   <div class="post-view__post-info post-view__post-info--bottom" v-show="!$store.state.params[chain].processing">
     <div class="post-view__post-data">
-      <span class="post-view__post-data-item" :class="{'post-view__post-value-correction': voteIsSliding}">
+      <span class="post-view__post-data-item" :class="{'post-view__post-value-correction': showPayoutWithVote}">
         <span class="post-view__post-currency" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>
-        {{voteIsSliding ? payoutWithVote : post.payout}}
+        {{showPayoutWithVote ? payoutWithVote : post.payout}}
       </span>
       <span class="post-view__post-data-item">
         <a 
@@ -16,7 +16,7 @@
           <svg @click.prevent="$emit('vote', true, voteWeight)" class="post-view__icon post-view__icon-like post-view__icon--disabled">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
           </svg>
-          <slider v-if="voteSliderActive" :value.sync="voteWeight">
+          <slider v-if="voteSliderActive && !isLike" :value.sync="voteWeight">
           </slider>
         </a>{{likeVotes}}
       </span>
@@ -65,6 +65,9 @@ export default {
     }
   },
   computed: {
+    showPayoutWithVote(){
+      return this.voteIsSliding && !this.isLike && this.account.username && this.payoutWithVote !== this.post.payout
+    },
     voteSliderActive() {
       return (
         this.account.username &&
@@ -147,8 +150,6 @@ export default {
           reward_balance *
           base
 
-        console.log(votesValue*CURRENCY[this.chain])
-        console.log(this.post.total_payout_value)
         return (
           (this.post.total_payout_value + votesValue) *
           CURRENCY[this.chain]

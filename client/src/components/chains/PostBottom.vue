@@ -3,7 +3,7 @@
     <div class="post-view__post-data">
       <span class="post-view__post-data-item" :class="{'post-view__post-value-correction': showPayoutWithVote}">
         <span class="post-view__post-currency" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>
-        {{showPayoutWithVote ? '≈ +' + diffPayouts : post.payout}}
+        {{showPayoutWithVote ? diffPayouts : post.payout}}
       </span>
       <span class="post-view__post-data-item">
         <a 
@@ -65,7 +65,7 @@ export default {
     }
   },
   computed: {
-    showPayoutWithVote(){
+    showPayoutWithVote() {
       return this.voteIsSliding && !this.isLike && this.account.username // && this.payoutWithVote !== this.post.payout
     },
     voteSliderActive() {
@@ -77,8 +77,10 @@ export default {
     currencySymbol() {
       return this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? '₽' : '$'
     },
-    diffPayouts(){
-      return (this.payoutWithVote - this.post.payout).toFixed(2)
+    diffPayouts() {
+      let diff = (this.payoutWithVote - this.post.payout).toFixed(2)
+      if (diff > 0) diff = '+' + diff
+      return diff
     },
     payoutWithVote() {
       const CONSTANT_S = 2000000000000
@@ -130,7 +132,9 @@ export default {
       const vote_pct = this.voteWeight
       const rshares = vestsToRshares(sp, voting_power, vote_pct)
       const feedPrice = this.$store.state.params[this.chain].feedPrice
-      const base = parseFloat(feedPrice.base.split(' ')[0]) / parseFloat(feedPrice.quote.split(' ')[0])
+      const base =
+        parseFloat(feedPrice.base.split(' ')[0]) /
+        parseFloat(feedPrice.quote.split(' ')[0])
 
       if (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM) {
         const voteValue = rshares / recent_claims * reward_balance * base
@@ -139,13 +143,14 @@ export default {
         const lastPayout = moment(this.post.last_payout).unix()
         const created = moment(this.post.created).unix()
 
-        const activeRshares = this.post.votes.reduce((sum, vote) => {
-          const time = moment(vote.time + '+00:00').unix()
-          if (lastPayout < created || time > lastPayout) {
-            sum += +vote.rshares
-          }
-          return sum
-        }, 0) + rshares
+        const activeRshares =
+          this.post.votes.reduce((sum, vote) => {
+            const time = moment(vote.time + '+00:00').unix()
+            if (lastPayout < created || time > lastPayout) {
+              sum += +vote.rshares
+            }
+            return sum
+          }, 0) + rshares
 
         const votesValue =
           calculateVshares(activeRshares) /

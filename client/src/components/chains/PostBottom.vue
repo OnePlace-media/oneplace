@@ -95,7 +95,7 @@ export default {
 
       const vestsToRshares = (sp, voting_power = 10000, vote_pct = 10000) => {
         const vesting_shares = parseInt(spToVests(sp) * 1e6, 10)
-        const power = voting_power * vote_pct / 10000 / 50 + 1
+        const power = voting_power * vote_pct / 10000 / 200 + 1
         return power * vesting_shares / 10000
       }
 
@@ -136,7 +136,7 @@ export default {
         const activeRshares = this.post.votes.reduce((sum, vote) => {
           const time = moment(vote.time + '+00:00').unix()
           if (lastPayout < created || time > lastPayout) {
-            sum = +vote.rshares + sum
+            sum += +vote.rshares
           }
           return sum
         }, 0) + rshares
@@ -147,6 +147,8 @@ export default {
           reward_balance *
           base
 
+        console.log(votesValue*CURRENCY[this.chain])
+        console.log(this.post.total_payout_value)
         return (
           (this.post.total_payout_value + votesValue) *
           CURRENCY[this.chain]

@@ -3,7 +3,7 @@
     <div class="post-view__post-data">
       <span class="post-view__post-data-item" :class="{'post-view__post-value-correction': showPayoutWithVote}">
         <span class="post-view__post-currency" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>
-        {{showPayoutWithVote ? payoutWithVote : post.payout}}
+        {{showPayoutWithVote ? '≈ +' + diffPayouts : post.payout}}
       </span>
       <span class="post-view__post-data-item">
         <a 
@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     showPayoutWithVote(){
-      return this.voteIsSliding && !this.isLike && this.account.username && this.payoutWithVote !== this.post.payout
+      return this.voteIsSliding && !this.isLike && this.account.username // && this.payoutWithVote !== this.post.payout
     },
     voteSliderActive() {
       return (
@@ -76,6 +76,9 @@ export default {
     },
     currencySymbol() {
       return this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? '₽' : '$'
+    },
+    diffPayouts(){
+      return (this.payoutWithVote - this.post.payout).toFixed(2)
     },
     payoutWithVote() {
       const CONSTANT_S = 2000000000000
@@ -127,7 +130,7 @@ export default {
       const vote_pct = this.voteWeight
       const rshares = vestsToRshares(sp, voting_power, vote_pct)
       const feedPrice = this.$store.state.params[this.chain].feedPrice
-      const base = parseFloat(feedPrice.base.split(' ')[0])
+      const base = parseFloat(feedPrice.base.split(' ')[0]) / parseFloat(feedPrice.quote.split(' ')[0])
 
       if (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM) {
         const voteValue = rshares / recent_claims * reward_balance * base

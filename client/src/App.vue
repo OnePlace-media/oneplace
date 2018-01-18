@@ -1,5 +1,5 @@
 <style>
-@import url('./assets/css/styles.css');
+@import url('../static/css/styles.css');
 .login-form__alert {
   display: block;
 }

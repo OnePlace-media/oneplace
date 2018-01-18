@@ -45,6 +45,13 @@ export default {
       }
       if (!findAncestor($event.target, 'post-view__overlay')) {
         history.go(-1)
+        const target = {
+          name: 'chain-trend',
+          params: {
+            chain: this.$route.params.chain
+          }
+        }
+        this.$store.commit('setRouterFrom', { target })
         this.$store.commit('setPostViewData', null)
       }
     }

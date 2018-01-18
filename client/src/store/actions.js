@@ -53,6 +53,7 @@ export default {
           response.data.reverse()
           commit('setPostViewRepliesProcessing', false)
           commit('setPostViewRepliesData', response.data)
+          commit('sortPostViewReplies')
         }
         return response.data
       })

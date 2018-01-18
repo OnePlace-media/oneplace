@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Looks like our site is down</title>
+  <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+  <link href="/static/css/styles.css" rel="stylesheet">
+</head>
+
+<body onload="setLang()">
+  <div class="wrapper">
+    <div class="login__wrapper">
+      <div class="login__logo">
+        <img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive">
+      </div>
+      <div class="error-block--down error-block">
+        <div class="error-block__message">
+          <h1 class="h1 error-block__title" id="title">Looks like our site is down.</h1>
+          <p class="error-block__text" id="text">Please check back later, our robot is working on a solution.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="footer footer--lite">
+      <div class="container footer__wrapper">
+        <div class="footer__lang-switch">
+          <span class="footer__lang" onclick="setLang('en')" id="lang-btn-en">English</span>
+          <span class="footer__lang" onclick="setLang('ru')" id="lang-btn-ru">Русский</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script>
+    const dict = {
+      ru: {
+        title: 'Кажется у нас что-то сломалось.',
+        text: 'Наш робот уже занят починкой. Возвращайтесь вскоре.'
+      },
+      en: {
+        title: 'Looks like our site is down.',
+        text: 'Please check back later, our robot is working on a solution.'
+      }
+    }
+    function setLang(lang) {
+      if (!lang) lang = localStorage.getItem('locale') || 'en'
+      localStorage.setItem('locale', lang)
+      document.getElementById('lang-btn-en').classList.remove('footer__lang--active')
+      document.getElementById('lang-btn-ru').classList.remove('footer__lang--active')
+      document.getElementById('lang-btn-' + lang).classList.add('footer__lang--active')
+      document.title = document.getElementById('title').innerHTML = dict[lang].title
+      document.getElementById('text').innerHTML = dict[lang].text
+    }
+  </script>
+</body>
+
+</html>

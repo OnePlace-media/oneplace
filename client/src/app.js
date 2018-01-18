@@ -85,8 +85,8 @@ export function createApp(ssrContext) {
   const store = createStore()
   router.beforeEach((to, from, next) => {
     if (to.params.chain) store.commit('setChain', {chain: to.params.chain})
-    if (~['chain-post-view', 'chain-trend'].indexOf(from.name)) {
-      store.commit('setRouterFrom', {from})
+    if (~['chain-post-view', 'chain-trend'].indexOf(to.name)) {
+      store.commit('setRouterFrom', {target: {name: to.name, params: to.params}})
     }
     next()
   })

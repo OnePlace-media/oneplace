@@ -46,6 +46,7 @@ module.exports = Model => {
     let user = await Model.findById(req.accessToken.userId, {include: ['accounts']})
     for (let account of user.accounts()) {
       account.avatar = await blockChains.getAvatar(account.chain, account.username)
+      account.data = await blockChains.getAccount(account.chain, account.username)
     }
     const tags = await getTagWithOrder(user.id)
     user = JSON.parse(JSON.stringify(user))

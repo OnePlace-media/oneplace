@@ -6,32 +6,27 @@ let goldPrice = {}
 
 function getGoldPrice() {
   return new Promise((resolve, reject) => {
-    let subtract = 0
-    const dayOfWeek = +moment().format('E')
-    if (dayOfWeek > 5) {
-      subtract = -(5 - dayOfWeek)
-    } else if (dayOfWeek === 1){
-      subtract = 3
-    }
-
-    const date = moment().subtract(subtract, 'days').format('DD/MM/YYYY')
-    goldPrice[date] = 2314
-    if (goldPrice[date]) {
-      resolve(goldPrice[date])
+    const date_req1 = moment().subtract(7, 'days').format('DD/MM/YYYY')
+    const date_req2 = moment().format('DD/MM/YYYY')
+    if (goldPrice[date_req2]) {
+      resolve(goldPrice[date_req2])
     } else {
-      const url = `http://www.cbr.ru/scripts/xml_metall.asp?date_req1=${date}&date_req2=${date}`
+      const url = `http://www.cbr.ru/scripts/xml_metall.asp?date_req1=${date_req1}&date_req2=${date_req2}`
       async.waterfall([
-        cbAsync => request(url, cbAsync),
+        cbAsync => request({url, headers:{'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36'}}, cbAsync),
         (res, body, cbAsync) => parseString(body, cbAsync)
       ], (err, result) => {
-        if (err)
-          reject(err)
-        else {
-          result = result.Metall.Record && result.Metall.Record.length
-            ? result.Metall.Record.find(record => record.$.Code === "1")
-            : {Buy: [0]}
-          goldPrice[date] = parseFloat(result.Buy[0])
-          resolve(goldPrice[date])
+        if (err) {
+          resolve(2400)
+        } else {
+          if (result.Metall.Record && result.Metall.Record.length) {
+            const prices = result.Metall.Record.filter(record => record.$.Code === "1")
+            result = prices[prices.length - 1]
+            goldPrice[date_req2] = parseFloat(result.Buy[0])
+          } else {
+            result = {Buy: [0]}
+          }
+          resolve(goldPrice[date_req2])
         }
       })
     }

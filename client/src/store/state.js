@@ -3,6 +3,23 @@ import CONSTANTS from '@oneplace/constants'
 export default {
   page404Flag: false,
   chain: null,
+  params: {
+    [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: {
+      processing: false,
+      time: null,
+      feedPrice: {},
+      rewardFunds: {},
+      globalProps: {}
+    },
+    [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: {
+      processing: false,
+      time: null,
+      goldPrice: null,
+      feedPrice: {},
+      rewardFunds: {},
+      globalProps: {},
+    }
+  },
   $router: {
     from: null
   },

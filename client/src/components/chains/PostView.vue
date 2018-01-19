@@ -31,31 +31,16 @@
       <h1 class="h1 post-view__post-title">{{post.title}}</h1>
     </header>
     <div class="post-view__post-body markdown" v-html="post.body"></div>
-    <div class="post-view__post-info post-view__post-info--bottom">
-      <div class="post-view__post-data">
-        <span class="post-view__post-data-item">
-          <span class="post-view__post-value" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>{{post.payout}}
-        </span>
-        <span class="post-view__post-data-item">
-          <a 
-            @click.prevent="vote(true)"
-            class="post-view__post-like" 
-            :title="isLike ? $t('comment.removeVote') : $t('comment.like')"
-            :class="{'post-view__post-like--active': isLike}">
-            <svg class="post-view__icon post-view__icon-like post-view__icon--disabled">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
-            </svg>
-          </a>{{likeVotes}}
-        </span>
-        <span class="post-view__post-data-item">
-          <a class="post-view__post-reply" :title="$t('common.reply')" @click="focusToComment" v-scroll-to="'#comment-input-root'">
-            <svg class="post-view__icon post-view__icon-comment">
-              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#comment"></use>
-            </svg>
-          </a>{{post.children}}
-        </span>
-      </div>
-    </div>
+    <post-bottom 
+      :post="post" 
+      :account="account" 
+      :chain="chain" 
+      :like-votes="likeVotes"
+      :dislike-votes="dislikeVotes"
+      :is-like="isLike"
+      :is-dislike="isDislike"
+      @vote="vote"
+    ></post-bottom>
     <section class="post-view__bottom-block">
       <div class="post-view__author-wrapper">
         <h2 class="h2 post-view__block-title">{{$t('common.author')}}</h2>
@@ -83,10 +68,21 @@
 import CONSTANTS from '@oneplace/constants'
 import Api from '../../plugins/api'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
+import PostBottom from './PostBottom.vue'
+
 export default {
   name: 'PostView',
   props: ['isModal'],
   mixins: [onClickOutside],
+  components: {
+    PostBottom
+  },
+  mounted() {
+    this.$store.dispatch('fetchParams', {
+      chain: this.chain,
+      $chains: this.$chains
+    })
+  },
   data() {
     return {
       showDropDownMenu: false,
@@ -94,7 +90,7 @@ export default {
     }
   },
   metaInfo() {
-    const IMAGE = process.env.BASE_API_URL + `img?l=${this.post.image}`
+    const IMAGE = process.env.BASE_API_URL + `img?l=${encodeURIComponent(this.post.image)}`
     return {
       title: this.post.title,
       meta: [
@@ -163,12 +159,6 @@ export default {
     }
   },
   methods: {
-    focusToComment() {
-      const commentInputRoot = document.getElementById('comment-input-root')
-      if (commentInputRoot) {
-        commentInputRoot.focus()
-      }
-    },
     toggleDropDown() {
       this.showDropDownMenu = !this.showDropDownMenu
     },
@@ -176,9 +166,9 @@ export default {
       history.go(-1)
       this.$store.commit('setPostViewData', null)
     },
-    vote(isLike) {
+    vote(isLike, weight = 10000) {
       if (this.account.username) {
-        let weight = isLike ? 10000 : -10000
+        weight = isLike ? weight : -10000
         if ((this.isLike && isLike) || (this.isDislike && !isLike)) {
           weight = 0
         }
@@ -194,7 +184,6 @@ export default {
             this.post.votes = this.post.votes.filter(
               _vote => _vote.voter !== vote.voter
             )
-            this.post.votes.push(vote)
             return Api.getPostByPermlink(
               this.chain,
               this.post.author,
@@ -203,6 +192,7 @@ export default {
           })
           .then(response => {
             this.post.payout = response.data.payout
+            this.post.votes = response.data.votes
           })
           .catch(err => {
             this.$toast.bottom(
@@ -215,9 +205,6 @@ export default {
   computed: {
     post() {
       return this.$store.state.postView.post
-    },
-    currencySymbol() {
-      return this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? '₽' : '$'
     },
     chain() {
       return this.$route.params.chain || this.$store.state.chain

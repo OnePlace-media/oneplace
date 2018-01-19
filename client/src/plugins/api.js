@@ -34,5 +34,8 @@ export default {
   },
   updateUser(id, data) {
     return Vue.axios.patch(`/users/${id}`, data)
+  },
+  params() {
+    return Vue.axios.get(`/params`)
   }
 }

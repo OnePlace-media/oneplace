@@ -1,16 +1,19 @@
 <template>
   <div class="post-view__comments-wrapper">
-      <div class="post-view__reply-disabled" v-if="!account.username">
-        <span>{{$t('comment.onlyRegisteredCanLeaveComments',{blockchain: chainName})}}</span>&nbsp;
-        <i18n path="comment.loginOrRegisterToReply" tag="span" v-if="!$auth.check()">
-          <span place="blockchain">{{chainName}}</span>
-          <router-link :to="{name:'auth-login'}" class="link link--op" place="login-link">{{$t('comment.logIn')}}</router-link>
-          <router-link :to="{name:'auth-registration'}" class="link link--op" place="reg-link">{{$t('comment.register')}}</router-link>
-        </i18n>
-        <i18n path="comment.addAccountToReply" tag="span" v-if="$auth.check()">
-          <router-link :to="{name:'add-account',params:{chain: $route.params.chain}}" class="link link--op" place="add-account">{{$t('comment.addAccounChain',{blockchain:chainName})}}</router-link>
-        </i18n>
-      </div>
+      <no-ssr>
+        <div class="post-view__reply-disabled" v-if="!account.username">
+          <span>{{$t('comment.onlyRegisteredCanLeaveComments',{blockchain: chainName})}}</span>&nbsp;
+          <i18n path="comment.loginOrRegisterToReply" tag="span" v-if="!$auth.check()">
+            <span place="blockchain">{{chainName}}</span>
+            <router-link :to="{name:'auth-login'}" class="link link--op" place="login-link">{{$t('comment.logIn')}}</router-link>
+            <router-link :to="{name:'auth-registration'}" class="link link--op" place="reg-link">{{$t('comment.register')}}</router-link>
+          </i18n>
+          <i18n path="comment.addAccountToReply" tag="span" v-if="$auth.check()">
+            <router-link :to="{name:'add-account',params:{chain: $route.params.chain}}" class="link link--op" place="add-account">{{$t('comment.addAccounChain',{blockchain:chainName})}}</router-link>
+          </i18n>
+        </div>
+      </no-ssr>
+
       <comment-form @success="addComment" :special="true" :post="post" v-if="account.username"></comment-form>
       
       <div class="post-view__comments-header" v-if="!repliesProcessing && replies.length">

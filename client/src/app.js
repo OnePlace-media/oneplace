@@ -11,14 +11,13 @@ import Vue2TouchEvents from 'vue2-touch-events'
 import VueI18n from 'vue-i18n'
 import moment from 'moment'
 import VueLocalStorage from 'vue-localstorage'
-import NoSSR from 'vue-no-ssr'
 import VueTimeago from 'vue-timeago'
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import Chains from './plugins/chains'
 import Meta from 'vue-meta'
-
+import GlobalComponents from './plugins/globalComponents'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
+const CONSTANTS = require('@oneplace/constants')
 
 Vue.use(Meta)
 Vue.use(Toast, {
@@ -37,26 +36,14 @@ Vue.use(VueTimeago, {
   }
 })
 
-
+Vue.use(GlobalComponents)
 Vue.use(VueI18n)
 Vue.use(Vue2TouchEvents)
 Vue.use(VeeValidate, {inject: false, events: 'blur'})
-
 Vue.use(VueAxios, axios)
-
 Vue.axios.defaults.baseURL = process.env.BASE_API_URL
-
-Vue.component('pulse-loader', PulseLoader)
 Vue.use(Helper)
-
 Vue.use(VueLocalStorage)
-Vue.component('no-ssr', NoSSR)
-
-Vue.filter('golosTag', require('./filters/golos.tag').golosTag)
-Vue.filter('unGolosTag', require('./filters/golos.tag').unGolosTag)
-Vue.filter('toLowerCase', function(input) {return input.toLowerCase()})
-
-const CONSTANTS = require('@oneplace/constants')
 
 export function createApp(ssrContext) {
   const i18n = new VueI18n({

@@ -110,6 +110,7 @@ async function _preparePosts(chain, posts, full = false) {
     _post.id = post.id
     _post.title = post.title
     _post.url = URL_PREFIX[chain] + post.url
+    _post.last_payout = post.last_payout + '+00:00'
     _post.created = post.created + '+00:00'
     _post.permlink = post.permlink
     _post.author = post.author
@@ -134,6 +135,7 @@ async function _preparePosts(chain, posts, full = false) {
     const payout = parseFloat(post.pending_payout_value) + parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
     _post.payout = (payout * CURRENCY[chain].q).toFixed(2)
     _post.payout_declined = parseInt(post.max_accepted_payout) ? false : true
+    _post.total_payout_value = parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
 
     _post.children = post.children
     _post.avatar = await blockChains.getAvatar(chain, _post.author)

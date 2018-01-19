@@ -1,6 +1,6 @@
 <template>
   <div class="post-view__comments-wrapper">
-      <no-ssr>
+      <no-ssr v-if="$auth && $auth.ready()">
         <div class="post-view__reply-disabled" v-if="!account.username">
           <span>{{$t('comment.onlyRegisteredCanLeaveComments',{blockchain: chainName})}}</span>&nbsp;
           <i18n path="comment.loginOrRegisterToReply" tag="span" v-if="!$auth.check()">

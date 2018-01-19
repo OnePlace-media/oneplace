@@ -99,48 +99,50 @@ export default {
 </script>
 
 <template>
-  <section class="main-content" v-if="$auth && $auth.ready() && $auth.check()">
-    <section class="tag-block">
-      <header class="tag-block__header container">
-        <h1 class="h1 tag-block__title">{{$t('settings.header')}}</h1>
-      </header>
-      <section class="tag-block__body">
-        <div class="container settings__wrapper">
-          <div class="settings__accounts" :class="{'settings__accounts--active':attachFormShow || accountRemove}">
-            <div class="settings__block-header aside-header">
-              <h4 class="h4 aside-header__title">{{$t('settings.blockchainAccounts')}}</h4>
+  <no-ssr>
+    <section class="main-content" v-if="$auth && $auth.ready() && $auth.check()">
+      <section class="tag-block">
+        <header class="tag-block__header container">
+          <h1 class="h1 tag-block__title">{{$t('settings.header')}}</h1>
+        </header>
+        <section class="tag-block__body">
+          <div class="container settings__wrapper">
+            <div class="settings__accounts" :class="{'settings__accounts--active':attachFormShow || accountRemove}">
+              <div class="settings__block-header aside-header">
+                <h4 class="h4 aside-header__title">{{$t('settings.blockchainAccounts')}}</h4>
+              </div>
+              <div class="settings__block-body">
+              <div class="settings__accounts-wrapper">
+                <ul class="settings__accounts-list" v-if="accounts.length">
+                  <li class="settings__account" v-for="account in accounts" :key="account.id">
+                    <span class="settings__account-chain" :class="{'settings__account-chain--steem':account.chain === CHAINS.STEEM, 'settings__account-chain--golos':account.chain === CHAINS.GOLOS}"></span>
+                    <span class="settings__account-name">{{account.username}}</span>
+                    <a class="settings__remove-btn" 
+                      @click.prevent="removeAccount(account)" :title="$t('accountForm.removeAccount')">
+                      <svg class="settings__icon">
+                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#delete"></use>
+                        </svg>
+                      </a>
+                  </li>
+                </ul>
+                <div class="settings__no-accounts" v-if="!accounts.length">{{$t('settings.noAddedAccountsYet')}}</div>
+                <a href="#" class="btn-expand btn-expand--accounts" v-show="!attachFormShow && !accountRemove" @click.prevent="attachFormShow = true"></a>
+              </div>
+              <account-form view="settings" v-if="attachFormShow && !accountRemove" @success="closeAccountForm" @close="closeAccountForm"></account-form>
+              <account-remove-form :account="accountRemove" @cancel="accountRemove = null" @success="removeAccount" v-if="accountRemove"></account-remove-form>
             </div>
-            <div class="settings__block-body">
-            <div class="settings__accounts-wrapper">
-              <ul class="settings__accounts-list" v-if="accounts.length">
-                <li class="settings__account" v-for="account in accounts" :key="account.id">
-                  <span class="settings__account-chain" :class="{'settings__account-chain--steem':account.chain === CHAINS.STEEM, 'settings__account-chain--golos':account.chain === CHAINS.GOLOS}"></span>
-                  <span class="settings__account-name">{{account.username}}</span>
-                  <a class="settings__remove-btn" 
-                    @click.prevent="removeAccount(account)" :title="$t('accountForm.removeAccount')">
-                    <svg class="settings__icon">
-                      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#delete"></use>
-                      </svg>
-                    </a>
-                </li>
-              </ul>
-              <div class="settings__no-accounts" v-if="!accounts.length">{{$t('settings.noAddedAccountsYet')}}</div>
-              <a href="#" class="btn-expand btn-expand--accounts" v-show="!attachFormShow && !accountRemove" @click.prevent="attachFormShow = true"></a>
             </div>
-            <account-form view="settings" v-if="attachFormShow && !accountRemove" @success="closeAccountForm" @close="closeAccountForm"></account-form>
-            <account-remove-form :account="accountRemove" @cancel="accountRemove = null" @success="removeAccount" v-if="accountRemove"></account-remove-form>
+            <div class="settings__tags">
+              <div class="settings__block-header aside-header">
+                <h4 class="h4 aside-header__title">{{$t('settings.categoriesList')}}</h4>
+              </div>
+              <div class="settings__block-body settings__tags-body">
+                <tags-form view="settings"></tags-form>
+              </div>
+            </div>
           </div>
-          </div>
-          <div class="settings__tags">
-            <div class="settings__block-header aside-header">
-              <h4 class="h4 aside-header__title">{{$t('settings.categoriesList')}}</h4>
-            </div>
-            <div class="settings__block-body settings__tags-body">
-              <tags-form view="settings"></tags-form>
-            </div>
-          </div>
-        </div>
+        </section>
       </section>
     </section>
-  </section>
+  </no-ssr>
 </template>

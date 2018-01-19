@@ -23,7 +23,7 @@ if (isProd) {
 function createRenderer(bundle, template) {
   return require('vue-server-renderer').createBundleRenderer(bundle, {
     template,
-    runInNewContext: true,
+    runInNewContext: false,
     cache: require('lru-cache')({
       max: 1000,
       maxAge: 1000 * 60 * 15

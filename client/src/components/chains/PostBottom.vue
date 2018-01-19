@@ -35,6 +35,12 @@
 import Slider from './Slider.vue'
 import CONSTANTS from '@oneplace/constants'
 import moment from 'moment'
+
+const CONSTANT_S = 2000000000000
+const STEEMIT_VOTE_REGENERATION_SECONDS = 5 * 60 * 60 * 24
+const STEEM_100_PERCENT = 10000
+
+
 export default {
   name: 'PostBottom',
   props: [
@@ -88,25 +94,20 @@ export default {
       return diff
     },
     payoutWithVote() {
-      const CONSTANT_S = 2000000000000
-      const STEEMIT_VOTE_REGENERATION_SECONDS = 5 * 60 * 60 * 24
-      const STEEM_100_PERCENT = 10000
-      const VOTE_POWER_REVERSE_RATE = this.$store.state.params[this.chain].globalProps.vote_power_reserve_rate || 40
+      const params = this.$store.state.params[this.chain]
+      const VOTE_POWER_REVERSE_RATE = params.globalProps.vote_power_reserve_rate || 40
       const CURRENCY = {
         [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: 1,
         [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: this.$store.state.params[
           CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS
         ].goldPrice
       }
-      const steem_per_mvests = this.$store.state.params[this.chain].steem_per_mvests
 
       const calculateVshares = rshares => {
         return (Math.pow(rshares + CONSTANT_S, 2) - Math.pow(CONSTANT_S, 2))
       }
 
-      const { recent_claims, reward_balance } = this.$store.state.params[
-        this.chain
-      ].rewardFunds
+      const { recent_claims, reward_balance } = params.rewardFunds
 
       const data = this.account.data
       
@@ -120,14 +121,13 @@ export default {
         total_vests -= parseFloat(data.delegated_vesting_shares.split(' ')[0])
 
       const vote_pct = this.voteWeight
-
-
       const max_vote_denom = VOTE_POWER_REVERSE_RATE * STEEMIT_VOTE_REGENERATION_SECONDS / (60*60*24)
       let used_power = (voting_power * vote_pct) / STEEM_100_PERCENT
       used_power = (used_power + max_vote_denom - 1) / max_vote_denom
 
       let rshares = total_vests * used_power / STEEM_100_PERCENT
       rshares = Math.floor(rshares * 1000000)
+
       const feedPrice = this.$store.state.params[this.chain].feedPrice
       const base =
         parseFloat(feedPrice.base.split(' ')[0]) /
@@ -148,7 +148,7 @@ export default {
             }
             return sum
           }, 0) + rshares
-
+        
         const votesValue =
           calculateVshares(activeRshares) /
           recent_claims *

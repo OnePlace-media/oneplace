@@ -41,7 +41,6 @@
       :is-dislike="isDislike"
       @vote="vote"
     ></post-bottom>
-
     <section class="post-view__bottom-block">
       <div class="post-view__author-wrapper">
         <h2 class="h2 post-view__block-title">{{$t('common.author')}}</h2>
@@ -185,7 +184,6 @@ export default {
             this.post.votes = this.post.votes.filter(
               _vote => _vote.voter !== vote.voter
             )
-            this.post.votes.push(vote)
             return Api.getPostByPermlink(
               this.chain,
               this.post.author,
@@ -194,6 +192,7 @@ export default {
           })
           .then(response => {
             this.post.payout = response.data.payout
+            this.post.votes = response.data.votes
           })
           .catch(err => {
             this.$toast.bottom(

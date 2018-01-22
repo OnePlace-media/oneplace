@@ -51,7 +51,7 @@ export default {
             chain: this.$route.params.chain
           }
         }
-        this.$store.commit('setRouterFrom', { target })
+        this.$store.commit('core/setRouterFrom', { target })
         this.$store.commit('setPostViewData', null)
       }
     }

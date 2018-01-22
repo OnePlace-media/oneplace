@@ -209,7 +209,8 @@ export default {
           })
           .then(() => {
             history.pushState('', post.title, this.makePath(post, chain))
-            this.$store.commit('setRouterFrom', { target })
+
+            this.$store.commit('core/setRouterFrom', { target })
             this.postLoading = false
           })
       }

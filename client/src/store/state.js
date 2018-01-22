@@ -21,9 +21,6 @@ export default () => {
         globalProps: {},
       }
     },
-    $router: {
-      from: null
-    },
     user: {
       accounts: {
         [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: {

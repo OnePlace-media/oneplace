@@ -39,9 +39,10 @@ export default {
                     name: 'chain-trend',
                     params: { chain: 's' }
                   }
-                  if (this.$store.state.$router.from) {
-                    target.name = this.$store.state.$router.from.name
-                    target.params = this.$store.state.$router.from.params
+                  const from = this.$store.state.core.$router.from
+                  if (from) {
+                    target.name = from.name
+                    target.params = from.params
                   }
                   this.$router.push(target)
                 })

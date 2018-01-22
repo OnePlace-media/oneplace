@@ -43,9 +43,9 @@ export default {
       const result = []
       if(isGolos){
         result.push(this.$n(this.post.total_payout, 'currency', 'ru'))
-        result.push(`(${this.post.total_payout_value} GBG)`)
+        result.push(`(${this.post.total_payout_value.toFixed(3)} GBG)`)
       } else {
-        result.push(`${this.post.total_payout_value} SBD`)
+        result.push(`${this.post.total_payout_value.toFixed(3)} SBD`)
       }
       return result.join(' ')
     }

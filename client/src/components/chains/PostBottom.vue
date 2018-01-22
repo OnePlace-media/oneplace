@@ -157,12 +157,12 @@ export default {
       return diff
     },
     payoutWithVote() {
-      const params = this.$store.state.params[this.chain]
+      const params = this.$store.state.core.params[this.chain]
       const VOTE_POWER_REVERSE_RATE =
         params.globalProps.vote_power_reserve_rate || 40
       const CURRENCY = {
         [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: 1,
-        [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: this.$store.state.params[
+        [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: this.$store.state.core.params[
           CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS
         ].goldPrice
       }

@@ -31,7 +31,7 @@
         <h1 class="h1 post-view__post-title">{{post.title}}</h1>
       </header>
       <div class="post-view__post-body markdown" v-html="post.body"></div>
-      <div class="post-view__post-info post-view__post-info--bottom" v-show="!$store.state.params[chain].processing">
+      <div class="post-view__post-info post-view__post-info--bottom" v-show="!$store.state.core.params[chain].processing">
         <post-bottom 
             type="post"
             :post="post" 
@@ -77,7 +77,7 @@ export default {
     PostBottom
   },
   mounted() {
-    this.$store.dispatch('fetchParams', {
+    this.$store.dispatch('core/fetchParams', {
       chain: this.chain,
       $chains: this.$chains
     })

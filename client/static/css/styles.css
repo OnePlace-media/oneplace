@@ -111,6 +111,10 @@ hr {
   font-weight: 700;
 }
 
+.currency {
+  font-family: 'PT Sans', 'Noto Sans', sans-serif;
+}
+
 .link {
   color: inherit;
   transition: all 0.3s ease;
@@ -158,6 +162,37 @@ hr {
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
+}
+
+.dropdown {
+  display: block;
+  position: absolute;
+  z-index: 10;
+  padding: 8px 8px;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0,0,0,0.15);
+}
+
+.dropdown:before,.dropdown:after {
+  display: block;
+  content: '';
+  position: absolute;
+  right: calc(50% - 8px);
+  top: -16px;
+  border: 8px solid transparent;
+}
+
+.dropdown:before {
+  width: 16px;
+  height: 16px;
+  border-bottom-color: #a8adad;
+}
+
+.dropdown:after {
+  width: 15px;
+  height: 15px;
+  border-bottom-color: #fff;
 }
 
 .header {
@@ -2206,7 +2241,7 @@ hr {
   font-size: 13px;
   border-radius: 3px;
   background: #fff;
-  box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.15);
 }
 
 .post-view__action-menu:before,.post-view__action-menu:after {
@@ -2320,7 +2355,7 @@ hr {
   bottom: 18px;
   left: -4px;
   width: 28px;
-  height: 88px;
+  height: 90px;
 }
 
 .post-view__vote-slider-wrapper:hover {
@@ -2334,11 +2369,11 @@ hr {
 .post-view__vote-slider {
   position: absolute;
   top: 0;
-  bottom: 8px;
+  bottom: 10px;
   left: 0;
   right: 0;
   background: #fff;
-  box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 10px rgba(0,0,0,0.15);
 }
 
 .post-view__vote-slider:hover {
@@ -2373,16 +2408,92 @@ hr {
 .post-view__vote-slider-handle {
   position: absolute;
   background: #383838;
-  left: -4px;
-  width: 12px;
-  height: 12px;
-  border: 2px solid #fff;
+  left: -3px;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #fff;
   border-radius: 50%;
   -webkit-transform: scale(1);
   transform: scale(1);
   transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
   transition: transform 0.2s ease, -webkit-transform 0.2s ease;
+}
+
+.post-view__post-value {
+  position: relative;
+}
+
+.post-view__post-value:hover .post-view__pending-payout {
+  display: block;
+}
+
+.post-view__pending-payout {
+  display: none;
+  font-size: 13px;
+  width: 200px;
+  padding: 8px 16px;
+  top: 32px;
+  left: calc(50% - 100px);
+  color: #383838;
+}
+
+.post-view__pending-payout:before,.post-view__pending-payout:after {
+  left: calc(50% - 8px);
+}
+
+.post-view__pending-payout p {
+  white-space: normal;
+}
+
+.post-view__votes {
+  position: relative;
+}
+
+.post-view__votes:hover .post-view__voters {
+  display: block;
+}
+
+.post-view__voters {
+  display: none;
+  font-size: 13px;
+  min-width: 200px;
+  padding: 8px 16px;
+  top: 32px;
+  left: -80px;
+  color: #383838;
+}
+
+.post-view__voters:before,.post-view__voters:after {
+  left: 80px;
+}
+
+.post-view__voter-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post-view__voter {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.post-view__voter-name {
+  padding-right: 16px;
+}
+
+.post-view__voter-amount {
+  color: #818888;
+}
+
+.post-view__voters-all {
+  color: #a8adad;
 }
 
 .post-view__icon {

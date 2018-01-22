@@ -184,5 +184,34 @@ export default {
     if (state.chain !== acc.chain) {
       Vue.router.push({name: 'chain-trend', params: {chain: acc.chain}})
     }
+  },
+  vote({commit, state}, {chain, post, account, isLike, weight = 10000}){
+    if (account.username) {
+      const alreadyLike = !!post.active_votes.find(vote => vote.voter === account.username && (vote.percent > 0 || vote.weight > 0))
+      const alreadyDisLike = !!post.active_votes.find(vote => vote.voter === account.username && (vote.percent < 0 || vote.weight < 0))
+      weight = isLike ? weight : -10000
+      if ((alreadyLike && isLike) || (alreadyDisLike && !isLike)) {
+        weight = 0
+      }
+      Api.vote(
+        chain,
+        account.username,
+        post.author,
+        post.permlink,
+        weight
+      )
+        .then(() => {
+          return Api.getPostByPermlink(chain, post.author, post.permlink)
+        })
+        .then(response => {
+          post.payout = response.data.payout
+          post.active_votes = response.data.active_votes
+        })
+        .catch(err => {
+          Vue.prototype.$toast.bottom(
+            Vue.prototype.$t(`errors.${err.response.data.error.code}`)
+          )
+        })
+    }
   }
 }

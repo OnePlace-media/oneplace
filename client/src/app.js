@@ -49,6 +49,18 @@ export function createApp(ssrContext) {
   const i18n = new VueI18n({
     locale: 'en',
     fallbackLocale: 'en',
+    numberFormats: {
+      'en': {
+        currency: {
+          style: 'currency', currency: 'usd', currencyDisplay: 'symbol'
+        }
+      },
+      'ru': {
+        currency: {
+          style: 'currency', currency: 'rub', currencyDisplay: 'symbol'
+        }
+      }
+    },
     messages: {
       en: require('./i18n/en'),
       ru: require('./i18n/ru')

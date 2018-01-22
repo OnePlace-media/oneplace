@@ -176,8 +176,8 @@ export default {
         }
       }
     },
-    makePath(post) {
-      return `/${this.chain}/@${post.author}/${post.permlink}`
+    makePath(post, chain) {
+      return `/${chain || this.chain}/@${post.author}/${post.permlink}`
     },
     fetchData() {
       this.$store
@@ -190,24 +190,25 @@ export default {
         })
     },
     showPost(post) {
+      const chain = this.chain
       if (!this.postLoading) {
         this.postLoading = true
         const target = {
           name: 'chain-post-view',
           params: {
-            chain: this.chain,
+            chain: chain,
             username: post.author,
             permlink: post.permlink
           }
         }
         this.$store
           .dispatch('fetchPostByPermlink', {
-            chain: this.chain,
+            chain: chain,
             username: post.author,
             permlink: post.permlink
           })
           .then(() => {
-            history.pushState('', post.title, this.makePath(post))
+            history.pushState('', post.title, this.makePath(post, chain))
             this.$store.commit('setRouterFrom', { target })
             this.postLoading = false
           })

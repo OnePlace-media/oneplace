@@ -1,5 +1,5 @@
 <script>
-const MAX_HEIGHT = 52
+const MAX_HEIGHT = 56
 export default {
   name: 'Slider',
   props: {

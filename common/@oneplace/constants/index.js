@@ -68,6 +68,10 @@ module.exports = {
     PREFIXES: {
       's': 'STM',
       'g': 'GLS'
+    },
+    MAX_PAYOUT_PENDING_DAYS: {
+      's': 7,
+      'g': 30
     }
   },
   USER: {

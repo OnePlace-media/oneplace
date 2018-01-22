@@ -76,7 +76,10 @@ module.exports = {
     imageIsHidden: 'Image is hidden. Click to show image.',
     emptyCategoryHelp: 'No posts in this category.',
     removeFlag: 'Remove flag',
-    downvotePost: 'Downvote post'
+    downvotePost: 'Downvote post',
+    pendingPayout: 'Pending payout is {payout} in {days}.',
+    pendingDays: '1 day | {count} days',
+    readyPayout: 'Past payouts {payout}'
   },
   welcome: {
     createRegistration: 'Create profile',

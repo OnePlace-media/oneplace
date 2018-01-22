@@ -77,7 +77,10 @@ module.exports = {
     imageIsHidden: 'Изображение скрыто. Нажмите, чтобы увидеть изображение.',
     emptyCategoryHelp: 'Нет записей в данной категории.',
     removeFlag: 'Отменить флаг',
-    downvotePost: 'Проголосовать против'
+    downvotePost: 'Проголосовать против',
+    pendingPayout: 'Ожидаемая выплата {payout} через {days}.',
+    pendingDays: '1 day | {count} дней',
+    readyPayout: 'Предыдущие выплаты {payout}'
   },
   welcome: {
     createRegistration: 'Создание профиля',

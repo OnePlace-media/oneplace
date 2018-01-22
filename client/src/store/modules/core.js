@@ -6,14 +6,14 @@ const state = {
   },
   params: {
     [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: {
-      processing: false,
+      processing: true,
       time: null,
       feedPrice: {},
       rewardFunds: {},
       globalProps: {}
     },
     [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: {
-      processing: false,
+      processing: true,
       time: null,
       goldPrice: null,
       feedPrice: {},

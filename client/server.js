@@ -87,6 +87,15 @@ const port = process.env.PORT || 3000
 app.listen(port, () => {
   app.emit('server-ready')
   console.log(`server started at http://localhost:${port}`)
+  setTimeout(() => process.send('ready'), 2000)
+
+})
+
+
+process.on('message', function(msg) {
+  if (msg === 'shutdown') {
+    app.close(() => process.exit(0))
+  }
 })
 
 module.exports = app

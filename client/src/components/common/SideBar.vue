@@ -47,9 +47,8 @@ export default {
             <li v-for="tag in tags" :key="tag.id">
               <a class="sidebar__nav-link link" 
                 :class="{'sidebar__nav-link-active': activeTag === tag.text}"
-                @click="close"
                 :href="`#${tag.text}`" 
-                v-scroll-to="`#tag-${tag.text}`">
+                v-scroll-to="{el:`#tag-${tag.text}`, onDone: close}">
                 <span>{{tag.text | unGolosTag}}</span>
               </a>
             </li>

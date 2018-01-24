@@ -87,8 +87,9 @@ const port = process.env.PORT || 3000
 app.listen(port, () => {
   app.emit('server-ready')
   console.log(`server started at http://localhost:${port}`)
-  setTimeout(() => process.send('ready'), 2000)
-
+  
+  if (process.send)
+    process.send('ready')
 })
 
 

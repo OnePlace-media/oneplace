@@ -10,7 +10,7 @@ export default {
   computed: {
     havePayoutPending() {
       const daysAfterCreated = moment().diff(moment(this.post.created), 'days')
-      return (
+      return +this.post.pending_payout && (
         daysAfterCreated <
         CONSTANTS.BLOCKCHAIN.MAX_PAYOUT_PENDING_DAYS[this.chain]
       )

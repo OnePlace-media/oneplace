@@ -58,14 +58,9 @@
 <script>
 import Slider from './Slider.vue'
 import CONSTANTS from '@oneplace/constants'
-import moment from 'moment'
 import DropdownPayout from './DropdownPayout.vue'
 import DropdownVotes from './DropdownVotes.vue'
 import Converter from '@oneplace/blockchains-api/converter'
-
-const CONSTANT_S = 2000000000000
-const STEEMIT_VOTE_REGENERATION_SECONDS = 5 * 60 * 60 * 24
-const STEEM_100_PERCENT = 10000
 
 export default {
   name: 'PostBottom',
@@ -148,7 +143,8 @@ export default {
     },
     diffPayouts() {
       let diff = (this.payoutWithVote - this.post.payout).toFixed(2)
-      if (diff > 0) diff = '+' + diff
+      if(diff === '0.00') diff = '< 0.01'
+      else if (diff > 0) diff = '+' + diff
       return diff
     },
     payoutWithVote() {

@@ -12,22 +12,37 @@ export default {
   },
   methods: {
     calcFiat(vote) {
-      const locale =
-        this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ? 'en' : 'ru'
+      let locale ='ru'
+      let prefix = ''
+      let postfix = ''
+      
+      if(this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM){
+        locale = 'en'
+        postfix = ' $'
+      }
+      
       const params = this.$store.state.core.params[this.chain]
-      return this.$n(
-        Converter.voteToFiat(vote, this.chain, params, this.post, false),
+      let payout = Converter.voteToFiat(vote, this.chain, params, this.post, false)
+      if(payout === '0.00'){
+        payout = '0.01'
+        prefix = '< '
+      }
+      return prefix + this.$n(
+        payout,
         'currency',
         locale
-      )
+      ).replace('$', '') + postfix
     }
   },
   computed: {
+    activeVotesLike(){
+      return this.post.active_votes.filter(vote=> vote.weight > 0 || vote.percent > 0)
+    },
     sortAndSliceVotes() {
-      return this.post.active_votes.slice(0, MAX_COUNT_VOTES)
+      return this.activeVotesLike.slice(0, MAX_COUNT_VOTES)
     },
     countMore() {
-      return this.post.active_votes.length - MAX_COUNT_VOTES
+      return this.activeVotesLike.length - MAX_COUNT_VOTES
     }
   }
 }

@@ -79,7 +79,7 @@ module.exports = {
     removeFlag: 'Отменить флаг',
     downvotePost: 'Проголосовать против',
     pendingPayout: 'Ожидаемая выплата {payout} через {days}.',
-    pendingDays: '1 day | {count} дней',
+    pendingDays: '1 день | {count} дней',
     readyPayout: 'Предыдущие выплаты {payout}'
   },
   welcome: {

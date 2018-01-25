@@ -154,10 +154,11 @@ function embedYouTubeNode(child, links, images) {
     if (!yt) return false
 
     const v = DOMParser.parseFromString(`
-      <div class="video-wrapper">
-        <iframe width="560" height="310" src="https://www.youtube.com/embed/${yt.id}" frameborder="0" allowfullscreen></iframe>
+      <div class="video-wrapper" data-src="https://www.youtube.com/embed/${yt.id}">
       </div>`
     )
+
+    // <iframe width="560" height="310" src="https://www.youtube.com/embed/${yt.id}" frameborder="0" allowfullscreen></iframe>
     child.parentNode.replaceChild(v, child)
     if (links) links.add(yt.url)
     if (images)
@@ -197,10 +198,11 @@ function embedVimeoNode(child, links /*images*/) {
 
     const url = `https://player.vimeo.com/video/${id}`
     const v = DOMParser.parseFromString(`
-      <div class="video-wrapper">
-        <iframe width="560" height="310" src="${url}" frameborder="0" allowfullscreen></iframe>
+      <div class="video-wrapper" data-src="${url}">
       </div>
   `)
+
+    // <iframe width="560" height="310" src="${url}" frameborder="0" allowfullscreen></iframe>
     child.parentNode.replaceChild(v, child)
     if (links) links.add(url)
     return true

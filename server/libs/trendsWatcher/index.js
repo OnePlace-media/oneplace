@@ -78,33 +78,16 @@ function setImage(chain, metadata) {
 
 async function getReplies(chain, post) {
   const replies = await blockChains.getContentReplies(chain, {author: post.author, permlink: post.permlink})
-  const _replies = []
-  for (let replie of replies) {
-    const _replie = {}
-    _replie.body = chainParser.prepareHTML(chain, replie.body, replie.json_metadata).html
-    _replie.author = replie.author
-    _replie.author_rep = chainParser.convertReputation(replie.author_reputation)
-    _replie.avatar = await blockChains.getAvatar(chain, replie.author)
-    _replie.permlink = replie.permlink
-    _replie.created = replie.created + '+00:00'
-    _replie.payout_declined = parseInt(replie.max_accepted_payout) ? false : true
-    _replie.votes = replie.net_votes
-    _replie.active_votes = await blockChains.getActiveVotes(chain, replie)
-    _replie.children = replie.children
-    if (_replie.children) {
-      _replie.replies = await getReplies(chain, {author: replie.author, permlink: replie.permlink})
+  const _replies = await _preparePosts(chain, replies, true, true)
+  for (let replie of _replies) {
+    if (replie.children) {
+      replie.replies = await getReplies(chain, {author: replie.author, permlink: replie.permlink})
     }
-    const payout = parseFloat(replie.pending_payout_value) + parseFloat(replie.total_payout_value) + parseFloat(replie.curator_payout_value)
-    _replie.payout = (payout * CURRENCY[chain].q).toFixed(2)
-    _replie.total_payout_value = parseFloat(replie.total_payout_value) + parseFloat(replie.curator_payout_value)
-    _replie.total_payout = (_replie.total_payout_value  * CURRENCY[chain].q).toFixed(2)
-
-    _replies.push(_replie)
   }
   return _replies
 }
 
-async function _preparePosts(chain, posts, full = false) {
+async function _preparePosts(chain, posts, full = false, replie = false) {
   CURRENCY[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS].q = await blockChainsHelper.getGoldPrice() / 1000
   const _posts = []
   for (let post of posts) {
@@ -120,7 +103,13 @@ async function _preparePosts(chain, posts, full = false) {
     _post.tags = setTags(chain, post.json_metadata)
     _post.image = setImage(chain, post.json_metadata)
     _post.nsfw = checkTags(_post.tags)
-    _post.active_votes = post.active_votes
+
+    if(replie){
+      _post.active_votes = await blockChains.getActiveVotes(chain, post)
+    } else {
+      _post.active_votes = post.active_votes
+    }
+
     if (full || _post.image === DEFAULT_IMG[chain]) {
       const profile = await blockChains.getProfile(chain, post.author)
       if (profile) {
@@ -145,7 +134,7 @@ async function _preparePosts(chain, posts, full = false) {
     _post.avatar = await blockChains.getAvatar(chain, _post.author)
 
     _post.preview = ''
-    if (post.body) {
+    if (post.body && !replie) {
       let preview = post.body.replace(/<[^>]+>/gm, '')
       preview = decoder.decode(md.render(preview)).replace(/<[^>]+>/gm, '')
       preview = he.decode(preview)

@@ -3,7 +3,7 @@
     <span class="post-view__post-data-item" :class="{'post-view__post-value-correction': showPayoutWithVote}">
       <span class="post-view__post-currency" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>
       <span class="post-view__post-value">{{payoutValue}}
-        <dropdown-payout :post="post" :chain="chain" v-if="!isComment"></dropdown-payout>
+        <dropdown-payout :post="post" :chain="chain"></dropdown-payout>
       </span>
     </span>
     <span class="post-view__post-data-item">
@@ -24,7 +24,7 @@
         <slider v-if="voteSliderActive && !isLike" :value.sync="voteWeight"></slider>
       </a>
       <span class="post-view__votes">{{likeVotes}}
-        <dropdown-votes :post="post" :chain="chain" v-if="!isComment"></dropdown-votes>
+        <dropdown-votes :post="post" :chain="chain" v-if="likeVotes"></dropdown-votes>
       </span>
     </span>
     <span class="post-view__post-data-item" v-if="isComment">
@@ -143,8 +143,7 @@ export default {
     },
     diffPayouts() {
       let diff = (this.payoutWithVote - this.post.payout).toFixed(2)
-      if(diff === '0.00') diff = '< 0.01'
-      else if (diff > 0) diff = '+' + diff
+      if (diff > 0) diff = '+' + diff
       return diff
     },
     payoutWithVote() {

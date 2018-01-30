@@ -77,7 +77,7 @@ class Converter {
           CURRENCY_Q
         ).toFixed(2)
       } else {
-        const setVoteMode = time => time > moment(post.created).unix() && time < moment(post.created).subtract(-1, 'days').unix()
+        const setVoteMode = time => time >= moment(post.created).unix() && time <= moment(post.created).subtract(-1, 'days').unix()
           ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
           : CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
 
@@ -94,6 +94,7 @@ class Converter {
 
         let q = (reward_balance * base) / recent_claims
         const vShares = Converter.calculateVshares(activeRshares)
+        
         if (vote.mode !== post.mode || post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
           if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
             q = post.total_payout_value / vShares

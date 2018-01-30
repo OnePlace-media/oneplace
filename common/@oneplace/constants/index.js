@@ -72,6 +72,11 @@ module.exports = {
     MAX_PAYOUT_PENDING_DAYS: {
       's': 7,
       'g': 30
+    },
+    MODES:{
+      FIRST_PAYOUT: 'first_payout',
+      SECOND_PAYOUT: 'second_payout',
+      ARCHIVED: 'archived'
     }
   },
   USER: {

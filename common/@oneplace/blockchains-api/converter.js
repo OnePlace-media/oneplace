@@ -28,38 +28,46 @@ class Converter {
     return Math.pow(rshares + CONSTANT_S, 2) - Math.pow(CONSTANT_S, 2)
   }
 
-  static voteToFiat(vote, chain, params, post, full = true) {
+  static voteToFiat(vote, chain, params, post, append = true) {
     const CURRENCY_Q = CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? params.goldPrice : 1
     const feedPrice = params.feedPrice
     const base = parseFloat(feedPrice.base.split(' ')[0]) / parseFloat(feedPrice.quote.split(' ')[0])
     const {recent_claims, reward_balance} = params.rewardFunds
     const active_votes = post.active_votes
+    const lastPayout = moment(post.last_payout).unix()
 
     let result
 
     if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM) {
-      if (full) {
-        result = (+post.payout + (vote.rshares / recent_claims * reward_balance * base)).toFixed(2)
+      let q = (reward_balance * base) / recent_claims
+      if (lastPayout) {
+        const sumRshares = active_votes.reduce((sum, _vote) => sum += +_vote.rshares, 0)
+        q = post.total_payout_value / sumRshares
+      }
+
+      if (append) {
+        result = (+post.payout + vote.rshares * q).toFixed(2)
       } else {
-        result = (vote.rshares / recent_claims * reward_balance * base).toFixed(2)
+        result = (vote.rshares * q).toFixed(2)
       }
     } else {
       const time = moment(vote.time + '+00:00').unix()
-      const lastPayout = moment(post.last_payout).unix()
       const created = moment(post.created).unix()
+      if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT) {
 
-      if (full) {
-        const activeRshares =
+      }
+      if (append) {
+        const currentActiveRshares =
           active_votes.reduce((sum, _vote) => {
             const _time = moment(_vote.time + '+00:00').unix()
-            if (lastPayout < created || _time > lastPayout) {
+            if (!lastPayout || _time > lastPayout) {
               sum += +_vote.rshares
             }
             return sum
           }, 0) + vote.rshares
 
         const votesValue =
-          Converter.calculateVshares(activeRshares) /
+          Converter.calculateVshares(currentActiveRshares) /
           recent_claims *
           reward_balance *
           base
@@ -69,21 +77,38 @@ class Converter {
           CURRENCY_Q
         ).toFixed(2)
       } else {
+        const setVoteMode = time => time > moment(post.created).unix() && time < moment(post.created).subtract(-1, 'days').unix()
+          ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+          : CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+
+        vote.mode = setVoteMode(time)
+
         const activeRshares = active_votes.reduce((sum, _vote) => {
           const _time = moment(_vote.time + '+00:00').unix()
-          if (!lastPayout || (time > lastPayout && _time > lastPayout) || (time < lastPayout && _time < lastPayout)) {
+          _vote.mode = setVoteMode(_time)
+          if (_vote.mode === vote.mode) {
             sum += +_vote.rshares
           }
           return sum
         }, 0)
 
-        const percentRshares = vote.rshares * 100 / activeRshares
+        let q = (reward_balance * base) / recent_claims
+        const vShares = Converter.calculateVshares(activeRshares)
+        if (vote.mode !== post.mode || post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
+          if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
+            q = post.total_payout_value / vShares
+          } else {
+            if (post.separatePayots[vote.mode]) {
+              q = (100 * parseFloat(post.separatePayots[vote.mode].sbd_payout.split(' ')[0] * 2) / 75) / vShares
+            } else {
+              // @todo Need show error or stub, because calc not found separate payout 
+              q = post.total_payout_value / vShares 
+            }
+          }
+        }
 
-        const votesValue =
-          Converter.calculateVshares(activeRshares) /
-          recent_claims *
-          reward_balance *
-          base
+        const votesValue = vShares * q
+        const percentRshares = vote.rshares * 100 / activeRshares
 
         result = (((votesValue / 100) * percentRshares) * CURRENCY_Q).toFixed(2)
       }

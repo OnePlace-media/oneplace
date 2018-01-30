@@ -284,7 +284,6 @@ function log10(str) {
 
 class Parser {
   static prepareHTML(chain, body, metadata) {
-    body = sanitize(body, sanitizeConfig({}))
     const state = {
       hashtags: new Set(),
       usertags: new Set(),
@@ -293,13 +292,14 @@ class Parser {
       links: new Set()
     }
     body = body.replace(/&amp;(mdash|rdquo|ndash|ldquo|laquo|raquo|zwj)/g, string => string.replace(/&amp;/, '&'))
-    const html = md.render(entities.decode(body))
+    let html = md.render(entities.decode(body))
     try {
       const doc = DOMParser.parseFromString(html, 'text/html');
       traverse(chain, doc, state)
       proxifyImages(chain, doc)
+      html = sanitize(doc ? XMLSerializer.serializeToString(doc) : '', sanitizeConfig({}))
       return {
-        html: doc ? XMLSerializer.serializeToString(doc) : '',
+        html,
         ...state,
       }
     } catch (error) {

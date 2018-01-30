@@ -114,6 +114,10 @@ class BlockChainApi {
     return _call(chain, 'get_active_votes', [author, permlink])
   }
 
+  static getState(chain, {path}) {
+    return _call(chain, 'get_state', [path])
+  }
+
   static getAvatar(chain, username) {
     return new Promise(resolve => {
       if (_avatars_[chain].hasOwnProperty(username)) {

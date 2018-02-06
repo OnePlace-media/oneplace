@@ -28,7 +28,7 @@
     "dataSource": "mysql"
   },
   "account": {
-    "public": false,
+    "public": true,
     "dataSource": "mysql"
   },
   "email": {

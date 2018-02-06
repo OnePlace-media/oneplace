@@ -28,6 +28,7 @@
 <script>
 import Api from '../../plugins/api'
 import Remarkable from 'remarkable'
+import CONSTANTS from '@oneplace/constants'
 
 const md = new Remarkable({
   html: true,
@@ -60,7 +61,7 @@ export default {
       return this.$auth && this.$auth.check() ? this.$auth.user().accounts : []
     },
     account() {
-      let result = { avatar: '/static/img/avatar.svg', username: null }
+      let result = { avatar: CONSTANTS.DEFAULT.AVATAR_IMAGE, username: null }
       if (this.$auth && this.$auth.check() && this.accountsByChain.length) {
         result =
           this.accountsByChain.find(

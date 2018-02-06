@@ -2,9 +2,11 @@
 <div class="post-view__thread-wrapper" :class="{'payout_declined': true}">
   <div class="comment">
     <div class="comment__wrapper">
-      <div class="post-view__post-avatar avatar" :style="`background-image: url('${item.avatar || '/static/img/avatar.svg'}');`"></div>
+      <div class="post-view__post-avatar avatar" :style="`background-image: url('${item.avatar || DEFAULT_AVATAR}');`"></div>
       <div class="comment__header">
-       <a class="link link--op" :href="`/${$route.params.chain}/@${item.author}`" target="_blank">{{item.author}}</a> 
+        <router-link tag="a" :to="{name:'chain-account-view', params:{chain,username:account.username}}" class="link link--op">
+          {{account.username}}
+        </router-link>
         <span class="post-view__post-author-rep">{{item.author_rep}}</span> · <timeago :since="item.created" :locale="$locale.current()"></timeago>
       </div>
       <div class="comment__body markdown markdown--small" v-html="item.body"></div>
@@ -84,6 +86,9 @@ export default {
     }
   },
   computed: {
+    DEFAULT_AVATAR(){
+      return CONSTANTS.DEFAULT.AVATAR_IMAGE
+    },
     isMaxDeep() {
       return this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && this.level >= 5
     },

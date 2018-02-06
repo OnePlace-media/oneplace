@@ -80,7 +80,8 @@ module.exports = {
     downvotePost: 'Проголосовать против',
     pendingPayout: 'Ожидаемая выплата {payout} через {days}.',
     pendingDays: '1 день | {count} дней',
-    readyPayout: 'Предыдущие выплаты {payout}'
+    readyPayout: 'Предыдущие выплаты {payout}',
+    andMore: 'и {count} еще...'
   },
   welcome: {
     createRegistration: 'Создание профиля',
@@ -125,7 +126,7 @@ module.exports = {
     logout: 'Выйти'
   },
   footer: {
-    createdBy: 'Создано 2017 by {link}',
+    createdBy: 'Создано 2017 {link}',
     language: 'Выбрать язык'
   },
   settings: {
@@ -134,6 +135,19 @@ module.exports = {
     addBlockChainAccount: 'Добавить аккаунт Steem или Golos',
     categoriesList: 'Подписка на категории',
     noAddedAccountsYet: 'Нет добавленных аккаунтов'
+  },
+  profile: {
+    follow: 'Подписаться',
+    following: 'Нет подписок | Подписки | Подписки',
+    unfollow: 'Отписаться',
+    block_user: 'Блокировать&nbsp;пользователя',
+    location: 'Местоположение',
+    website: 'Сайт',
+    posts: 'Публикаций | Публикация | Публикаций',
+    followers: 'Нет подписчиков | Подписчик | Подписчика',
+    allPosts: 'Все записи',
+    accountPosts:'Записи {username}',
+    posted: 'Создано'
   },
   auth: {
     SignIn: 'Войти',

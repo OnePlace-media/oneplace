@@ -37,5 +37,14 @@ export default {
   },
   params() {
     return Vue.axios.get(`/params`)
+  },
+  getAccountByName(chain, username) {
+    return Vue.axios.get(`/accounts/${chain}/byName`, {params: {username}})
+  },
+  getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit}) {
+    return Vue.axios.get(`/posts/${chain}/getDiscussionsByBlog`, {params: {tag, start_author, start_permlink, limit}})
+  },
+  getDiscussionsByAuthorBeforeDate(chain, {author, before_date, limit}) {
+    return Vue.axios.get(`/posts/${chain}/getDiscussionsByAuthorBeforeDate`, {params: {author, before_date, limit}})
   }
 }

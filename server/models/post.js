@@ -7,38 +7,6 @@ const decoder = require('html-entities').AllHtmlEntities
 const he = require('he')
 const Remarkable = require('remarkable')
 const md = new Remarkable
-const URL_PREFIX = {
-  [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: 'https://steemit.com',
-  [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: 'https://golos.io'
-}
-
-const DEFAULT_IMG = {
-  [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: '/static/img/default-img.jpg',
-  [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: '/static/img/default-img.jpg'
-}
-
-const DEFAULT_AVR = {
-  [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: '/static/img/avatar.svg',
-  [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: '/static/img/avatar.svg'
-}
-
-const IMG_PREFIX = {
-  [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: 'https://steemitimages.com',
-  [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: 'https://steemitimages.com'
-}
-
-const CURRENCY = {
-  [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: {
-    symbol: '$',
-    q: 1
-  },
-  [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: {
-    symbol: '₽',
-    q: 1
-  }
-}
-
-const PREVIEW_LENGTH = 130
 
 module.exports = Model => {
   Model.trendByTags = async function(chain, tags, exclude = [], cb) {
@@ -106,6 +74,42 @@ module.exports = Model => {
     http: {path: '/:chain(g|s)/repliesByPermLink', verb: 'get'}
   })
 
+  Model.getDiscussionsByBlog = async function(chain, tag, start_author, start_permlink, limit) {
+    let posts = await blockChains.getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit})
+    posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+    return posts
+  }
+
+  Model.remoteMethod('getDiscussionsByBlog', {
+    accepts: [
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'tag', type: 'string', required: true},
+      {arg: 'start_author', type: 'string', required: true},
+      {arg: 'start_permlink', type: 'string', required: true},
+      {arg: 'limit', type: 'string', required: true}
+    ],
+    returns: {arg: 'body', type: 'array', root: true},
+    http: {path: '/:chain(g|s)/getDiscussionsByBlog', verb: 'get'}
+  })
+
+  Model.getDiscussionsByAuthorBeforeDate = async function(chain, author, start_permalink, before_date, limit) {
+    let posts = await blockChains.getDiscussionsByAuthorBeforeDate(chain, {author, start_permalink, before_date, limit})
+    posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+    return posts
+  }
+
+  Model.remoteMethod('getDiscussionsByAuthorBeforeDate', {
+    accepts: [
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'author', type: 'string', required: true},
+      {arg: 'start_permlink', type: 'string', default: ''},
+      {arg: 'before_date', type: 'string', required: true},
+      {arg: 'limit', type: 'string', required: true}
+    ],
+    returns: {arg: 'body', type: 'array', root: true},
+    http: {path: '/:chain(g|s)/getDiscussionsByAuthorBeforeDate', verb: 'get'}
+  })
+
   const Remarkable = require('remarkable')
   const md = new Remarkable
   Model.comment = async function(req, chain, author, body, parentAuthor, parentPermlink) {
@@ -170,7 +174,7 @@ module.exports = Model => {
           code = err.data.stack[0].format
         }
       }
-      
+
       const error = new Error('Bad request, somethign wrong with blockchain request')
       error.code = code
       error.status = 400

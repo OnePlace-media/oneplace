@@ -17,9 +17,14 @@ const cacheMethodsMap = {
 }
 const cache = {}
 function _call(chain, method, params, noCache) {
-  if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && params[0].tag) {
-    params[0].select_tags = [params[0].tag]
-    delete params[0].tag
+  if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS) {
+    if (params[0].tag) {
+      params[0].select_tags = [params[0].tag]
+      delete params[0].tag
+    } else if (params[1] === 'get_discussions_by_blog') {
+      params[2][0].select_authors = [params[2][0].tag]
+      delete params[2][0].tag
+    }
   }
   return new Promise((resolve, reject) => {
     if (!clients[chain]) throw new Error(`Unknown chain ${chain}`)
@@ -46,7 +51,6 @@ const _avatars_ = {
 
 
 const IMG_PREFIX = 'https://steemitimages.com'
-const DEFAULT_AVR = '/static/img/avatar.svg'
 
 class BlockChainApi {
   static preparePosts(chain, posts) {
@@ -118,6 +122,18 @@ class BlockChainApi {
     return _call(chain, 'get_state', [path])
   }
 
+  static getFollowCount(chain, {username}) {
+    return _call(chain, 'call', ['follow_api', 'get_follow_count', [username]])
+  }
+
+  static getDiscussionsByAuthorBeforeDate(chain, {author, start_permalink, before_date, limit = 15}) {
+    return _call(chain, 'get_discussions_by_author_before_date', [author, start_permalink, before_date, limit])
+  }
+
+  static getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit = 15}) {
+    return _call(chain, 'call', ['database_api', 'get_discussions_by_blog', [{tag, start_author, start_permlink, limit}]])
+  }
+
   static getAvatar(chain, username) {
     return new Promise(resolve => {
       if (_avatars_[chain].hasOwnProperty(username)) {
@@ -132,10 +148,10 @@ class BlockChainApi {
             if (_avatars_[chain][username]) {
               _avatars_[chain][username] = IMG_PREFIX + '/100x100/' + _avatars_[chain][username]
             }
-            resolve(_avatars_[chain][username] || DEFAULT_AVR)
+            resolve(_avatars_[chain][username] || CONSTANTS.DEFAULT.AVATAR_IMAGE)
           })
           .catch(e => {
-            _avatars_[chain][username] = DEFAULT_AVR
+            _avatars_[chain][username] = CONSTANTS.DEFAULT.AVATAR_IMAGE
             resolve()
           })
       }

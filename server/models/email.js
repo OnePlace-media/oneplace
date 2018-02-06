@@ -1,6 +1,5 @@
 const fs    = require('fs');
 
-// const emailLib = require('../../server/libs/mail');
 module.exports = Email => {
     let templates = {
         emailConfirmation_ru : fs.readFileSync(`${__dirname}/../emails/emailConfirmation_ru.html`).toString(),

@@ -56,19 +56,10 @@ function iframe(state, child) {
     }
   }
 
-  const tag = child.parentNode.tagName
-    ? child.parentNode.tagName.toLowerCase()
-    : child.parentNode.tagName
-  if (
-    tag == 'div' &&
-    child.parentNode.getAttribute('class') == 'videoWrapper'
-  )
-    return
-  const html = XMLSerializer.serializeToString(child)
-  child.parentNode.replaceChild(
-    DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`),
-    child
-  )
+  const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
+  if (tag === 'div' && child.parentNode.getAttribute('class') === 'video-wrapper') return
+  const newDoc = DOMParser.parseFromString(`<div class="video-wrapper" data-src="${url}"></div>`)
+  child.parentNode.replaceChild(newDoc.childNodes[0], child)
 }
 
 function link(chain, state, child) {
@@ -294,13 +285,14 @@ class Parser {
     body = body.replace(/&amp;(mdash|rdquo|ndash|ldquo|laquo|raquo|zwj)/g, string => string.replace(/&amp;/, '&'))
     let html = md.render(entities.decode(body))
     try {
-      const doc = DOMParser.parseFromString(html, 'text/html');
+      let doc = DOMParser.parseFromString(`<div>${html}</div>`, 'text/html')
       traverse(chain, doc, state)
       proxifyImages(chain, doc)
-      html = sanitize(doc ? XMLSerializer.serializeToString(doc) : '', sanitizeConfig({}))
+      const docString = doc ? XMLSerializer.serializeToString(doc) : ''
+      html = sanitize(docString, sanitizeConfig({}))
       return {
         html,
-        ...state,
+        state,
       }
     } catch (error) {
       console.log(

@@ -38,6 +38,7 @@ import Comment from './Comment.vue'
 import CommentForm from './CommentForm.vue'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 import { ORDER_BY_LIST } from '@oneplace/constants'
+import CONSTANTS from '@oneplace/constants'
 
 const orderByList = [
   { value: ORDER_BY_LIST.TRENDING },
@@ -85,7 +86,7 @@ export default {
       return this.$auth && this.$auth.check() ? this.$auth.user().accounts : []
     },
     account() {
-      let result = { avatar: '/static/img/avatar.svg', username: null }
+      let result = { avatar: CONSTANTS.DEFAULT.AVATAR_IMAGE, username: null }
       if (this.$auth && this.$auth.check() && this.accountsByChain.length) {
         result =
           this.accountsByChain.find(

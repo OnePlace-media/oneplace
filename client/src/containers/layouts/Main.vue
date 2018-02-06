@@ -35,7 +35,7 @@ export default {
 </script>
 
 <template>
-  <div id="app" v-if="!page404Flag">
+  <div id="app" v-if="!page404Flag" data-server-rendered="true">
     <div class="wrapper">
       <top-bar></top-bar>
       <side-bar></side-bar>
@@ -48,7 +48,7 @@ export default {
     </div>
   </div>
   
-  <div id="app" class="wrapper" v-else>
+  <div id="app" class="wrapper" v-else data-server-rendered="true">
     <div class="login__wrapper">
       <router-link :to="{name:'chain-trend', params:{chain:'s'}}" tag="div" class="login__logo">
         <img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive">

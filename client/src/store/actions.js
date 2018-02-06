@@ -4,6 +4,9 @@ const async = require('async')
 import Vue from 'vue'
 
 export default {
+  fetchAccount({commit, state}, {}){
+    return 
+  },
   fetchTrends({commit, state}, {chain, tags}) {
     return new Promise((resolve, reject) => {
       if (!state.trends.data[chain].processing) {

@@ -7,11 +7,16 @@
     <div class="post-view__post">
       <div class="post-view__post-info post-view__post-info--top">
         <div class="post-view__post-avatar avatar" 
-          :style="`background-image: url('${post.avatar || '/static/img/avatar.svg'}');`">
+          :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`">
         </div>
         <div class="column-wrapper">
           <span class="post-view__post-author-tag">
-            <a class="post-view__author-link link link--op" :href="`/${$route.params.chain}/@${post.author}`" target="_blank">{{post.author}}</a>
+            <router-link 
+              tag="a" 
+              :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
+              class="post-view__author-link link link--op">
+              {{post.author}}
+            </router-link>
             <span class="post-view__post-author-rep">{{post.author_rep}}</span><br>&nbsp;{{$t('common.in')}}&nbsp;<span class="hashtag">#{{post.category | unGolosTag | toLowerCase}}</span>
           </span>
           <span class="post-view__post-posted"><timeago :since="post.created" :locale="$locale.current()"></timeago></span>
@@ -44,11 +49,13 @@
         <div class="post-view__author-wrapper">
           <h2 class="h2 post-view__block-title">{{$t('common.author')}}</h2>
           <div class="post-view__avatar-wrapper">
-            <div class="post-view__author-avatar avatar" :style="`background-image: url('${post.avatar || '/static/img/avatar.svg'}');`"></div>
+            <div class="post-view__author-avatar avatar" :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`"></div>
             <span class="post-view__author-rep">{{post.author_rep}}</span>
           </div>
           <div class="post-view__author-info">
-            <a class="link link--op" target="_blank" :href="`/${$route.params.chain}/@${post.author}`">{{post.author}}</a>
+            <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">
+              {{account.username}}
+            </router-link>
             <p class="author-info">{{post.author_about}}</p>
           </div>
         </div>
@@ -123,6 +130,9 @@ export default {
     }
   },
   computed: {
+    DEFAULT_AVATAR() {
+      return CONSTANTS.DEFAULT.AVATAR_IMAGE
+    },
     post() {
       return this.$store.state.postView.post
     },
@@ -136,7 +146,7 @@ export default {
       return this.$auth && this.$auth.check() ? this.$auth.user().accounts : []
     },
     account() {
-      let result = { avatar: '/static/img/avatar.svg', username: null }
+      let result = { avatar: this.DEFAULT_AVATAR, username: null }
       if (this.$auth && this.$auth.check() && this.accountsByChain.length) {
         result =
           this.accountsByChain.find(

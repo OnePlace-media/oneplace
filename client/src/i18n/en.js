@@ -79,7 +79,8 @@ module.exports = {
     downvotePost: 'Downvote post',
     pendingPayout: 'Pending payout is {payout} in {days}.',
     pendingDays: '1 day | {count} days',
-    readyPayout: 'Past payouts {payout}'
+    readyPayout: 'Past payouts {payout}',
+    andMore: 'and {count} more...'
   },
   welcome: {
     createRegistration: 'Create profile',
@@ -133,6 +134,19 @@ module.exports = {
     addBlockChainAccount: 'Please attach your Steem or Golos account',
     categoriesList: 'Followed categories',
     noAddedAccountsYet: 'No added accounts yet'
+  },
+  profile: {
+    follow: 'Follow',
+    following: 'Not following anybody | Following | Following',
+    unfollow: 'Unfollow',
+    block_user: 'Block&nbsp;user',
+    location: 'Location',
+    website: 'Website',
+    posts: 'Posts | Post | Posts',
+    followers: 'No followers | Follower | Followers',
+    allPosts: 'All posts',
+    accountPosts:'Posts {username}',
+    posted: 'Posted'
   },
   auth: {
     SignIn: 'Log in',

@@ -9,6 +9,13 @@
     },
     "validateUpsert": true
   },
+  "mixins": {
+    "HideRemoteMethods": {
+      "methodsVisibility": [
+        "byName"
+      ]
+    }
+  },
   "properties": {
     "id": {
       "id": true,

@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'post-view__post-data':!isComment, 'comment__post-data': isComment}" >
+  <div :class="{'blog__post-data': isBlog, 'post-view__post-data':isPost, 'comment__post-data': isComment}" >
     <span class="post-view__post-data-item" :class="{'post-view__post-value-correction': showPayoutWithVote}">
       <span class="post-view__post-currency" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>
       <span class="post-view__post-value">{{payoutValue}}
@@ -17,7 +17,7 @@
         <svg 
           @click.prevent="$emit('vote', true, voteWeight)" 
           class="post-view__icon post-view__icon-like post-view__icon--disabled"
-          :class="{'post-view__icon--small': isComment}"
+          :class="{'post-view__icon--small': isComment || isBlog}"
         >
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
         </svg>
@@ -38,9 +38,11 @@
         </svg>
       </a>{{dislikeVotes}}
     </span>
-    <span class="post-view__post-data-item" v-if="!isComment">
+    <span class="post-view__post-data-item" v-if="isPost || isBlog">
       <a class="post-view__post-reply" :title="$t('common.reply')" @click="focusToComment" v-scroll-to="'#comment-input-root'">
-        <svg class="post-view__icon post-view__icon-comment">
+        <svg 
+          class="post-view__icon post-view__icon-comment"
+          :class="{'post-view__icon--small': isBlog}">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#comment"></use>
         </svg>
       </a>{{post.children}}
@@ -116,6 +118,12 @@ export default {
     },
     isComment() {
       return this.type === 'comment'
+    },
+    isBlog(){
+      return this.type === 'blog'
+    },
+    isPost(){
+      return this.type === 'post'
     },
     payoutValue() {
       const locale =

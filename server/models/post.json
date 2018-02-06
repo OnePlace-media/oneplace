@@ -29,6 +29,18 @@
       "permission": "ALLOW"
     },
     {
+      "property": "getDiscussionsByBlog",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "property": "getDiscussionsByAuthorBeforeDate",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
       "property": "trendByTags",
       "principalType": "ROLE",
       "principalId": "$everyone",

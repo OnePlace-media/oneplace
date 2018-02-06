@@ -45,17 +45,15 @@ class Converter {
         q = post.total_payout_value / sumRshares
       }
 
-      if (append) {
+      if (append)
         result = (+post.payout + vote.rshares * q).toFixed(2)
-      } else {
+      else
         result = (vote.rshares * q).toFixed(2)
-      }
+      
     } else {
       const time = moment(vote.time + '+00:00').unix()
       const created = moment(post.created).unix()
-      if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT) {
 
-      }
       if (append) {
         const currentActiveRshares =
           active_votes.reduce((sum, _vote) => {
@@ -94,17 +92,15 @@ class Converter {
 
         let q = (reward_balance * base) / recent_claims
         const vShares = Converter.calculateVshares(activeRshares)
-        
+
         if (vote.mode !== post.mode || post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
           if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
             q = post.total_payout_value / vShares
           } else {
-            if (post.separatePayots[vote.mode]) {
+            if (post.separatePayots[vote.mode])
               q = (100 * parseFloat(post.separatePayots[vote.mode].sbd_payout.split(' ')[0] * 2) / 75) / vShares
-            } else {
-              // @todo Need show error or stub, because calc not found separate payout 
-              q = post.total_payout_value / vShares 
-            }
+            else // @todo Need show error or stub, because calc not found separate payout
+              q = post.total_payout_value / vShares
           }
         }
 

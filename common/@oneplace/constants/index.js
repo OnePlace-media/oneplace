@@ -13,6 +13,8 @@ module.exports = {
     }
   },
   DEFAULT: {
+    POST_IMAGE: '/static/img/default-img.jpg',
+    AVATAR_IMAGE: '/static/img/avatar.svg',
     TAGS: {
       s: [
         {text: "steemit"},
@@ -73,7 +75,7 @@ module.exports = {
       's': 7,
       'g': 30
     },
-    MODES:{
+    MODES: {
       FIRST_PAYOUT: 'first_payout',
       SECOND_PAYOUT: 'second_payout',
       ARCHIVED: 'archived'

@@ -1,4 +1,4 @@
-
+import CONSTANTS from '@oneplace/constants'
 export default class Helper {
   static install(Vue) {
     Vue.prototype.$helper = new Helper()
@@ -20,8 +20,8 @@ export default class Helper {
       })
     })
   }
-  
-  generateAppMeta($route){
+
+  generateAppMeta($route) {
     const TITLE = 'Your daily dose of blockchain'
     const DESCRIPTION =
       'Blockchain aggregator that selects best content from Golos and Steem and delivers it to users with user-friendly and modern interface'
@@ -40,7 +40,7 @@ export default class Helper {
           property: 'og:title',
           content: `${TITLE} | OnePlace.media`
         },
-        { vmid: 'og:type', property: 'og:type', content: 'website' },
+        {vmid: 'og:type', property: 'og:type', content: 'website'},
         {
           vmid: 'og:url',
           property: 'og:url',
@@ -95,7 +95,73 @@ export default class Helper {
     }
   }
 
-  generatePostMeta(post, $route){
+  generateProfileMeta(account, $route) {
+    const profile = account.meta && account.meta.profile ? account.meta.profile : {}
+    const IMAGE = profile.profile_image ? process.env.BASE_API_URL + `img?l=${encodeURIComponent(profile.profile_image)}` : CONSTANTS.DEFAULT.AVATAR_IMAGE
+    return {
+      title: account.name,
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: profile.about
+        },
+        {
+          vmid: 'og:title',
+          property: 'og:title',
+          content: account.name + ' | OnePlace.media'
+        },
+        {vmid: 'og:type', property: 'og:type', content: 'profile'},
+        {
+          vmid: 'profile:username',
+          property: 'profile:username',
+          content: account.name
+        },
+        {
+          vmid: 'og:url',
+          property: 'og:url',
+          content: `https://oneplace.media${$route.path}`
+        },
+        {
+          vmid: 'og:image',
+          property: 'og:image',
+          content: IMAGE
+        },
+        {
+          vmid: 'og:description',
+          property: 'og:description',
+          content: profile.about
+        },
+        {
+          vmid: 'og:site_name',
+          property: 'og:site_name',
+          content: 'OnePlace.media'
+        },
+        {
+          vmid: 'twitter:image',
+          name: 'twitter:image',
+          content: IMAGE
+        },
+        {
+          vmid: 'twitter:card',
+          name: 'twitter:site',
+          content: '@oneplace.media'
+        },
+        {
+          vmid: 'twitter:title',
+          name: 'twitter:title',
+          content: account.name + ' | OnePlace.media'
+        },
+        {
+          vmid: 'twitter:description',
+          name: 'twitter:description',
+          content: account.about
+        }
+      ]
+    }
+  }
+
+  generatePostMeta(post, $route) {
     const IMAGE = process.env.BASE_API_URL + `img?l=${encodeURIComponent(post.image)}`
     return {
       title: post.title,
@@ -110,7 +176,7 @@ export default class Helper {
           property: 'og:title',
           content: post.title + ' | OnePlace.media'
         },
-        { vmid: 'og:type', property: 'og:type', content: 'article' },
+        {vmid: 'og:type', property: 'og:type', content: 'article'},
         {
           vmid: 'article:tag',
           property: 'article:tag',

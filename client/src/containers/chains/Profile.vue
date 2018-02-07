@@ -96,6 +96,9 @@ export default {
       followOptionsDropdown: false
     }
   },
+  metaInfo() {
+    return this.$helper.generateProfileMeta(this.account, this.$route)
+  },
   methods: {
     follow(unfollow = false) {
       this.$store.dispatch('profile/follow', {

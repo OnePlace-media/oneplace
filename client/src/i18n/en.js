@@ -1,5 +1,6 @@
 module.exports = {
   errors: {
+    FAILED_APPEND_POST_BY_AUTHOR: 'Loading posts error, please try again later',
     UNKNOW_ERROR: 'Something is wrong.',
     STEEMIT_MAX_VOTE_CHANGES: 'You have used the maximum number of vote changes on this comment',
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds'

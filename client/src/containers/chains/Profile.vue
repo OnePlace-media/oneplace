@@ -21,7 +21,7 @@
               <span class="profile__btn-more" @click="toggleFollowOptionsDropdown">
                 <ul class="profile__follow-options" v-show="followOptionsDropdown">
                   <li class="profile__follow-options-item">{{$t('profile.unfollow')}}</li>
-                  <li class="profile__follow-options-item" v-html="$t('profile.block_user')"></li>
+                  <!-- <li class="profile__follow-options-item" v-html="$t('profile.block_user')"></li> -->
                 </ul>
               </span>
             </div>

@@ -1,5 +1,6 @@
 module.exports = {
   errors: {
+    FAILED_APPEND_POST_BY_AUTHOR: 'Ошибка загрузки постов, попробуйте позже',
     UNKNOW_ERROR: 'Неизвестная ошибка.',
     STEEMIT_MAX_VOTE_CHANGES: 'Вы использовали максимальное число изменений голоса для данной записи',
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'Вы можете голосовать за записи не чаще одного раза в 3 секунды'

@@ -1,8 +1,12 @@
 <template>
   <section class="blog">
     <div class="blog__header">
-      <div class="blog__header-tab blog__header-tab--active">{{$t('profile.allPosts')}}</div>
-      <div class="blog__header-tab">{{$t('profile.accountPosts', {username: account.name})}}</div>
+      <div class="blog__header-tab" :class="{'blog__header-tab--active': withRepost}" @click="withRepost = true">
+        {{$t('profile.allPosts')}}
+      </div>
+      <div class="blog__header-tab" :class="{'blog__header-tab--active': !withRepost}" @click="withRepost = false">
+        {{$t('profile.accountPosts', {username: account.name})}}
+      </div>
     </div>
     <article class="blog__post" v-for="post in posts" :key="post.id">
       <a href="#" 
@@ -39,7 +43,7 @@
     <no-ssr>
       <infinite-loading @infinite="infiniteHandler">
         <center slot="spinner">
-          <pulse-loader :color="'#383838'" :size="'10px'"></pulse-loader>
+          <br><pulse-loader :color="'#383838'" :size="'10px'"></pulse-loader><br>
         </center>
         <span slot="no-more"></span>
       </infinite-loading>
@@ -62,6 +66,7 @@ export default {
   },
   data() {
     return {
+      withRepost: true,
       postLoading: false
     }
   },
@@ -94,6 +99,8 @@ export default {
         })
         .catch(err => {
           $state.loaded()
+          $state.complete()
+          this.$toast.bottom(this.$t(`errors.failedAppendPostByAuthor`))
         })
     },
     vote(post, isLike, weight = 10000) {
@@ -159,7 +166,9 @@ export default {
       return this.$route.params.chain || this.$store.state.chain
     },
     posts() {
-      return this.$store.state.profile.posts.collection
+      return this.$store.state.profile.posts.collection.filter(post => {
+        return this.withRepost || post.author === this.account.name
+      })
     },
     postsProcessing() {
       return this.$store.state.profile.posts.processing

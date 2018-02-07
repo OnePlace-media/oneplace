@@ -137,6 +137,7 @@ module.exports = {
     noAddedAccountsYet: 'No added accounts yet'
   },
   profile: {
+    isFollower: 'Following',
     follow: 'Follow',
     following: 'Not following anybody | Following | Following',
     unfollow: 'Unfollow',

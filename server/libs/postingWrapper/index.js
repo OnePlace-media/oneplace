@@ -88,5 +88,22 @@ class PostingWrapper {
       })
     })
   }
+
+  follow(chain, {follower, following, unfollow}) {
+    return new Promise((resolve, reject) => {
+      const json = JSON.stringify(
+        ['follow', {
+          follower: follower,
+          following: following,
+          what: unfollow ? [] : ['blog']
+        }]
+      )
+
+      this.clients[chain].broadcast.customJson(this.WIF, [], [follower], 'follow', json, (err, result) => {
+        if (err) reject(err)
+        else resolve(result)
+      })
+    })
+  }
 }
 module.exports = PostingWrapper

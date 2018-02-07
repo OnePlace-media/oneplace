@@ -12,7 +12,9 @@
   "mixins": {
     "HideRemoteMethods": {
       "methodsVisibility": [
-        "byName"
+        "byName",
+        "follow",
+        "getFollowers"
       ]
     }
   },
@@ -29,6 +31,13 @@
     }
   },
   "validations": [],
-  "acls": [],
+  "acls": [
+    {
+      "property": "follow",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
   "methods": {}
 }

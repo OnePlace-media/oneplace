@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'blog__post-data': isBlog, 'post-view__post-data':isPost, 'comment__post-data': isComment}" >
+  <div :class="{'blog__post-data': isBlog, 'post-view__post-data':isPost, 'comment__post-data': isComment}">
     <span class="post-view__post-data-item" :class="{'post-view__post-value-correction': showPayoutWithVote}">
       <span class="post-view__post-currency" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>
       <span class="post-view__post-value">{{payoutValue}}
@@ -10,10 +10,11 @@
       <a 
         @click.prevent
         class="post-view__post-like" 
-        @mouseout="voteIsSliding=false"
-        @mouseover="voteIsSliding=true"
+        @mouseout="setVoteIsSliding(false)"
+        @mouseover="setVoteIsSliding(true)"
         :title="isLike ? $t('comment.removeVote') : $t('comment.like')"
-        :class="{'post-view__post-like--active': isLike}">
+        :class="{'post-view__post-like--active': isLike, 'post-view__post-like--processing': upVoteProcessing}">
+        <div class="spinner-rolling"><div></div></div>
         <svg 
           @click.prevent="$emit('vote', true, voteWeight)" 
           class="post-view__icon post-view__icon-like post-view__icon--disabled"
@@ -21,7 +22,7 @@
         >
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
         </svg>
-        <slider v-if="voteSliderActive && !isLike" :value.sync="voteWeight"></slider>
+        <slider v-if="voteSliderActive && !isLike && !post.voteProcessing" :value.sync="voteWeight"></slider>
       </a>
       <span class="post-view__votes">{{likeVotes}}
         <dropdown-votes :post="post" :chain="chain" v-if="likeVotes"></dropdown-votes>
@@ -29,9 +30,9 @@
     </span>
     <span class="post-view__post-data-item" v-if="isComment">
       <a 
-        @click.prevent="vote(false)"
+        @click.prevent="$emit('vote', true, voteWeight)"
         class="post-view__post-like" 
-        :class="{'post-view__post-like--active': isDislike}" 
+        :class="{'post-view__post-like--active': isDislike, 'post-view__post-like--processing': downVoteProcessing}" 
         :title="isDislike ? $t('comment.removeVote') : $t('comment.dislike')">
         <svg class="post-view__icon post-view__icon--small post-view__icon-dislike">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
@@ -66,11 +67,12 @@ import Converter from '@oneplace/blockchains-api/converter'
 
 export default {
   name: 'PostBottom',
-  props: ['post', 'account', 'chain', 'type', 'isMaxDeep'],
+  props: ['post', 'account', 'chain', 'type', 'isMaxDeep', 'upVoteProcessing', 'downVoteProcessing'],
   data() {
     return {
       voteIsSliding: false,
-      voteWeight: 10000
+      voteWeight: 10000,
+      timer: null
     }
   },
   components: {
@@ -79,6 +81,13 @@ export default {
     DropdownVotes
   },
   methods: {
+    setVoteIsSliding(flag) {
+      if (flag) this.timer = setTimeout(() => (this.voteIsSliding = flag), 275)
+      else {
+        clearTimeout(this.timer)
+        this.voteIsSliding = flag
+      }
+    },
     slide(value) {
       this.$store.commit('setVoteWeight', value)
     },
@@ -119,10 +128,10 @@ export default {
     isComment() {
       return this.type === 'comment'
     },
-    isBlog(){
+    isBlog() {
       return this.type === 'blog'
     },
-    isPost(){
+    isPost() {
       return this.type === 'post'
     },
     payoutValue() {
@@ -137,7 +146,8 @@ export default {
         this.voteIsSliding &&
         !this.isLike &&
         this.account.username &&
-        this.payoutWithVote !== this.post.payout
+        this.payoutWithVote !== +this.post.payout &&
+        !this.post.voteProcessing
       )
     },
     voteSliderActive() {
@@ -157,10 +167,12 @@ export default {
     payoutWithVote() {
       const params = this.$store.state.core.params[this.chain]
       const rshares = Converter.calculateRshares(
+        this.chain,
         this.account.data,
         this.voteWeight
       )
-      const vote = {rshares, time: new Date().toISOString().split('.')[0]}
+
+      const vote = { rshares, time: new Date().toISOString().split('.')[0] }
       return Converter.voteToFiat(vote, this.chain, params, this.post)
     }
   }

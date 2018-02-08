@@ -18,6 +18,8 @@
             @vote="vote"
             @reply="reply"
             :is-max-deep="isMaxDeep"
+            :up-vote-processing="upVoteProcessing"
+            :down-vote-processing="downVoteProcessing"
           ></post-bottom>
     </div>
   </div>
@@ -50,7 +52,9 @@ export default {
     return {
       showCommentForm: false,
       commentFormNotEmpty: false,
-      nextLevel: this.level + 1
+      nextLevel: this.level + 1,
+      upVoteProcessing: false,
+      downVoteProcessing: false
     }
   },
   components: {
@@ -59,12 +63,18 @@ export default {
   },
   methods: {
     vote(isLike) {
-      this.$store.dispatch('vote', {
-        chain: this.chain,
-        post: this.item,
-        account: this.account,
-        isLike
-      })
+      const field = isLike ? 'upVoteProcessing' : 'downVoteProcessing'
+      this[field] = true
+      this.$store
+        .dispatch('vote', {
+          chain: this.chain,
+          post: this.item,
+          account: this.account,
+          isLike
+        })
+        .then(() => {
+          this[field] = false
+        })
     },
     checkCommentFormBody(body) {
       this.commentFormNotEmpty = !!body
@@ -86,7 +96,7 @@ export default {
     }
   },
   computed: {
-    DEFAULT_AVATAR(){
+    DEFAULT_AVATAR() {
       return CONSTANTS.DEFAULT.AVATAR_IMAGE
     },
     isMaxDeep() {

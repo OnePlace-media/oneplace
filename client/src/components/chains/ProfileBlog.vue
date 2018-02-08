@@ -36,6 +36,8 @@
             :account="accountCurrent" 
             :chain="chain" 
             @vote="(isLike, weight) => vote(post, isLike, weight)"
+            :up-vote-processing="voteProcessing[post.id] ? voteProcessing[post.id].upVoteProcessing : false"
+            :down-vote-processing="voteProcessing[post.id] ? voteProcessing[post.id].downVoteProcessing : false"
           ></post-bottom>
         </div>
       </div>
@@ -52,6 +54,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import CONSTANTS from '@oneplace/constants'
 import PostBottom from './PostBottom.vue'
 import InfiniteLoading from 'vue-infinite-loading'
@@ -67,7 +70,8 @@ export default {
   data() {
     return {
       withRepost: true,
-      postLoading: false
+      postLoading: false,
+      voteProcessing: {}
     }
   },
   components: {
@@ -104,13 +108,26 @@ export default {
         })
     },
     vote(post, isLike, weight = 10000) {
-      this.$store.dispatch('vote', {
-        chain: this.chain,
-        post: post,
-        account: this.accountCurrent,
-        isLike,
-        weight
-      })
+      if (!this.voteProcessing[post.id]) {
+        Vue.set(this.voteProcessing, post.id, {
+          upVoteProcessing: false,
+          downVoteProcessing: false
+        })
+      }
+
+      const field = isLike ? 'upVoteProcessing' : 'downVoteProcessing'
+      this.voteProcessing[post.id][field] = true
+      this.$store
+        .dispatch('vote', {
+          chain: this.chain,
+          post: post,
+          account: this.accountCurrent,
+          isLike,
+          weight
+        })
+        .then(() => {
+          this.voteProcessing[post.id][field] = false
+        })
     },
     makePath(post, chain) {
       return `/${chain || this.chain}/@${post.author}/${post.permlink}`

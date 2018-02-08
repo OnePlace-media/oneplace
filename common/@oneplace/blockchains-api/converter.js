@@ -1,12 +1,16 @@
 const CONSTANT_S = 2000000000000
 const STEEMIT_VOTE_REGENERATION_SECONDS = 5 * 60 * 60 * 24
 const STEEM_100_PERCENT = 10000
-const VOTE_POWER_REVERSE_RATE = 40
 const CONSTANTS = require('@oneplace/constants')
+const VOTE_POWER_REVERSE_RATE = {
+  [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: 40,
+  [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: 10,
+}
+
 const moment = require('moment')
 
 class Converter {
-  static calculateRshares(account, weight) {
+  static calculateRshares(chain, account, weight) {
     const voting_power = account.voting_power
     let total_vests = parseFloat(account.vesting_shares.split(' ')[0])
 
@@ -17,7 +21,7 @@ class Converter {
       total_vests -= parseFloat(account.delegated_vesting_shares.split(' ')[0])
 
     const vote_pct = weight
-    const max_vote_denom = VOTE_POWER_REVERSE_RATE * STEEMIT_VOTE_REGENERATION_SECONDS / (60 * 60 * 24)
+    const max_vote_denom = VOTE_POWER_REVERSE_RATE[chain] * STEEMIT_VOTE_REGENERATION_SECONDS / (60 * 60 * 24)
     let used_power = voting_power * vote_pct / STEEM_100_PERCENT
     used_power = (used_power + max_vote_denom - 1) / max_vote_denom
     let rshares = total_vests * used_power / STEEM_100_PERCENT
@@ -46,34 +50,38 @@ class Converter {
       }
 
       if (append)
-        result = (+post.payout + vote.rshares * q).toFixed(2)
+        result = lastPayout ? +post.payout : (+post.payout + vote.rshares * q).toFixed(2)
       else
         result = (vote.rshares * q).toFixed(2)
-      
     } else {
       const time = moment(vote.time + '+00:00').unix()
       const created = moment(post.created).unix()
 
       if (append) {
-        const currentActiveRshares =
-          active_votes.reduce((sum, _vote) => {
-            const _time = moment(_vote.time + '+00:00').unix()
-            if (!lastPayout || _time > lastPayout) {
-              sum += +_vote.rshares
-            }
-            return sum
-          }, 0) + vote.rshares
+        if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED)
+          result = (post.total_payout_value * CURRENCY_Q).toFixed(2)
+        else {
+          const currentActiveRshares =
+            active_votes.reduce((sum, _vote) => {
+              const _time = moment(_vote.time + '+00:00').unix()
+              if (!lastPayout || _time > lastPayout) {
+                sum += +_vote.rshares
+              }
+              return sum
+            }, 0) + vote.rshares
 
-        const votesValue =
-          Converter.calculateVshares(currentActiveRshares) /
-          recent_claims *
-          reward_balance *
-          base
+          const votesValue =
+            Converter.calculateVshares(currentActiveRshares) /
+            recent_claims *
+            reward_balance *
+            base
 
-        result = (
-          (post.total_payout_value + votesValue) *
-          CURRENCY_Q
-        ).toFixed(2)
+          result = (
+            (post.total_payout_value + votesValue) *
+            CURRENCY_Q
+          ).toFixed(2)
+        }
+
       } else {
         const setVoteMode = time => time >= moment(post.created).unix() && time <= moment(post.created).subtract(-1, 'days').unix()
           ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT

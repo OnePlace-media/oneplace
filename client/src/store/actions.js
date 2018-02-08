@@ -4,8 +4,8 @@ const async = require('async')
 import Vue from 'vue'
 
 export default {
-  fetchAccount({commit, state}, {}){
-    return 
+  fetchAccount({commit, state}, {}) {
+    return
   },
   fetchTrends({commit, state}, {chain, tags}) {
     return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ export default {
       })
   },
   fetchParams({commit, state}, {chain, $chains}) {
-    commit('setParamsProcessing', {chain, flag:true})
+    commit('setParamsProcessing', {chain, flag: true})
     $chains.setChain(chain)
     const params = state.params[chain]
     const tasks = []
@@ -110,7 +110,7 @@ export default {
 
     return Promise.all(tasks).then(() => {
       commit('setParams', {chain, params})
-      commit('setParamsProcessing', {chain, flag:false})
+      commit('setParamsProcessing', {chain, flag: false})
     })
   },
   fetchRepliesByPermlink({commit, state}, {chain, username, permlink}) {
@@ -188,7 +188,7 @@ export default {
       Vue.router.push({name: 'chain-trend', params: {chain: acc.chain}})
     }
   },
-  vote({commit, state}, {chain, post, account, isLike, weight = 10000}){
+  vote({commit, state}, {chain, post, account, isLike, weight = 10000}) {
     if (account.username) {
       const alreadyLike = !!post.active_votes.find(vote => vote.voter === account.username && (vote.percent > 0 || vote.weight > 0))
       const alreadyDisLike = !!post.active_votes.find(vote => vote.voter === account.username && (vote.percent < 0 || vote.weight < 0))
@@ -196,7 +196,12 @@ export default {
       if ((alreadyLike && isLike) || (alreadyDisLike && !isLike)) {
         weight = 0
       }
-      Api.vote(
+
+      const fieldProcessing = isLike ? 'upVoteProcessing' : 'downVoteProcessing'
+      
+      post.voteProcessing = post[fieldProcessing] = true
+
+      return Api.vote(
         chain,
         account.username,
         post.author,
@@ -209,6 +214,7 @@ export default {
         .then(response => {
           post.payout = response.data.payout
           post.active_votes = response.data.active_votes
+          post.voteProcessing = post[fieldProcessing] = false
         })
         .catch(err => {
           Vue.prototype.$toast.bottom(

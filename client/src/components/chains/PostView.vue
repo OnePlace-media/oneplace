@@ -43,6 +43,8 @@
             :account="account" 
             :chain="chain" 
             @vote="vote"
+            :up-vote-processing="upVoteProcessing"
+            :down-vote-processing="downVoteProcessing"
           ></post-bottom>
       </div>
       <section class="post-view__bottom-block">
@@ -100,12 +102,14 @@ export default {
       iframe.frameBorder = 0
       iframe.setAttribute('allowfullscreen', '')
       videoWrapper.appendChild(iframe)
-    } 
+    }
   },
   data() {
     return {
       showDropDownMenu: false,
-      comment: null
+      comment: null,
+      upVoteProcessing: false,
+      downVoteProcessing: false
     }
   },
   metaInfo() {
@@ -120,13 +124,19 @@ export default {
       this.$store.commit('setPostViewData', null)
     },
     vote(isLike, weight = 10000) {
-      this.$store.dispatch('vote', {
-        chain: this.chain, 
-        post: this.post, 
-        account: this.account, 
-        isLike, 
-        weight
-      })
+      const field = isLike ? 'upVoteProcessing' : 'downVoteProcessing'
+      this[field] = true
+      this.$store
+        .dispatch('vote', {
+          chain: this.chain,
+          post: this.post,
+          account: this.account,
+          isLike,
+          weight
+        })
+        .then(() => {
+          this[field] = false
+        })
     }
   },
   computed: {

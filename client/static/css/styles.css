@@ -2342,24 +2342,43 @@ hr {
 }
 
 .post-view__post-like:hover .post-view__vote-slider-wrapper {
-  display: block;
+  visibility: visible;
+  transition-delay: 0.3s;
+  bottom: 18px;
+  opacity: 1;
 }
 
 .post-view__post-like--active:hover .post-view__vote-slider-wrapper {
-  display: none;
+  visibility: hidden;
+}
+
+.post-view__post-like--processing .post-view__icon {
+  transition-delay: 0s;
+  transition-duration: 0s;
+  visibility: hidden;
+}
+
+.post-view__post-like--processing .spinner-rolling {
+  display: inline;
 }
 
 .post-view__vote-slider-wrapper {
-  display: none;
+  visibility: hidden;
   position: absolute;
-  bottom: 18px;
+  bottom: 28px;
   left: -4px;
   width: 28px;
   height: 90px;
+  transition-duration: 0.2s;
+  transition-delay: 0s;
+  opacity: 0;
 }
 
 .post-view__vote-slider-wrapper:hover {
-  display: block;
+  bottom: 18px;
+  transition-delay: 0.3s;
+  visibility: visible;
+  opacity: 1;
 }
 
 .post-view__vote-slider-show {
@@ -2418,6 +2437,24 @@ hr {
   transition: -webkit-transform 0.2s ease;
   transition: transform 0.2s ease;
   transition: transform 0.2s ease, -webkit-transform 0.2s ease;
+}
+
+.spinner-rolling {
+  display: none;
+  position: relative;
+}
+
+.spinner-rolling div {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #818888;
+  border-top-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: spinner-rolling 1s linear infinite;
+  animation: spinner-rolling 1s linear infinite;
+  top: 10px;
+  left: 10px;
 }
 
 .post-view__post-value {
@@ -2499,8 +2536,11 @@ hr {
 .post-view__icon {
   width: 20px;
   height: 20px;
-  transition: all 0.3s ease;
   fill: #a8adad;
+}
+
+.post-view__icon * {
+  transition: all 0.3s ease;
 }
 
 .post-view__icon:hover {
@@ -3998,5 +4038,29 @@ hr {
 
   .sidebar__nav-link {
     padding: 4px 12px 5px 32px;
+  }
+}
+
+@-webkit-keyframes spinner-rolling {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes spinner-rolling {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }

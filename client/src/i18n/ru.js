@@ -149,7 +149,8 @@ module.exports = {
     followers: 'Нет подписчиков | Подписчик | Подписчика',
     allPosts: 'Все записи',
     accountPosts:'Записи {username}',
-    posted: 'Создано'
+    posted: 'Создано',
+    repostedFrom: 'Репост от'
   },
   auth: {
     SignIn: 'Войти',

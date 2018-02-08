@@ -148,7 +148,8 @@ module.exports = {
     followers: 'No followers | Follower | Followers',
     allPosts: 'All posts',
     accountPosts:'Posts {username}',
-    posted: 'Posted'
+    posted: 'Posted',
+    repostedFrom: 'Reposted from'
   },
   auth: {
     SignIn: 'Log in',

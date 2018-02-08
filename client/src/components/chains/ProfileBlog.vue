@@ -16,9 +16,9 @@
       </a>
       <div class="blog__post-content">
         
-        <div class="blog__post-reposted" v-if="account.name !== post.author">Reposted from
+        <div class="blog__post-reposted" v-if="account.name !== post.author">{{$t('profile.repostedFrom')}}
           <span class="blog__repost-avatar" :style="`background-image: url('${post.avatar}');`"></span>
-          <a href="#" class="link link--op">{{post.author}}</a>
+          <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">{{post.author}}</router-link>
         </div>
 
         <h3 class="blog__post-title h3">

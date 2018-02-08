@@ -54,7 +54,7 @@
           </div>
           <div class="post-view__author-info">
             <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">
-              {{account.username}}
+              {{post.author}}
             </router-link>
             <p class="author-info">{{post.author_about}}</p>
           </div>

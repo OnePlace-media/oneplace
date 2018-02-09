@@ -80,7 +80,8 @@ export default {
     return {
       voteIsSliding: false,
       voteWeight: 10000,
-      timer: null
+      timerOver: null,
+      timerOut: null
     }
   },
   components: {
@@ -90,10 +91,12 @@ export default {
   },
   methods: {
     setVoteIsSliding(flag) {
-      if (flag) this.timer = setTimeout(() => (this.voteIsSliding = flag), 275)
-      else {
-        clearTimeout(this.timer)
-        this.voteIsSliding = flag
+      if (flag) {
+        clearTimeout(this.timerOut)
+        this.timerOver = setTimeout(() => (this.voteIsSliding = flag), 275)
+      } else {
+        clearTimeout(this.timerOver)
+        this.timerOut = setTimeout(() => (this.voteIsSliding = flag), 0)
       }
     },
     slide(value) {

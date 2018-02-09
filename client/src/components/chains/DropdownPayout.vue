@@ -57,7 +57,7 @@ export default {
   <div class="post-view__pending-payout dropdown">
     <i18n path="chains.pendingPayout" tag="p" v-if="havePayoutPending">
       <span place="payout" class="currency">{{pendingPayout}}</span>
-      <span place="days">{{$tc('chains.pendingDays', payoutPendingDays, {count: payoutPendingDays})}}</span>
+      <span place="days" v-html="$tc('chains.pendingDays', payoutPendingDays, {count: payoutPendingDays})"></span>
     </i18n>
     <i18n path="chains.readyPayout" tag="p" v-if="havePayout">
       <span place="payout" class="currency">{{readyPayout}}</span>

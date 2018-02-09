@@ -66,7 +66,7 @@ module.exports = {
     onlyRegisteredCanLeaveComments: 'Только зарегистрированные пользователи со связанным {blockchain} аккаунтом могут оставлять комментарии.',
     addAccountToReply: '{add-account}, чтобы ответить.',
     addAccounChain: 'Добавьте&nbsp;{blockchain} аккаунт',
-    loginOrRegisterToReply: '{login-link}&nbsp;или&nbsp;{reg-link}, чтобы ответить.'
+    loginOrRegisterToReply: '{login-link}{nbsp}или{nbsp}{reg-link}, чтобы ответить.'
 
   },
   addAccount: {

@@ -132,9 +132,7 @@ export default {
           post: this.post,
           account: this.account,
           isLike,
-          weight,
-          toast: this.$toast,
-          t: this.$t
+          weight
         })
         .then(() => {
           this[field] = false

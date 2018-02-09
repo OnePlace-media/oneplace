@@ -62,7 +62,7 @@ export default {
     PostBottom
   },
   methods: {
-    vote(isLike) {
+    vote(isLike, weight = 10000) {
       const field = isLike ? 'upVoteProcessing' : 'downVoteProcessing'
       this[field] = true
       this.$store
@@ -71,8 +71,7 @@ export default {
           post: this.item,
           account: this.account,
           isLike,
-          toast: this.$toast,
-          t: this.$t
+          weight
         })
         .then(() => {
           this[field] = false

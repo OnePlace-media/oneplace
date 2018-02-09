@@ -66,7 +66,7 @@ module.exports = {
     onlyRegisteredCanLeaveComments: 'Only registered users with attached {blockchain} account can leave comments.',
     addAccountToReply: '{add-account} to reply.',
     addAccounChain: 'Add&nbsp;{blockchain} account',
-    loginOrRegisterToReply: '{login-link}&nbsp;or&nbsp;{reg-link} to reply.'
+    loginOrRegisterToReply: '{login-link}{nbsp}or{nbsp}{reg-link} to reply.'
   },
   addAccount: {
     header: 'It\'s time to add your {blockchain} account!',

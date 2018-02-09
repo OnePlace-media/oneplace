@@ -162,8 +162,7 @@ export default {
       return (
         this.account.username &&
         +this.account.data.vesting_shares.split(' ')[0] > 1e6 &&
-        (!this.upVoteProcessing && !this.downVoteProcessing) &&
-        this.post.mode !== CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED
+        (!this.upVoteProcessing && !this.downVoteProcessing)
       )
     },
     currencySymbol() {

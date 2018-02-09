@@ -1,6 +1,7 @@
 <script>
 const CONSTANTS = require('@oneplace/constants')
 import Api from '../../plugins/api'
+import { mixin as onClickOutside } from 'vue-on-click-outside'
 export default {
   name: 'SideBar',
   data() {
@@ -8,8 +9,9 @@ export default {
       opened: false
     }
   },
+  mixins: [onClickOutside],
   computed: {
-    activeTag(){
+    activeTag() {
       return this.$store.state.trends.activeTag
     },
     tags() {
@@ -28,13 +30,17 @@ export default {
     },
     toggle() {
       this.opened = !this.opened
+    },
+    close() {
+      this.opened = false
+      return true
     }
   }
 }
 </script>
 
 <template>
-  <div class="sidebar" :class="{'sidebar-opened': opened }" v-touch:swipe="swipe" v-if="$route.name === 'chain-trend'">
+  <div class="sidebar" :class="{'sidebar-opened': opened }" v-touch:swipe="swipe" v-if="$route.name === 'chain-trend'" v-on-click-outside="close">
       <nav class="sidebar__nav">
         <no-ssr v-if="$auth && $auth.ready()">
           <ul class="sidebar__nav-list">
@@ -42,7 +48,7 @@ export default {
               <a class="sidebar__nav-link link" 
                 :class="{'sidebar__nav-link-active': activeTag === tag.text}"
                 :href="`#${tag.text}`" 
-                v-scroll-to="`#tag-${tag.text}`">
+                v-scroll-to="{el:`#tag-${tag.text}`, onDone: close}">
                 <span>{{tag.text | unGolosTag}}</span>
               </a>
             </li>

@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <div id="app" class="wrapper">
+  <div id="app" class="wrapper" data-server-rendered="true">
     <div class="login__wrapper">
       <router-link :to="{name:'chain-trend', params:{chain:$route.params.chain || 's'}}" tag="div" class="login__logo">
         <img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive">

@@ -1,5 +1,6 @@
 module.exports = {
   errors: {
+    FAILED_APPEND_POST_BY_AUTHOR: 'Ошибка загрузки постов, попробуйте позже',
     UNKNOW_ERROR: 'Неизвестная ошибка.',
     STEEMIT_MAX_VOTE_CHANGES: 'Вы использовали максимальное число изменений голоса для данной записи',
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'Вы можете голосовать за записи не чаще одного раза в 3 секунды'
@@ -64,8 +65,8 @@ module.exports = {
     register: 'зарегистрируйтесь',
     onlyRegisteredCanLeaveComments: 'Только зарегистрированные пользователи со связанным {blockchain} аккаунтом могут оставлять комментарии.',
     addAccountToReply: '{add-account}, чтобы ответить.',
-    addAccounChain: 'Добавьте {blockchain} аккаунт',
-    loginOrRegisterToReply: '{login-link} или {reg-link}, чтобы ответить.'
+    addAccounChain: 'Добавьте&nbsp;{blockchain} аккаунт',
+    loginOrRegisterToReply: '{login-link}&nbsp;или&nbsp;{reg-link}, чтобы ответить.'
 
   },
   addAccount: {
@@ -77,7 +78,11 @@ module.exports = {
     imageIsHidden: 'Изображение скрыто. Нажмите, чтобы увидеть изображение.',
     emptyCategoryHelp: 'Нет записей в данной категории.',
     removeFlag: 'Отменить флаг',
-    downvotePost: 'Проголосовать против'
+    downvotePost: 'Проголосовать против',
+    pendingPayout: 'Ожидаемая выплата {payout} через {days}.',
+    pendingDays: '1&nbsp;день | {count}&nbsp;дней',
+    readyPayout: 'Предыдущие выплаты {payout}',
+    andMore: '...и еще {count}'
   },
   welcome: {
     createRegistration: 'Создание профиля',
@@ -122,7 +127,7 @@ module.exports = {
     logout: 'Выйти'
   },
   footer: {
-    createdBy: 'Создано 2017 by {link}',
+    createdBy: 'Создано 2017 {link}',
     language: 'Выбрать язык'
   },
   settings: {
@@ -131,6 +136,21 @@ module.exports = {
     addBlockChainAccount: 'Добавить аккаунт Steem или Golos',
     categoriesList: 'Подписка на категории',
     noAddedAccountsYet: 'Нет добавленных аккаунтов'
+  },
+  profile: {
+    isFollower: 'Подписан',
+    follow: 'Подписаться',
+    following: 'Нет подписок | Подписки | Подписки',
+    unfollow: 'Отписаться',
+    block_user: 'Блокировать&nbsp;пользователя',
+    location: 'Местоположение',
+    website: 'Сайт',
+    posts: 'Публикаций | Публикация | Публикаций',
+    followers: 'Нет подписчиков | Подписчик | Подписчика',
+    allPosts: 'Все записи',
+    accountPosts:'Записи {username}',
+    posted: 'Создано',
+    repostedFrom: 'Репост от'
   },
   auth: {
     SignIn: 'Войти',

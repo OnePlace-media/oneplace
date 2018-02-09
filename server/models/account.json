@@ -9,6 +9,15 @@
     },
     "validateUpsert": true
   },
+  "mixins": {
+    "HideRemoteMethods": {
+      "methodsVisibility": [
+        "byName",
+        "follow",
+        "getFollowers"
+      ]
+    }
+  },
   "properties": {
     "id": {
       "id": true,
@@ -22,6 +31,13 @@
     }
   },
   "validations": [],
-  "acls": [],
+  "acls": [
+    {
+      "property": "follow",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
   "methods": {}
 }

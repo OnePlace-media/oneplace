@@ -132,9 +132,11 @@ export default {
       })
       return arr
     })(state.postView.replies)
-
   },
-  setRouterFrom(state, {target}) {
-    state.$router.from = target
+  setParams(state, {chain, params}) {
+    state.params[chain] = params
+  },
+  setParamsProcessing(state, {chain, flag}) {
+    state.params[chain].processing = flag
   }
 }

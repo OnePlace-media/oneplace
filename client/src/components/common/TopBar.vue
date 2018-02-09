@@ -8,6 +8,9 @@ export default {
   name: 'TopBar',
   mixins: [onClickOutside],
   computed: {
+    DEFAULT_AVATAR(){
+      return CONSTANTS.DEFAULT.AVATAR_IMAGE
+    },
     userDropDownToggle() {
       return this.$store.state.user.dropDownOpen
     },
@@ -15,10 +18,11 @@ export default {
       return this.$auth && this.$auth.check()
     },
     chain() {
-      return this.$route.params.chain || this.$store.state.chain
+      return this.$route.params.chain || this.$store.state.chain || 's'
     },
     account() {
-      let result = { avatar: '/static/img/avatar.svg', username: null }
+      
+      let result = { avatar: CONSTANTS.DEFAULT.AVATAR_IMAGE, username: null }
       if (this.$auth && this.$auth.check() && this.accountsByChain.length) {
         result =
           this.accountsByChain.find(
@@ -62,7 +66,7 @@ export default {
 <template>
   <header class="header">
     <div class="header__wrapper container">
-      <router-link :to="{name:'chain-trend', params:{chain:'s'}}" class="header__logo" tag="div"><img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive"></router-link>
+      <router-link :to="{name:'chain-trend', params:{chain}}" class="header__logo" tag="div"><img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive"></router-link>
       <div class="header__right-panel">
         <div class="header__chain-wrapper">
           <router-link 
@@ -81,11 +85,19 @@ export default {
         <no-ssr v-if="$auth && $auth.ready()">
           <router-link :to="{name:'auth-login', params:{lang:'ru'}}" class="header__auth link" v-if="!isAuth">{{$t('topBar.getStarted')}}</router-link>
           <div class="header__user-wrapper" v-else v-on-click-outside="closeDropDown">
-            <a href="#" @click.prevent="" class="header__user-avatar avatar" :style="`background-image: url('${account.avatar || '/static/img/avatar.svg'}');`"></a>
+            <a href="#" @click.prevent="" class="header__user-avatar avatar" :style="`background-image: url('${account.avatar || DEFAULT_AVATAR}');`"></a>
             <a href="#" @click.prevent="switchAccount($event)" class="header__user-switch" :title="$t('topBar.switchAccount')" v-if="accountsByChain.length > 1"></a>
             <router-link class="header__user-name link link--op" :to="{name:'add-account', params:{chain}}" v-if="!account.username">{{$t('topBar.addAccount')}}</router-link>
-            <a href="#" @click.prevent="" class="header__user-name link link--op" v-if="account.username">{{account.username}}</a>
-            
+            <!-- <router-link 
+              tag="a" 
+              :to="{name:'chain-account-view', params:{chain, username: account.username}}" 
+              class="header__user-name link link--op"
+              v-if="account.username">
+              {{account.username}}
+            </router-link> -->
+            <a :href="`/${chain}/@${account.username}`" class="link link--op">
+              {{account.username}}
+            </a>
             <a class="header__profile-btn" @click="$store.dispatch('toggleDropDown')"></a>
             <div class="header__usermenu" :class="{'header__usermenu--opened':userDropDownToggle}" @click="closeDropDown">
               <router-link :to="{name:'settings'}" class="header__usermenu-item link">{{$t('topBar.settings')}}</router-link>

@@ -1,10 +1,11 @@
-const rpc = require('json-rpc2')
+const request = require('request')
 const CONSTANTS = require('../constants')
 var decoder = require('html-entities').AllHtmlEntities
 const config = require('../../../server/config.json')
-const clients = {
-  [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: rpc.Client.$create(80, config.postingWrapper.steemDomain), // api.steemit.com
-  [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: rpc.Client.$create(80, config.postingWrapper.golosDomain) // ws.golos.io | api.golos.cf
+
+const clientsURL = {
+  [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: config.postingWrapper.steemDomain,
+  [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: config.postingWrapper.golosDomain
 }
 
 const cacheMethodsMap = {
@@ -17,23 +18,37 @@ const cacheMethodsMap = {
 }
 const cache = {}
 function _call(chain, method, params, noCache) {
-  if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && params[0].tag) {
-    params[0].select_tags = [params[0].tag]
-    delete params[0].tag
+  if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS) {
+    if (params[0].tag) {
+      params[0].select_tags = [params[0].tag]
+      delete params[0].tag
+    } else if (params[1] === 'get_discussions_by_blog') {
+      params[2][0].select_authors = [params[2][0].tag]
+      delete params[2][0].tag
+    }
   }
   return new Promise((resolve, reject) => {
-    if (!clients[chain]) throw new Error(`Unknown chain ${chain}`)
+    if (!clientsURL[chain]) throw new Error(`Unknown chain ${chain}`)
     const cacheKey = [chain, method, JSON.stringify(params)].join(':')
     if (cache[cacheKey] && !noCache) {
       resolve(cache[cacheKey])
     } else {
-      clients[chain].call(method, params, {https: false}, (err, result) => {
+      request({
+        url: `http://${clientsURL[chain]}`,
+        method: 'POST',
+        json: {
+          id: 1,
+          method,
+          params,
+          jsonrpc: "2.0"
+        }
+      }, (err, res, body) => {
         if (err) reject(err)
         else {
           if (cacheMethodsMap[method]) {
-            cache[cacheKey] = result
+            cache[cacheKey] = body.result
           }
-          resolve(result)
+          resolve(body.result)
         }
       })
     }
@@ -46,7 +61,6 @@ const _avatars_ = {
 
 
 const IMG_PREFIX = 'https://steemitimages.com'
-const DEFAULT_AVR = '/static/img/avatar.svg'
 
 class BlockChainApi {
   static preparePosts(chain, posts) {
@@ -114,6 +128,22 @@ class BlockChainApi {
     return _call(chain, 'get_active_votes', [author, permlink])
   }
 
+  static getState(chain, {path}) {
+    return _call(chain, 'get_state', [path])
+  }
+
+  static getFollowCount(chain, {username}) {
+    return _call(chain, 'call', ['follow_api', 'get_follow_count', [username]])
+  }
+
+  static getDiscussionsByAuthorBeforeDate(chain, {author, start_permalink, before_date, limit = 15}) {
+    return _call(chain, 'get_discussions_by_author_before_date', [author, start_permalink, before_date, limit])
+  }
+
+  static getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit = 15}) {
+    return _call(chain, 'call', ['database_api', 'get_discussions_by_blog', [{tag, start_author, start_permlink, limit}]])
+  }
+
   static getAvatar(chain, username) {
     return new Promise(resolve => {
       if (_avatars_[chain].hasOwnProperty(username)) {
@@ -128,14 +158,18 @@ class BlockChainApi {
             if (_avatars_[chain][username]) {
               _avatars_[chain][username] = IMG_PREFIX + '/100x100/' + _avatars_[chain][username]
             }
-            resolve(_avatars_[chain][username] || DEFAULT_AVR)
+            resolve(_avatars_[chain][username] || CONSTANTS.DEFAULT.AVATAR_IMAGE)
           })
           .catch(e => {
-            _avatars_[chain][username] = DEFAULT_AVR
+            _avatars_[chain][username] = CONSTANTS.DEFAULT.AVATAR_IMAGE
             resolve()
           })
       }
     })
+  }
+
+  static getFollowers(chain, {following, startFollower, followType, limit = 100}) {
+    return _call(chain, 'call', ['follow_api', 'get_followers', [following, startFollower, followType, limit]])
   }
 }
 

@@ -1,5 +1,6 @@
 module.exports = {
   errors: {
+    FAILED_APPEND_POST_BY_AUTHOR: 'Loading posts error, please try again later',
     UNKNOW_ERROR: 'Something is wrong.',
     STEEMIT_MAX_VOTE_CHANGES: 'You have used the maximum number of vote changes on this comment',
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds'
@@ -64,8 +65,8 @@ module.exports = {
     logIn: 'Log in',
     onlyRegisteredCanLeaveComments: 'Only registered users with attached {blockchain} account can leave comments.',
     addAccountToReply: '{add-account} to reply.',
-    addAccounChain: 'Add {blockchain} account',
-    loginOrRegisterToReply: '{login-link} or {reg-link} to reply.'
+    addAccounChain: 'Add&nbsp;{blockchain} account',
+    loginOrRegisterToReply: '{login-link}&nbsp;or&nbsp;{reg-link} to reply.'
   },
   addAccount: {
     header: 'It\'s time to add your {blockchain} account!',
@@ -76,7 +77,11 @@ module.exports = {
     imageIsHidden: 'Image is hidden. Click to show image.',
     emptyCategoryHelp: 'No posts in this category.',
     removeFlag: 'Remove flag',
-    downvotePost: 'Downvote post'
+    downvotePost: 'Downvote post',
+    pendingPayout: 'Pending payout is {payout} in {days}.',
+    pendingDays: '1&nbsp;day | {count}&nbsp;days',
+    readyPayout: 'Past payouts {payout}',
+    andMore: '...and {count} more'
   },
   welcome: {
     createRegistration: 'Create profile',
@@ -130,6 +135,21 @@ module.exports = {
     addBlockChainAccount: 'Please attach your Steem or Golos account',
     categoriesList: 'Followed categories',
     noAddedAccountsYet: 'No added accounts yet'
+  },
+  profile: {
+    isFollower: 'Following',
+    follow: 'Follow',
+    following: 'Not following anybody | Following | Following',
+    unfollow: 'Unfollow',
+    block_user: 'Block&nbsp;user',
+    location: 'Location',
+    website: 'Website',
+    posts: 'Posts | Post | Posts',
+    followers: 'No followers | Follower | Followers',
+    allPosts: 'All posts',
+    accountPosts:'Posts {username}',
+    posted: 'Posted',
+    repostedFrom: 'Reposted from'
   },
   auth: {
     SignIn: 'Log in',

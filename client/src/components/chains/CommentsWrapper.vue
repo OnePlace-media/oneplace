@@ -1,16 +1,19 @@
 <template>
   <div class="post-view__comments-wrapper">
-      <div class="post-view__reply-disabled" v-if="!account.username">
-        <span>{{$t('comment.onlyRegisteredCanLeaveComments',{blockchain: chainName})}}</span>&nbsp;
-        <i18n path="comment.loginOrRegisterToReply" tag="span" v-if="!$auth.check()">
-          <span place="blockchain">{{chainName}}</span>
-          <router-link :to="{name:'auth-login'}" class="link link--op" place="login-link">{{$t('comment.logIn')}}</router-link>
-          <router-link :to="{name:'auth-registration'}" class="link link--op" place="reg-link">{{$t('comment.register')}}</router-link>
-        </i18n>
-        <i18n path="comment.addAccountToReply" tag="span" v-if="$auth.check()">
-          <router-link :to="{name:'add-account',params:{chain: $route.params.chain}}" class="link link--op" place="add-account">{{$t('comment.addAccounChain',{blockchain:chainName})}}</router-link>
-        </i18n>
-      </div>
+      <no-ssr v-if="$auth && $auth.ready()">
+        <div class="post-view__reply-disabled" v-if="!account.username">
+          <span>{{$t('comment.onlyRegisteredCanLeaveComments',{blockchain: chainName})}}</span>&nbsp;
+          <i18n path="comment.loginOrRegisterToReply" tag="span" v-if="!$auth.check()">
+            <span place="blockchain">{{chainName}}</span>
+            <router-link :to="{name:'auth-login'}" class="link link--op" place="login-link">{{$t('comment.logIn')}}</router-link>
+            <router-link :to="{name:'auth-registration'}" class="link link--op" place="reg-link">{{$t('comment.register')}}</router-link>
+          </i18n>
+          <i18n path="comment.addAccountToReply" tag="span" v-if="$auth.check()">
+            <router-link :to="{name:'add-account',params:{chain: $route.params.chain}}" class="link link--op" place="add-account">{{$t('comment.addAccounChain',{blockchain:chainName})}}</router-link>
+          </i18n>
+        </div>
+      </no-ssr>
+
       <comment-form @success="addComment" :special="true" :post="post" v-if="account.username"></comment-form>
       
       <div class="post-view__comments-header" v-if="!repliesProcessing && replies.length">
@@ -35,6 +38,7 @@ import Comment from './Comment.vue'
 import CommentForm from './CommentForm.vue'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 import { ORDER_BY_LIST } from '@oneplace/constants'
+import CONSTANTS from '@oneplace/constants'
 
 const orderByList = [
   { value: ORDER_BY_LIST.TRENDING },
@@ -82,7 +86,7 @@ export default {
       return this.$auth && this.$auth.check() ? this.$auth.user().accounts : []
     },
     account() {
-      let result = { avatar: '/static/img/avatar.svg', username: null }
+      let result = { avatar: CONSTANTS.DEFAULT.AVATAR_IMAGE, username: null }
       if (this.$auth && this.$auth.check() && this.accountsByChain.length) {
         result =
           this.accountsByChain.find(

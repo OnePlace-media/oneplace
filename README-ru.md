@@ -1,4 +1,4 @@
-# OnePlace
+![OnePlace](/client/static/img/logo_hub.png)
 
 OnePlace - это web-приложение для взаимодействия с блокчейнами [Steem](https://github.com/steemit/steem) и [Golos](https://github.com/GolosChain/golos). В качестве основы были использованы такие технологии как [Vue](https://vuejs.org) с [SSR](https://ssr.vuejs.org/ru/) модулем для клиентской части проекта и [LoopBack](https://loopback.io/) для реализации серверной составляющей.
 

@@ -23,7 +23,7 @@ if (isProd) {
 function createRenderer(bundle, template) {
   return require('vue-server-renderer').createBundleRenderer(bundle, {
     template,
-    runInNewContext: true,
+    runInNewContext: 'once',
     cache: require('lru-cache')({
       max: 1000,
       maxAge: 1000 * 60 * 15
@@ -87,6 +87,16 @@ const port = process.env.PORT || 3000
 app.listen(port, () => {
   app.emit('server-ready')
   console.log(`server started at http://localhost:${port}`)
+  
+  if (process.send)
+    process.send('ready')
+})
+
+
+process.on('message', function(msg) {
+  if (msg === 'shutdown') {
+    app.close(() => process.exit(0))
+  }
 })
 
 module.exports = app

@@ -7,18 +7,11 @@ const decoder = require('html-entities').AllHtmlEntities
 const he = require('he')
 const Remarkable = require('remarkable')
 const md = new Remarkable
+
 const URL_PREFIX = {
   [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: 'https://steemit.com',
   [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: 'https://golos.io'
 }
-
-const DEFAULT_IMG = {
-  [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: '/static/img/default-img.jpg',
-  [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: '/static/img/default-img.jpg'
-}
-
-const IMG_PREFIX = 'https://steemitimages.com'
-const DEFAULT_AVR = '/static/img/avatar.svg'
 
 const CURRENCY = {
   [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: {
@@ -64,52 +57,37 @@ function checkTags(tags) {
 }
 
 function setImage(chain, metadata) {
-  if (metadata.length == 0) return DEFAULT_IMG[chain]
+  if (metadata.length == 0) return CONSTANTS.DEFAULT.POST_IMAGE
   let meta = {}
   try {
     meta = JSON.parse(metadata)
   } catch (e) {
-    return DEFAULT_IMG[chain]
+    return CONSTANTS.DEFAULT.POST_IMAGE
   }
 
   if (!meta.image && meta.images) meta.image = meta.images
-  return meta.image && meta.image[0] ? chainParser.ipfsPrefix(chain, meta.image[0]) : DEFAULT_IMG[chain]
+  return meta.image && meta.image[0] ? chainParser.ipfsPrefix(chain, meta.image[0]) : CONSTANTS.DEFAULT.POST_IMAGE
 }
 
 async function getReplies(chain, post) {
   const replies = await blockChains.getContentReplies(chain, {author: post.author, permlink: post.permlink})
-  const _replies = []
-  for (let replie of replies) {
-    const _replie = {}
-    _replie.body = chainParser.prepareHTML(chain, replie.body, replie.json_metadata).html
-    _replie.author = replie.author
-    _replie.author_rep = chainParser.convertReputation(replie.author_reputation)
-    _replie.avatar = await blockChains.getAvatar(chain, replie.author)
-    _replie.permlink = replie.permlink
-    _replie.created = replie.created + '+00:00'
-    _replie.payout_declined = parseInt(replie.max_accepted_payout) ? false : true
-    _replie.votes = replie.net_votes
-    _replie.active_votes = await blockChains.getActiveVotes(chain, replie)
-    _replie.children = replie.children
-    if (_replie.children) {
-      _replie.replies = await getReplies(chain, {author: replie.author, permlink: replie.permlink})
+  const _replies = await _preparePosts(chain, replies, true, true)
+  for (let replie of _replies) {
+    if (replie.children) {
+      replie.replies = await getReplies(chain, {author: replie.author, permlink: replie.permlink})
     }
-    const payout = parseFloat(replie.pending_payout_value) + parseFloat(replie.total_payout_value) + parseFloat(replie.curator_payout_value)
-    _replie.payout = (payout * CURRENCY[chain].q).toFixed(2)
-
-    _replies.push(_replie)
   }
   return _replies
 }
 
-async function _preparePosts(chain, posts, full = false) {
+async function _preparePosts(chain, posts, full = false, replie = false) {
   CURRENCY[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS].q = await blockChainsHelper.getGoldPrice() / 1000
   const _posts = []
   for (let post of posts) {
     const _post = {}
     _post.id = post.id
     _post.title = post.title
-    _post.url = URL_PREFIX[chain] + post.url
+    _post.last_payout = post.last_payout + '+00:00'
     _post.created = post.created + '+00:00'
     _post.permlink = post.permlink
     _post.author = post.author
@@ -118,8 +96,14 @@ async function _preparePosts(chain, posts, full = false) {
     _post.tags = setTags(chain, post.json_metadata)
     _post.image = setImage(chain, post.json_metadata)
     _post.nsfw = checkTags(_post.tags)
-    _post.votes = post.active_votes
-    if (full || _post.image === DEFAULT_IMG[chain]) {
+    _post.mode = post.mode
+    if (replie) {
+      _post.active_votes = await blockChains.getActiveVotes(chain, post)
+    } else {
+      _post.active_votes = post.active_votes
+    }
+
+    if (full || _post.image === CONSTANTS.DEFAULT.POST_IMAGE) {
       const profile = await blockChains.getProfile(chain, post.author)
       if (profile) {
         _post.author_about = profile.about
@@ -127,19 +111,40 @@ async function _preparePosts(chain, posts, full = false) {
       _post.author_rep = chainParser.convertReputation(post.author_reputation)
       const prepareHTML = chainParser.prepareHTML(chain, post.body, post.json_metadata)
       _post.body = prepareHTML.html
-      if (_post.image === DEFAULT_IMG[chain] && Array.from(prepareHTML.images).length) {
-        _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.images)[0]) || DEFAULT_IMG[chain]
+      if (_post.image === CONSTANTS.DEFAULT.POST_IMAGE && prepareHTML.images && Array.from(prepareHTML.images).length) {
+        _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
       }
     }
+
+    if (full && chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED) {
+      const stateData = await blockChains.getState(chain, {path: `@${post.author}/transfers`})
+      _post.separatePayots = stateData
+        .accounts[post.author]
+        .transfer_history
+        .filter(item => item[1].op[0] === 'author_reward' && item[1].op[1].permlink === post.permlink)
+        .reduce((obj, item) => {
+            let mode = CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+            if(moment(item[1].timestamp + '+00:00').unix() > moment(_post.created).subtract(-1, 'days').unix()){
+              mode = CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+            }
+            obj[mode] = item[1].op[1]
+            return obj
+        }, {})
+    }
+
     const payout = parseFloat(post.pending_payout_value) + parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
     _post.payout = (payout * CURRENCY[chain].q).toFixed(2)
-    _post.payout_declined = parseInt(post.max_accepted_payout) ? false : true
+    _post.pending_payout = (parseFloat(post.pending_payout_value) * CURRENCY[chain].q).toFixed(2)
+    _post.pending_payout_value = parseFloat(post.pending_payout_value)
 
+    _post.payout_declined = parseInt(post.max_accepted_payout) ? false : true
+    _post.total_payout_value = parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
+    _post.total_payout = (_post.total_payout_value * CURRENCY[chain].q).toFixed(2)
     _post.children = post.children
     _post.avatar = await blockChains.getAvatar(chain, _post.author)
 
     _post.preview = ''
-    if (post.body) {
+    if (post.body && !replie) {
       let preview = post.body.replace(/<[^>]+>/gm, '')
       preview = decoder.decode(md.render(preview)).replace(/<[^>]+>/gm, '')
       preview = he.decode(preview)

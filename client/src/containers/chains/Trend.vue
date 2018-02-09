@@ -39,8 +39,13 @@
                     <a @click.prevent="showPost(post)" :href="makePath(post)" class="link">{{post.preview}}</a>
                   </p>
                   <div class="tag-block__top-post-other tag-block__post-other">
-                    <a :href="`/${$route.params.chain}/@${post.author}`" class="tag-block__post-avatar avatar" 
-                      :style="`background-image: url('${post.avatar || '/static/img/avatar.svg'}');`"></a>
+                    <!-- <router-link 
+                      tag="a" 
+                      :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
+                      :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`"
+                      class="tag-block__post-avatar avatar">
+                    </router-link> -->
+                    <a :href="`/${$route.params.chain}/@${post.author}`" class="tag-block__post-avatar avatar" :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`"></a>
                     <div class="tag-block__post-data">
                       <span class="tag-block__post-value" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}&nbsp;{{post.payout}}</span>
                       <a @click.prevent="showPost(post)" :href="makePath(post)" class="tag-block__post-replies link">
@@ -48,7 +53,15 @@
                           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#comment"></use>
                         </svg>&nbsp;&nbsp;{{post.children}}</a>
                     </div>
-                    <a class="tag-block__post-author link" :href="`/${$route.params.chain}/@${post.author}`">{{post.author}}</a>
+                    <!-- <router-link 
+                      tag="a" 
+                      :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
+                      class="post-view__author-link link link--op">
+                      {{post.author}}
+                    </router-link> -->
+                    <a :href="`/${$route.params.chain}/@${post.author}`" class="post-view__author-link link link--op">
+                      {{post.author}}
+                    </a>
                     <br>
                     <span class="tag-block__post-time">
                       <timeago :since="post.created" :locale="$locale.current()" :format="formatTime"></timeago>
@@ -72,7 +85,16 @@
                         <span class="tag-block__post-time" place="timeago">
                           <timeago :since="post.created" :locale="$locale.current()"></timeago>
                         </span>
-                        <a place="author" :href="`/${$route.params.chain}/@${post.author}`" class="tag-block__post-author link">{{post.author}}</a>
+                        <!-- <router-link 
+                          tag="a" 
+                          place="author"
+                          :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
+                          class="tag-block__post-author link">
+                          {{post.author}}
+                        </router-link> -->
+                        <a :href="`/${$route.params.chain}/@${post.author}`" place="author" class="tag-block__post-author link">
+                          {{post.author}}
+                        </a>
                       </i18n>
                     </div>
                   </div>
@@ -122,6 +144,9 @@ export default {
   },
   computed: {
     ...mapState(['trends']),
+    DEFAULT_AVATAR(){
+      return CONSTANTS.DEFAULT.AVATAR_IMAGE
+    },
     chain() {
       return this.$route.params.chain
     },
@@ -176,8 +201,8 @@ export default {
         }
       }
     },
-    makePath(post) {
-      return `/${this.chain}/@${post.author}/${post.permlink}`
+    makePath(post, chain) {
+      return `/${chain || this.chain}/@${post.author}/${post.permlink}`
     },
     fetchData() {
       this.$store
@@ -190,25 +215,27 @@ export default {
         })
     },
     showPost(post) {
+      const chain = this.chain
       if (!this.postLoading) {
         this.postLoading = true
         const target = {
           name: 'chain-post-view',
           params: {
-            chain: this.chain,
+            chain: chain,
             username: post.author,
             permlink: post.permlink
           }
         }
         this.$store
           .dispatch('fetchPostByPermlink', {
-            chain: this.chain,
+            chain: chain,
             username: post.author,
             permlink: post.permlink
           })
           .then(() => {
-            history.pushState('', post.title, this.makePath(post))
-            this.$store.commit('setRouterFrom', { target })
+            history.pushState('', post.title, this.makePath(post, chain))
+
+            this.$store.commit('core/setRouterFrom', { target })
             this.postLoading = false
           })
       }

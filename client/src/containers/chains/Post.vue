@@ -25,17 +25,21 @@ export default {
     CommentsWrapper
   },
   asyncData({ store, route, router }) {
-    return store
-      .dispatch('fetchPostByPermlink', {
-        chain: route.params.chain,
-        username: route.params.username,
-        permlink: route.params.permlink
-      })
-      .catch(err => {
-        if (err.response.status === 500) {
-          store.commit('set404Page', true)
-        }
-      })
+    if (!store.state.postView.post || store.state.postView.post.permlink !== route.params.permlink) {
+      return store
+        .dispatch('fetchPostByPermlink', {
+          chain: route.params.chain,
+          username: route.params.username,
+          permlink: route.params.permlink
+        })
+        .catch(err => {
+          if (err.response.status === 500) {
+            store.commit('set404Page', true)
+          }
+        })
+    } else {
+      return new Promise(resolve => resolve())
+    }
   },
   beforeDestroy() {
     this.$store.commit('setPostViewData', null)

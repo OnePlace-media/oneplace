@@ -56,19 +56,10 @@ function iframe(state, child) {
     }
   }
 
-  const tag = child.parentNode.tagName
-    ? child.parentNode.tagName.toLowerCase()
-    : child.parentNode.tagName
-  if (
-    tag == 'div' &&
-    child.parentNode.getAttribute('class') == 'videoWrapper'
-  )
-    return
-  const html = XMLSerializer.serializeToString(child)
-  child.parentNode.replaceChild(
-    DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`),
-    child
-  )
+  const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
+  if (tag === 'div' && child.parentNode.getAttribute('class') === 'video-wrapper') return
+  const newDoc = DOMParser.parseFromString(`<div class="video-wrapper" data-src="${url}"></div>`)
+  child.parentNode.replaceChild(newDoc.childNodes[0], child)
 }
 
 function link(chain, state, child) {
@@ -154,10 +145,11 @@ function embedYouTubeNode(child, links, images) {
     if (!yt) return false
 
     const v = DOMParser.parseFromString(`
-      <div class="video-wrapper">
-        <iframe width="560" height="310" src="https://www.youtube.com/embed/${yt.id}" frameborder="0" allowfullscreen></iframe>
+      <div class="video-wrapper" data-src="https://www.youtube.com/embed/${yt.id}">
       </div>`
     )
+
+    // <iframe width="560" height="310" src="https://www.youtube.com/embed/${yt.id}" frameborder="0" allowfullscreen></iframe>
     child.parentNode.replaceChild(v, child)
     if (links) links.add(yt.url)
     if (images)
@@ -197,10 +189,11 @@ function embedVimeoNode(child, links /*images*/) {
 
     const url = `https://player.vimeo.com/video/${id}`
     const v = DOMParser.parseFromString(`
-      <div class="video-wrapper">
-        <iframe width="560" height="310" src="${url}" frameborder="0" allowfullscreen></iframe>
+      <div class="video-wrapper" data-src="${url}">
       </div>
   `)
+
+    // <iframe width="560" height="310" src="${url}" frameborder="0" allowfullscreen></iframe>
     child.parentNode.replaceChild(v, child)
     if (links) links.add(url)
     return true
@@ -282,7 +275,6 @@ function log10(str) {
 
 class Parser {
   static prepareHTML(chain, body, metadata) {
-    body = sanitize(body, sanitizeConfig({}))
     const state = {
       hashtags: new Set(),
       usertags: new Set(),
@@ -291,14 +283,16 @@ class Parser {
       links: new Set()
     }
     body = body.replace(/&amp;(mdash|rdquo|ndash|ldquo|laquo|raquo|zwj)/g, string => string.replace(/&amp;/, '&'))
-    const html = md.render(entities.decode(body))
+    let html = md.render(entities.decode(body))
     try {
-      const doc = DOMParser.parseFromString(html, 'text/html');
+      let doc = DOMParser.parseFromString(`<div>${html}</div>`, 'text/html')
       traverse(chain, doc, state)
       proxifyImages(chain, doc)
+      const docString = doc ? XMLSerializer.serializeToString(doc) : ''
+      html = sanitize(docString, sanitizeConfig({}))
       return {
-        html: doc ? XMLSerializer.serializeToString(doc) : '',
-        ...state,
+        html,
+        state,
       }
     } catch (error) {
       console.log(

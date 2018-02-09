@@ -4,6 +4,9 @@ const async = require('async')
 import Vue from 'vue'
 
 export default {
+  fetchAccount({commit, state}, {}) {
+    return
+  },
   fetchTrends({commit, state}, {chain, tags}) {
     return new Promise((resolve, reject) => {
       if (!state.trends.data[chain].processing) {
@@ -42,6 +45,73 @@ export default {
         commit('setPostViewData', response.data)
         return response.data
       })
+  },
+  fetchParams({commit, state}, {chain, $chains}) {
+    commit('setParamsProcessing', {chain, flag: true})
+    $chains.setChain(chain)
+    const params = state.params[chain]
+    const tasks = []
+    if (!state.params[chain].time || state.params[chain].time < new Date().getTime() - 5 * 60 * 1000) {
+      params.time = new Date().getTime()
+      tasks.push(
+        new Promise((resolve, reject) => {
+          $chains.client.api.getDynamicGlobalProperties((err, result) => {
+            if (err) reject
+            else {
+              params.globalProps = result
+              if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS) {
+                params.rewardFunds.reward_balance = result.total_reward_fund_steem.replace(
+                  ' GOLOS',
+                  ''
+                )
+                params.rewardFunds.recent_claims = result.total_reward_shares2
+              }
+              params.steem_per_mvests = 1000000.0 *
+                parseFloat(result['total_vesting_fund_steem'].split(' ')[0]) /
+                parseFloat(result['total_vesting_shares'].split(' ')[0])
+              resolve()
+            }
+          })
+        })
+      )
+
+      tasks.push(new Promise((resolve, reject) => {
+        $chains.client.api.getCurrentMedianHistoryPrice((err, result) => {
+          if (err) reject(err)
+          else {
+            params.feedPrice = result
+            resolve()
+          }
+        })
+      }))
+
+      if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM) {
+        tasks.push(
+          new Promise((resolve, reject) => {
+            $chains.client.api.getRewardFund('post', (err, result) => {
+              if (err) reject
+              else {
+                params.rewardFunds.reward_balance = result.reward_balance.replace(
+                  ' STEEM',
+                  ''
+                )
+                params.rewardFunds.recent_claims = result.recent_claims
+                resolve()
+              }
+            })
+          })
+        )
+      } else {
+        tasks.push(Api.params().then(response => {
+          params.goldPrice = response.data.goldPrice
+        }))
+      }
+    }
+
+    return Promise.all(tasks).then(() => {
+      commit('setParams', {chain, params})
+      commit('setParamsProcessing', {chain, flag: false})
+    })
   },
   fetchRepliesByPermlink({commit, state}, {chain, username, permlink}) {
     commit('setPostViewRepliesProcessing', true)
@@ -116,6 +186,31 @@ export default {
 
     if (state.chain !== acc.chain) {
       Vue.router.push({name: 'chain-trend', params: {chain: acc.chain}})
+    }
+  },
+  vote({commit, state}, {chain, post, account, isLike, weight = 10000}) {
+    if (account.username) {
+      const alreadyLike = !!post.active_votes.find(vote => vote.voter === account.username && (vote.percent > 0 || vote.weight > 0))
+      const alreadyDisLike = !!post.active_votes.find(vote => vote.voter === account.username && (vote.percent < 0 || vote.weight < 0))
+      weight = isLike ? weight : -10000
+      if ((alreadyLike && isLike) || (alreadyDisLike && !isLike)) {
+        weight = 0
+      }
+
+      return Api.vote(
+        chain,
+        account.username,
+        post.author,
+        post.permlink,
+        weight
+      )
+        .then(() => {
+          return Api.getPostByPermlink(chain, post.author, post.permlink)
+        })
+        .then(response => {
+          post.payout = response.data.payout
+          post.active_votes = response.data.active_votes
+        })
     }
   }
 }

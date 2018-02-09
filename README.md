@@ -1,4 +1,4 @@
-# OnePlace
+![OnePlace](/client/static/img/logo_hub.png)
 
 OnePlace - smart client for [Steem](https://github.com/steemit/steem) and [Golos](https://github.com/GolosChain/golos) blockchains. As a basis we took [Vue](https://vuejs.org) with [SSR](https://ssr.vuejs.org/en/) module for frontend and [LoopBack](https://loopback.io/) for backend.
 

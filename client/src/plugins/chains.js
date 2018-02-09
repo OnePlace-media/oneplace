@@ -1,7 +1,6 @@
-import Vue from 'vue'
 const CONSTANTS = require('@oneplace/constants')
 export default class Chains {
-  static install() {
+  static install(Vue) {
     const client = require('steem/lib/browser')
     const SteemUrl = `https://${process.env.STEEM_DOMAIN}`
     const GolosUrl = `https://${process.env.GOLOS_DOMAIN}`

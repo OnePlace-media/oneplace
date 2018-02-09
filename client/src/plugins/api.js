@@ -32,7 +32,25 @@ export default {
   vote(chain, voter, author, permlink, weight) {
     return Vue.axios.post(`/posts/${chain}/vote`, {voter, author, permlink, weight})
   },
+  follow(chain, follower, following, unfollow) {
+    return Vue.axios.post(`/accounts/${chain}/follow`, {chain, follower, following, unfollow})
+  },
   updateUser(id, data) {
     return Vue.axios.patch(`/users/${id}`, data)
+  },
+  params() {
+    return Vue.axios.get(`/params`)
+  },
+  getAccountByName(chain, username) {
+    return Vue.axios.get(`/accounts/${chain}/byName`, {params: {username}})
+  },
+  getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit}) {
+    return Vue.axios.get(`/posts/${chain}/getDiscussionsByBlog`, {params: {tag, start_author, start_permlink, limit}})
+  },
+  getDiscussionsByAuthorBeforeDate(chain, {author, before_date, limit}) {
+    return Vue.axios.get(`/posts/${chain}/getDiscussionsByAuthorBeforeDate`, {params: {author, before_date, limit}})
+  },
+  getFollowers(chain, {following, startFollower, followType, limit}) {
+    return Vue.axios.get(`/accounts/${chain}/getFollowers`, {params: {following, startFollower, followType, limit}})
   }
 }

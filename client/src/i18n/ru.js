@@ -65,8 +65,8 @@ module.exports = {
     register: 'зарегистрируйтесь',
     onlyRegisteredCanLeaveComments: 'Только зарегистрированные пользователи со связанным {blockchain} аккаунтом могут оставлять комментарии.',
     addAccountToReply: '{add-account}, чтобы ответить.',
-    addAccounChain: 'Добавьте {blockchain} аккаунт',
-    loginOrRegisterToReply: '{login-link} или {reg-link}, чтобы ответить.'
+    addAccounChain: 'Добавьте&nbsp;{blockchain} аккаунт',
+    loginOrRegisterToReply: '{login-link}&nbsp;или&nbsp;{reg-link}, чтобы ответить.'
 
   },
   addAccount: {
@@ -80,9 +80,9 @@ module.exports = {
     removeFlag: 'Отменить флаг',
     downvotePost: 'Проголосовать против',
     pendingPayout: 'Ожидаемая выплата {payout} через {days}.',
-    pendingDays: '1 день | {count} дней',
+    pendingDays: '1&nbsp;день | {count}&nbsp;дней',
     readyPayout: 'Предыдущие выплаты {payout}',
-    andMore: 'и {count} еще...'
+    andMore: '...и еще {count}'
   },
   welcome: {
     createRegistration: 'Создание профиля',

@@ -11,12 +11,15 @@
         </div>
         <div class="column-wrapper">
           <span class="post-view__post-author-tag">
-            <router-link 
+            <!-- <router-link 
               tag="a" 
               :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
               class="post-view__author-link link link--op">
               {{post.author}}
-            </router-link>
+            </router-link> -->
+            <a tag="a" :href="`/${$route.params.chain}/@${post.author}`" class="link link--op">
+              {{post.author}}
+            </a>
             <span class="post-view__post-author-rep">{{post.author_rep}}</span><br>&nbsp;{{$t('common.in')}}&nbsp;<span class="hashtag">#{{post.category | unGolosTag | toLowerCase}}</span>
           </span>
           <span class="post-view__post-posted"><timeago :since="post.created" :locale="$locale.current()"></timeago></span>
@@ -55,9 +58,12 @@
             <span class="post-view__author-rep">{{post.author_rep}}</span>
           </div>
           <div class="post-view__author-info">
-            <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">
+            <!-- <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">
               {{post.author}}
-            </router-link>
+            </router-link> -->
+            <a :href="`/${$route.params.chain}/@${post.author}`" class="link link--op">
+              {{post.author}}
+            </a>
             <p class="author-info">{{post.author_about}}</p>
           </div>
         </div>

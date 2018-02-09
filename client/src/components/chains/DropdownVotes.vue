@@ -74,9 +74,12 @@ export default {
     <div class="dropdown post-view__voters">
       <ul class="post-view__voter-list">
         <li class="post-view__voter" v-for="vote in votesWithFiatAndResort" :key="vote.voter">
-          <router-link tag="a" :to="{name:'chain-account-view', params:{chain, username:vote.voter}}" class="link">
+          <!-- <router-link tag="a" :to="{name:'chain-account-view', params:{chain, username:vote.voter}}" class="link">
             {{vote.voter}}
-          </router-link>
+          </router-link> -->
+          <a tag="a" :href="`/@${chain}/${vote.voter}`" class="link">
+            {{vote.voter}}
+          </a>
           <span class="post-view__voter-amount currency">{{vote.fiat.string}}</span>
         </li>
       </ul>

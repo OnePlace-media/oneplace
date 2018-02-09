@@ -39,12 +39,13 @@
                     <a @click.prevent="showPost(post)" :href="makePath(post)" class="link">{{post.preview}}</a>
                   </p>
                   <div class="tag-block__top-post-other tag-block__post-other">
-                    <router-link 
+                    <!-- <router-link 
                       tag="a" 
                       :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
                       :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`"
                       class="tag-block__post-avatar avatar">
-                    </router-link>
+                    </router-link> -->
+                    <a :href="`/${$route.params.chain}/@${post.author}`" class="tag-block__post-avatar avatar" :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`"></a>
                     <div class="tag-block__post-data">
                       <span class="tag-block__post-value" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}&nbsp;{{post.payout}}</span>
                       <a @click.prevent="showPost(post)" :href="makePath(post)" class="tag-block__post-replies link">
@@ -52,12 +53,15 @@
                           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#comment"></use>
                         </svg>&nbsp;&nbsp;{{post.children}}</a>
                     </div>
-                    <router-link 
+                    <!-- <router-link 
                       tag="a" 
                       :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
                       class="post-view__author-link link link--op">
                       {{post.author}}
-                    </router-link>
+                    </router-link> -->
+                    <a :href="`/${$route.params.chain}/@${post.author}`" class="post-view__author-link link link--op">
+                      {{post.author}}
+                    </a>
                     <br>
                     <span class="tag-block__post-time">
                       <timeago :since="post.created" :locale="$locale.current()" :format="formatTime"></timeago>
@@ -81,13 +85,16 @@
                         <span class="tag-block__post-time" place="timeago">
                           <timeago :since="post.created" :locale="$locale.current()"></timeago>
                         </span>
-                        <router-link 
+                        <!-- <router-link 
                           tag="a" 
                           place="author"
                           :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
                           class="tag-block__post-author link">
                           {{post.author}}
-                        </router-link>
+                        </router-link> -->
+                        <a :href="`/${$route.params.chain}/@${post.author}`" place="author" class="tag-block__post-author link">
+                          {{post.author}}
+                        </a>
                       </i18n>
                     </div>
                   </div>

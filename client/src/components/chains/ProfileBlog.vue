@@ -18,7 +18,10 @@
         
         <div class="blog__post-reposted" v-if="account.name !== post.author">{{$t('profile.repostedFrom')}}
           <span class="blog__repost-avatar" :style="`background-image: url('${post.avatar}');`"></span>
-          <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">{{post.author}}</router-link>
+          <!-- <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">{{post.author}}</router-link> -->
+          <a :href="`/${$route.params.chain}/@${post.author}`" class="link link--op">
+            {{post.author}}
+          </a>
         </div>
 
         <h3 class="blog__post-title h3">

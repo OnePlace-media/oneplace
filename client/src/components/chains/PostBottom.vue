@@ -155,7 +155,7 @@ export default {
         !this.isLike &&
         this.account.username &&
         +this.payoutWithVote !== +this.post.payout &&
-        !this.post.voteProcessing
+        !this.upVoteProcessing
       )
     },
     voteSliderActive() {

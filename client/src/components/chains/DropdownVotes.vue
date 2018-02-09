@@ -1,13 +1,9 @@
 <script>
 const MAX_COUNT_VOTES = 20
 const NEED_COUNT_VOTES = 10
-const fiatToNumber = f => +f.replace('< ', '').replace(',', '.').split(' ')[0]
 const sortByRshares = (a, b) => +b.rshares - +a.rshares
-const sortByFiat = (a, b) => {
-  const aFiat = fiatToNumber(a.fiat)
-  const bFiat = fiatToNumber(b.fiat)
-  return bFiat - aFiat
-}
+const sortByFiat = (a, b) => b.fiat.number - a.fiat.number
+
 import Converter from '@oneplace/blockchains-api/converter'
 const CONSTANTS = require('@oneplace/constants')
 
@@ -22,7 +18,7 @@ export default {
 
       if (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM) {
         locale = 'en'
-        postfix = ' $'
+        postfix = ' $'
       }
 
       const params = this.$store.state.core.params[this.chain]
@@ -37,14 +33,21 @@ export default {
         payout = '0.01'
         prefix = '< '
       }
-      return (
-        prefix + this.$n(payout, 'currency', locale).replace('$', '') + postfix
-      )
+
+      return {
+        number: +payout,
+        string:
+          prefix +
+          this.$n(payout, 'currency', locale).replace('$', '') +
+          postfix
+      }
     }
   },
   computed: {
     activeVotesLike() {
-      const active_votes = this.post.active_votes.filter(vote => vote.weight > 0 || vote.percent > 0)
+      const active_votes = this.post.active_votes.filter(
+        vote => vote.weight > 0 || vote.percent > 0
+      )
       active_votes.sort(sortByRshares)
       return active_votes
     },
@@ -71,10 +74,10 @@ export default {
     <div class="dropdown post-view__voters">
       <ul class="post-view__voter-list">
         <li class="post-view__voter" v-for="vote in votesWithFiatAndResort" :key="vote.voter">
-          <router-link tag="a" :to="{name:'chain-account-view', params:{chain, username:vote.voter}}" class="link link--op">
+          <router-link tag="a" :to="{name:'chain-account-view', params:{chain, username:vote.voter}}" class="link">
             {{vote.voter}}
           </router-link>
-          <span class="post-view__voter-amount currency">{{vote.fiat}}</span>
+          <span class="post-view__voter-amount currency">{{vote.fiat.string}}</span>
         </li>
       </ul>
       <span class="post-view__voters-all" v-if="count > 0">{{$t('chains.andMore', {count})}}</span>

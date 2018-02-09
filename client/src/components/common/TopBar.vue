@@ -95,7 +95,7 @@ export default {
               v-if="account.username">
               {{account.username}}
             </router-link> -->
-            <a :href="`/${chain}/@${account.username}`" class="link link--op">
+            <a :href="`/${chain}/@${account.username}`" class="header__user-name link link--op">
               {{account.username}}
             </a>
             <a class="header__profile-btn" @click="$store.dispatch('toggleDropDown')"></a>

@@ -65,8 +65,8 @@ module.exports = {
     logIn: 'Log in',
     onlyRegisteredCanLeaveComments: 'Only registered users with attached {blockchain} account can leave comments.',
     addAccountToReply: '{add-account} to reply.',
-    addAccounChain: 'Add {blockchain} account',
-    loginOrRegisterToReply: '{login-link} or {reg-link} to reply.'
+    addAccounChain: 'Add&nbsp;{blockchain} account',
+    loginOrRegisterToReply: '{login-link}&nbsp;or&nbsp;{reg-link} to reply.'
   },
   addAccount: {
     header: 'It\'s time to add your {blockchain} account!',
@@ -79,9 +79,9 @@ module.exports = {
     removeFlag: 'Remove flag',
     downvotePost: 'Downvote post',
     pendingPayout: 'Pending payout is {payout} in {days}.',
-    pendingDays: '1 day | {count} days',
+    pendingDays: '1&nbsp;day | {count}&nbsp;days',
     readyPayout: 'Past payouts {payout}',
-    andMore: 'and {count} more...'
+    andMore: '...and {count} more'
   },
   welcome: {
     createRegistration: 'Create profile',

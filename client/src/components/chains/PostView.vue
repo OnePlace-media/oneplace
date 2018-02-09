@@ -132,10 +132,16 @@ export default {
           post: this.post,
           account: this.account,
           isLike,
-          weight
+          weight,
+          toast: this.$toast,
+          t: this.$t
         })
         .then(() => {
           this[field] = false
+        })
+        .catch(err => {
+          this[field] = false
+          this.$toast.bottom(this.$t(`errors.${err.response.data.error.code}`))
         })
     }
   },

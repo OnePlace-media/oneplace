@@ -211,11 +211,6 @@ export default {
           post.payout = response.data.payout
           post.active_votes = response.data.active_votes
         })
-        .catch(err => {
-          Vue.prototype.$toast.bottom(
-            Vue.prototype.$t(`errors.${err.response.data.error.code}`)
-          )
-        })
     }
   }
 }

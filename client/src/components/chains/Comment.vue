@@ -70,10 +70,16 @@ export default {
           chain: this.chain,
           post: this.item,
           account: this.account,
-          isLike
+          isLike,
+          toast: this.$toast,
+          t: this.$t
         })
         .then(() => {
           this[field] = false
+        })
+        .catch(err => {
+          this[field] = false
+          this.$toast.bottom(this.$t(`errors.${err.response.data.error.code}`))
         })
     },
     checkCommentFormBody(body) {

@@ -2353,8 +2353,6 @@ hr {
 }
 
 .post-view__post-like--processing .post-view__icon {
-  transition-delay: 0s;
-  transition-duration: 0s;
   visibility: hidden;
 }
 
@@ -2537,10 +2535,6 @@ hr {
   width: 20px;
   height: 20px;
   fill: #a8adad;
-}
-
-.post-view__icon * {
-  transition: all 0.3s ease;
 }
 
 .post-view__icon:hover {
@@ -3599,7 +3593,7 @@ hr {
 }
 
 .payout-declined {
-  color: #cfd2d2;
+  text-decoration: line-through;
 }
 
 .error-block {

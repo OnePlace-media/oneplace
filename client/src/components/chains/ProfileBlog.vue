@@ -128,6 +128,10 @@ export default {
         .then(() => {
           this.voteProcessing[post.id][field] = false
         })
+        .catch(err => {
+          this.voteProcessing[post.id][field] = false
+          this.$toast.bottom(this.$t(`errors.${err.response.data.error.code}`))
+        })
     },
     makePath(post, chain) {
       return `/${chain || this.chain}/@${post.author}/${post.permlink}`

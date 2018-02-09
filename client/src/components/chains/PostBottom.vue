@@ -67,7 +67,15 @@ import Converter from '@oneplace/blockchains-api/converter'
 
 export default {
   name: 'PostBottom',
-  props: ['post', 'account', 'chain', 'type', 'isMaxDeep', 'upVoteProcessing', 'downVoteProcessing'],
+  props: [
+    'post',
+    'account',
+    'chain',
+    'type',
+    'isMaxDeep',
+    'upVoteProcessing',
+    'downVoteProcessing'
+  ],
   data() {
     return {
       voteIsSliding: false,
@@ -146,14 +154,16 @@ export default {
         this.voteIsSliding &&
         !this.isLike &&
         this.account.username &&
-        this.payoutWithVote !== +this.post.payout &&
+        +this.payoutWithVote !== +this.post.payout &&
         !this.post.voteProcessing
       )
     },
     voteSliderActive() {
       return (
         this.account.username &&
-        +this.account.data.vesting_shares.split(' ')[0] > 1e6
+        +this.account.data.vesting_shares.split(' ')[0] > 1e6 &&
+        (!this.upVoteProcessing && !this.downVoteProcessing) &&
+        this.post.mode !== CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED
       )
     },
     currencySymbol() {

@@ -197,10 +197,6 @@ export default {
         weight = 0
       }
 
-      const fieldProcessing = isLike ? 'upVoteProcessing' : 'downVoteProcessing'
-      
-      post.voteProcessing = post[fieldProcessing] = true
-
       return Api.vote(
         chain,
         account.username,
@@ -214,7 +210,6 @@ export default {
         .then(response => {
           post.payout = response.data.payout
           post.active_votes = response.data.active_votes
-          post.voteProcessing = post[fieldProcessing] = false
         })
         .catch(err => {
           Vue.prototype.$toast.bottom(

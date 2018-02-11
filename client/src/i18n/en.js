@@ -115,7 +115,7 @@ module.exports = {
     removeAccount: 'Remove account',
     addAccount: 'Add account',
     cancelRemoveAccount: 'Cancel',
-    aboutPrivate: '<em>OnePlace does not store your private keys</em>. Once you sign in with your bloackchain account you authorize OnePlace app to vote, post and edit comments on your behalf. You can revoke that authority at any time.',
+    aboutPrivate: '<em>OnePlace does not store your private keys</em>. Once you sign in with your blockchain account you authorize OnePlace app to vote, post and edit comments on your behalf. You can revoke that authority at any time.',
     aboutRemove: '<em>Remove account</em>. You are going to remove posting authority from OnePlace app. Confirm this operation with your private active key.',
   },
   topBar: {

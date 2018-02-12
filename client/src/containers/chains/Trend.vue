@@ -144,7 +144,7 @@ export default {
   },
   computed: {
     ...mapState(['trends']),
-    DEFAULT_AVATAR(){
+    DEFAULT_AVATAR() {
       return CONSTANTS.DEFAULT.AVATAR_IMAGE
     },
     chain() {
@@ -233,8 +233,7 @@ export default {
             permlink: post.permlink
           })
           .then(() => {
-            history.pushState('', post.title, this.makePath(post, chain))
-
+            history.replaceState('', post.title, this.makePath(post, chain))
             this.$store.commit('core/setRouterFrom', { target })
             this.postLoading = false
           })

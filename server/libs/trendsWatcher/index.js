@@ -111,8 +111,9 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
       _post.author_rep = chainParser.convertReputation(post.author_reputation)
       const prepareHTML = chainParser.prepareHTML(chain, post.body, post.json_metadata)
       _post.body = prepareHTML.html
-      if (_post.image === CONSTANTS.DEFAULT.POST_IMAGE && prepareHTML.images && Array.from(prepareHTML.images).length) {
-        _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
+      
+      if (_post.image === CONSTANTS.DEFAULT.POST_IMAGE && prepareHTML.state && prepareHTML.state.images && Array.from(prepareHTML.state.images).length) {
+        _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.state.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
       }
     }
 

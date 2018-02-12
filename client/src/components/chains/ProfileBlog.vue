@@ -91,27 +91,31 @@ export default {
     infiniteHandler($state) {
       const posts = this.$store.state.profile.posts.collection
       if (!this.postsProcessing) {
-        this.$store
-          .dispatch('profile/appendPostByAuthor', {
-            chain: this.$route.params.chain,
-            tag: this.$route.params.username,
-            start_author: this.$route.params.username,
-            start_permlink: posts[posts.length - 1].permlink,
-            limit: LIMIT + 1
-          })
-          .then(posts => {
-            $state.loaded()
-            if (posts.length < LIMIT) {
+        if (this.posts.length) {
+          this.$store
+            .dispatch('profile/appendPostByAuthor', {
+              chain: this.$route.params.chain,
+              tag: this.$route.params.username,
+              start_author: this.$route.params.username,
+              start_permlink: posts[posts.length - 1].permlink,
+              limit: LIMIT + 1
+            })
+            .then(posts => {
+              $state.loaded()
+              if (posts.length < LIMIT) {
+                $state.complete()
+              }
+            })
+            .catch(err => {
+              $state.loaded()
               $state.complete()
-            }
-          })
-          .catch(err => {
-            $state.loaded()
-            $state.complete()
-            this.$toast.bottom(this.$t(`errors.failedAppendPostByAuthor`))
-          })
-      } else 
-        setTimeout($state.loaded, 200)
+              this.$toast.bottom(this.$t(`errors.failedAppendPostByAuthor`))
+            })
+        } else {
+          $state.loaded()
+          $state.complete()
+        }
+      } else setTimeout($state.loaded, 200)
     },
     vote(post, isLike, weight = 10000) {
       if (!this.voteProcessing[post.id]) {
@@ -161,7 +165,7 @@ export default {
             permlink: post.permlink
           })
           .then(() => {
-            history.replaceState('', post.title, this.makePath(post, chain))
+            history.pushState('', post.title, this.makePath(post, chain))
             this.$store.commit('core/setRouterFrom', { target })
             this.postLoading = false
           })

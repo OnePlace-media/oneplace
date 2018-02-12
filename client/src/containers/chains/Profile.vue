@@ -117,13 +117,15 @@ export default {
   },
   mounted() {
     const fetchFollowersByCurrentAccounts = () => {
-      if (this.accounts.length) {
-        this.$store.dispatch('profile/fetchFollowersByCurrentAccounts', {
-          chain: this.chain,
-          accounts: this.accounts,
-          following: this.account.name
-        })
-      }
+      this.dataPromise.then(() => {
+        if (this.accounts.length) {
+          this.$store.dispatch('profile/fetchFollowersByCurrentAccounts', {
+            chain: this.chain,
+            accounts: this.accounts,
+            following: this.account.name
+          })
+        }
+      })
     }
 
     if (this.$auth.ready()) fetchFollowersByCurrentAccounts()

@@ -16,9 +16,9 @@ export default [
     path: `:chain(${CONSTANTS.BLOCKCHAIN.SOURCE.STEEM}|${CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS})/@:username/:permlink`,
     component: Post
   },
-  // {
-  //   name: 'chain-account-view',
-  //   path: `:chain(${CONSTANTS.BLOCKCHAIN.SOURCE.STEEM}|${CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS})/@:username`,
-  //   component: Profile
-  // }
+  {
+    name: 'chain-account-view',
+    path: `:chain(${CONSTANTS.BLOCKCHAIN.SOURCE.STEEM}|${CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS})/@:username`,
+    component: Profile
+  }
 ]

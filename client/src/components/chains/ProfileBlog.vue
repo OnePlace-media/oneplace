@@ -18,10 +18,10 @@
         
         <div class="blog__post-reposted" v-if="account.name !== post.author">{{$t('profile.repostedFrom')}}
           <span class="blog__repost-avatar" :style="`background-image: url('${post.avatar}');`"></span>
-          <!-- <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">{{post.author}}</router-link> -->
-          <a :href="`/${$route.params.chain}/@${post.author}`" class="link link--op">
+          <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">{{post.author}}</router-link>
+          <!-- <a :href="`/${$route.params.chain}/@${post.author}`" class="link link--op">
             {{post.author}}
-          </a>
+          </a> -->
         </div>
 
         <h3 class="blog__post-title h3">
@@ -90,25 +90,28 @@ export default {
   methods: {
     infiniteHandler($state) {
       const posts = this.$store.state.profile.posts.collection
-      this.$store
-        .dispatch('profile/appendPostByAuthor', {
-          chain: this.$route.params.chain,
-          tag: this.$route.params.username,
-          start_author: this.$route.params.username,
-          start_permlink: posts[posts.length - 1].permlink,
-          limit: LIMIT + 1
-        })
-        .then(posts => {
-          $state.loaded()
-          if (posts.length < LIMIT) {
+      if (!this.postsProcessing) {
+        this.$store
+          .dispatch('profile/appendPostByAuthor', {
+            chain: this.$route.params.chain,
+            tag: this.$route.params.username,
+            start_author: this.$route.params.username,
+            start_permlink: posts[posts.length - 1].permlink,
+            limit: LIMIT + 1
+          })
+          .then(posts => {
+            $state.loaded()
+            if (posts.length < LIMIT) {
+              $state.complete()
+            }
+          })
+          .catch(err => {
+            $state.loaded()
             $state.complete()
-          }
-        })
-        .catch(err => {
-          $state.loaded()
-          $state.complete()
-          this.$toast.bottom(this.$t(`errors.failedAppendPostByAuthor`))
-        })
+            this.$toast.bottom(this.$t(`errors.failedAppendPostByAuthor`))
+          })
+      } else 
+        setTimeout($state.loaded, 200)
     },
     vote(post, isLike, weight = 10000) {
       if (!this.voteProcessing[post.id]) {

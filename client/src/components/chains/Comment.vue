@@ -4,12 +4,12 @@
     <div class="comment__wrapper">
       <div class="post-view__post-avatar avatar" :style="`background-image: url('${item.avatar || DEFAULT_AVATAR}');`"></div>
       <div class="comment__header">
-        <!-- <router-link tag="a" :to="{name:'chain-account-view', params:{chain,username: item.author}}" class="link link--op">
+        <router-link tag="a" :to="{name:'chain-account-view', params:{chain,username: item.author}}" class="link link--op">
           {{item.author}}
-        </router-link> -->
-        <a :href="`/@${chain}/${item.author}`" class="link link--op">
+        </router-link>
+        <!-- <a :href="`/@${chain}/${item.author}`" class="link link--op">
           {{item.author}}
-        </a>
+        </a> -->
         <span class="post-view__post-author-rep">{{item.author_rep}}</span> · <timeago :since="item.created" :locale="$locale.current()"></timeago>
       </div>
       <div class="comment__body markdown markdown--small" v-html="item.body"></div>

@@ -76,8 +76,10 @@ module.exports = Model => {
 
   Model.getDiscussionsByBlog = async function(chain, tag, start_author, start_permlink, limit) {
     let posts = await blockChains.getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit})
-    posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
-    return posts
+    if (posts && posts.length)
+      posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+
+    return posts || []
   }
 
   Model.remoteMethod('getDiscussionsByBlog', {
@@ -94,7 +96,9 @@ module.exports = Model => {
 
   Model.getDiscussionsByAuthorBeforeDate = async function(chain, author, start_permalink, before_date, limit) {
     let posts = await blockChains.getDiscussionsByAuthorBeforeDate(chain, {author, start_permalink, before_date, limit})
-    posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+    if (posts && posts.length)
+      posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+
     return posts
   }
 

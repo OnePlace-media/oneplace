@@ -4,21 +4,23 @@
       <no-ssr>
         <center><pulse-loader :loading="accountProcessing" :color="'#383838'" :size="'10px'"></pulse-loader></center>
       </no-ssr>
-      <div class="profile__header" v-if="!accountProcessing" :style="cover ? `background-image:url('https://steemitimages.com/2048x512/${cover}')`: ''"></div>
-      <div class="profile__wrapper" v-if="!accountProcessing">
-        <div class="profile__avatar" :style="`background-image:url('${avatar}')`"></div>
-        <div class="profile__user">
-          <div class="profile__top-wrapper">
-            <h2 class="h2 profile__name">
-              {{accountName}}
-              <span class="profile__reputation">{{account.reputation}}</span>
-            </h2>
+      <div class="blog__wrapper">
+        <div class="profile__header" v-if="!accountProcessing" :style="cover ? `background-image:url('https://steemitimages.com/2048x512/${cover}')`: ''"></div>
+        <div class="profile__wrapper" v-if="!accountProcessing">
+          <div class="profile__avatar" :style="`background-image:url('${avatar}')`"></div>
+          <div class="profile__top-block">
+            <span class="profile__reputation">{{account.reputation}}</span>
+            <h2 class="h2 profile__name">{{accountName}}</h2>
+            <p class="profile__about">{{profile.about}}</p>
+
             <no-ssr>
-              <div class="profile__btn-group" v-if="isFollowerReady">
-                <span class="profile__btn-follow" @click="follow(false)" v-if="!isFollower">{{$t('profile.follow')}}</span>
-                <span class="profile__btn-following" v-if="isFollower">{{$t('profile.isFollower')}}</span>
-                
-                <span class="profile__btn-more" @click="toggleFollowOptionsDropdown" v-if="isFollower">
+              <div class="profile__btn-follow profile__btn-follow--active">
+                <pulse-loader v-if="followProcessing" :color="'#383838'" :size="'10px'"></pulse-loader>
+
+                <span @click="follow(false)" v-if="!isFollower && !followProcessing">{{$t('profile.follow')}}</span>
+                <span v-if="isFollower && !followProcessing">{{$t('profile.isFollower')}}</span>
+
+                <span class="profile__btn-more" @click="toggleFollowOptionsDropdown" v-if="isFollower && !followProcessing" v-on-click-outside="toggleFollowOptionsDropdown">
                   <ul class="profile__follow-options" v-show="followOptionsDropdown">
                     <li class="profile__follow-options-item" @click="unfollow">{{$t('profile.unfollow')}}</li>
                     <!-- <li class="profile__follow-options-item" v-html="$t('profile.block_user')"></li> -->
@@ -26,20 +28,16 @@
                 </span>
               </div>
             </no-ssr>
-          </div>
-          <p class="profile__about">{{profile.about}}</p>
-          <div class="profile__info-wrapper">
-            <div class="profile__info-tab" v-if="profile.location">
-              <span class="profile__info-item">{{$t('profile.location')}}:</span>
-              {{profile.location}}
-            </div>
 
-            <div class="profile__info-tab" v-if="profile.website">
-              <span class="profile__info-item">{{$t('profile.website')}}:</span>
-              <a class="link" :href="profile.website" target="_blank">{{profile.website}}</a>
+            <div class="profile__info-block" v-if="profile.website || profile.location">
+              <span class="profile__info-item profile__info-item--location" v-if="profile.location">{{profile.location}}</span>
+              <span class="profile__info-item profile__info-item--website">
+                <a class="link" :href="profile.website" target="_blank">{{profile.website}}</a>
+              </span>
             </div>
           </div>
-          <div class="profile__bottom-wrapper">
+          
+          <div class="profile__bottom-block">
             <div class="profile__user-data">
               <span class="profile__data-value">{{account.post_count}}</span>
               {{$tc('profile.posts', account.post_count)}}
@@ -54,8 +52,8 @@
             </div>
           </div>
         </div>
+        <profile-blog :account="account" v-if="!accountProcessing"></profile-blog>
       </div>
-      <profile-blog :account="account" v-if="!accountProcessing"></profile-blog>
     </div>
   </section>
 </template>
@@ -63,26 +61,21 @@
 <script>
 import ProfileBlog from '../../components/chains/ProfileBlog'
 import CONSTANTS from '@oneplace/constants'
+import { mixin as onClickOutside } from 'vue-on-click-outside'
+
 export default {
   name: 'Profile',
   components: {
     ProfileBlog
   },
+  mixins: [onClickOutside],
   asyncData({ store, route, router }) {
     if (store.state.profile.account.data.name !== route.params.username) {
       store.commit('profile/CLEAR_ALL_DATA')
       return store
-        .dispatch('profile/fetchAccount', {
+        .dispatch('profile/fetchState', {
           chain: route.params.chain,
           username: route.params.username
-        })
-        .then(() => {
-          return store.dispatch('profile/fetchPostByAuthor', {
-            chain: route.params.chain,
-            author: route.params.username,
-            before_date: new Date().toISOString().split('.')[0],
-            limit: 5
-          })
         })
         .catch(err => {
           if (err.response.status === 500) {
@@ -132,6 +125,9 @@ export default {
     else this.$auth.ready(fetchFollowersByCurrentAccounts)
   },
   computed: {
+    followProcessing() {
+      return this.$store.state.profile.account.followProcessing || !this.isFollowerReady
+    },
     isFollower() {
       return !!this.$store.state.profile.followers.byCurrentAccounts.collection.filter(
         item => item.follower === this.accountCurrent.data.name

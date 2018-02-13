@@ -4,9 +4,6 @@ const async = require('async')
 import Vue from 'vue'
 
 export default {
-  fetchAccount({commit, state}, {}) {
-    return
-  },
   fetchTrends({commit, state}, {chain, tags}) {
     return new Promise((resolve, reject) => {
       if (!state.trends.data[chain].processing) {
@@ -39,7 +36,7 @@ export default {
     commit('setPostViewProcessing', true)
     commit('setPostViewData', null)
     return Api
-      .getPostByPermlink(chain, username, permlink)
+      .getContent(chain, username, permlink)
       .then(response => {
         commit('setPostViewProcessing', false)
         commit('setPostViewData', response.data)
@@ -205,7 +202,7 @@ export default {
         weight
       )
         .then(() => {
-          return Api.getPostByPermlink(chain, post.author, post.permlink)
+          return Api.getContent(chain, post.author, post.permlink)
         })
         .then(response => {
           post.payout = response.data.payout

@@ -8,6 +8,7 @@
         {{$t('profile.accountPosts', {username: account.name})}}
       </div>
     </div>
+    <div class="blog__no-posts" v-if="!posts.length">{{$t('profile.emptyBlog')}}</div>
     <article class="blog__post" v-for="post in posts" :key="post.id">
       <a href="#" 
         v-if="post.image !== DEFAULT_IMAGE"
@@ -93,7 +94,7 @@ export default {
       if (!this.postsProcessing) {
         if (this.posts.length) {
           this.$store
-            .dispatch('profile/appendPostByAuthor', {
+            .dispatch('profile/fetchPostByAuthor', {
               chain: this.$route.params.chain,
               tag: this.$route.params.username,
               start_author: this.$route.params.username,

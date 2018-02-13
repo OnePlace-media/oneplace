@@ -17,30 +17,6 @@
       "permission": "ALLOW"
     },
     {
-      "property": "byPermLink",
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "ALLOW"
-    },
-    {
-      "property": "repliesByPermLink",
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "ALLOW"
-    },
-    {
-      "property": "getDiscussionsByBlog",
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "ALLOW"
-    },
-    {
-      "property": "getDiscussionsByAuthorBeforeDate",
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "ALLOW"
-    },
-    {
       "property": "trendByTags",
       "principalType": "ROLE",
       "principalId": "$everyone",

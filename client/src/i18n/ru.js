@@ -148,9 +148,10 @@ module.exports = {
     posts: 'Публикаций | Публикация | Публикаций',
     followers: 'Нет подписчиков | Подписчик | Подписчика',
     allPosts: 'Все записи',
-    accountPosts:'Записи {username}',
+    accountPosts: 'Записи {username}',
     posted: 'Создано',
-    repostedFrom: 'Репост от'
+    repostedFrom: 'Репост от',
+    emptyBlog: 'Этот пользователь еще не опубликовал ни одного поста'
   },
   auth: {
     SignIn: 'Войти',

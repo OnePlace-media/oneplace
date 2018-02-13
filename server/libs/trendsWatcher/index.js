@@ -111,7 +111,7 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
       _post.author_rep = chainParser.convertReputation(post.author_reputation)
       const prepareHTML = chainParser.prepareHTML(chain, post.body, post.json_metadata)
       _post.body = prepareHTML.html
-      
+
       if (_post.image === CONSTANTS.DEFAULT.POST_IMAGE && prepareHTML.state && prepareHTML.state.images && Array.from(prepareHTML.state.images).length) {
         _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.state.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
       }
@@ -124,12 +124,12 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
         .transfer_history
         .filter(item => item[1].op[0] === 'author_reward' && item[1].op[1].permlink === post.permlink)
         .reduce((obj, item) => {
-            let mode = CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
-            if(moment(item[1].timestamp + '+00:00').unix() > moment(_post.created).subtract(-1, 'days').unix()){
-              mode = CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
-            }
-            obj[mode] = item[1].op[1]
-            return obj
+          let mode = CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+          if (moment(item[1].timestamp + '+00:00').unix() > moment(_post.created).subtract(-1, 'days').unix()) {
+            mode = CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+          }
+          obj[mode] = item[1].op[1]
+          return obj
         }, {})
     }
 
@@ -171,47 +171,13 @@ async function loadPosts(method, chain, tag, _limit) {
 
 class TrendsWatcher {
   constructor(redis) {
-    this.redis = redis;
-    const self = this;
-    if (process.env.NODE_ENV && !~['test', 'development'].indexOf(process.env.NODE_ENV)) {
-      (function updater() {
-        console.log('Start update cache', new Date())
-        const restart = err => {
-          if (err) console.log(err)
-          setTimeout(() => updater(), 60 * 1000)
-          console.log('Stop update cache', new Date())
-        }
-
-        Promise.all(['s', 'g'].map(chain => new Promise((resolve, reject) => {
-          redis.zrangebyscore([KEYS.TOP_TAGS, chain].join(':'), '-inf', '+inf', 'LIMIT', 0, 100, (err, tags) => {
-            if (err) reject(err)
-            else {
-              Promise.all(tags.map(tag => {
-                return Promise.all([
-                  self.getTrendsByTag(chain, tag, [], true),
-                  self.getTrendsByRecent(chain, tag, true)
-                ])
-              }))
-                .then(() => {
-                  resolve()
-                })
-                .catch(err => {
-                  console.error(err)
-                  resolve()
-                })
-            }
-          })
-        })))
-          .then(() => {
-            restart()
-          })
-          .catch(err => restart(err))
-      })()
-    }
+    this.redis = redis
   }
+
   async preparePosts(chain, posts, full = false) {
     return await _preparePosts(chain, posts, full)
   }
+
   getFromCache(cacheKey, _limit) {
     return new Promise((resolve, reject) => {
       this.redis.lrange(cacheKey, 0, _limit, (err, records) => {
@@ -269,6 +235,45 @@ class TrendsWatcher {
 
   async getReplies(chain, post) {
     return getReplies(chain, post)
+  }
+
+  startCacheUpdater() {
+    const self = this
+    if (process.env.NODE_ENV && !~['test', 'development'].indexOf(process.env.NODE_ENV)) {
+      (function updater() {
+        console.log('Start update cache', new Date())
+        const restart = err => {
+          if (err) console.log(err)
+          setTimeout(() => updater(), 60 * 1000)
+          console.log('Stop update cache', new Date())
+        }
+
+        Promise.all(['s', 'g'].map(chain => new Promise((resolve, reject) => {
+          self.redis.zrangebyscore([KEYS.TOP_TAGS, chain].join(':'), '-inf', '+inf', 'LIMIT', 0, 100, (err, tags) => {
+            if (err) reject(err)
+            else {
+              Promise.all(tags.map(tag => {
+                return Promise.all([
+                  self.getTrendsByTag(chain, tag, [], true),
+                  self.getTrendsByRecent(chain, tag, true)
+                ])
+              }))
+                .then(() => {
+                  resolve()
+                })
+                .catch(err => {
+                  console.error(err)
+                  resolve()
+                })
+            }
+          })
+        })))
+          .then(() => {
+            restart()
+          })
+          .catch(err => restart(err))
+      })()
+    }
   }
 }
 

@@ -4,6 +4,7 @@ const postViewComponents = {}
 import Trend from './Trend.vue'
 import Post from './Post.vue'
 import Profile from './Profile.vue'
+import PostCreate from './PostCreate.vue'
 
 export default [
   {
@@ -11,6 +12,11 @@ export default [
     path: `:chain(${CONSTANTS.BLOCKCHAIN.SOURCE.STEEM}|${CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS})`,
     component: Trend
   },
+  // {
+  //   name: 'chain-post-create',
+  //   path: `:chain(${CONSTANTS.BLOCKCHAIN.SOURCE.STEEM}|${CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS})/create`,
+  //   component: PostCreate
+  // },
   {
     name: 'chain-account-view',
     path: `:chain(${CONSTANTS.BLOCKCHAIN.SOURCE.STEEM}|${CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS})/@:username`,

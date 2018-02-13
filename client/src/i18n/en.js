@@ -149,7 +149,8 @@ module.exports = {
     allPosts: 'All posts',
     accountPosts:'Posts {username}',
     posted: 'Posted',
-    repostedFrom: 'Reposted from'
+    repostedFrom: 'Reposted from',
+    emptyBlog:'This user has not posted anything yet.'
   },
   auth: {
     SignIn: 'Log in',

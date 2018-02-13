@@ -14,6 +14,19 @@
       }
     },
     {
+      "name": "cacheUpdater",
+      "script": "./server/libs/trendsWatcher/cacheUpdater.js",
+      "watch": false,
+      "env": {
+        "NODE_ENV": "development",
+        "NODE_PATH": "./common"
+      },
+      "env_production": {
+        "NODE_ENV": "production",
+        "NODE_PATH": "./common"
+      }
+    },
+    {
       "wait_ready": true,
       "listen_timeout": 3000,
       "instances" : 2,

@@ -1,0 +1,8 @@
+{
+  "name": "blockchain",
+  "plural": "blockchains",
+  "base": "Model",
+  "properties": {},
+  "validations": [],
+  "methods": {}
+}

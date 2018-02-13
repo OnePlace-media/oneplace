@@ -14,13 +14,13 @@
             <p class="profile__about">{{profile.about}}</p>
 
             <no-ssr>
-              <div class="profile__btn-follow profile__btn-follow--active">
+              <div class="profile__btn-follow" :class="{'profile__btn-follow--active':isFollower || followProcessing}">
                 <pulse-loader v-if="followProcessing" :color="'#383838'" :size="'10px'"></pulse-loader>
 
                 <span @click="follow(false)" v-if="!isFollower && !followProcessing">{{$t('profile.follow')}}</span>
                 <span v-if="isFollower && !followProcessing">{{$t('profile.isFollower')}}</span>
 
-                <span class="profile__btn-more" @click="toggleFollowOptionsDropdown" v-if="isFollower && !followProcessing" v-on-click-outside="toggleFollowOptionsDropdown">
+                <span class="profile__btn-more" @click="toggleFollowOptionsDropdown" v-if="isFollower && !followProcessing" v-on-click-outside="hideFollowOptionsDropdown">
                   <ul class="profile__follow-options" v-show="followOptionsDropdown">
                     <li class="profile__follow-options-item" @click="unfollow">{{$t('profile.unfollow')}}</li>
                     <!-- <li class="profile__follow-options-item" v-html="$t('profile.block_user')"></li> -->
@@ -104,8 +104,11 @@ export default {
     unfollow() {
       this.follow(true)
     },
+    hideFollowOptionsDropdown(){
+      this.followOptionsDropdown = false
+    },
     toggleFollowOptionsDropdown() {
-      this.followOptionsDropdown = !this.followOptionsDropdown
+        this.followOptionsDropdown = !this.followOptionsDropdown
     }
   },
   mounted() {
@@ -126,7 +129,10 @@ export default {
   },
   computed: {
     followProcessing() {
-      return this.$store.state.profile.account.followProcessing || !this.isFollowerReady
+      return (
+        this.$store.state.profile.account.followProcessing ||
+        !this.isFollowerReady
+      )
     },
     isFollower() {
       return !!this.$store.state.profile.followers.byCurrentAccounts.collection.filter(

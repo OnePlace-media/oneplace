@@ -83,79 +83,82 @@ async function getReplies(chain, post) {
 async function _preparePosts(chain, posts, full = false, replie = false) {
   CURRENCY[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS].q = await blockChainsHelper.getGoldPrice() / 1000
   const _posts = []
-  for (let post of posts) {
-    const _post = {}
-    _post.id = post.id
-    _post.title = post.title
-    _post.last_payout = post.last_payout + '+00:00'
-    _post.created = post.created + '+00:00'
-    _post.permlink = post.permlink
-    _post.author = post.author
-    _post.category = post.parent_permlink
-    _post.author_url = URL_PREFIX[chain] + '/@' + post.author
-    _post.tags = setTags(chain, post.json_metadata)
-    _post.image = setImage(chain, post.json_metadata)
-    _post.nsfw = checkTags(_post.tags)
-    _post.mode = post.mode
-    if (replie) {
-      _post.active_votes = await blockChains.getActiveVotes(chain, post)
-    } else {
-      _post.active_votes = post.active_votes
-    }
-
-    if (full || _post.image === CONSTANTS.DEFAULT.POST_IMAGE) {
-      const profile = await blockChains.getProfile(chain, post.author)
-      if (profile) {
-        _post.author_about = profile.about
+  if (posts && posts.length) {
+    for (let post of posts) {
+      const _post = {}
+      _post.id = post.id
+      _post.title = post.title
+      _post.last_payout = post.last_payout + '+00:00'
+      _post.created = post.created + '+00:00'
+      _post.permlink = post.permlink
+      _post.author = post.author
+      _post.category = post.parent_permlink
+      _post.author_url = URL_PREFIX[chain] + '/@' + post.author
+      _post.tags = setTags(chain, post.json_metadata)
+      _post.image = setImage(chain, post.json_metadata)
+      _post.nsfw = checkTags(_post.tags)
+      _post.mode = post.mode
+      if (replie) {
+        _post.active_votes = await blockChains.getActiveVotes(chain, post)
+      } else {
+        _post.active_votes = post.active_votes
       }
-      _post.author_rep = chainParser.convertReputation(post.author_reputation)
-      const prepareHTML = chainParser.prepareHTML(chain, post.body, post.json_metadata)
-      _post.body = prepareHTML.html
 
-      if (_post.image === CONSTANTS.DEFAULT.POST_IMAGE && prepareHTML.state && prepareHTML.state.images && Array.from(prepareHTML.state.images).length) {
-        _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.state.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
+      if (full || _post.image === CONSTANTS.DEFAULT.POST_IMAGE) {
+        const profile = await blockChains.getProfile(chain, post.author)
+        if (profile) {
+          _post.author_about = profile.about
+        }
+        _post.author_rep = chainParser.convertReputation(post.author_reputation)
+        const prepareHTML = chainParser.prepareHTML(chain, post.body, post.json_metadata)
+        _post.body = prepareHTML.html
+
+        if (_post.image === CONSTANTS.DEFAULT.POST_IMAGE && prepareHTML.state && prepareHTML.state.images && Array.from(prepareHTML.state.images).length) {
+          _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.state.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
+        }
       }
+
+      if (full && chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED) {
+        const stateData = await blockChains.getState(chain, {path: `@${post.author}/transfers`})
+        _post.separatePayots = stateData
+          .accounts[post.author]
+          .transfer_history
+          .filter(item => item[1].op[0] === 'author_reward' && item[1].op[1].permlink === post.permlink)
+          .reduce((obj, item) => {
+            let mode = CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+            if (moment(item[1].timestamp + '+00:00').unix() > moment(_post.created).subtract(-1, 'days').unix()) {
+              mode = CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+            }
+            obj[mode] = item[1].op[1]
+            return obj
+          }, {})
+      }
+
+      const payout = parseFloat(post.pending_payout_value) + parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
+      _post.payout = (payout * CURRENCY[chain].q).toFixed(2)
+      _post.pending_payout = (parseFloat(post.pending_payout_value) * CURRENCY[chain].q).toFixed(2)
+      _post.pending_payout_value = parseFloat(post.pending_payout_value)
+
+      _post.payout_declined = parseInt(post.max_accepted_payout) ? false : true
+      _post.total_payout_value = parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
+      _post.total_payout = (_post.total_payout_value * CURRENCY[chain].q).toFixed(2)
+      _post.children = post.children
+      _post.avatar = await blockChains.getAvatar(chain, _post.author)
+
+      _post.preview = ''
+      if (post.body && !replie) {
+        let preview = post.body.replace(/<[^>]+>/gm, '')
+        preview = decoder.decode(md.render(preview)).replace(/<[^>]+>/gm, '')
+        preview = he.decode(preview)
+        preview = chainParser.cutLinks(preview, PREVIEW_LENGTH).substring(0, PREVIEW_LENGTH)
+        _post.preview = preview.length == PREVIEW_LENGTH
+          ? preview.substring(0, preview.split('').lastIndexOf(' ')) + '...'
+          : preview
+      }
+      _posts.push(_post)
     }
-
-    if (full && chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED) {
-      const stateData = await blockChains.getState(chain, {path: `@${post.author}/transfers`})
-      _post.separatePayots = stateData
-        .accounts[post.author]
-        .transfer_history
-        .filter(item => item[1].op[0] === 'author_reward' && item[1].op[1].permlink === post.permlink)
-        .reduce((obj, item) => {
-          let mode = CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
-          if (moment(item[1].timestamp + '+00:00').unix() > moment(_post.created).subtract(-1, 'days').unix()) {
-            mode = CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
-          }
-          obj[mode] = item[1].op[1]
-          return obj
-        }, {})
-    }
-
-    const payout = parseFloat(post.pending_payout_value) + parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
-    _post.payout = (payout * CURRENCY[chain].q).toFixed(2)
-    _post.pending_payout = (parseFloat(post.pending_payout_value) * CURRENCY[chain].q).toFixed(2)
-    _post.pending_payout_value = parseFloat(post.pending_payout_value)
-
-    _post.payout_declined = parseInt(post.max_accepted_payout) ? false : true
-    _post.total_payout_value = parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
-    _post.total_payout = (_post.total_payout_value * CURRENCY[chain].q).toFixed(2)
-    _post.children = post.children
-    _post.avatar = await blockChains.getAvatar(chain, _post.author)
-
-    _post.preview = ''
-    if (post.body && !replie) {
-      let preview = post.body.replace(/<[^>]+>/gm, '')
-      preview = decoder.decode(md.render(preview)).replace(/<[^>]+>/gm, '')
-      preview = he.decode(preview)
-      preview = chainParser.cutLinks(preview, PREVIEW_LENGTH).substring(0, PREVIEW_LENGTH)
-      _post.preview = preview.length == PREVIEW_LENGTH
-        ? preview.substring(0, preview.split('').lastIndexOf(' ')) + '...'
-        : preview
-    }
-    _posts.push(_post)
   }
+
   return _posts
 }
 

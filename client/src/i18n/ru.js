@@ -138,7 +138,7 @@ module.exports = {
     noAddedAccountsYet: 'Нет добавленных аккаунтов'
   },
   profile: {
-    isFollower: 'Подписан',
+    isFollower: 'Вы подписаны',
     follow: 'Подписаться',
     following: 'Нет подписок | Подписки | Подписки',
     unfollow: 'Отписаться',

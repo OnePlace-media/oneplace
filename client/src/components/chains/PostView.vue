@@ -72,6 +72,14 @@
               {{post.author}}
             </a>
             <p class="author-info">{{post.author_about}}</p>
+            <no-ssr v-if="$auth && $auth.ready()">
+              <profile-follow-btn
+                :chain="chain"
+                :account-follower="account"
+                :account-following="postAccount"
+                type="post"
+              ></profile-follow-btn>
+            </no-ssr>
           </div>
         </div>
         <div class="post-view__tags-wrapper">
@@ -90,13 +98,15 @@ import CONSTANTS from '@oneplace/constants'
 import Api from '../../plugins/api'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 import PostBottom from './PostBottom.vue'
+import ProfileFollowBtn from '../../components/chains/ProfileFollowBtn.vue'
 
 export default {
   name: 'PostView',
   props: ['isModal'],
   mixins: [onClickOutside],
   components: {
-    PostBottom
+    PostBottom,
+    ProfileFollowBtn
   },
   watch: {
     $route() {
@@ -180,6 +190,9 @@ export default {
     },
     post() {
       return this.$store.state.postView.post
+    },
+    postAccount() {
+      return { name: this.post.author }
     },
     chain() {
       return this.$route.params.chain || this.$store.state.chain

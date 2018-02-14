@@ -2653,6 +2653,11 @@ hr {
 .author-info {
   font-size: 14px;
   color: #a8adad;
+  margin-bottom: 8px;
+}
+
+.author-info:last-child {
+  margin-bottom: 0;
 }
 
 .post-view__reply-disabled {
@@ -3093,6 +3098,7 @@ hr {
 
 .profile__name {
   text-align: left;
+  font-size: 20px;
   margin-bottom: 8px;
 }
 
@@ -3105,40 +3111,44 @@ hr {
   line-height: 18px;
   height: 20px;
   padding: 0 4px;
-  margin-left: 8px;
+  margin-left: 4px;
   margin-top: 4px;
   border: 1px solid #a8adad;
   border-radius: 3px;
 }
 
-.profile__btn-follow {
+.btn-follow {
   width: 100%;
   height: 40px;
   text-align: center;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 38px;
   color: #259cb7;
   border: 1px solid #259cb7;
 }
 
-.profile__btn-follow:hover {
+.btn-follow:hover {
   cursor: pointer;
   color: #2ab1cf;
   border: 1px solid #2ab1cf;
 }
 
-.profile__btn-follow--active {
+.btn-follow--active {
   border-color: #a8adad;
   color: #818888;
 }
 
-.profile__btn-follow--active:hover {
+.btn-follow--active:hover {
   cursor: auto;
   border-color: #a8adad;
   color: #818888;
 }
 
-.profile__btn-more {
+.btn-follow--post {
+  width: 50%;
+}
+
+.btn-follow__more {
   display: inline-block;
   position: relative;
   float: right;
@@ -3148,7 +3158,7 @@ hr {
   margin-left: 0;
 }
 
-.profile__btn-more:before,.profile__btn-more:after {
+.btn-follow__more:before,.btn-follow__more:after {
   display: block;
   width: 1px;
   height: 11px;
@@ -3163,25 +3173,25 @@ hr {
   transition: all 0.3s ease;
 }
 
-.profile__btn-more:before {
+.btn-follow__more:before {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 
-.profile__btn-more:after {
+.btn-follow__more:after {
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 
-.profile__btn-more:hover {
+.btn-follow__more:hover {
   cursor: pointer;
 }
 
-.profile__btn-more:hover:before,.profile__btn-more:hover:after {
+.btn-follow__more:hover:before,.btn-follow__more:hover:after {
   background: #818888;
 }
 
-.profile__follow-options {
+.btn-follow__options {
   display: block;
   list-style: none;
   padding: 0;
@@ -3196,12 +3206,12 @@ hr {
   box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
 }
 
-.profile__follow-options-item {
+.btn-follow__options-item {
   color: #818888;
   padding: 8px 16px;
 }
 
-.profile__follow-options-item:hover {
+.btn-follow__options-item:hover {
   cursor: pointer;
   background: #f6f6f6;
   color: #383838;
@@ -3230,7 +3240,7 @@ hr {
   position: relative;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-wrap: break-word;
+  word-break: break-word;
   margin-bottom: 8px;
 }
 
@@ -3347,7 +3357,7 @@ hr {
   margin-bottom: 12px;
 }
 
-.blog__post:last-child {
+.blog__post:last-of-type {
   margin-bottom: 0;
 }
 

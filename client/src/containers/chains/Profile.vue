@@ -13,20 +13,13 @@
             <h2 class="h2 profile__name">{{accountName}}</h2>
             <p class="profile__about">{{profile.about}}</p>
 
-            <no-ssr>
-              <div class="profile__btn-follow" :class="{'profile__btn-follow--active':isFollower || followProcessing}">
-                <pulse-loader v-if="followProcessing" :color="'#383838'" :size="'10px'"></pulse-loader>
-
-                <span @click="follow(false)" v-if="!isFollower && !followProcessing">{{$t('profile.follow')}}</span>
-                <span v-if="isFollower && !followProcessing">{{$t('profile.isFollower')}}</span>
-
-                <span class="profile__btn-more" @click="toggleFollowOptionsDropdown" v-if="isFollower && !followProcessing" v-on-click-outside="hideFollowOptionsDropdown">
-                  <ul class="profile__follow-options" v-show="followOptionsDropdown">
-                    <li class="profile__follow-options-item" @click="unfollow">{{$t('profile.unfollow')}}</li>
-                    <!-- <li class="profile__follow-options-item" v-html="$t('profile.block_user')"></li> -->
-                  </ul>
-                </span>
-              </div>
+            <no-ssr v-if="$auth && $auth.ready()">
+              <profile-follow-btn
+                :chain="chain"
+                :account-follower="accountCurrent"
+                :account-following="account"
+                type="blog"
+              ></profile-follow-btn>
             </no-ssr>
 
             <div class="profile__info-block" v-if="profile.website || profile.location">
@@ -59,18 +52,23 @@
 </template>
 
 <script>
-import ProfileBlog from '../../components/chains/ProfileBlog'
+import ProfileBlog from '../../components/chains/ProfileBlog.vue'
+import ProfileFollowBtn from '../../components/chains/ProfileFollowBtn.vue'
+
 import CONSTANTS from '@oneplace/constants'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 
 export default {
   name: 'Profile',
   components: {
-    ProfileBlog
+    ProfileBlog,
+    ProfileFollowBtn
   },
   mixins: [onClickOutside],
   asyncData({ store, route, router }) {
-    if (store.state.profile.account.data.name !== route.params.username) {
+    const username = store.state.profile.account.data.name
+    const chain = store.state.profile.chain
+    if (username !== route.params.username || chain !== route.params.chain) {
       store.commit('profile/CLEAR_ALL_DATA')
       return store
         .dispatch('profile/fetchState', {
@@ -78,74 +76,16 @@ export default {
           username: route.params.username
         })
         .catch(err => {
-          if (err.response.status === 500) {
+          if (err.response && err.response.status === 500) {
             store.commit('set404Page', true)
           }
         })
     } else return new Promise(resolve => resolve())
   },
-  data() {
-    return {
-      followOptionsDropdown: false
-    }
-  },
   metaInfo() {
     return this.$helper.generateProfileMeta(this.account, this.$route)
   },
-  methods: {
-    follow(unfollow = false) {
-      this.$store.dispatch('profile/follow', {
-        chain: this.$route.params.chain,
-        follower: this.accountCurrent.data.name,
-        following: this.account.name,
-        unfollow: unfollow
-      })
-    },
-    unfollow() {
-      this.follow(true)
-    },
-    hideFollowOptionsDropdown(){
-      this.followOptionsDropdown = false
-    },
-    toggleFollowOptionsDropdown() {
-        this.followOptionsDropdown = !this.followOptionsDropdown
-    }
-  },
-  mounted() {
-    const fetchFollowersByCurrentAccounts = () => {
-      this.dataPromise.then(() => {
-        if (this.accounts.length) {
-          this.$store.dispatch('profile/fetchFollowersByCurrentAccounts', {
-            chain: this.chain,
-            accounts: this.accounts,
-            following: this.account.name
-          })
-        }
-      })
-    }
-
-    if (this.$auth.ready()) fetchFollowersByCurrentAccounts()
-    else this.$auth.ready(fetchFollowersByCurrentAccounts)
-  },
   computed: {
-    followProcessing() {
-      return (
-        this.$store.state.profile.account.followProcessing ||
-        !this.isFollowerReady
-      )
-    },
-    isFollower() {
-      return !!this.$store.state.profile.followers.byCurrentAccounts.collection.filter(
-        item => item.follower === this.accountCurrent.data.name
-      ).length
-    },
-    isFollowerReady() {
-      return (
-        this.$auth &&
-        this.$auth.check() &&
-        !this.$store.state.profile.followers.byCurrentAccounts.processing
-      )
-    },
     accountsByChain() {
       return this.accounts.filter(acc => acc.chain === this.chain)
     },

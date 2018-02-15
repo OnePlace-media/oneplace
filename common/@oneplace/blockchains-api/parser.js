@@ -238,12 +238,12 @@ function linkifyNode(chain, child, state) {
 
 const IMG_PREFIX = {
   s: 'https://steemitimages.com',
-  g: 'https://imgp.golos.io'
+  g: 'https://steemitimages.com' // https://imgp.golos.io
 }
 
 const IMG_PREFIX_IPFS = {
   s: 'https://steemitimages.com/640x480',
-  g: 'https://imgp.golos.io/640x480'
+  g: 'https://steemitimages.com/640x480' // https://imgp.golos.io/640x480
 }
 
 function ipfsPrefix(chain, url) {
@@ -331,6 +331,10 @@ class Parser {
 
   static ipfsPrefix(chain, url) {
     return ipfsPrefix(chain, url)
+  }
+
+  static proxyImagePrefix(chain, url) {
+    return IMG_PREFIX_IPFS[chain] + '/' + url
   }
 }
 

@@ -66,7 +66,7 @@ function setImage(chain, metadata) {
   }
 
   if (!meta.image && meta.images) meta.image = meta.images
-  return meta.image && meta.image[0] ? chainParser.ipfsPrefix(chain, meta.image[0]) : CONSTANTS.DEFAULT.POST_IMAGE
+  return meta.image && meta.image[0] ? chainParser.proxyImagePrefix(chain, meta.image[0]) : CONSTANTS.DEFAULT.POST_IMAGE
 }
 
 async function getReplies(chain, post) {

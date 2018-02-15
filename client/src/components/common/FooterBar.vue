@@ -13,6 +13,11 @@ export default {
       }
       this.$locale.change(lang)
     }
+  },
+  computed:{
+    chain() {
+      return this.$route.params.chain || this.$store.state.chain
+    }
   }
 }
 </script>
@@ -21,7 +26,14 @@ export default {
   <footer class="footer">
     <div class="container footer__wrapper">
       <i18n path="footer.createdBy" tag="div" class="footer__license">
-        <a place="link" href="https://steemit.com/@oneplace.media" target="_blank" class="link link--op">oneplace.media</a>
+        <router-link 
+          place="link"
+          tag="a"
+          target="_blank"
+          :to="{name:'chain-account-view', params:{chain, username: 'oneplace'}}" 
+          class="link link--op">
+          oneplace.media
+        </router-link>
       </i18n>
       <no-ssr>
         <div class="footer__lang-switch">

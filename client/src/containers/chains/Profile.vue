@@ -13,7 +13,7 @@
             <h2 class="h2 profile__name">{{accountName}}</h2>
             <p class="profile__about">{{profile.about}}</p>
 
-            <no-ssr v-if="$auth && $auth.ready()">
+            <no-ssr v-if="$auth && $auth.check()">
               <profile-follow-btn
                 :chain="chain"
                 :account-follower="accountCurrent"

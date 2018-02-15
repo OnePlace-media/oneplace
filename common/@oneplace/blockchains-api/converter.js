@@ -84,10 +84,18 @@ class Converter {
 
       } else {
         const setVoteMode = (time, post) => {
-          const subtractDays = post.percent_steem_dollars === 0 ? 3 : 1
-          return time >= moment(post.created).unix() && time <= moment(post.created).subtract(-subtractDays, 'days').unix()
-            ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
-            : CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+          if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT)
+            return CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+
+          if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT)
+            return time <= moment(post.last_payout).unix()
+              ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+              : CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+
+          if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED)
+            return time <= moment(post.last_payout).subtract(30, 'days').unix()
+              ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+              : CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
         }
 
         vote.mode = setVoteMode(time, post)

@@ -83,15 +83,18 @@ class Converter {
         }
 
       } else {
-        const setVoteMode = time => time >= moment(post.created).unix() && time <= moment(post.created).subtract(-1, 'days').unix()
-          ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
-          : CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+        const setVoteMode = (time, post) => {
+          const subtractDays = post.percent_steem_dollars === 0 ? 3 : 1
+          return time >= moment(post.created).unix() && time <= moment(post.created).subtract(-subtractDays, 'days').unix()
+            ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+            : CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+        }
 
-        vote.mode = setVoteMode(time)
+        vote.mode = setVoteMode(time, post)
 
         const activeRshares = active_votes.reduce((sum, _vote) => {
           const _time = moment(_vote.time + '+00:00').unix()
-          _vote.mode = setVoteMode(_time)
+          _vote.mode = setVoteMode(_time, post)
           if (_vote.mode === vote.mode) {
             sum += +_vote.rshares
           }
@@ -100,7 +103,6 @@ class Converter {
 
         let q = (reward_balance * base) / recent_claims
         const vShares = Converter.calculateVshares(activeRshares)
-
         if (vote.mode !== post.mode || post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
           if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
             q = post.total_payout_value / vShares

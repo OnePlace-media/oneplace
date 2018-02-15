@@ -72,7 +72,7 @@
               {{post.author}}
             </a>
             <p class="author-info">{{post.author_about}}</p>
-            <no-ssr v-if="$auth && $auth.ready()">
+            <no-ssr v-if="$auth && $auth.check() && account.username">
               <profile-follow-btn
                 :chain="chain"
                 :account-follower="account"

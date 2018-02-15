@@ -11,7 +11,7 @@
           <div class="profile__top-block">
             <span class="profile__reputation">{{account.reputation}}</span>
             <h2 class="h2 profile__name">{{accountName}}</h2>
-            <p class="profile__about">{{profile.about}}</p>
+            <p class="profile__about" v-if="profile.about">{{profile.about}}</p>
 
             <no-ssr v-if="$auth && $auth.check() && accountCurrent.username">
               <profile-follow-btn

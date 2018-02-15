@@ -5,6 +5,10 @@ export default class Helper {
     this.vue = Vue.prototype
   }
 
+  makePathForPost(post, chain){
+    return `/${chain}/@${post.author}/${post.permlink}`
+  }
+
   handleValidationError(errorsFromResponse, errors) {
     const codes = errorsFromResponse.details.codes
     const messages = errorsFromResponse.details.messages

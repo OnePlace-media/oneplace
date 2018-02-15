@@ -14,7 +14,7 @@
               <article class="tag-block__top-post" v-for="(post, index) in trend.posts" :key="index">
                 <a 
                   v-if="!post.nsfw || post.nsfw === 'show'"
-                  @click.prevent="showPost(post)" :href="makePath(post)"
+                  @click.prevent="showPost(post)" :href="$helper.makePathForPost(post, chain)"
                   class="tag-block__post-image" :class="{'tag-block__secondary-post-image': index > 0, 'tag-block__primary-post-image': !index}" 
                  :style="`background:url('${post.image}') 50% 0 no-repeat transparent;`" 
                 >
@@ -31,12 +31,12 @@
 
                 <div class="tag-block__top-post-info">
                   <h3 class="h3 tag-block__top-post-title">
-                    <a @click.prevent="showPost(post)" :href="makePath(post)" class="link">
+                    <a @click.prevent="showPost(post)" :href="$helper.makePathForPost(post, chain)" class="link">
                       <span class="nsfw-warning" v-if="post.nsfw">nsfw</span>{{post.title}}
                     </a>
                   </h3>
                   <p class="tag-block__top-post-text">
-                    <a @click.prevent="showPost(post)" :href="makePath(post)" class="link">{{post.preview}}</a>
+                    <a @click.prevent="showPost(post)" :href="$helper.makePathForPost(post, chain)" class="link">{{post.preview}}</a>
                   </p>
                   <div class="tag-block__top-post-other tag-block__post-other">
                     <router-link 
@@ -48,7 +48,7 @@
                     <!-- <a :href="`/${$route.params.chain}/@${post.author}`" class="tag-block__post-avatar avatar" :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`"></a> -->
                     <div class="tag-block__post-data">
                       <span class="tag-block__post-value" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}&nbsp;{{post.payout}}</span>
-                      <a @click.prevent="showPost(post)" :href="makePath(post)" class="tag-block__post-replies link">
+                      <a @click.prevent="showPost(post)" :href="$helper.makePathForPost(post, chain)" class="tag-block__post-replies link">
                         <svg class="tag-block__icon-comment">
                           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#comment"></use>
                         </svg>&nbsp;&nbsp;{{post.children}}</a>
@@ -78,7 +78,7 @@
                 <section class="tag-block__recent-body">
                   <div class="tag-block__recent-post" v-for="post in trend.recentPosts" :key="post.id">
                     <h4 class="h4 tag-block__recent-post-heading">
-                      <a @click.prevent="showPost(post)" :href="makePath(post)" class="link">{{post.title}}</a>
+                      <a @click.prevent="showPost(post)" :href="$helper.makePathForPost(post, chain)" class="link">{{post.title}}</a>
                     </h4>
                     <div class="tag-block__post-other tag-block__recent-post-other">
                       <i18n path="common.timeAgoWithAuthor" tag="p">
@@ -201,9 +201,6 @@ export default {
         }
       }
     },
-    makePath(post, chain) {
-      return `/${chain || this.chain}/@${post.author}/${post.permlink}`
-    },
     fetchData() {
       this.$store
         .dispatch('fetchTrends', {
@@ -233,7 +230,7 @@ export default {
             permlink: post.permlink
           })
           .then(() => {
-            history.pushState('', post.title, this.makePath(post, chain))
+            history.pushState('', post.title, this.$helper.makePathForPost(post, chain))
             this.$store.commit('core/setRouterFrom', { target })
             this.postLoading = false
           })

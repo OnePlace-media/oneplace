@@ -66,6 +66,16 @@ export function createApp(ssrContext) {
       ru: require('./i18n/ru')
     }
   })
+  
+  axios.interceptors.response.use(
+    response => response,
+    error => {
+      if (!error.response) {
+        Vue.prototype.$toast.bottom(i18n.t('errors.NET_PROBLEM'))
+      }
+      return Promise.reject(error.response);
+    }
+  )
 
   Vue.prototype.$locale = {
     change(language) {

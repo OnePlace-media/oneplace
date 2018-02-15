@@ -24,7 +24,7 @@
 
             <div class="profile__info-block" v-if="profile.website || profile.location">
               <span class="profile__info-item profile__info-item--location" v-if="profile.location">{{profile.location}}</span>
-              <span class="profile__info-item profile__info-item--website">
+              <span class="profile__info-item profile__info-item--website" v-if="profile.website">
                 <a class="link" :href="profile.website" target="_blank">{{profile.website}}</a>
               </span>
             </div>

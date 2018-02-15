@@ -16,7 +16,7 @@
         </div>
 
         <h3 class="blog__post-title h3">
-          <a @click.prevent="$emit('show', post)" :href="$helper.makePathForPost(post, chain)" class="link">{{cutTitle}}</a>
+          <a @click.prevent="$emit('show', post)" :href="$helper.makePathForPost(post, chain)" class="link" :title="post.title">{{cutTitle}}</a>
         </h3>
         <p class="blog__post-text"><a href="#" class="link">{{cutPreview}}</a></p>
         <div class="blog__post-info" v-if="!$store.state.core.params[chain].processing">

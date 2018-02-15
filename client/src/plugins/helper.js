@@ -235,12 +235,13 @@ export default class Helper {
     }
   }
 
-  generateTagMeta(tag, $route) {
-    const TITLE = unGolosTag(tag)
-    let DESCRIPTION = `The most trendy and recent posts with the ${TITLE.toLowerCase()} tag`
-    
-    if($route.params.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
-      DESCRIPTION = `Самые трендовые и свежие посты в категории ${TITLE.toLowerCase()}`
+  generateTagMeta(tag, $route, chainName) {
+    const tagName = unGolosTag(tag)
+    const TITLE = tagName + ' | ' + chainName
+    let DESCRIPTION = `The most trendy and recent posts with the ${tagName.toLowerCase()} tag, ${chainName} blockchain.`
+
+    if ($route.params.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
+      DESCRIPTION = `Самые трендовые и свежие посты в категории ${tagName.toLowerCase()}, ${chainName} блокчейн.`
 
     return {
       title: TITLE,

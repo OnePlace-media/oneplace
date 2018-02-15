@@ -1,11 +1,11 @@
 import CONSTANTS from '@oneplace/constants'
+import {unGolosTag} from '../filters/golos.tag'
 export default class Helper {
   static install(Vue) {
     Vue.prototype.$helper = new Helper()
-    this.vue = Vue.prototype
   }
 
-  makePathForPost(post, chain){
+  makePathForPost(post, chain) {
     return `/${chain}/@${post.author}/${post.permlink}`
   }
 
@@ -230,6 +230,66 @@ export default class Helper {
           vmid: 'twitter:description',
           name: 'twitter:description',
           content: post.preview
+        }
+      ]
+    }
+  }
+
+  generateTagMeta(tag, $route) {
+    const TITLE = unGolosTag(tag)
+    let DESCRIPTION = `The most trendy and recent posts with the ${TITLE.toLowerCase()} tag`
+    
+    if($route.params.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
+      DESCRIPTION = `Самые трендовые и свежие посты в категории ${TITLE.toLowerCase()}`
+
+    return {
+      title: TITLE,
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: DESCRIPTION
+        },
+        {
+          vmid: 'og:title',
+          property: 'og:title',
+          content: TITLE
+        },
+        {vmid: 'og:type', property: 'og:type', content: 'article'},
+        {
+          vmid: 'article:tag',
+          property: 'article:tag',
+          content: TITLE
+        },
+        {
+          vmid: 'og:url',
+          property: 'og:url',
+          content: `https://oneplace.media${$route.path}`
+        },
+        {
+          vmid: 'og:description',
+          property: 'og:description',
+          content: DESCRIPTION
+        },
+        {
+          vmid: 'og:site_name',
+          property: 'og:site_name',
+          content: 'OnePlace.media'
+        },
+        {
+          vmid: 'twitter:card',
+          name: 'twitter:site',
+          content: '@oneplace.media'
+        },
+        {
+          vmid: 'twitter:title',
+          name: 'twitter:title',
+          content: TITLE
+        },
+        {
+          vmid: 'twitter:description',
+          name: 'twitter:description',
+          content: DESCRIPTION
         }
       ]
     }

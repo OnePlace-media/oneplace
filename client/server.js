@@ -40,6 +40,8 @@ app.use('/dist', serve('./dist', true))
 // app.use(require('cookie-parser')())
 app.use(favicon(path.resolve(__dirname, 'static/favicon.ico')))
 // app.use('/service-worker.js', serve('./dist/service-worker.js'))
+app.use('/sitemap.xml', serve('./static/sitemap.xml'))
+app.use('/robots.txt', serve('./static/robots.txt'))
 
 
 app.get('*', (req, res) => {

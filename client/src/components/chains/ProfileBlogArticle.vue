@@ -1,6 +1,8 @@
 <template>
   <article class="blog__post">
-      <a href="#" 
+      <a 
+        @click.prevent="$emit('show', post)" 
+        :href="$helper.makePathForPost(post, chain)"
         v-if="post.image !== DEFAULT_IMAGE"
         class="blog__post-image" 
         :style="`background-image: url('${post.image}')`">
@@ -18,7 +20,9 @@
         <h3 class="blog__post-title h3">
           <a @click.prevent="$emit('show', post)" :href="$helper.makePathForPost(post, chain)" class="link" :title="post.title">{{cutTitle}}</a>
         </h3>
-        <p class="blog__post-text"><a href="#" class="link">{{cutPreview}}</a></p>
+        <p class="blog__post-text">
+          <a @click.prevent="$emit('show', post)" :href="$helper.makePathForPost(post, chain)" class="link">{{cutPreview}}</a>
+        </p>
         <div class="blog__post-info" v-if="!$store.state.core.params[chain].processing">
           <span class="blog__post-time">
             {{$t('profile.posted')}}
@@ -80,21 +84,21 @@ export default {
       return this.account.name !== this.post.author
     },
     cutTitle() {
-      const STR_LIMIT = this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? 70 : 90
+      const STR_LIMIT = this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? 70 : 80
       let str = this.post.title
       if (str.length > STR_LIMIT) {
-        str = str.substr(0, STR_LIMIT) + '...'
+        str = str.substring(0, str.substr(0, STR_LIMIT).split('').lastIndexOf(' ')) + '...'
       }
       return str
     },
     cutPreview() {
-      let STR_LIMIT = this.isRepost ? 65 : 130
+      let STR_LIMIT = this.isRepost ? 50 : 110
       if(this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
-        STR_LIMIT = this.isRepost ? 50 : 100
+        STR_LIMIT = this.isRepost ? 50 : 90
 
       let str = this.post.preview
       if (str.length > STR_LIMIT) {
-        str = str.substr(0, STR_LIMIT) + '...'
+        str = str.substring(0, str.substr(0, STR_LIMIT).split('').lastIndexOf(' ')) + '...'
       }
       return str
     }

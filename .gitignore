@@ -27,3 +27,4 @@ server/datasources.json
 server/config.json
 client/dist
 test.js
+docs/*

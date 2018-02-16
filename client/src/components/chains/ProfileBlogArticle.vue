@@ -3,6 +3,7 @@
       <a 
         @click.prevent="$emit('show', post)" 
         :href="$helper.makePathForPost(post, chain)"
+        :title="post.title"
         v-if="post.image !== DEFAULT_IMAGE"
         class="blog__post-image" 
         :style="`background-image: url('${post.image}')`">

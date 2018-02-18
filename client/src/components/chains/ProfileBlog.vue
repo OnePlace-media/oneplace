@@ -107,7 +107,11 @@ export default {
             permlink: post.permlink
           })
           .then(() => {
-            history.pushState('', post.title, this.$helper.makePathForPost(post, chain))
+            history.pushState(
+              '',
+              post.title,
+              this.$helper.makePathForPost(post, chain)
+            )
             this.$store.commit('core/setRouterFrom', { target })
             this.postLoading = false
           })
@@ -136,7 +140,19 @@ export default {
     },
     posts() {
       return this.$store.state.profile.posts.collection.filter(post => {
-        return this.withRepost || post.author === this.account.name
+        let result = true
+        if (this.withRepost && post.author !== this.account.name) result = false
+        else {
+          const include = this.$store.state.profile.tags.include
+          const exclude = this.$store.state.profile.tags.exclude
+          if (Object.keys(include).length && Object.keys(exclude).length)
+            result = post.tags.every(tag => !exclude[tag]) && post.tags.some(tag => include[tag])
+          else if (Object.keys(include).length)
+            result = post.tags.some(tag => include[tag])
+          else if (Object.keys(exclude).length)
+            result = post.tags.every(tag => !exclude[tag])
+        }
+        return result
       })
     },
     postsProcessing() {

@@ -151,7 +151,12 @@ module.exports = {
     accountPosts: 'Posts {username}',
     posted: 'Posted',
     repostedFrom: 'Reposted from',
-    emptyBlog: 'This user has not posted anything yet.'
+    emptyBlog: 'This user has not posted anything yet.',
+    topTags: 'Top tags',
+    showAllTags: 'Show all tags',
+    clearFilters: 'Clear filters',
+    allTags: 'All tags',
+    removeTag: 'Remove tag'
   },
   auth: {
     SignIn: 'Log in',

@@ -1,5 +1,6 @@
 import Api from '../../plugins/api'
 import moment from 'moment'
+import Vue from 'vue'
 
 const TYPES = {
   SET_CHAIN: 'SET_CHAIN',
@@ -11,9 +12,38 @@ const TYPES = {
   SET_POSTS_DATA: 'SET_POSTS_DATA',
   APPEND_POSTS_DATA: 'APPEND_POSTS_DATA',
 
+  SET_TAGS: 'SET_TAGS',
+  APPEND_TAGS: 'APPEND_TAGS',
+  SET_SHOW_ALL_TAGS: 'SET_SHOW_ALL_TAGS',
+  SELECT_TAG: 'SELECT_TAG',
+  REMOVE_TAG: 'REMOVE_TAG',
+  CLEAR_TAGS_FILTER: 'CLEAR_TAGS_FILTER',
+
+
   CLEAR_ALL_DATA: 'CLEAR_ALL_DATA'
 }
 
+function getTagsFromPosts(posts) {
+  const tagsObj = posts.reduce((obj, post) => {
+    post.tags.forEach(tag => {
+      if (!obj[tag]) obj[tag] = 0
+      obj[tag]++
+    })
+    return obj
+  }, {})
+
+  return Object.keys(tagsObj).map(tag => {
+    return {
+      text: tag,
+      count: tagsObj[tag],
+      status: null
+    }
+  })
+}
+
+function sortTags(a, b) {
+  return b.count - a.count
+}
 
 export default () => {
   const state = {
@@ -26,6 +56,12 @@ export default () => {
     posts: {
       processing: true,
       collection: []
+    },
+    tags: {
+      collection: [],
+      showAllTags: false,
+      include: {},
+      exclude: {}
     }
   }
 
@@ -53,7 +89,85 @@ export default () => {
       state.posts.collection = posts
     },
 
+    [TYPES.SET_TAGS](state, {posts}) {
+      state.tags.collection = getTagsFromPosts(posts)
+      state.tags.collection.sort(sortTags)
+    },
+    [TYPES.APPEND_TAGS](state, {posts}) {
+      getTagsFromPosts(posts).forEach(_tag => {
+        const findIndex = state.tags.collection.findIndex(tag => tag.text === _tag.text)
+        if (~findIndex)
+          state.tags.collection[findIndex].count += _tag.count
+        else
+          state.tags.collection.push(_tag)
+      })
+      state.tags.collection.sort(sortTags)
+    },
+    [TYPES.SET_SHOW_ALL_TAGS](state, flag) {
+      state.tags.showAllTags = flag
+    },
+
     [TYPES.CLEAR_ALL_DATA](state) {
+      state.tags.followProcessing = flag
+    },
+
+    [TYPES.SET_POSTS_PROCESSING](state, flag) {
+      state.posts.processing = flag
+    },
+    [TYPES.APPEND_POSTS_DATA](state, {posts}) {
+      state.posts.collection = [...state.posts.collection, ...posts]
+    },
+    [TYPES.SET_POSTS_DATA](state, {posts}) {
+      state.posts.collection = posts
+    },
+
+    [TYPES.SET_TAGS](state, {posts}) {
+      state.tags.collection = getTagsFromPosts(posts)
+      state.tags.collection.sort(sortTags)
+    },
+    [TYPES.APPEND_TAGS](state, {posts}) {
+      getTagsFromPosts(posts).forEach(_tag => {
+        const findIndex = state.tags.collection.findIndex(tag => tag.text === _tag.text)
+        if (~findIndex)
+          state.tags.collection[findIndex].count += _tag.count
+        else
+          state.tags.collection.push(_tag)
+      })
+      state.tags.collection.sort(sortTags)
+    },
+    [TYPES.SET_SHOW_ALL_TAGS](state, flag) {
+      state.tags.showAllTags = flag
+    },
+    [TYPES.SELECT_TAG](state, {tag}) {
+      if (state.tags.exclude[tag.text])
+        Vue.delete(state.tags.exclude, tag.text)
+      else {
+        if (!state.tags.include[tag.text])
+          Vue.set(state.tags.include, tag.text, true)
+        else
+          Vue.delete(state.tags.include, tag.text)
+      }
+    },
+    [TYPES.REMOVE_TAG](state, {tag}) {
+      if (state.tags.include[tag.text])
+        Vue.delete(state.tags.include, tag.text)
+
+      if (!state.tags.exclude[tag.text])
+        Vue.set(state.tags.exclude, tag.text, true)
+      else
+        Vue.delete(state.tags.exclude, tag.text)
+    },
+    [TYPES.CLEAR_TAGS_FILTER](state) {
+      state.tags.exclude = {}
+      state.tags.include = {}
+    },
+
+    [TYPES.CLEAR_ALL_DATA](state) {
+      state.tags.collection = []
+      state.tags.showAllTags = false
+      state.tags.include = {}
+      state.tags.exclude = {}
+
       state.chain = null
       state.account.data = {}
       state.posts.collection = []
@@ -70,6 +184,7 @@ export default () => {
           commit(TYPES.SET_CHAIN, chain)
           commit(TYPES.SET_ACCOUNT_DATA, {data: response.data.accounts[username]})
           commit(TYPES.SET_POSTS_DATA, {posts})
+          commit(TYPES.SET_TAGS, {posts})
           commit(TYPES.SET_ACCOUNT_PROCESSING, false)
           commit(TYPES.SET_POSTS_PROCESSING, false)
         })
@@ -80,7 +195,9 @@ export default () => {
         .then(response => {
           if (state.account.data.name === start_author) {
             response.data.shift()
-            commit(TYPES.APPEND_POSTS_DATA, {posts: response.data})
+            const posts = response.data
+            commit(TYPES.APPEND_POSTS_DATA, {posts})
+            commit(TYPES.APPEND_TAGS, {posts})
             commit(TYPES.SET_POSTS_PROCESSING, false)
           }
           return response.data

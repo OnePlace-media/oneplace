@@ -44,6 +44,8 @@
               {{$tc('profile.following', followCount.following_count)}}
             </div>
           </div>
+          <profile-tags-top></profile-tags-top>
+          <profile-tags-all></profile-tags-all>
         </div>
         <profile-blog :account="account" v-if="!accountProcessing"></profile-blog>
       </div>
@@ -54,6 +56,8 @@
 <script>
 import ProfileBlog from '../../components/chains/ProfileBlog.vue'
 import ProfileFollowBtn from '../../components/chains/ProfileFollowBtn.vue'
+import ProfileTagsTop from '../../components/chains/ProfileTagsTop.vue'
+import ProfileTagsAll from '../../components/chains/ProfileTagsAll.vue'
 
 import CONSTANTS from '@oneplace/constants'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
@@ -62,7 +66,9 @@ export default {
   name: 'Profile',
   components: {
     ProfileBlog,
-    ProfileFollowBtn
+    ProfileFollowBtn,
+    ProfileTagsTop,
+    ProfileTagsAll
   },
   mixins: [onClickOutside],
   asyncData({ store, route, router }) {

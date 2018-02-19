@@ -1,16 +1,17 @@
 <template>
   <section class="blog">
     <div class="blog__header">
-      <div class="blog__header-tab" :class="{'blog__header-tab--active': withRepost}" @click="withRepost = true">
+      <div class="blog__header-tab" :class="{'blog__header-tab--active': withRepost}" @click="$emit('update:withRepost', true)">
         {{$t('profile.allPosts')}}
       </div>
-      <div class="blog__header-tab" :class="{'blog__header-tab--active': !withRepost}" @click="withRepost = false">
+      <div class="blog__header-tab" :class="{'blog__header-tab--active': !withRepost}" @click="$emit('update:withRepost', false)">
         {{$t('profile.accountPosts', {username: account.name})}}
       </div>
     </div>
     <div class="blog__no-posts" v-if="!posts.length">{{$t('profile.emptyBlog')}}</div>
     <profile-blog-article
       v-for="post in posts" :key="post.id"
+      :with-repost="withRepost"
       :post="post"
       :account="account"
       :accountCurrent="accountCurrent"
@@ -40,11 +41,14 @@ export default {
     account: {
       type: Object,
       required: true
+    },
+    withRepost: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
     return {
-      withRepost: true,
       postLoading: false
     }
   },
@@ -141,12 +145,26 @@ export default {
     posts() {
       return this.$store.state.profile.posts.collection.filter(post => {
         let result = true
-        if (this.withRepost && post.author !== this.account.name) result = false
+        if (!this.withRepost && post.author !== this.account.name)
+          result = false
         else {
-          const include = this.$store.state.profile.tags.include
-          const exclude = this.$store.state.profile.tags.exclude
+          const clearRepostsTags = tags => {
+            let clearTags = Object.assign({}, tags)
+            if (!this.withRepost) {
+              clearTags = Object.keys(clearTags).reduce((obj, tagName) => {
+                if (clearTags[tagName].owner) obj[tagName] = clearTags[tagName]
+                return obj
+              }, {})
+            }
+            return clearTags
+          }
+          const include = clearRepostsTags(this.$store.state.profile.tags.include)
+          const exclude = clearRepostsTags(this.$store.state.profile.tags.exclude)
+
           if (Object.keys(include).length && Object.keys(exclude).length)
-            result = post.tags.every(tag => !exclude[tag]) && post.tags.some(tag => include[tag])
+            result =
+              post.tags.every(tag => !exclude[tag]) &&
+              post.tags.some(tag => include[tag])
           else if (Object.keys(include).length)
             result = post.tags.some(tag => include[tag])
           else if (Object.keys(exclude).length)

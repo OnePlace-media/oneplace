@@ -153,11 +153,11 @@ module.exports = {
     posted: 'Создано',
     repostedFrom: 'Репост от',
     emptyBlog: 'Этот пользователь еще не опубликовал ни одного поста',
-    topTags: 'Топ тэги',
-    showAllTags: 'Все тэги',
-    allTags: 'Все тэги',
+    topTags: 'Топ теги',
+    showAllTags: 'Все теги',
+    allTags: 'Все теги',
     clearFilters: 'Очистить фильтр',
-    removeTag: 'Исключить тэг'
+    removeTag: 'Исключить тег'
   },
   auth: {
     SignIn: 'Войти',

@@ -17,7 +17,10 @@ Vue.use(VueScrollTo, {
 
 // Vue.component('markdownEditor', markdownEditor)
 
-
+router.beforeEach((to, from, next) => {
+  window.scrollTo(0, 0)
+  next()
+})
 router.onReady(() => {
   if (window.__INITIAL_STATE__) {
     store.replaceState(window.__INITIAL_STATE__)

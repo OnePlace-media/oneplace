@@ -1,12 +1,12 @@
 <template>
-  <div class="post-view__overlay" v-if="show">
-    <div class="tags-filter__modal">
+  <div class="post-view__overlay">
+    <div class="tags-filter__modal" v-on-click-outside="hideAllTags">
       <span class="tags-filter__close-modal" @click="hideAllTags"></span>
       <div class="tags-filter__modal-header">
         <h3 class="h3">{{$t('profile.allTags')}}</h3>
         <a href="#" class="link tags-filter__clear" @click.prevent="clearTagsFilter">{{$t('profile.clearFilters')}}</a>
       </div>
-      <div class="tags-list__wrapper">
+      <div class="tags-list__wrapper tags-list__wrapper--modal">
         <span 
           v-for="tag in tags" :key="tag.text"
           @click.stop="select(tag)"
@@ -21,14 +21,27 @@
 </template>
 
 <script>
+import { mixin as onClickOutside } from 'vue-on-click-outside'
 export default {
   name: 'ProfileTagsAll',
+  props: {
+    withRepost: {
+      type: Boolean,
+      required: true
+    }
+  },
+  mixins: [onClickOutside],
+  mounted() {
+    document.body.classList.add('modal-shown')
+  },
+  beforeDestroy() {
+    document.body.classList.remove('modal-shown')
+  },
   computed: {
-    show() {
-      return this.$store.state.profile.tags.showAllTags
-    },
     tags() {
-      return this.$store.state.profile.tags.collection
+      return this.withRepost
+        ? this.$store.state.profile.tags.collection
+        : this.$store.state.profile.tags.collection.filter(tag => tag.owner)
     }
   },
   methods: {
@@ -41,7 +54,7 @@ export default {
     remove(tag) {
       this.$store.commit('profile/REMOVE_TAG', { tag })
     },
-    clearTagsFilter(){
+    clearTagsFilter() {
       this.$store.commit('profile/CLEAR_TAGS_FILTER')
     }
   }

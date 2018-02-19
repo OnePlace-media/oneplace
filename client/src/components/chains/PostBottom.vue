@@ -24,8 +24,9 @@
         </svg>
         <slider v-if="voteSliderActive && !isLike && !post.voteProcessing" :value.sync="voteWeight"></slider>
       </a>
-      <span class="post-view__votes">{{likeVotes}}
-        <dropdown-votes :post="post" :chain="chain" v-if="likeVotes"></dropdown-votes>
+      <span class="post-view__votes" @mouseover="showDropdownsVotes = true">
+        {{likeVotes}}
+        <dropdown-votes :post="post" :chain="chain" v-if="likeVotes && showDropdownsVotes" ></dropdown-votes>
       </span>
     </span>
     <span class="post-view__post-data-item" v-if="isComment">
@@ -81,7 +82,8 @@ export default {
       voteIsSliding: false,
       voteWeight: 10000,
       timerOver: null,
-      timerOut: null
+      timerOut: null,
+      showDropdownsVotes: false
     }
   },
   components: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="profile__tags-filter">
+  <div class="profile__tags-filter" :class="{'profile__tags-filter--fixed': fixed}">
     <h4 class="h4 tags-filter__title">{{$t('profile.topTags')}}</h4>
     <div class="tags-list__wrapper">
       <span 
@@ -12,16 +12,39 @@
       </span>
     </div>
     <div class="profile__tags-more">
-      <a href="#" class="link" @click.prevent="showAllTags">{{$t('profile.showAllTags')}}</a>
       <a href="#" class="link" @click.prevent="clearTagsFilter">{{$t('profile.clearFilters')}}</a>
+      <a href="#" class="link" @click.prevent="showAllTags" v-if="showAllTagsBtn">{{$t('profile.showAllTags')}}</a>
     </div>
   </div>
 </template>
 
 <script>
+const TOP_LIMIT = 10
 export default {
   name: 'ProfileTopTags',
+  data() {
+    return {
+      fixed: false
+    }
+  },
+  props: {
+    withRepost: {
+      type: Boolean,
+      required: true
+    }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.scrollHandler)
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.scrollHandler)
+  },
   methods: {
+    scrollHandler() {
+      const elTop = this.$el.getBoundingClientRect().top
+      const bottomBlockTop = document.getElementById('profile__bottom-block').getBoundingClientRect().top
+      this.fixed = this.$el.getBoundingClientRect().top <= 70 && bottomBlockTop < -70
+    },
     showAllTags() {
       this.$store.commit('profile/SET_SHOW_ALL_TAGS', true)
     },
@@ -36,8 +59,16 @@ export default {
     }
   },
   computed: {
+    tags() {
+      return this.withRepost
+        ? this.$store.state.profile.tags.collection
+        : this.$store.state.profile.tags.collection.filter(tag => tag.owner)
+    },
     tagsTop() {
-      return this.$store.state.profile.tags.collection.slice(0, 10)
+      return this.tags.slice(0, TOP_LIMIT)
+    },
+    showAllTagsBtn() {
+      return this.tags.length > TOP_LIMIT
     }
   }
 }

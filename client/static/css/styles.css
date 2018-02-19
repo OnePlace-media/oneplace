@@ -3321,9 +3321,15 @@ hr {
 }
 
 .profile__tags-filter {
+  width: 224px;
   background: #fff;
   padding: 12px 16px 12px;
   margin-bottom: 12px;
+}
+
+.profile__tags-filter--fixed {
+  position: fixed;
+  top: 70px;
 }
 
 .tags-filter__title {
@@ -3368,6 +3374,11 @@ hr {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+  -webkit-flex-flow: row-reverse;
+  -ms-flex-flow: row-reverse;
+  flex-flow: row-reverse;
   font-size: 12px;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
@@ -3418,12 +3429,13 @@ hr {
   position: relative;
   display: block;
   width: 600px;
+  padding: 16px 24px 12px;
   background: #fff;
-  padding: 16px 20px 12px;
-  margin: 96px auto 32px;
+  margin: 96px auto 40px;
 }
 
 .tags-filter__modal-header {
+  width: 100%;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -3436,7 +3448,14 @@ hr {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  border-bottom: 1px solid #f2f2f2;
+  padding-bottom: 12px;
   margin-bottom: 12px;
+}
+
+.tags-list__wrapper--modal {
+  max-height: calc(100vh - 210px);
+  overflow-y: scroll;
 }
 
 .tags-filter__clear {

@@ -26,14 +26,13 @@
         </p>
         <div class="blog__post-info" v-if="!$store.state.core.params[chain].processing">
           <span class="blog__post-time">
-            {{$t('profile.posted')}}
             <timeago :since="post.created" :locale="$locale.current()"></timeago>
             </span>
-          <post-bottom 
+          <post-bottom
             type="blog"
-            :post="post" 
-            :account="accountCurrent" 
-            :chain="chain" 
+            :post="post"
+            :account="accountCurrent"
+            :chain="chain"
             @vote="(isLike, weight) => vote(post, isLike, weight)"
             :up-vote-processing="voteProcessing.upVoteProcessing"
             :down-vote-processing="voteProcessing.downVoteProcessing"
@@ -67,6 +66,10 @@ export default {
     post: {
       type: Object,
       required: true
+    },
+    withRepost: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -85,21 +88,36 @@ export default {
       return this.account.name !== this.post.author
     },
     cutTitle() {
-      const STR_LIMIT = this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? 70 : 80
+      const STR_LIMIT =
+        this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? 70 : 80
       let str = this.post.title
       if (str.length > STR_LIMIT) {
-        str = str.substring(0, str.substr(0, STR_LIMIT).split('').lastIndexOf(' ')) + '...'
+        str =
+          str.substring(
+            0,
+            str
+              .substr(0, STR_LIMIT)
+              .split('')
+              .lastIndexOf(' ')
+          ) + '...'
       }
       return str
     },
     cutPreview() {
       let STR_LIMIT = this.isRepost ? 50 : 110
-      if(this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
+      if (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
         STR_LIMIT = this.isRepost ? 50 : 90
 
       let str = this.post.preview
       if (str.length > STR_LIMIT) {
-        str = str.substring(0, str.substr(0, STR_LIMIT).split('').lastIndexOf(' ')) + '...'
+        str =
+          str.substring(
+            0,
+            str
+              .substr(0, STR_LIMIT)
+              .split('')
+              .lastIndexOf(' ')
+          ) + '...'
       }
       return str
     }

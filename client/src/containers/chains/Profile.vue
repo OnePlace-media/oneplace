@@ -30,7 +30,7 @@
             </div>
           </div>
           
-          <div class="profile__bottom-block">
+          <div class="profile__bottom-block" id="profile__bottom-block">
             <div class="profile__user-data">
               <span class="profile__data-value">{{account.post_count}}</span>
               {{$tc('profile.posts', account.post_count)}}
@@ -44,10 +44,10 @@
               {{$tc('profile.following', followCount.following_count)}}
             </div>
           </div>
-          <profile-tags-top></profile-tags-top>
-          <profile-tags-all></profile-tags-all>
+          <profile-tags-top :with-repost="withRepost"></profile-tags-top>
+          <profile-tags-all :with-repost="withRepost" v-if="showAllTagsModal"></profile-tags-all>
         </div>
-        <profile-blog :account="account" v-if="!accountProcessing"></profile-blog>
+        <profile-blog :with-repost.sync="withRepost" :account="account" v-if="!accountProcessing"></profile-blog>
       </div>
     </div>
   </section>
@@ -91,7 +91,15 @@ export default {
   metaInfo() {
     return this.$helper.generateProfileMeta(this.account, this.$route)
   },
+  data() {
+    return {
+      withRepost: true
+    }
+  },
   computed: {
+    showAllTagsModal() {
+      return this.$store.state.profile.tags.showAllTags
+    },
     accountsByChain() {
       return this.accounts.filter(acc => acc.chain === this.chain)
     },

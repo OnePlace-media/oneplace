@@ -19,15 +19,16 @@ const TYPES = {
   REMOVE_TAG: 'REMOVE_TAG',
   CLEAR_TAGS_FILTER: 'CLEAR_TAGS_FILTER',
 
-
   CLEAR_ALL_DATA: 'CLEAR_ALL_DATA'
 }
 
-function getTagsFromPosts(posts) {
+function getTagsFromPosts(username, posts) {
   const tagsObj = posts.reduce((obj, post) => {
     post.tags.forEach(tag => {
-      if (!obj[tag]) obj[tag] = 0
-      obj[tag]++
+      if (!obj[tag]) obj[tag] = {count: 0, owner: false}
+      obj[tag].count++
+      if (!obj[tag].owner)
+        obj[tag].owner = post.author === username
     })
     return obj
   }, {})
@@ -35,8 +36,9 @@ function getTagsFromPosts(posts) {
   return Object.keys(tagsObj).map(tag => {
     return {
       text: tag,
-      count: tagsObj[tag],
-      status: null
+      count: tagsObj[tag].count,
+      status: null,
+      owner: tagsObj[tag].owner
     }
   })
 }
@@ -89,16 +91,18 @@ export default () => {
       state.posts.collection = posts
     },
 
-    [TYPES.SET_TAGS](state, {posts}) {
-      state.tags.collection = getTagsFromPosts(posts)
+    [TYPES.SET_TAGS](state, {username, posts}) {
+      state.tags.collection = getTagsFromPosts(username, posts)
       state.tags.collection.sort(sortTags)
     },
-    [TYPES.APPEND_TAGS](state, {posts}) {
-      getTagsFromPosts(posts).forEach(_tag => {
+    [TYPES.APPEND_TAGS](state, {username, posts}) {
+      getTagsFromPosts(username, posts).forEach(_tag => {
         const findIndex = state.tags.collection.findIndex(tag => tag.text === _tag.text)
-        if (~findIndex)
+        if (~findIndex) {
           state.tags.collection[findIndex].count += _tag.count
-        else
+          if (state.tags.collection[findIndex].owner)
+            state.tags.collection[findIndex].owner = _tag.owner
+        } else
           state.tags.collection.push(_tag)
       })
       state.tags.collection.sort(sortTags)
@@ -107,43 +111,12 @@ export default () => {
       state.tags.showAllTags = flag
     },
 
-    [TYPES.CLEAR_ALL_DATA](state) {
-      state.tags.followProcessing = flag
-    },
-
-    [TYPES.SET_POSTS_PROCESSING](state, flag) {
-      state.posts.processing = flag
-    },
-    [TYPES.APPEND_POSTS_DATA](state, {posts}) {
-      state.posts.collection = [...state.posts.collection, ...posts]
-    },
-    [TYPES.SET_POSTS_DATA](state, {posts}) {
-      state.posts.collection = posts
-    },
-
-    [TYPES.SET_TAGS](state, {posts}) {
-      state.tags.collection = getTagsFromPosts(posts)
-      state.tags.collection.sort(sortTags)
-    },
-    [TYPES.APPEND_TAGS](state, {posts}) {
-      getTagsFromPosts(posts).forEach(_tag => {
-        const findIndex = state.tags.collection.findIndex(tag => tag.text === _tag.text)
-        if (~findIndex)
-          state.tags.collection[findIndex].count += _tag.count
-        else
-          state.tags.collection.push(_tag)
-      })
-      state.tags.collection.sort(sortTags)
-    },
-    [TYPES.SET_SHOW_ALL_TAGS](state, flag) {
-      state.tags.showAllTags = flag
-    },
     [TYPES.SELECT_TAG](state, {tag}) {
       if (state.tags.exclude[tag.text])
         Vue.delete(state.tags.exclude, tag.text)
       else {
         if (!state.tags.include[tag.text])
-          Vue.set(state.tags.include, tag.text, true)
+          Vue.set(state.tags.include, tag.text, tag)
         else
           Vue.delete(state.tags.include, tag.text)
       }
@@ -153,7 +126,7 @@ export default () => {
         Vue.delete(state.tags.include, tag.text)
 
       if (!state.tags.exclude[tag.text])
-        Vue.set(state.tags.exclude, tag.text, true)
+        Vue.set(state.tags.exclude, tag.text, tag)
       else
         Vue.delete(state.tags.exclude, tag.text)
     },
@@ -184,7 +157,7 @@ export default () => {
           commit(TYPES.SET_CHAIN, chain)
           commit(TYPES.SET_ACCOUNT_DATA, {data: response.data.accounts[username]})
           commit(TYPES.SET_POSTS_DATA, {posts})
-          commit(TYPES.SET_TAGS, {posts})
+          commit(TYPES.SET_TAGS, {username, posts})
           commit(TYPES.SET_ACCOUNT_PROCESSING, false)
           commit(TYPES.SET_POSTS_PROCESSING, false)
         })
@@ -197,7 +170,7 @@ export default () => {
             response.data.shift()
             const posts = response.data
             commit(TYPES.APPEND_POSTS_DATA, {posts})
-            commit(TYPES.APPEND_TAGS, {posts})
+            commit(TYPES.APPEND_TAGS, {username: start_author, posts})
             commit(TYPES.SET_POSTS_PROCESSING, false)
           }
           return response.data

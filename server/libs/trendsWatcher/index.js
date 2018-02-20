@@ -127,7 +127,7 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
           .filter(item => item[1].op[0] === 'author_reward' && item[1].op[1].permlink === post.permlink)
           .reduce((obj, item) => {
             let mode = CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
-            if (moment(item[1].timestamp + '+00:00').unix() > moment(_post.created).subtract(-1, 'days').unix()) {
+            if (moment(item[1].timestamp + '+00:00').unix() > moment(_post.created).subtract(-30, 'days').unix()) {
               mode = CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
             }
             obj[mode] = item[1].op[1]

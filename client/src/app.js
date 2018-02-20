@@ -11,12 +11,13 @@ import Vue2TouchEvents from 'vue2-touch-events'
 import VueI18n from 'vue-i18n'
 import moment from 'moment'
 import VueLocalStorage from 'vue-localstorage'
-import VueTimeago from 'vue-timeago'
 import Chains from './plugins/chains'
 import Meta from 'vue-meta'
 import GlobalComponents from './plugins/globalComponents'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
+import TimeAgo from './components/common/TimeAgo.vue'
+
 const CONSTANTS = require('@oneplace/constants')
 
 Vue.use(Meta)
@@ -27,14 +28,6 @@ Vue.use(Toast, {
 })
 
 Vue.use(Chains)
-Vue.use(VueTimeago, {
-  name: 'timeago',
-  locale: 'en-US',
-  locales: {
-    'en': require('vue-timeago/locales/en-US.json'),
-    'ru': require('vue-timeago/locales/ru-RU.json')
-  }
-})
 
 Vue.use(GlobalComponents)
 Vue.use(VueI18n)
@@ -44,6 +37,8 @@ Vue.use(VueAxios, axios)
 Vue.axios.defaults.baseURL = process.env.BASE_API_URL
 Vue.use(Helper)
 Vue.use(VueLocalStorage)
+
+Vue.component('time-ago', TimeAgo)
 
 export function createApp(ssrContext) {
   const i18n = new VueI18n({

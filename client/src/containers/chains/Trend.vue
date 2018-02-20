@@ -64,7 +64,7 @@
                     </a> -->
                     <br>
                     <span class="tag-block__post-time">
-                      <timeago :since="post.created" :locale="$locale.current()" :format="formatTime"></timeago>
+                      <time-ago :time="post.created"></time-ago>
                     </span>
                   </div>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="tag-block__post-other tag-block__recent-post-other">
                       <i18n path="common.timeAgoWithAuthor" tag="p">
                         <span class="tag-block__post-time" place="timeago">
-                          <timeago :since="post.created" :locale="$locale.current()"></timeago>
+                          <time-ago :time="post.created"></time-ago>
                         </span>
                         <router-link 
                           tag="a" 

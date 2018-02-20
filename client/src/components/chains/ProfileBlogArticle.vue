@@ -26,8 +26,8 @@
         </p>
         <div class="blog__post-info" v-if="!$store.state.core.params[chain].processing">
           <span class="blog__post-time">
-            <timeago :since="post.created" :locale="$locale.current()"></timeago>
-            </span>
+            <time-ago :time="post.created"></time-ago>
+          </span>
           <post-bottom
             type="blog"
             :post="post"

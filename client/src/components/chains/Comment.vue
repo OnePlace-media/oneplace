@@ -13,7 +13,7 @@
           class="link link--op">
             {{item.author}}
         </a>
-        <span class="post-view__post-author-rep">{{item.author_rep}}</span> · <timeago :since="item.created" :locale="$locale.current()"></timeago>
+        <span class="post-view__post-author-rep">{{item.author_rep}}</span> · <time-ago :time="item.created"></time-ago>
       </div>
       <div class="comment__body markdown markdown--small" v-html="item.body"></div>
        <post-bottom 

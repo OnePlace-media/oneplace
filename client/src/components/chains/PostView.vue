@@ -26,7 +26,9 @@
             </a>
             <span class="post-view__post-author-rep">{{post.author_rep}}</span><br>&nbsp;{{$t('common.in')}}&nbsp;<span class="hashtag">#{{post.category | unGolosTag | toLowerCase}}</span>
           </span>
-          <span class="post-view__post-posted"><timeago :since="post.created" :locale="$locale.current()"></timeago></span>
+          <span class="post-view__post-posted">
+            <time-ago :time="post.created"></time-ago>
+          </span>
         </div>
         <span class="post-view__action-menu-btn" @click.prevent="toggleDropDown" v-if="account.username" >• • •</span>
         <div class="post-view__action-menu" v-if="showDropDownMenu">

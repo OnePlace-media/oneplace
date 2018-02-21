@@ -2,13 +2,8 @@
 import CONSTANTS from '@oneplace/constants'
 import moment from 'moment'
 
-const GOLOS_FIRST_PAYOUT_DAYS = 1
-import VueCountdown from '@xkeshi/vue-countdown'
 export default {
   name: 'DropdownPayout',
-  components: {
-    VueCountdown
-  },
   props: ['post', 'chain'],
   computed: {
     now() {

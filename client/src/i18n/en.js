@@ -152,7 +152,7 @@ module.exports = {
     posted: 'Posted',
     repostedFrom: 'Reposted from',
     emptyBlog: 'This user has not posted anything yet.',
-    topTags: 'Top tags',
+    topTags: 'Popular tags',
     showAllTags: 'Show all tags',
     clearFilters: 'Clear filters',
     allTags: 'All tags',

@@ -115,9 +115,13 @@ class Converter {
           if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
             q = post.total_payout_value / vShares
           } else {
-            if (post.separatePayots[vote.mode])
-              q = 2 * parseFloat(post.separatePayots[vote.mode].sbd_payout.split(' ')[0]) / vShares
-            else {
+            if (post.separatePayots[vote.mode]) {
+              let sbd_payout = 2 * parseFloat(post.separatePayots[vote.mode].sbd_payout.split(' ')[0])
+              if (!sbd_payout && vShares && !post.percent_steem_dollars) {
+                sbd_payout = post.total_payout_value
+              }
+              q = sbd_payout / vShares
+            } else {
               // @todo Need show error or stub, because calc not found separate payout
               let activeRshares = active_votes.reduce((sum, _vote) => {
                 sum += +_vote.rshares
@@ -131,6 +135,14 @@ class Converter {
         const votesValue = vShares * q
         const percentRshares = vote.rshares / (activeRshares / 100)
         result = (((votesValue / 100) * percentRshares) * CURRENCY_Q).toFixed(2)
+
+        if (vote.mode === CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT) {
+          console.log('FIRST', base, vote.voter, votesValue, percentRshares, post.separatePayots)
+        }
+
+        if (vote.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
+          console.log('SECOND', vote.voter, votesValue, percentRshares, post.separatePayots)
+        }
       }
     }
 

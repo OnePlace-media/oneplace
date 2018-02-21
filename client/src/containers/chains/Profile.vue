@@ -25,7 +25,7 @@
             <div class="profile__info-block" v-if="profile.website || profile.location">
               <span class="profile__info-item profile__info-item--location" v-if="profile.location">{{profile.location}}</span>
               <span class="profile__info-item profile__info-item--website" v-if="profile.website">
-                <a class="link" :href="profile.website" target="_blank">{{profile.website}}</a>
+                <a class="link" :href="profile.website" target="_blank">{{website}}</a>
               </span>
             </div>
           </div>
@@ -143,6 +143,9 @@ export default {
     },
     avatar() {
       return this.profile.profile_image || CONSTANTS.DEFAULT.AVATAR_IMAGE
+    },
+    website(){
+      return this.profile.website ? this.profile.website.replace(/http(s)?:\/\//, '') : ''
     }
   }
 }

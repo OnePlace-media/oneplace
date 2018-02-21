@@ -113,7 +113,10 @@ class Converter {
         let vShares = Converter.calculateVshares(activeRshares)
         if (vote.mode !== post.mode || post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
           if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
-            q = post.total_payout_value / vShares
+            if(vote.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT)
+              q = post.pending_payout_value / vShares
+            else 
+              q = post.total_payout_value / vShares
           } else {
             if (post.separatePayots[vote.mode]) {
               let sbd_payout = 2 * parseFloat(post.separatePayots[vote.mode].sbd_payout.split(' ')[0])

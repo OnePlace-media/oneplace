@@ -79,7 +79,7 @@ module.exports = {
     emptyCategoryHelp: 'No posts in this category.',
     removeFlag: 'Remove flag',
     downvotePost: 'Downvote post',
-    pendingPayout: 'Pending payout is {payout} in {days}.',
+    pendingPayout: 'Pending payout is {payout} {fromNow}.',
     pendingDays: '1&nbsp;day | {count}&nbsp;days',
     readyPayout: 'Past payouts {payout}',
     andMore: '...and {count} more'

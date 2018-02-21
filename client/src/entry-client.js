@@ -26,6 +26,8 @@ router.onReady(() => {
     store.replaceState(window.__INITIAL_STATE__)
   }
 
+  store.dispatch('core/startNowInterval')
+
   Vue.router = router
   Vue.use(VueCookie)
   Vue.use(VueAuth, {

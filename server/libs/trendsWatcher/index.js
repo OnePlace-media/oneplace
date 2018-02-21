@@ -87,6 +87,7 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
     for (let post of posts) {
       const _post = {}
       _post.id = post.id
+      _post.cashout_time = post.cashout_time + '+00:00'
       _post.percent_steem_dollars = post.percent_steem_dollars
       _post.title = post.title
       _post.last_payout = post.last_payout + '+00:00'

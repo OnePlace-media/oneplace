@@ -3,6 +3,7 @@ const CONSTANTS = require('@oneplace/constants')
 
 export default () => {
   const state = {
+    now: null,
     $router: {
       from: null
     },
@@ -34,10 +35,18 @@ export default () => {
     },
     setParamsProcessing(state, {chain, flag}) {
       state.params[chain].processing = flag
+    },
+    setNow(state) {
+      state.now = Math.floor(new Date().getTime() / 1000)
     }
   }
 
   const actions = {
+    startNowInterval({commit}) {
+      setInterval(() => {
+        commit('setNow')
+      }, 1000)
+    },
     fetchParams({commit, state}, {chain, $chains}) {
       commit('setParamsProcessing', {chain, flag: true})
       $chains.setChain(chain)

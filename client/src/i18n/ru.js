@@ -80,7 +80,7 @@ module.exports = {
     emptyCategoryHelp: 'Нет записей в данной категории.',
     removeFlag: 'Отменить флаг',
     downvotePost: 'Проголосовать против',
-    pendingPayout: 'Ожидаемая выплата {payout} через {days}.',
+    pendingPayout: 'Ожидаемая выплата {payout} {fromNow}.',
     pendingDays: '1&nbsp;день | {count}&nbsp;дней',
     readyPayout: 'Предыдущие выплаты {payout}',
     andMore: '...и еще {count}'

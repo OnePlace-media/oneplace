@@ -135,14 +135,6 @@ class Converter {
         const votesValue = vShares * q
         const percentRshares = vote.rshares / (activeRshares / 100)
         result = (((votesValue / 100) * percentRshares) * CURRENCY_Q).toFixed(2)
-
-        if (vote.mode === CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT) {
-          console.log('FIRST', base, vote.voter, votesValue, percentRshares, post.separatePayots)
-        }
-
-        if (vote.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
-          console.log('SECOND', vote.voter, votesValue, percentRshares, post.separatePayots)
-        }
       }
     }
 

@@ -75,6 +75,7 @@ export function createApp(ssrContext) {
   Vue.prototype.$locale = {
     change(language) {
       i18n.locale = language
+      moment.locale(language)
       Vue.localStorage.set('locale', language)
     },
     current() {

@@ -125,6 +125,14 @@ hr {
   text-decoration: none;
 }
 
+.link--inactive {
+  color: #a8adad;
+}
+
+.link--inactive:hover {
+  cursor: auto;
+}
+
 .link--op {
   color: #db4c2a;
 }
@@ -3263,7 +3271,7 @@ hr {
 }
 
 .profile__info-item {
-  display: inline-block;
+  display: block;
   padding-left: 25px;
   position: relative;
   overflow: hidden;

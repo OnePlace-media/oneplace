@@ -12,7 +12,13 @@
       </span>
     </div>
     <div class="profile__tags-more">
-      <a href="#" class="link" @click.prevent="clearTagsFilter">{{$t('profile.clearFilters')}}</a>
+      <a 
+        href="#" 
+        class="link"
+        :class="{'link--inactive': clearFilterInActive}"
+        @click.prevent="clearTagsFilter">
+        {{$t('profile.clearFilters')}}
+      </a>
       <a href="#" class="link" @click.prevent="showAllTags" v-if="showAllTagsBtn">{{$t('profile.showAllTags')}}</a>
     </div>
   </div>
@@ -29,6 +35,10 @@ export default {
   },
   props: {
     withRepost: {
+      type: Boolean,
+      required: true
+    },
+    clearFilterInActive: {
       type: Boolean,
       required: true
     }

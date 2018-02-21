@@ -4,7 +4,12 @@
       <span class="tags-filter__close-modal" @click="hideAllTags"></span>
       <div class="tags-filter__modal-header">
         <h3 class="h3">{{$t('profile.allTags')}}</h3>
-        <a href="#" class="link tags-filter__clear" @click.prevent="clearTagsFilter">{{$t('profile.clearFilters')}}</a>
+        <a href="#" 
+          class="link tags-filter__clear" 
+          :class="{'link--inactive': clearFilterInActive}"
+          @click.prevent="clearTagsFilter">
+          {{$t('profile.clearFilters')}}
+        </a>
       </div>
       <div class="tags-list__wrapper tags-list__wrapper--modal">
         <span 
@@ -26,6 +31,10 @@ export default {
   name: 'ProfileTagsAll',
   props: {
     withRepost: {
+      type: Boolean,
+      required: true
+    },
+    clearFilterInActive: {
       type: Boolean,
       required: true
     }

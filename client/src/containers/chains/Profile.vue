@@ -44,8 +44,8 @@
               {{$tc('profile.following', followCount.following_count)}}
             </div>
           </div>
-          <profile-tags-top :with-repost="withRepost"></profile-tags-top>
-          <profile-tags-all :with-repost="withRepost" v-if="showAllTagsModal"></profile-tags-all>
+          <profile-tags-top :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost"></profile-tags-top>
+          <profile-tags-all :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost" v-if="showAllTagsModal"></profile-tags-all>
         </div>
         <profile-blog :with-repost.sync="withRepost" :account="account" v-if="!accountProcessing"></profile-blog>
       </div>
@@ -146,6 +146,19 @@ export default {
     },
     website(){
       return this.profile.website ? this.profile.website.replace(/http(s)?:\/\//, '') : ''
+    },
+    clearFilterInActive() {
+      const checkActiveFilterTagsByRepost = tags => {
+        return !!Object.keys(tags).filter(tagName => {
+          return this.withRepost || tags[tagName].owner
+        }).length
+      }
+      const include = this.$store.state.profile.tags.include
+      const exclude = this.$store.state.profile.tags.exclude
+      return (
+        !checkActiveFilterTagsByRepost(include) &&
+        !checkActiveFilterTagsByRepost(exclude)
+      )
     }
   }
 }

@@ -134,9 +134,7 @@ export default {
       return this.$store.state.profile.account.data
     },
     accountName() {
-      return this.account.meta && this.account.meta.name
-        ? this.account.meta.name
-        : this.account.name
+      return this.profile.name || this.account.name
     },
     profile() {
       return this.account.meta && this.account.meta.profile

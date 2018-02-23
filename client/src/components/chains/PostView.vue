@@ -17,12 +17,18 @@
               class="post-view__author-link link link--op">
               {{post.author}}
             </router-link> -->
-            <a tag="a" :href="`/${$route.params.chain}/@${post.author}`" class="link link--op">
+            <a 
+              tag="a" 
+              @click.prevent="goToProfile(post.author)"
+              :href="`/${$route.params.chain}/@${post.author}`" 
+              class="link link--op">
               {{post.author}}
             </a>
             <span class="post-view__post-author-rep">{{post.author_rep}}</span><br>&nbsp;{{$t('common.in')}}&nbsp;<span class="hashtag">#{{post.category | unGolosTag | toLowerCase}}</span>
           </span>
-          <span class="post-view__post-posted"><timeago :since="post.created" :locale="$locale.current()"></timeago></span>
+          <span class="post-view__post-posted">
+            <time-ago :time="post.created"></time-ago>
+          </span>
         </div>
         <span class="post-view__action-menu-btn" @click.prevent="toggleDropDown" v-if="account.username" >• • •</span>
         <div class="post-view__action-menu" v-if="showDropDownMenu">
@@ -61,10 +67,21 @@
             <!-- <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">
               {{post.author}}
             </router-link> -->
-            <a :href="`/${$route.params.chain}/@${post.author}`" class="link link--op">
+            <a 
+              @click.prevent="goToProfile(post.author)"
+              :href="`/${$route.params.chain}/@${post.author}`" 
+              class="link link--op">
               {{post.author}}
             </a>
             <p class="author-info">{{post.author_about}}</p>
+            <!-- <no-ssr v-if="$auth && $auth.check() && account.username">
+              <profile-follow-btn
+                :chain="chain"
+                :account-follower="account"
+                :account-following="postAccount"
+                type="post"
+              ></profile-follow-btn>
+            </no-ssr> -->
           </div>
         </div>
         <div class="post-view__tags-wrapper">
@@ -83,13 +100,23 @@ import CONSTANTS from '@oneplace/constants'
 import Api from '../../plugins/api'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 import PostBottom from './PostBottom.vue'
+import ProfileFollowBtn from '../../components/chains/ProfileFollowBtn.vue'
 
 export default {
   name: 'PostView',
   props: ['isModal'],
   mixins: [onClickOutside],
   components: {
-    PostBottom
+    PostBottom,
+    ProfileFollowBtn
+  },
+  watch: {
+    $route() {
+      this.$store.commit('setPostViewData', null)
+    }
+  },
+  beforeRouteUpdate() {
+    console.log('beforeRouteUpdate')
   },
   mounted() {
     this.$store.dispatch('core/fetchParams', {
@@ -122,6 +149,16 @@ export default {
     return this.$helper.generatePostMeta(this.post, this.$route)
   },
   methods: {
+    goToProfile(username) {
+      if (username === this.post.author) {
+        this.$store.commit('setPostViewData', null)
+      }
+
+      this.$router.push({
+        name: 'chain-account-view',
+        params: { chain: this.chain, username }
+      })
+    },
     toggleDropDown() {
       this.showDropDownMenu = !this.showDropDownMenu
     },
@@ -155,6 +192,9 @@ export default {
     },
     post() {
       return this.$store.state.postView.post
+    },
+    postAccount() {
+      return { name: this.post.author }
     },
     chain() {
       return this.$route.params.chain || this.$store.state.chain

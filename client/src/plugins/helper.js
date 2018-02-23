@@ -1,8 +1,12 @@
 import CONSTANTS from '@oneplace/constants'
+import {unGolosTag} from '../filters/golos.tag'
 export default class Helper {
   static install(Vue) {
     Vue.prototype.$helper = new Helper()
-    this.vue = Vue.prototype
+  }
+
+  makePathForPost(post, chain) {
+    return `/${chain}/@${post.author}/${post.permlink}`
   }
 
   handleValidationError(errorsFromResponse, errors) {
@@ -96,10 +100,11 @@ export default class Helper {
   }
 
   generateProfileMeta(account, $route) {
+    const BC = $route.params.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ? 'STEEM' : 'GOLOS'
     const profile = account.meta && account.meta.profile ? account.meta.profile : {}
     const IMAGE = profile.profile_image ? process.env.BASE_API_URL + `img?l=${encodeURIComponent(profile.profile_image)}` : CONSTANTS.DEFAULT.AVATAR_IMAGE
     return {
-      title: account.name,
+      title: `@${account.name} | ${BC}`,
       meta: [
         {
           vmid: 'description',
@@ -226,6 +231,67 @@ export default class Helper {
           vmid: 'twitter:description',
           name: 'twitter:description',
           content: post.preview
+        }
+      ]
+    }
+  }
+
+  generateTagMeta(tag, $route, chainName) {
+    const tagName = unGolosTag(tag)
+    const TITLE = tagName + ' | ' + chainName
+    let DESCRIPTION = `The most trendy and recent posts with the ${tagName.toLowerCase()} tag, ${chainName} blockchain.`
+
+    if ($route.params.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
+      DESCRIPTION = `Самые трендовые и свежие посты в категории ${tagName.toLowerCase()}, ${chainName} блокчейн.`
+
+    return {
+      title: TITLE,
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: DESCRIPTION
+        },
+        {
+          vmid: 'og:title',
+          property: 'og:title',
+          content: TITLE
+        },
+        {vmid: 'og:type', property: 'og:type', content: 'article'},
+        {
+          vmid: 'article:tag',
+          property: 'article:tag',
+          content: TITLE
+        },
+        {
+          vmid: 'og:url',
+          property: 'og:url',
+          content: `https://oneplace.media${$route.path}`
+        },
+        {
+          vmid: 'og:description',
+          property: 'og:description',
+          content: DESCRIPTION
+        },
+        {
+          vmid: 'og:site_name',
+          property: 'og:site_name',
+          content: 'OnePlace.media'
+        },
+        {
+          vmid: 'twitter:card',
+          name: 'twitter:site',
+          content: '@oneplace.media'
+        },
+        {
+          vmid: 'twitter:title',
+          name: 'twitter:title',
+          content: TITLE
+        },
+        {
+          vmid: 'twitter:description',
+          name: 'twitter:description',
+          content: DESCRIPTION
         }
       ]
     }

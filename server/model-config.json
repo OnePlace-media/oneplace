@@ -31,6 +31,10 @@
     "public": true,
     "dataSource": "mysql"
   },
+  "blockchain": {
+    "public": true,
+    "dataSource": "db"
+  },
   "email": {
     "dataSource": "email"
   },

@@ -7,10 +7,13 @@
         <!-- <router-link tag="a" :to="{name:'chain-account-view', params:{chain,username: item.author}}" class="link link--op">
           {{item.author}}
         </router-link> -->
-        <a :href="`/@${chain}/${item.author}`" class="link link--op">
-          {{item.author}}
+        <a 
+          :href="`/@${chain}/${item.author}`" 
+          @click.prevent="goToProfile(item.author)"
+          class="link link--op">
+            {{item.author}}
         </a>
-        <span class="post-view__post-author-rep">{{item.author_rep}}</span> · <timeago :since="item.created" :locale="$locale.current()"></timeago>
+        <span class="post-view__post-author-rep">{{item.author_rep}}</span> · <time-ago :time="item.created"></time-ago>
       </div>
       <div class="comment__body markdown markdown--small" v-html="item.body"></div>
        <post-bottom 
@@ -65,6 +68,13 @@ export default {
     PostBottom
   },
   methods: {
+    goToProfile(username) {
+      this.$store.commit('setPostViewData', null)
+      this.$router.push({
+        name: 'chain-account-view',
+        params: { chain: this.chain, username }
+      })
+    },
     vote(isLike, weight = 10000) {
       const field = isLike ? 'upVoteProcessing' : 'downVoteProcessing'
       this[field] = true

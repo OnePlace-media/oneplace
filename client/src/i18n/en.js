@@ -3,7 +3,8 @@ module.exports = {
     FAILED_APPEND_POST_BY_AUTHOR: 'Loading posts error, please try again later',
     UNKNOW_ERROR: 'Something is wrong.',
     STEEMIT_MAX_VOTE_CHANGES: 'You have used the maximum number of vote changes on this comment',
-    STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds'
+    STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds',
+    NET_PROBLEM: 'A network error has occurred, check your connection and try again'
   },
   common: {
     orderBy: 'Order by',
@@ -78,7 +79,7 @@ module.exports = {
     emptyCategoryHelp: 'No posts in this category.',
     removeFlag: 'Remove flag',
     downvotePost: 'Downvote post',
-    pendingPayout: 'Pending payout is {payout} in {days}.',
+    pendingPayout: 'Pending payout is {payout} {fromNow}.',
     pendingDays: '1&nbsp;day | {count}&nbsp;days',
     readyPayout: 'Past payouts {payout}',
     andMore: '...and {count} more'
@@ -147,9 +148,16 @@ module.exports = {
     posts: 'Posts | Post | Posts',
     followers: 'No followers | Follower | Followers',
     allPosts: 'All posts',
-    accountPosts:'Posts {username}',
+    accountPosts: 'Posts {username}',
     posted: 'Posted',
-    repostedFrom: 'Reposted from'
+    repostedFrom: 'Reposted from',
+    emptyBlog: 'This user has not posted anything yet.',
+    emptyBlogByFilters: 'No posts matched your criteria. You can change or clear the tag filters.',
+    topTags: 'Popular tags',
+    showAllTags: 'Show all tags',
+    clearFilters: 'Clear filters',
+    allTags: 'All tags',
+    removeTag: 'Remove tag'
   },
   auth: {
     SignIn: 'Log in',

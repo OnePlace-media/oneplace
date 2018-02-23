@@ -20,12 +20,6 @@ export default {
   removeAccount(id, chain, username) {
     return Vue.axios.delete(`/users/${id}/account`, {params: {chain, username}})
   },
-  getPostByPermlink(chain, username, permlink) {
-    return Vue.axios.get(`/posts/${chain}/byPermLink`, {params: {username, permlink}})
-  },
-  getRepliesByPermlink(chain, username, permlink) {
-    return Vue.axios.get(`/posts/${chain}/repliesByPermLink`, {params: {username, permlink}})
-  },
   createComment(chain, author, permlink, body, parentAuthor, parentPermlink) {
     return Vue.axios.post(`/posts/${chain}/comment`, {author, body, parentAuthor, parentPermlink})
   },
@@ -41,16 +35,21 @@ export default {
   params() {
     return Vue.axios.get(`/params`)
   },
-  getAccountByName(chain, username) {
-    return Vue.axios.get(`/accounts/${chain}/byName`, {params: {username}})
+
+  // GET BLOCKCHAINS PROXY OPERATIONS
+  getContent(chain, username, permlink) {
+    return Vue.axios.get(`/blockchains/${chain}/getContent`, {params: {username, permlink}})
+  },
+  getState(chain, {path}) {
+    return Vue.axios.get(`/blockchains/${chain}/getState`, {params: {path}})
   },
   getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit}) {
-    return Vue.axios.get(`/posts/${chain}/getDiscussionsByBlog`, {params: {tag, start_author, start_permlink, limit}})
+    return Vue.axios.get(`/blockchains/${chain}/getDiscussionsByBlog`, {params: {tag, start_author, start_permlink, limit}})
   },
-  getDiscussionsByAuthorBeforeDate(chain, {author, before_date, limit}) {
-    return Vue.axios.get(`/posts/${chain}/getDiscussionsByAuthorBeforeDate`, {params: {author, before_date, limit}})
+  getRepliesByPermlink(chain, username, permlink) {
+    return Vue.axios.get(`/blockchains/${chain}/repliesByPermLink`, {params: {username, permlink}})
   },
   getFollowers(chain, {following, startFollower, followType, limit}) {
-    return Vue.axios.get(`/accounts/${chain}/getFollowers`, {params: {following, startFollower, followType, limit}})
+    return Vue.axios.get(`/blockchains/${chain}/getFollowers`, {params: {following, startFollower, followType, limit}})
   }
 }

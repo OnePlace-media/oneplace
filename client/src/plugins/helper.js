@@ -100,10 +100,11 @@ export default class Helper {
   }
 
   generateProfileMeta(account, $route) {
+    const BC = $route.params.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ? 'STEEM' : 'GOLOS'
     const profile = account.meta && account.meta.profile ? account.meta.profile : {}
     const IMAGE = profile.profile_image ? process.env.BASE_API_URL + `img?l=${encodeURIComponent(profile.profile_image)}` : CONSTANTS.DEFAULT.AVATAR_IMAGE
     return {
-      title: account.name,
+      title: `@${account.name} | ${BC}`,
       meta: [
         {
           vmid: 'description',

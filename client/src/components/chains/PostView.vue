@@ -74,14 +74,14 @@
               {{post.author}}
             </a>
             <p class="author-info">{{post.author_about}}</p>
-            <no-ssr v-if="$auth && $auth.check() && account.username">
+            <!-- <no-ssr v-if="$auth && $auth.check() && account.username">
               <profile-follow-btn
                 :chain="chain"
                 :account-follower="account"
                 :account-following="postAccount"
                 type="post"
               ></profile-follow-btn>
-            </no-ssr>
+            </no-ssr> -->
           </div>
         </div>
         <div class="post-view__tags-wrapper">

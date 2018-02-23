@@ -8,7 +8,9 @@
         {{$t('profile.accountPosts', {username: account.name})}}
       </div>
     </div>
-    <div class="blog__no-posts" v-if="!posts.length">{{$t('profile.emptyBlog')}}</div>
+    <div class="blog__no-posts" v-if="!posts.length">
+      {{$t(`profile.${postsWithoutFilters.length ? 'emptyBlogByFilters' : 'emptyBlog'}`)}}
+    </div>
     <profile-blog-article
       v-for="post in posts" :key="post.id"
       :with-repost="withRepost"
@@ -142,6 +144,9 @@ export default {
     chain() {
       return this.$route.params.chain || this.$store.state.chain
     },
+    postsWithoutFilters() {
+      return this.$store.state.profile.posts.collection
+    },
     posts() {
       return this.$store.state.profile.posts.collection.filter(post => {
         let result = true
@@ -158,8 +163,12 @@ export default {
             }
             return clearTags
           }
-          const include = clearRepostsTags(this.$store.state.profile.tags.include)
-          const exclude = clearRepostsTags(this.$store.state.profile.tags.exclude)
+          const include = clearRepostsTags(
+            this.$store.state.profile.tags.include
+          )
+          const exclude = clearRepostsTags(
+            this.$store.state.profile.tags.exclude
+          )
 
           if (Object.keys(include).length && Object.keys(exclude).length)
             result =

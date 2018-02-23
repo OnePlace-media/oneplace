@@ -118,7 +118,11 @@ class BlockChainApi {
       .then(account => {
         let profile
         if (account && account.json_metadata) {
-          profile = JSON.parse(account.json_metadata).profile
+          try {
+            profile = JSON.parse(account.json_metadata).profile
+          } catch (e) {
+            profile = {}
+          }
         }
         return profile
       })

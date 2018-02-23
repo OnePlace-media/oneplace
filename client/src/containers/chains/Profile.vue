@@ -5,7 +5,9 @@
         <center><pulse-loader :loading="accountProcessing" :color="'#383838'" :size="'10px'"></pulse-loader></center>
       </no-ssr>
       <div class="blog__wrapper">
-        <div class="profile__header" v-if="!accountProcessing" :style="cover ? `background-image:url('https://steemitimages.com/2048x512/${cover}')`: ''"></div>
+        <div class="profile__header" v-if="!accountProcessing" 
+          :style="`background-image:url('${cover}')`">
+        </div>
         <div class="profile__wrapper" v-if="!accountProcessing">
           <div class="profile__avatar" :style="`background-image:url('${avatar}')`"></div>
           <div class="profile__top-block">
@@ -44,7 +46,7 @@
               {{$tc('profile.following', followCount.following_count)}}
             </div>
           </div>
-          <profile-tags-top :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost"></profile-tags-top>
+          <profile-tags-top :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost" v-if="postsExists"></profile-tags-top>
           <profile-tags-all :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost" v-if="showAllTagsModal"></profile-tags-all>
         </div>
         <profile-blog :with-repost.sync="withRepost" :account="account" v-if="!accountProcessing"></profile-blog>
@@ -82,7 +84,11 @@ export default {
           username: route.params.username
         })
         .catch(err => {
-          if (err.response && err.response.status === 500) {
+          console.log(err)
+          if (
+            (err && ~[500, 404].indexOf(err.status)) ||
+            (err.response && ~[500, 404].indexOf(err.response.status))
+          ) {
             store.commit('set404Page', true)
           }
         })
@@ -97,6 +103,9 @@ export default {
     }
   },
   computed: {
+    postsExists() {
+      return !!this.$store.state.profile.posts.collection.length
+    },
     showAllTagsModal() {
       return this.$store.state.profile.tags.showAllTags
     },
@@ -139,13 +148,18 @@ export default {
         : {}
     },
     cover() {
-      return this.profile.cover_image || ''
+      const cover = this.profile.cover_image
+      return cover
+        ? `https://steemitimages.com/2048x512/${cover}`
+        : '/static/img/header.jpg'
     },
     avatar() {
       return this.profile.profile_image || CONSTANTS.DEFAULT.AVATAR_IMAGE
     },
-    website(){
-      return this.profile.website ? this.profile.website.replace(/http(s)?:\/\//, '') : ''
+    website() {
+      return this.profile.website
+        ? this.profile.website.replace(/http(s)?:\/\//, '')
+        : ''
     },
     clearFilterInActive() {
       const checkActiveFilterTagsByRepost = tags => {

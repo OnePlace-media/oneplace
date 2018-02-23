@@ -4,7 +4,7 @@ const chainParser = require('@oneplace/blockchains-api/parser')
 module.exports = Model => {
 
   // ----- GET DISCUSSIONS BY BLOG -----
-  
+
   Model.remoteMethod('getDiscussionsByBlog', {
     accepts: [
       {arg: 'chain', type: 'string', required: true},
@@ -60,8 +60,13 @@ module.exports = Model => {
         for (let username in state.accounts) {
           state.accounts[username].reputation = chainParser.convertReputation(state.accounts[username].reputation)
           state.accounts[username].followCount = await blockChains.getFollowCount(chain, {username})
+
           if (state.accounts[username].json_metadata)
-            state.accounts[username].meta = JSON.parse(state.accounts[username].json_metadata)
+            try {
+              state.accounts[username].meta = JSON.parse(state.accounts[username].json_metadata)
+            } catch (err) {
+              state.accounts[username].meta = {}
+            }
         }
       }
 

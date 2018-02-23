@@ -152,6 +152,7 @@ module.exports = {
     posted: 'Posted',
     repostedFrom: 'Reposted from',
     emptyBlog: 'This user has not posted anything yet.',
+    emptyBlogByFilters: 'No posts matched your criteria. You can change or clear the tag filters.',
     topTags: 'Popular tags',
     showAllTags: 'Show all tags',
     clearFilters: 'Clear filters',

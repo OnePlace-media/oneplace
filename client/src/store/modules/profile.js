@@ -152,14 +152,20 @@ export default () => {
       commit(TYPES.SET_ACCOUNT_PROCESSING, true)
       return Api.getState(chain, {path: `@${username}`})
         .then(response => {
-          const posts = Object.keys(response.data.content).map(link => response.data.content[link])
-          posts.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
-          commit(TYPES.SET_CHAIN, chain)
-          commit(TYPES.SET_ACCOUNT_DATA, {data: response.data.accounts[username]})
-          commit(TYPES.SET_POSTS_DATA, {posts})
-          commit(TYPES.SET_TAGS, {username, posts})
-          commit(TYPES.SET_ACCOUNT_PROCESSING, false)
-          commit(TYPES.SET_POSTS_PROCESSING, false)
+          if (response.data.accounts[username]) {
+            const posts = Object.keys(response.data.content).map(link => response.data.content[link])
+            posts.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
+            commit(TYPES.SET_CHAIN, chain)
+            commit(TYPES.SET_ACCOUNT_DATA, {data: response.data.accounts[username]})
+            commit(TYPES.SET_POSTS_DATA, {posts})
+            commit(TYPES.SET_TAGS, {username, posts})
+            commit(TYPES.SET_ACCOUNT_PROCESSING, false)
+            commit(TYPES.SET_POSTS_PROCESSING, false)
+          } else {
+            const error = new Error('account not found')
+            error.status = 404
+            throw error
+          }
         })
     },
     fetchPostByAuthor({commit, state}, {chain, tag, start_author, start_permlink, limit}) {

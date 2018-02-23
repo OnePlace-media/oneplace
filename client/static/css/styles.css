@@ -2245,7 +2245,6 @@ hr {
   line-height: 18px;
   height: 20px;
   padding: 0px 4px;
-  margin-left: 4px;
   border: 1px solid #a8adad;
   border-radius: 3px;
 }
@@ -2906,95 +2905,95 @@ hr {
   margin-bottom: 8px;
 }
 
-.markdown {
+.markdown,.editor-preview,.editor-preview-side {
   line-height: 1.6;
   overflow: hidden;
   word-wrap: break-word;
 }
 
-.markdown ul,.markdown ol {
+.markdown ul,.editor-preview ul,.editor-preview-side ul,.markdown ol,.editor-preview ol,.editor-preview-side ol {
   padding-left: 0;
   margin-left: 2rem;
   margin-bottom: 1rem;
   line-height: 1.6;
 }
 
-.markdown h1 {
+.markdown h1,.editor-preview h1,.editor-preview-side h1 {
   font-size: 1.6em;
   margin: 2rem 0 1rem;
 }
 
-.markdown h2 {
+.markdown h2,.editor-preview h2,.editor-preview-side h2 {
   font-size: 1.4em;
   margin: 2rem 0 1rem;
 }
 
-.markdown h3 {
+.markdown h3,.editor-preview h3,.editor-preview-side h3 {
   font-size: 1.2em;
   margin: 1.5rem 0 0.75rem;
 }
 
-.markdown h4 {
+.markdown h4,.editor-preview h4,.editor-preview-side h4 {
   font-size: 1.1em;
   margin: 1.5rem 0 0.75rem;
 }
 
-.markdown h5 {
+.markdown h5,.editor-preview h5,.editor-preview-side h5 {
   font-size: 1em;
   margin: 1rem 0 0.5rem;
 }
 
-.markdown h6 {
+.markdown h6,.editor-preview h6,.editor-preview-side h6 {
   font-size: 0.9em;
   margin: 0.75rem 0 0.5rem;
 }
 
-.markdown p {
+.markdown p,.editor-preview p,.editor-preview-side p {
   font: 1em 'Noto Sans', sans-serif;
   line-height: 1.6;
   margin-bottom: 1rem;
 }
 
-.markdown strong,.markdown b {
+.markdown strong,.editor-preview strong,.editor-preview-side strong,.markdown b,.editor-preview b,.editor-preview-side b {
   font-weight: 700;
 }
 
-.markdown hr {
+.markdown hr,.editor-preview hr,.editor-preview-side hr {
   border-color: #a8adad;
   clear: both;
   margin: 1rem auto;
 }
 
-.markdown a {
+.markdown a,.editor-preview a,.editor-preview-side a {
   color: #259cb7;
   text-decoration: none;
 }
 
-.markdown a:hover,.markdown a:focus {
+.markdown a:hover,.editor-preview a:hover,.editor-preview-side a:hover,.markdown a:focus,.editor-preview a:focus,.editor-preview-side a:focus {
   color: #2ab1cf;
 }
 
-.markdown img {
+.markdown img,.editor-preview img,.editor-preview-side img {
   width: auto;
   max-width: 100%;
   height: auto;
   max-height: none;
 }
 
-.markdown blockquote {
+.markdown blockquote,.editor-preview blockquote,.editor-preview-side blockquote {
   color: #818888;
   margin: 0 0 1rem;
   padding: 0 1.5rem;
   border-left: 4px solid #cfd2d2;
 }
 
-.markdown pre>code {
+.markdown pre>code,.editor-preview pre>code,.editor-preview-side pre>code {
   display: block;
   padding: 0.5rem 0.75rem 0.75rem;
   margin-bottom: 1rem;
 }
 
-.markdown code {
+.markdown code,.editor-preview code,.editor-preview-side code {
   display: inline-block;
   font-weight: 400;
   border-radius: 3px;
@@ -3002,7 +3001,7 @@ hr {
   background: #f2f2f2;
 }
 
-.markdown table {
+.markdown table,.editor-preview table,.editor-preview-side table {
   width: 100%;
   margin-bottom: 1rem;
   border-radius: 3px;
@@ -3010,71 +3009,71 @@ hr {
   border-spacing: 0;
 }
 
-.markdown table tfoot,.markdown table thead {
+.markdown table tfoot,.editor-preview table tfoot,.editor-preview-side table tfoot,.markdown table thead,.editor-preview table thead,.editor-preview-side table thead {
   background: #f2f2f2;
 }
 
-.markdown table tbody,.markdown table tfoot,.markdown table thead {
+.markdown table tbody,.editor-preview table tbody,.editor-preview-side table tbody,.markdown table tfoot,.editor-preview table tfoot,.editor-preview-side table tfoot,.markdown table thead,.editor-preview table thead,.editor-preview-side table thead {
   border: 1px solid #f2f2f2;
 }
 
-.markdown table tbody th,.markdown table tfoot th,.markdown table thead th {
+.markdown table tbody th,.editor-preview table tbody th,.editor-preview-side table tbody th,.markdown table tfoot th,.editor-preview table tfoot th,.editor-preview-side table tfoot th,.markdown table thead th,.editor-preview table thead th,.editor-preview-side table thead th {
   text-align: left;
 }
 
-.markdown table tbody tr:nth-child(even) {
+.markdown table tbody tr:nth-child(even),.editor-preview table tbody tr:nth-child(even),.editor-preview-side table tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-.markdown table th,.markdown table td {
+.markdown table th,.editor-preview table th,.editor-preview-side table th,.markdown table td,.editor-preview table td,.editor-preview-side table td {
   word-break: normal;
   vertical-align: middle;
   padding: 0.5rem;
 }
 
-.markdown table img {
+.markdown table img,.editor-preview table img,.editor-preview-side table img {
   vertical-align: middle;
 }
 
-.markdown div.pull-left {
+.markdown div.pull-left,.editor-preview div.pull-left,.editor-preview-side div.pull-left {
   float: left;
   padding-right: 1rem;
   max-width: 50%;
 }
 
-.markdown div.pull-right {
+.markdown div.pull-right,.editor-preview div.pull-right,.editor-preview-side div.pull-right {
   float: right;
   padding-left: 1rem;
   max-width: 50%;
 }
 
-.markdown div.text-justify {
+.markdown div.text-justify,.editor-preview div.text-justify,.editor-preview-side div.text-justify {
   text-align: justify;
 }
 
-.markdown div.text-right {
+.markdown div.text-right,.editor-preview div.text-right,.editor-preview-side div.text-right {
   text-align: right;
 }
 
-.markdown div.text-center {
+.markdown div.text-center,.editor-preview div.text-center,.editor-preview-side div.text-center {
   text-align: center;
 }
 
-.markdown div.text-rtl {
+.markdown div.text-rtl,.editor-preview div.text-rtl,.editor-preview-side div.text-rtl {
   direction: rtl;
 }
 
-.markdown .video-wrapper {
+.markdown .video-wrapper,.editor-preview .video-wrapper,.editor-preview-side .video-wrapper {
   width: 100%;
   margin-bottom: 1rem;
   position: relative;
 }
 
-.markdown iframe {
+.markdown iframe,.editor-preview iframe,.editor-preview-side iframe {
   max-width: 100%;
 }
 
-.markdown >*:last-child {
+.markdown >*:last-child,.editor-preview >*:last-child,.editor-preview-side >*:last-child {
   margin-bottom: 0;
 }
 
@@ -3096,10 +3095,10 @@ hr {
   -webkit-flex-basis: 100%;
   -ms-flex-preferred-size: 100%;
   flex-basis: 100%;
-  height: 96px;
+  height: 124px;
   background-position: 50% 0;
   background-repeat: no-repeat;
-  background-color: #cfd2d2;
+  background-color: #f2f2f2;
   background-size: cover;
   margin-bottom: 24px;
 }
@@ -3137,10 +3136,14 @@ hr {
   margin-bottom: 8px;
 }
 
+.profile__name:last-child {
+  margin-bottom: 0;
+}
+
 .profile__reputation {
   display: inline-block;
   position: absolute;
-  top: 14px;
+  top: 16px;
   right: 16px;
   background: #fff;
   font-size: 12px;
@@ -3181,6 +3184,7 @@ hr {
 }
 
 .btn-follow--post {
+  display: none;
   width: 50%;
 }
 
@@ -3550,7 +3554,7 @@ hr {
   -webkit-flex: none;
   -ms-flex: none;
   flex: none;
-  height: 166.8726823238566px;
+  height: 167px;
   border-right: 1px solid #f2f2f2;
   background-position: 50% 0;
   background-repeat: no-repeat;
@@ -3644,30 +3648,51 @@ hr {
   top: 5px;
 }
 
+.publish__input-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: baseline;
+  -webkit-align-items: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+}
+
+.publish__input-name {
+  width: 86px;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: right;
+  padding-right: 16px;
+}
+
+.publish__input-field {
+  position: relative;
+  width: 914px;
+  padding-right: 40px;
+  padding-bottom: 16px;
+}
+
 .login-form__item--publish {
   position: relative;
 }
 
-.publish__input--title {
-  width: calc(100% - 40px);
+.publish__info-button {
+  position: absolute;
+  top: 0;
+  right: 0;
   font-size: 18px;
-  font-weight: 700;
-}
-
-.info-button {
-  float: right;
-  width: 20px;
-  height: 20px;
-  margin: 10px;
-  background: url("/static/img/info-button.svg") 50% 50% no-repeat transparent;
-  background-size: 20px 20px;
-  opacity: 0.75;
+  color: #a8adad;
+  width: 16px;
+  height: 18px;
+  margin: 8px 12px;
   transition: all 0.3s ease;
 }
 
-.info-button:hover {
+.publish__info-button:hover {
   cursor: pointer;
-  opacity: 1;
+  color: #818888;
 }
 
 .publish__info-alert {
@@ -3676,11 +3701,10 @@ hr {
   width: max-content;
   margin-top: 8px;
   font-size: 12px;
-  color: #818888;
-  padding: 4px 16px;
-  background: #f6f6f6;
-  border: 1px solid #c3e6cb;
-  border-radius: 5px;
+  color: #383838;
+  padding: 8px 16px;
+  background: #d4edda;
+  border-radius: 3px;
 }
 
 #post-body {
@@ -3700,6 +3724,48 @@ hr {
 
 .publish__setup-block {
   width: 50%;
+}
+
+.publish__post-btn-group {
+  padding-left: 86px;
+}
+
+.editor-toolbar {
+  border-radius: 0 !important;
+  border-top: 1px solid #cfd2d2 !important;
+  border-left: 1px solid #cfd2d2 !important;
+  border-right: 1px solid #cfd2d2 !important;
+}
+
+.editor-toolbar:before {
+  margin-bottom: 3px !important;
+}
+
+.editor-toolbar:after {
+  margin-top: 3px !important;
+}
+
+.editor-toolbar.fullscreen {
+  top: 59px !important;
+}
+
+.editor-toolbar a {
+  outline: none;
+}
+
+.CodeMirror {
+  color: #383838 !important;
+  border: 1px solid #cfd2d2 !important;
+  border-radius: 0 !important;
+}
+
+.CodeMirror-fullscreen,.editor-preview-side {
+  top: 109px !important;
+}
+
+.editor-preview,.editor-preview-side {
+  padding: 16px !important;
+  background: #fff !important;
 }
 
 .guides-wrapper {

@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="blog__no-posts" v-if="!posts.length">
-      {{$t(`profile.${postsWithoutFilters.length ? 'emptyBlogByFilters' : 'emptyBlog'}`)}}
+      {{$t(`profile.${messageOfEmptyPosts}`)}}
     </div>
     <profile-blog-article
       v-for="post in posts" :key="post.id"
@@ -125,6 +125,16 @@ export default {
     }
   },
   computed: {
+    messageOfEmptyPosts(){
+      let message
+      if(this.withRepost){
+        message = this.postsWithoutFilters.length ? 'emptyBlogByFilters' : 'emptyBlog'
+      } else {
+        message = this.postsWithoutRepost.length ? 'emptyBlogByFilters' : 'emptyBlog'
+      }
+
+      return message
+    },
     accountsByChain() {
       return this.accounts.filter(acc => acc.chain === this.chain)
     },
@@ -147,38 +157,40 @@ export default {
     postsWithoutFilters() {
       return this.$store.state.profile.posts.collection
     },
+    postsWithoutRepost() {
+      return this.$store.state.profile.posts.collection.filter(
+        post => post.author === this.account.name
+      )
+    },
     posts() {
-      return this.$store.state.profile.posts.collection.filter(post => {
-        let result = true
-        if (!this.withRepost && post.author !== this.account.name)
-          result = false
-        else {
-          const clearRepostsTags = tags => {
-            let clearTags = Object.assign({}, tags)
-            if (!this.withRepost) {
-              clearTags = Object.keys(clearTags).reduce((obj, tagName) => {
-                if (clearTags[tagName].owner) obj[tagName] = clearTags[tagName]
-                return obj
-              }, {})
-            }
-            return clearTags
-          }
-          const include = clearRepostsTags(
-            this.$store.state.profile.tags.include
-          )
-          const exclude = clearRepostsTags(
-            this.$store.state.profile.tags.exclude
-          )
+      const posts = this.withRepost
+        ? this.postsWithoutFilters
+        : this.postsWithoutRepost
 
-          if (Object.keys(include).length && Object.keys(exclude).length)
-            result =
-              post.tags.every(tag => !exclude[tag]) &&
-              post.tags.some(tag => include[tag])
-          else if (Object.keys(include).length)
-            result = post.tags.some(tag => include[tag])
-          else if (Object.keys(exclude).length)
-            result = post.tags.every(tag => !exclude[tag])
+      return posts.filter(post => {
+        let result = true
+        const clearRepostsTags = tags => {
+          let clearTags = Object.assign({}, tags)
+          if (!this.withRepost) {
+            clearTags = Object.keys(clearTags).reduce((obj, tagName) => {
+              if (clearTags[tagName].owner) obj[tagName] = clearTags[tagName]
+              return obj
+            }, {})
+          }
+          return clearTags
         }
+        const include = clearRepostsTags(this.$store.state.profile.tags.include)
+        const exclude = clearRepostsTags(this.$store.state.profile.tags.exclude)
+
+        if (Object.keys(include).length && Object.keys(exclude).length)
+          result =
+            post.tags.every(tag => !exclude[tag]) &&
+            post.tags.some(tag => include[tag])
+        else if (Object.keys(include).length)
+          result = post.tags.some(tag => include[tag])
+        else if (Object.keys(exclude).length)
+          result = post.tags.every(tag => !exclude[tag])
+
         return result
       })
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="profile__tags-filter" :class="{'profile__tags-filter--fixed': fixed}">
+  <div class="profile__tags-filter" :class="{'profile__tags-filter--fixed': fixed}" v-show="tagsTop.length">
     <h4 class="h4 tags-filter__title">{{$t('profile.topTags')}}</h4>
     <div class="tags-list__wrapper">
       <span 
@@ -52,8 +52,11 @@ export default {
   methods: {
     scrollHandler() {
       const elTop = this.$el.getBoundingClientRect().top
-      const bottomBlockTop = document.getElementById('profile__bottom-block').getBoundingClientRect().top
-      this.fixed = this.$el.getBoundingClientRect().top <= 70 && bottomBlockTop < -70
+      const bottomBlockTop = document
+        .getElementById('profile__bottom-block')
+        .getBoundingClientRect().top
+      this.fixed =
+        this.$el.getBoundingClientRect().top <= 70 && bottomBlockTop < -70
     },
     showAllTags() {
       this.$store.commit('profile/SET_SHOW_ALL_TAGS', true)

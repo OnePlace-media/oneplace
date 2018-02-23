@@ -46,7 +46,7 @@
               {{$tc('profile.following', followCount.following_count)}}
             </div>
           </div>
-          <profile-tags-top :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost" v-if="postsExists"></profile-tags-top>
+          <profile-tags-top :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost"></profile-tags-top>
           <profile-tags-all :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost" v-if="showAllTagsModal"></profile-tags-all>
         </div>
         <profile-blog :with-repost.sync="withRepost" :account="account" v-if="!accountProcessing"></profile-blog>
@@ -84,7 +84,6 @@ export default {
           username: route.params.username
         })
         .catch(err => {
-          console.log(err)
           if (
             (err && ~[500, 404].indexOf(err.status)) ||
             (err.response && ~[500, 404].indexOf(err.response.status))
@@ -103,9 +102,6 @@ export default {
     }
   },
   computed: {
-    postsExists() {
-      return !!this.$store.state.profile.posts.collection.length
-    },
     showAllTagsModal() {
       return this.$store.state.profile.tags.showAllTags
     },

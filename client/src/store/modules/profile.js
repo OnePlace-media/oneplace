@@ -172,13 +172,11 @@ export default () => {
       commit(TYPES.SET_POSTS_PROCESSING, true)
       return Api.getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit})
         .then(response => {
-          if (state.account.data.name === start_author) {
             response.data.shift()
             const posts = response.data
             commit(TYPES.APPEND_POSTS_DATA, {posts})
             commit(TYPES.APPEND_TAGS, {username: start_author, posts})
             commit(TYPES.SET_POSTS_PROCESSING, false)
-          }
           return response.data
         })
     }

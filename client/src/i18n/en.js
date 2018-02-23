@@ -148,7 +148,7 @@ module.exports = {
     posts: 'Posts | Post | Posts',
     followers: 'No followers | Follower | Followers',
     allPosts: 'All posts',
-    accountPosts: 'Posts {username}',
+    accountPosts: 'Posts by {username}',
     posted: 'Posted',
     repostedFrom: 'Reposted from',
     emptyBlog: 'This user has not posted anything yet.',

@@ -69,12 +69,13 @@ export default {
       const posts = this.$store.state.profile.posts.collection
       if (!this.postsProcessing) {
         if (this.posts.length) {
+          const lastPost = posts[posts.length - 1]
           this.$store
             .dispatch('profile/fetchPostByAuthor', {
               chain: this.$route.params.chain,
               tag: this.$route.params.username,
-              start_author: this.$route.params.username,
-              start_permlink: posts[posts.length - 1].permlink,
+              start_author: lastPost.author,
+              start_permlink: lastPost.permlink,
               limit: LIMIT + 1
             })
             .then(posts => {
@@ -92,7 +93,7 @@ export default {
           $state.loaded()
           $state.complete()
         }
-      } else setTimeout($state.loaded, 200)
+      } else setTimeout($state.loaded, 2000)
     },
     showPost(post) {
       const chain = this.chain

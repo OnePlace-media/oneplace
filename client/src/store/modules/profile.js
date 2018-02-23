@@ -154,7 +154,11 @@ export default () => {
         .then(response => {
           if (response.data.accounts[username]) {
             const posts = Object.keys(response.data.content).map(link => response.data.content[link])
-            posts.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
+            posts.sort((a, b) => {
+              const aCreated = a.first_reblogged_on || a.created
+              const bCreated = b.first_reblogged_on || b.created
+              return new Date(bCreated).getTime() - new Date(aCreated).getTime()
+            })
             commit(TYPES.SET_CHAIN, chain)
             commit(TYPES.SET_ACCOUNT_DATA, {data: response.data.accounts[username]})
             commit(TYPES.SET_POSTS_DATA, {posts})
@@ -172,11 +176,13 @@ export default () => {
       commit(TYPES.SET_POSTS_PROCESSING, true)
       return Api.getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit})
         .then(response => {
+          if (tag === state.account.data.name) {
             response.data.shift()
             const posts = response.data
             commit(TYPES.APPEND_POSTS_DATA, {posts})
             commit(TYPES.APPEND_TAGS, {username: start_author, posts})
             commit(TYPES.SET_POSTS_PROCESSING, false)
+          }
           return response.data
         })
     }

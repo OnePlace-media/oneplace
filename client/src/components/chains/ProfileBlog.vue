@@ -1,17 +1,14 @@
 <template>
   <section class="blog">
-    <div class="blog__header">
+    <!-- <div class="blog__header">
       <div class="blog__header-tab" :class="{'blog__header-tab--active': withRepost}" @click="$emit('update:withRepost', true)">
         {{$t('profile.allPosts')}}
       </div>
       <div class="blog__header-tab" :class="{'blog__header-tab--active': !withRepost}" @click="$emit('update:withRepost', false)">
         {{$t('profile.accountPosts', {username: account.name})}}
       </div>
-    </div>
-    <keep-alive>
-      <profile-blog-posts v-if="withRepost" :with-repost="withRepost" :account="account" @show="showPost"></profile-blog-posts>
-      <profile-blog-posts v-if="!withRepost" :with-repost="withRepost" :account="account" @show="showPost"></profile-blog-posts>
-    </keep-alive>
+    </div> -->
+    <profile-blog-posts :with-repost="withRepost" :account="account" @show="showPost"></profile-blog-posts>
   </section>
 </template>
 

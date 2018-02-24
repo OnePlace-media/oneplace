@@ -115,11 +115,6 @@ export default () => {
       state.tags.collection.sort(sortTags)
     },
     [TYPES.APPEND_TAGS](state, {username, posts}) {
-      posts = posts.filter(post => {
-        const result = !!state.tags.postIds[post.id]
-        state.tags.postIds[post.id] = true
-        return result
-      })
       getTagsFromPosts(username, posts).forEach(_tag => {
         const findIndex = state.tags.collection.findIndex(tag => tag.text === _tag.text)
         if (~findIndex) {

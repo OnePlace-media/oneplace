@@ -83,12 +83,12 @@ export default {
           chain: route.params.chain,
           username: route.params.username
         })
-        .then(() =>
-          store.dispatch('profile/fetchPostByAuthor', {
-            chain: route.params.chain,
-            author: route.params.username
-          })
-        )
+        // .then(() =>
+        //   store.dispatch('profile/fetchPostByAuthor', {
+        //     chain: route.params.chain,
+        //     author: route.params.username
+        //   })
+        // )
         .catch(err => {
           if (
             (err && ~[500, 404].indexOf(err.status)) ||

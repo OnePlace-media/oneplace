@@ -136,7 +136,6 @@ export default {
       return this.$store.state.profile.postsAuthor.collection
     },
     posts() {
-      console.log(this.$store.state.profile)
       const posts = this.withRepost
         ? this.postsWithoutFilters
         : this.postsWithoutRepost

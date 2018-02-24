@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     showPost(post) {
-      const chain = this.chain
+      const chain = this.$route.params.chain
       if (!this.postLoading) {
         this.postLoading = true
         const target = {

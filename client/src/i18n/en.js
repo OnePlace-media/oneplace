@@ -157,7 +157,8 @@ module.exports = {
     showAllTags: 'Show all tags',
     clearFilters: 'Clear filters',
     allTags: 'All tags',
-    removeTag: 'Remove tag'
+    removeTag: 'Remove tag',
+    accBlogs:'{username}\'s blog'
   },
   auth: {
     SignIn: 'Log in',

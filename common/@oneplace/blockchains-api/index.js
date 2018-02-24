@@ -33,15 +33,17 @@ function _call(chain, method, params, noCache) {
     if (cache[cacheKey] && !noCache) {
       resolve(cache[cacheKey])
     } else {
+      const json = {
+        id: 1,
+        method,
+        params,
+        jsonrpc: "2.0"
+      }
+      
       request({
         url: `http://${clientsURL[chain]}`,
         method: 'POST',
-        json: {
-          id: 1,
-          method,
-          params,
-          jsonrpc: "2.0"
-        }
+        json
       }, (err, res, body) => {
         if (err) reject(err)
         else {

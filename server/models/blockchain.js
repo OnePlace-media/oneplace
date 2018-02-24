@@ -1,7 +1,62 @@
 const blockChains = require('@oneplace/blockchains-api')
 const chainParser = require('@oneplace/blockchains-api/parser')
+const CONSTANTS = require('@oneplace/constants')
 
 module.exports = Model => {
+
+  // ----- GET DISCUSSIONS BY AUTHOR BEFORE DATE -----
+
+  Model.remoteMethod('getDiscussionsByAuthorBeforeDate', {
+    accepts: [
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'author', type: 'string', required: true},
+      {arg: 'start_permlink', type: 'string', required: false},
+      {arg: 'before_date', type: 'string', required: false},
+      {arg: 'limit', type: 'string', default: 10}
+    ],
+    returns: {arg: 'body', type: 'array', root: true},
+    http: {path: '/:chain(g|s)/getDiscussionsByAuthorBeforeDate', verb: 'get'}
+  })
+
+  Model.getDiscussionsByAuthorBeforeDate = async function(chain, author, start_permlink, before_date, limit) {
+    if (!before_date) before_date = new Date().toISOString().split('.')[0]
+    let posts = await blockChains.getDiscussionsByAuthorBeforeDate(chain, {author, start_permlink, before_date, limit})
+    if (posts && posts.length)
+      posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+    return posts || []
+  }
+
+  // ----- GET DISCUSSIONS BY CREATED -----
+
+  Model.remoteMethod('getDiscussionsByCreated', {
+    accepts: [
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'author', type: 'string', required: true},
+      {arg: 'start_permlink', type: 'string', required: false},
+      {arg: 'limit', type: 'string', default: 10}
+    ],
+    returns: {arg: 'body', type: 'array', root: true},
+    http: {path: '/:chain(g|s)/getDiscussionsByCreated', verb: 'get'}
+  })
+
+  Model.getDiscussionsByCreated = async function(chain, author, start_permlink = '', limit = 10) {
+    const params = {
+      limit
+    }
+    if (start_permlink) {
+      params.start_permlink = start_permlink
+      params.start_author = author
+    }
+    if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
+      params.select_authors = [author]
+    else
+      params.tag = author
+
+    let posts = await blockChains.getDiscussionsByCreated(chain, params)
+    if (posts && posts.length)
+      posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+    return posts || []
+  }
 
   // ----- GET DISCUSSIONS BY BLOG -----
 

@@ -13,7 +13,7 @@
       @show="showPost"
     ></profile-blog-article>
     <no-ssr>
-      <infinite-loading @infinite="infiniteHandler">
+      <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
         <center slot="spinner">
           <br><pulse-loader :color="'#383838'" :size="'10px'"></pulse-loader><br>
         </center>
@@ -43,6 +43,11 @@ export default {
     withRepost: {
       type: Boolean,
       required: true
+    }
+  },
+  data() {
+    return {
+      complete: false
     }
   },
   methods: {
@@ -80,11 +85,13 @@ export default {
             $state.loaded()
             if (posts.length < LIMIT) {
               $state.complete()
+              this.complete = true
             }
           })
           .catch(err => {
             $state.loaded()
             $state.complete()
+            this.complete = true
             this.$toast.bottom(this.$t(`errors.failedAppendPostByAuthor`))
           })
       } else setTimeout($state.loaded, 2000)
@@ -135,7 +142,7 @@ export default {
         ? this.postsWithoutFilters
         : this.postsWithoutRepost
 
-      return posts.filter(post => {
+      let postsFilter = posts.filter(post => {
         let result = true
         const clearRepostsTags = tags => {
           let clearTags = Object.assign({}, tags)
@@ -158,9 +165,16 @@ export default {
           result = post.tags.some(tag => include[tag])
         else if (Object.keys(exclude).length)
           result = post.tags.every(tag => !exclude[tag])
-
         return result
       })
+
+      if (postsFilter.length < LIMIT && !this.complete) {
+        this.$nextTick(() => {
+          this.$refs.infiniteLoading.attemptLoad()
+        })
+      }
+
+      return postsFilter
     },
     postsProcessing() {
       return this.withRepost

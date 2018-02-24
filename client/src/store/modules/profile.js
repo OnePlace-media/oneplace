@@ -12,6 +12,10 @@ const TYPES = {
   SET_POSTS_DATA: 'SET_POSTS_DATA',
   APPEND_POSTS_DATA: 'APPEND_POSTS_DATA',
 
+  SET_POSTS_AUTHOR_PROCESSING: 'SET_POSTS_AUTHOR_PROCESSING',
+  SET_POSTS_AUTHOR_DATA: 'SET_POSTS_AUTHOR_DATA',
+  APPEND_POSTS_AUTHOR_DATA: 'APPEND_POSTS_AUTHOR_DATA',
+
   SET_TAGS: 'SET_TAGS',
   APPEND_TAGS: 'APPEND_TAGS',
   SET_SHOW_ALL_TAGS: 'SET_SHOW_ALL_TAGS',
@@ -59,7 +63,12 @@ export default () => {
       processing: true,
       collection: []
     },
+    postsAuthor: {
+      processing: true,
+      collection: []
+    },
     tags: {
+      postIds: [],
       collection: [],
       showAllTags: false,
       include: {},
@@ -91,11 +100,26 @@ export default () => {
       state.posts.collection = posts
     },
 
+    [TYPES.SET_POSTS_AUTHOR_PROCESSING](state, flag) {
+      state.postsAuthor.processing = flag
+    },
+    [TYPES.APPEND_POSTS_AUTHOR_DATA](state, {posts}) {
+      state.postsAuthor.collection = [...state.postsAuthor.collection, ...posts]
+    },
+    [TYPES.SET_POSTS_AUTHOR_DATA](state, {posts}) {
+      state.postsAuthor.collection = posts
+    },
+
     [TYPES.SET_TAGS](state, {username, posts}) {
       state.tags.collection = getTagsFromPosts(username, posts)
       state.tags.collection.sort(sortTags)
     },
     [TYPES.APPEND_TAGS](state, {username, posts}) {
+      posts = posts.filter(post => {
+        const result = !!state.tags.postIds[post.id]
+        state.tags.postIds[post.id] = true
+        return result
+      })
       getTagsFromPosts(username, posts).forEach(_tag => {
         const findIndex = state.tags.collection.findIndex(tag => tag.text === _tag.text)
         if (~findIndex) {
@@ -140,10 +164,12 @@ export default () => {
       state.tags.showAllTags = false
       state.tags.include = {}
       state.tags.exclude = {}
+      state.tags.postIds = {}
 
       state.chain = null
       state.account.data = {}
       state.posts.collection = []
+      state.postsAuthor.collection = []
     }
   }
 
@@ -172,7 +198,7 @@ export default () => {
           }
         })
     },
-    fetchPostByAuthor({commit, state}, {chain, tag, start_author, start_permlink, limit}) {
+    fetchPostByBlog({commit, state}, {chain, tag, start_author, start_permlink, limit}) {
       commit(TYPES.SET_POSTS_PROCESSING, true)
       return Api.getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit})
         .then(response => {
@@ -182,6 +208,20 @@ export default () => {
             commit(TYPES.APPEND_POSTS_DATA, {posts})
             commit(TYPES.APPEND_TAGS, {username: start_author, posts})
             commit(TYPES.SET_POSTS_PROCESSING, false)
+          }
+          return response.data
+        })
+    },
+    fetchPostByAuthor({commit, state}, {chain, author, start_permlink, limit}) {
+      commit(TYPES.SET_POSTS_AUTHOR_PROCESSING, true)
+      return Api.getDiscussionsByCreated(chain, {author, start_permlink, limit})
+        .then(response => {
+          if (author === state.account.data.name) {
+            response.data.shift()
+            const posts = response.data
+            commit(TYPES.APPEND_POSTS_AUTHOR_DATA, {posts})
+            commit(TYPES.APPEND_TAGS, {username: author, posts})
+            commit(TYPES.SET_POSTS_AUTHOR_PROCESSING, false)
           }
           return response.data
         })

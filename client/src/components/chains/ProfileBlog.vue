@@ -1,13 +1,13 @@
 <template>
   <section class="blog">
-    <!-- <div class="blog__header">
-      <div class="blog__header-tab" :class="{'blog__header-tab--active': withRepost}" @click="$emit('update:withRepost', true)">
-        {{$t('profile.allPosts')}}
+    <div class="blog__header">
+      <div class="blog__header-tab" :class="{'blog__header-tab--active': withRepost}">
+        {{$t('profile.accBlogs',{username: name})}}
       </div>
-      <div class="blog__header-tab" :class="{'blog__header-tab--active': !withRepost}" @click="$emit('update:withRepost', false)">
+      <!-- <div class="blog__header-tab" :class="{'blog__header-tab--active': !withRepost}" @click="$emit('update:withRepost', false)">
         {{$t('profile.accountPosts', {username: account.name})}}
-      </div>
-    </div> -->
+      </div> -->
+    </div>
     <profile-blog-posts :with-repost="withRepost" :account="account" @show="showPost"></profile-blog-posts>
   </section>
 </template>
@@ -41,6 +41,12 @@ export default {
       chain: this.$route.params.chain,
       $chains: this.$chains
     })
+  },
+  computed: {
+    name() {
+      const str = this.account.name
+      return str.charAt(0).toUpperCase() + str.substr(1, str.length - 1)
+    }
   },
   methods: {
     showPost(post) {

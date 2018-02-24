@@ -158,7 +158,8 @@ module.exports = {
     showAllTags: 'Все теги',
     allTags: 'Все теги',
     clearFilters: 'Сбросить фильтры',
-    removeTag: 'Исключить тег'
+    removeTag: 'Исключить тег',
+    accBlogs: 'Блог {username}'
   },
   auth: {
     SignIn: 'Войти',

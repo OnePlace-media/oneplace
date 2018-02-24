@@ -52,46 +52,38 @@ export default {
         : this.$store.state.profile.postsAuthor.collection
 
       if (!this.postsProcessing) {
-        if (this.posts.length >= LIMIT) {
-          let lastPost = (lastPost = posts[posts.length - 1])
-          let dispatchPromise
-          if (this.withRepost) {
-            dispatchPromise = this.$store.dispatch('profile/fetchPostByBlog', {
-              chain: this.chain,
-              tag: this.$route.params.username,
-              start_author: lastPost.author,
-              start_permlink: lastPost.permlink,
-              limit: LIMIT + 1
-            })
-          } else {
-            dispatchPromise = this.$store.dispatch(
-              'profile/fetchPostByAuthor',
-              {
-                chain: this.chain,
-                author: this.$route.params.username,
-                before_date: lastPost.created.replace('+00:00', ''),
-                start_permlink: lastPost.permlink,
-                limit: LIMIT + 1
-              }
-            )
-          }
-
-          dispatchPromise
-            .then(posts => {
-              $state.loaded()
-              if (posts.length < LIMIT) {
-                $state.complete()
-              }
-            })
-            .catch(err => {
-              $state.loaded()
-              $state.complete()
-              this.$toast.bottom(this.$t(`errors.failedAppendPostByAuthor`))
-            })
+        let lastPost = (lastPost = posts[posts.length - 1])
+        let dispatchPromise
+        if (this.withRepost) {
+          dispatchPromise = this.$store.dispatch('profile/fetchPostByBlog', {
+            chain: this.chain,
+            tag: this.$route.params.username,
+            start_author: lastPost.author,
+            start_permlink: lastPost.permlink,
+            limit: LIMIT + 1
+          })
         } else {
-          $state.loaded()
-          $state.complete()
+          dispatchPromise = this.$store.dispatch('profile/fetchPostByAuthor', {
+            chain: this.chain,
+            author: this.$route.params.username,
+            before_date: lastPost.created.replace('+00:00', ''),
+            start_permlink: lastPost.permlink,
+            limit: LIMIT + 1
+          })
         }
+
+        dispatchPromise
+          .then(posts => {
+            $state.loaded()
+            if (posts.length < LIMIT) {
+              $state.complete()
+            }
+          })
+          .catch(err => {
+            $state.loaded()
+            $state.complete()
+            this.$toast.bottom(this.$t(`errors.failedAppendPostByAuthor`))
+          })
       } else setTimeout($state.loaded, 2000)
     }
   },

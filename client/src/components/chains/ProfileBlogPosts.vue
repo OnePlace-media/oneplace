@@ -170,7 +170,9 @@ export default {
 
       if (postsFilter.length < LIMIT && !this.complete) {
         this.$nextTick(() => {
-          this.$refs.infiniteLoading.attemptLoad()
+          if (this.$refs.infiniteLoading) {
+            this.$refs.infiniteLoading.attemptLoad()
+          }
         })
       }
 

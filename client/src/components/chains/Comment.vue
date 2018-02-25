@@ -8,7 +8,7 @@
           {{item.author}}
         </router-link> -->
         <a 
-          :href="`/@${chain}/${item.author}`" 
+          :href="`/${chain}/@${item.author}`" 
           @click.prevent="goToProfile(item.author)"
           class="link link--op">
             {{item.author}}
@@ -17,16 +17,16 @@
       </div>
       <div class="comment__body markdown markdown--small" v-html="item.body"></div>
        <post-bottom 
-            type="comment"
-            :post="item" 
-            :account="account" 
-            :chain="chain"
-            @vote="vote"
-            @reply="reply"
-            :is-max-deep="isMaxDeep"
-            :up-vote-processing="upVoteProcessing"
-            :down-vote-processing="downVoteProcessing"
-          ></post-bottom>
+          type="comment"
+          :post="item" 
+          :account="account" 
+          :chain="chain"
+          @vote="vote"
+          @reply="reply"
+          :is-max-deep="isMaxDeep"
+          :up-vote-processing="upVoteProcessing"
+          :down-vote-processing="downVoteProcessing"
+        ></post-bottom>
     </div>
   </div>
   <div class="comment__replies">
@@ -66,6 +66,10 @@ export default {
   components: {
     CommentForm,
     PostBottom
+  },
+  mounted() {
+    // fix for v-html with iframe
+    this.$helper.videoWrapperHandler()
   },
   methods: {
     goToProfile(username) {

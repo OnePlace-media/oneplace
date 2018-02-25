@@ -27,22 +27,27 @@ export default {
     pendingPayout() {
       const isGolos = this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS
       const result = []
+      const pending_payout = this.post.pending_payout || 0
+      const pending_payout_value = this.post.pending_payout_value || 0
+
       if (isGolos) {
-        result.push(this.$n(this.post.pending_payout, 'currency', 'ru'))
-        result.push(`(${this.post.pending_payout_value} GBG)`)
+        result.push(this.$n(pending_payout, 'currency', 'ru'))
+        result.push(`(${pending_payout_value} GBG)`)
       } else {
-        result.push(`${this.post.pending_payout_value} SBD`)
+        result.push(`${pending_payout_value} SBD`)
       }
       return result.join(' ')
     },
     readyPayout() {
       const isGolos = this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS
       const result = []
-      if (isGolos) {
-        result.push(this.$n(this.post.total_payout, 'currency', 'ru'))
-        result.push(`(${this.post.total_payout_value.toFixed(3)} GBG)`)
+      const total_payout = this.post.total_payout || 0
+      const total_payout_value = this.post.total_payout_value || 0
+       if (isGolos) {
+        result.push(this.$n(total_payout, 'currency', 'ru'))
+        result.push(`(${!total_payout_value.toFixed ? 0.00 : total_payout_value.toFixed(3)} GBG)`)
       } else {
-        result.push(`${this.post.total_payout_value.toFixed(3)} SBD`)
+        result.push(`${!total_payout_value.toFixed ? 0.00 : total_payout_value.toFixed(3)} SBD`)
       }
       return result.join(' ')
     }

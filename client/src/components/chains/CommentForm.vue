@@ -26,9 +26,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import Api from '../../plugins/api'
 import Remarkable from 'remarkable'
 import CONSTANTS from '@oneplace/constants'
+const parser = require('@oneplace/blockchains-api/parser')
 
 const md = new Remarkable({
   html: true,
@@ -71,7 +73,14 @@ export default {
       return result
     },
     preview() {
-      return md.render(this.body)
+      return parser.prepareHTML(this.chain, this.body).html // md.render(this.body)
+    }
+  },
+  watch: {
+    preview() {
+      Vue.nextTick(() => {
+        this.$helper.videoWrapperHandler()
+      })
     }
   },
   methods: {
@@ -92,6 +101,8 @@ export default {
         this.processing = false
         this.body = ''
         this.$emit('success', response.data)
+        // fix for v-html with iframe
+        this.$helper.videoWrapperHandler()
       })
     }
   }

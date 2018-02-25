@@ -125,17 +125,7 @@ export default {
     })
 
     // fix for v-html with iframe
-    const videoWrappers = document.getElementsByClassName('video-wrapper')
-    for (let i = 0, len = videoWrappers.length; i < len; i++) {
-      let videoWrapper = videoWrappers[i]
-      const iframe = document.createElement('IFRAME')
-      iframe.src = videoWrapper.dataset.src
-      iframe.width = 560
-      iframe.height = 310
-      iframe.frameBorder = 0
-      iframe.setAttribute('allowfullscreen', '')
-      videoWrapper.appendChild(iframe)
-    }
+    this.$helper.videoWrapperHandler()
   },
   data() {
     return {

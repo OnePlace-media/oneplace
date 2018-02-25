@@ -49,7 +49,11 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: [
+          /node_modules/,
+          /SanitizeConfig/,
+          /blockchains-api\/parser/
+        ]
       },
       {
         test: /\.(png|jpg|gif|svg)$/,

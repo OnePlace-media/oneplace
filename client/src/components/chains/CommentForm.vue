@@ -100,6 +100,8 @@ export default {
       ).then(response => {
         this.processing = false
         this.body = ''
+        response.data.body = parser.prepareHTML(this.chain, response.data.body).html
+        response.data.total_payout_value = '0'
         this.$emit('success', response.data)
         // fix for v-html with iframe
         this.$helper.videoWrapperHandler()

@@ -260,12 +260,12 @@ class TrendsWatcher {
           self.redis.zrangebyscore([KEYS.TOP_TAGS, chain].join(':'), '-inf', '+inf', 'LIMIT', 0, 100, (err, tags) => {
             if (err) reject(err)
             else {
-              Promise.all(tags.map(tag => {
-                return Promise.all([
+              tags.reduce((p, tag) => {
+                return p.then(() => Promise.all([
                   self.getTrendsByTag(chain, tag, [], true),
                   self.getTrendsByRecent(chain, tag, true)
-                ])
-              }))
+                ]))
+              }, Promise.resolve())
                 .then(() => {
                   resolve()
                 })

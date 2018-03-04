@@ -41,7 +41,7 @@
       </a>{{dislikeVotes}}
     </span>
     <span class="post-view__post-data-item" v-if="isPost || isBlog">
-      <a class="post-view__post-reply" :title="$t('common.reply')" @click="focusToComment" v-scroll-to="'#comment-input-root'">
+      <a class="post-view__post-reply" :title="$t('common.reply')" @click.prevent="focusToComment" v-scroll-to="'#comment-input-root'">
         <svg 
           class="post-view__icon post-view__icon-comment"
           :class="{'post-view__icon--small': isBlog}">
@@ -107,6 +107,7 @@ export default {
     focusToComment() {
       const commentInputRoot = document.getElementById('comment-input-root')
       if (commentInputRoot) commentInputRoot.focus()
+      else this.$emit('focus')
     }
   },
   computed: {

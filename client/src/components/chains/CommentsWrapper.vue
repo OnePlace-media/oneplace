@@ -1,5 +1,5 @@
 <template>
-  <div class="post-view__comments-wrapper">
+  <div class="post-view__comments-wrapper" id="comments-wrapper">
       <no-ssr v-if="$auth && $auth.ready()">
         <div class="post-view__reply-disabled" v-if="!account.username">
           <span>{{$t('comment.onlyRegisteredCanLeaveComments',{blockchain: chainName})}}</span>&nbsp;

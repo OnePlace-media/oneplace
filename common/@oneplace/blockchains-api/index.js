@@ -9,7 +9,7 @@ const clientsURL = {
 }
 
 const cacheMethodsMap = {
-  get_accounts: true,
+  get_accounts: false,
   get_discussions_by_trending: false,
   get_discussions_by_created: false,
   get_discussions_by_hot: false,
@@ -89,7 +89,7 @@ class BlockChainApi {
   static getAccount(chain, username, noCache = false) {
     return _call(chain, 'get_accounts', [[username]], noCache)
       .then(accounts => {
-        if (!accounts.length) throw new Error('Account not found')
+        if (!accounts || !accounts.length) throw new Error('Account not found')
         return accounts[0]
       })
   }

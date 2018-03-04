@@ -87,7 +87,7 @@ export default {
           <div class="header__user-wrapper" v-else v-on-click-outside="closeDropDown">
             <router-link 
               tag="a" 
-              :to="{name:'chain-account-view', params:{chain, username: account.username}}" 
+              :to="account.username ? {name:'chain-account-view', params:{chain, username: account.username}} : {name:'add-account', params:{chain}}" 
               class="header__user-avatar avatar"
               :style="`background-image: url('${account.avatar || DEFAULT_AVATAR}');`"
             >

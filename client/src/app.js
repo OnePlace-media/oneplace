@@ -16,7 +16,7 @@ import Meta from 'vue-meta'
 import GlobalComponents from './plugins/globalComponents'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
-import TimeAgo from './components/common/TimeAgo.vue'
+
 
 const CONSTANTS = require('@oneplace/constants')
 
@@ -38,7 +38,16 @@ Vue.axios.defaults.baseURL = process.env.BASE_API_URL
 Vue.use(Helper)
 Vue.use(VueLocalStorage)
 
-Vue.component('time-ago', TimeAgo)
+
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (!error.response) {
+      Vue.prototype.$toast.bottom(i18n.t('errors.NET_PROBLEM'))
+    }
+    return Promise.reject(error)
+  }
+)
 
 export function createApp(ssrContext) {
   const i18n = new VueI18n({
@@ -61,16 +70,6 @@ export function createApp(ssrContext) {
       ru: require('./i18n/ru')
     }
   })
-
-  axios.interceptors.response.use(
-    response => response,
-    error => {
-      if (!error.response) {
-        Vue.prototype.$toast.bottom(i18n.t('errors.NET_PROBLEM'))
-      }
-      return Promise.reject(error)
-    }
-  )
 
   Vue.prototype.$locale = {
     change(language) {

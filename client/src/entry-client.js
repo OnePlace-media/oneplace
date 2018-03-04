@@ -2,6 +2,7 @@ import Vue from 'vue'
 import {createApp} from './app'
 import VueAuth from "@websanova/vue-auth"
 import VueCookie from 'vue-cookie'
+import AsyncData from './plugins/asyncData'
 // import VueSimplemde from 'vue-simplemde'
 // import markdownEditor from 'vue-simplemde/src/markdown-editor.vue'
 
@@ -59,27 +60,7 @@ router.onReady(() => {
   })
 
 
-  Vue.mixin({
-    beforeRouteUpdate(to, from, next) {
-      const {asyncData} = this.$options
-      if (asyncData) {
-        asyncData({
-          store: store,
-          route: to
-        })
-      }
-      next()
-    },
-    beforeMount() {
-      const {asyncData} = this.$options
-      if (asyncData) {
-        this.dataPromise = asyncData({
-          store: store,
-          route: this.$route
-        })
-      }
-    }
-  })
+  Vue.use(AsyncData, {store})
 
   app.$mount('#app')
 })

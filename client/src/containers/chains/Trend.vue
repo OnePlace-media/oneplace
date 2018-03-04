@@ -48,7 +48,7 @@
                     <!-- <a :href="`/${$route.params.chain}/@${post.author}`" class="tag-block__post-avatar avatar" :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`"></a> -->
                     <div class="tag-block__post-data">
                       <span class="tag-block__post-value" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}&nbsp;{{post.payout}}</span>
-                      <a @click.prevent="showPost(post)" :href="$helper.makePathForPost(post, chain)" class="tag-block__post-replies link">
+                      <a @click.prevent="focusComment(post)" :href="$helper.makePathForPost(post, chain)" class="tag-block__post-replies link">
                         <svg class="tag-block__icon-comment">
                           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#comment"></use>
                         </svg>&nbsp;&nbsp;{{post.children}}</a>
@@ -211,6 +211,13 @@ export default {
           this.scrollHandler(true)
         })
     },
+    focusComment(post) {
+      this.showPost(post).then(() => {
+        document.getElementById('comments-wrapper').scrollIntoView(true)
+        const commentInputRoot = document.getElementById('comment-input-root')
+        if (commentInputRoot) commentInputRoot.focus()
+      })
+    },
     showPost(post) {
       const chain = this.chain
       if (!this.postLoading) {
@@ -223,14 +230,18 @@ export default {
             permlink: post.permlink
           }
         }
-        this.$store
+        return this.$store
           .dispatch('fetchPostByPermlink', {
             chain: chain,
             username: post.author,
             permlink: post.permlink
           })
           .then(() => {
-            history.pushState('', post.title, this.$helper.makePathForPost(post, chain))
+            history.pushState(
+              '',
+              post.title,
+              this.$helper.makePathForPost(post, chain)
+            )
             this.$store.commit('core/setRouterFrom', { target })
             this.postLoading = false
           })

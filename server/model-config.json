@@ -35,6 +35,10 @@
     "public": true,
     "dataSource": "db"
   },
+  "image": {
+    "public": true,
+    "dataSource": "db"
+  },
   "email": {
     "dataSource": "email"
   },

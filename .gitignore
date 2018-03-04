@@ -26,6 +26,7 @@ npm-debug.log
 server/data/docker
 server/datasources.json
 server/config.json
+server/storage/*
 client/dist
 test.js
 docs/*

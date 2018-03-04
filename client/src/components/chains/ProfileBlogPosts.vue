@@ -10,7 +10,8 @@
       :account="account"
       :accountCurrent="accountCurrent"
       :chain="chain"
-      @show="showPost"
+      @show="post=>$emit('show', post)"
+      @focus="post=>$emit('focus', post)"
     ></profile-blog-article>
     <no-ssr>
       <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
@@ -51,9 +52,6 @@ export default {
     }
   },
   methods: {
-    showPost(post) {
-      this.$emit('show', post)
-    },
     infiniteHandler($state) {
       const posts = this.withRepost
         ? this.$store.state.profile.posts.collection

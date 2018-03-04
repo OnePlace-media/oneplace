@@ -8,7 +8,7 @@
         {{$t('profile.accountPosts', {username: account.name})}}
       </div> -->
     </div>
-    <profile-blog-posts :with-repost="withRepost" :account="account" @show="showPost"></profile-blog-posts>
+    <profile-blog-posts :with-repost="withRepost" :account="account" @show="showPost" @focus="focusComment"></profile-blog-posts>
   </section>
 </template>
 
@@ -61,7 +61,7 @@ export default {
             permlink: post.permlink
           }
         }
-        this.$store
+        return this.$store
           .dispatch('fetchPostByPermlink', {
             chain: chain,
             username: post.author,
@@ -77,6 +77,13 @@ export default {
             this.postLoading = false
           })
       }
+    },
+    focusComment(post) {
+      this.showPost(post).then(() => {
+        document.getElementById('comments-wrapper').scrollIntoView(true)
+        const commentInputRoot = document.getElementById('comment-input-root')
+        if (commentInputRoot) commentInputRoot.focus()
+      })
     }
   }
 }

@@ -64,11 +64,9 @@ module.exports = Model => {
       error.status = 400
       throw error
     }
-    result.avatar = await blockChains.getAvatar(chain, author)
-    const account = await blockChains.getAccount(chain, author)
-    result.author_rep = chainParser.convertReputation(account.reputation)
-    result.body = md.render(body)
-    return result
+    let comment = await blockChains.getContent(chain, result)
+    comment = await Model.app.trendsWatcher.preparePosts(chain, [comment], true)
+    return comment[0]
   }
 
   Model.remoteMethod('comment', {

@@ -33,6 +33,7 @@
             :post="post"
             :account="accountCurrent"
             :chain="chain"
+            @focus="()=>$emit('focus', post)"
             @vote="(isLike, weight) => vote(post, isLike, weight)"
             :up-vote-processing="voteProcessing.upVoteProcessing"
             :down-vote-processing="voteProcessing.downVoteProcessing"

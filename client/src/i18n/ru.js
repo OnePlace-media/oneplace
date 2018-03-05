@@ -13,6 +13,8 @@ module.exports = {
     back: 'Назад',
     tags: 'Теги',
     author: 'Автор',
+    edit: 'Редактировать',
+    delete: 'Удалить',
     returnToOnePlace: 'Вернуться на OnePlace',
     validate: {
       emailRequired: 'Строка "e-mail" не может быть пустой',
@@ -50,6 +52,7 @@ module.exports = {
   },
   comment: {
     header: 'Комментарии',
+    confirmDeleteComment: 'Подтвердите удаление комментария',
     post: 'Отправить',
     cancel: 'Отмена',
     preview: 'Предварительный просмотр',

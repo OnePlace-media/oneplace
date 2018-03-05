@@ -56,12 +56,40 @@
       v-scroll-to="`#comment-input-${post.permlink}`"
       @click.prevent="$emit('reply')">{{$t('common.reply')}}
     </a>
+    <a v-if="showEditOption" 
+      href="#" 
+      class="post-view__post-data-item link" 
+      :title="$t('common.edit')">
+      {{$t('common.edit')}}
+    </a>
+    <a v-if="showDeleteOption" 
+      href="#" 
+      class="post-view__post-data-item link" :title="$t('common.delete')" 
+      @click.prevent="setRemoveModal(true)">
+      {{$t('common.delete')}}
+    </a>
+    <div class="modal__overlay" v-if="removeModal">
+      <div class="modal__dialog" v-on-click-outside="closeRemoveModal">
+        <div class="modal__dialog-header">
+          <h2 class="h2">{{$t('comment.confirmDeleteComment')}}</h2>
+          <span class="modal__close-modal" @click="closeRemoveModal"></span>
+        </div>
+        <div>
+          <button class="btn btn--large modal__confirm-btn" @click.prevent="deleteComment">
+            <span v-show="replieDeleteProcessing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
+            <span v-show="!replieDeleteProcessing">{{$t('common.delete')}}</span>
+          </button>
+          <a @click.prevent="closeRemoveModal" href="#" class="modal__btn-link link--ul">{{$t('comment.cancel')}}</a>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Slider from './Slider.vue'
 import CONSTANTS from '@oneplace/constants'
+import { mixin as onClickOutside } from 'vue-on-click-outside'
 import DropdownPayout from './DropdownPayout.vue'
 import DropdownVotes from './DropdownVotes.vue'
 import Converter from '@oneplace/blockchains-api/converter'
@@ -77,13 +105,15 @@ export default {
     'upVoteProcessing',
     'downVoteProcessing'
   ],
+  mixins: [onClickOutside],
   data() {
     return {
       voteIsSliding: false,
       voteWeight: 10000,
       timerOver: null,
       timerOut: null,
-      showDropdownsVotes: false
+      showDropdownsVotes: false,
+      removeModal: false
     }
   },
   components: {
@@ -92,6 +122,19 @@ export default {
     DropdownVotes
   },
   methods: {
+    deleteComment() {
+      this.$store.dispatch('deleteComment', {
+        chain: this.chain,
+        author: this.post.author,
+        permlink: this.post.permlink
+      })
+    },
+    closeRemoveModal() {
+      this.setRemoveModal(false)
+    },
+    setRemoveModal(flag) {
+      this.removeModal = flag
+    },
     setVoteIsSliding(flag) {
       if (flag) {
         clearTimeout(this.timerOut)
@@ -111,6 +154,22 @@ export default {
     }
   },
   computed: {
+    replieDeleteProcessing() {
+      return this.$store.state.postView.replieDeleteProcessing
+    },
+    showEditOption() {
+      const isOwner = this.post.author === this.account.username
+      const isGolos = this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS
+      const isArchived = this.post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED
+      return this.isComment && isOwner && (!isGolos || !isArchived)
+    },
+    showDeleteOption() {
+      return (
+        this.showEditOption &&
+        (!this.post.replies || !this.post.replies.length) &&
+        this.post.net_rshares <= 0
+      )
+    },
     isLike() {
       return this.account.username
         ? !!this.post.active_votes.find(

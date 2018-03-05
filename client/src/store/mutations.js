@@ -138,5 +138,12 @@ export default {
   },
   setParamsProcessing(state, {chain, flag}) {
     state.params[chain].processing = flag
+  },
+
+  setReplieDeleteProcessing(state, flag) {
+    state.postView.replieDeleteProcessing = flag
+  },
+  removeReplie(state, {author, permlink}) {
+    state.postView.replies = state.postView.replies.filter(replie => replie.author !== author || replie.permlink !== permlink)
   }
 }

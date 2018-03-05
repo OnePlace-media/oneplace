@@ -105,5 +105,21 @@ class PostingWrapper {
       })
     })
   }
+
+  delete_comment(chain, {author, permlink}) {
+    return new Promise((resolve, reject) => {
+      const json = JSON.stringify(
+        ['delete_comment', {
+          author,
+          permlink
+        }]
+      )
+
+      this.clients[chain].broadcast.deleteComment(this.WIF, author, permlink, (err, result) => {
+        if (err) reject(err)
+        else resolve(result)
+      })
+    })
+  }
 }
 module.exports = PostingWrapper

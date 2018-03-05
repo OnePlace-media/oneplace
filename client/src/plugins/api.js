@@ -32,6 +32,9 @@ export default {
   updateUser(id, data) {
     return Vue.axios.patch(`/users/${id}`, data)
   },
+  deleteComment(chain, author, permlink) {
+    return Vue.axios.post(`/posts/${chain}/delete_comment`, {author, permlink})
+  },
   params() {
     return Vue.axios.get(`/params`)
   },

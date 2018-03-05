@@ -95,6 +95,9 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
       _post.title = post.title
       _post.last_payout = post.last_payout + '+00:00'
       _post.created = post.created + '+00:00'
+      _post.vote_rshares = post.vote_rshares
+      _post.net_rshares = post.net_rshares
+      _post.net_votes = post.net_votes
       _post.permlink = post.permlink
       _post.author = post.author
       _post.category = post.parent_permlink

@@ -13,6 +13,8 @@ module.exports = {
     back: 'Back',
     tags: 'Tags',
     author: 'Author',
+    edit: 'Edit',
+    delete: 'Delete',
     returnToOnePlace: 'Return to OnePlace',
     validate: {
       emailRequired: 'E-mail address can\'t be blank',
@@ -50,6 +52,7 @@ module.exports = {
   },
   comment: {
     header: 'Comments',
+    confirmDeleteComment:'Confirm delete comment',
     post: 'Post',
     cancel: 'Cancel',
     preview: 'Preview',
@@ -158,7 +161,7 @@ module.exports = {
     clearFilters: 'Clear filters',
     allTags: 'All tags',
     removeTag: 'Remove tag',
-    accBlogs:'{username}\'s blog'
+    accBlogs: '{username}\'s blog'
   },
   auth: {
     SignIn: 'Log in',

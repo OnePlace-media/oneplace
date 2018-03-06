@@ -21,11 +21,12 @@ class PostingWrapper {
     this.WIF = WIF
     this.CLIENT_ID = username
   }
-  comment(chain, {parentAuthor, parentPermlink, author, body}) {
+  comment(chain, {parentAuthor, parentPermlink, author, permlink, body}) {
     return new Promise((resolve, reject) => {
       const title = ''
       const jsonMetadata = '{}'
-      const permlink = this.clients[chain].formatter.commentPermlink(parentAuthor, parentPermlink)
+      const isUpdate = !!permlink
+      permlink = permlink || this.clients[chain].formatter.commentPermlink(parentAuthor, parentPermlink)
 
       const operations = [
         ['comment', {
@@ -38,8 +39,8 @@ class PostingWrapper {
           json_metadata: jsonMetadata
         }]
       ]
-      if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM) {
-        operations.push(['comment_options', {
+      if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM && !isUpdate) {
+        const options = {
           author,
           permlink,
           max_accepted_payout: '1000000.000 SBD',
@@ -53,7 +54,8 @@ class PostingWrapper {
               ]
             }]
           ]
-        }])
+        }
+        operations.push(['comment_options', options])
       }
 
       this.clients[chain].broadcast.send(
@@ -100,6 +102,22 @@ class PostingWrapper {
       )
 
       this.clients[chain].broadcast.customJson(this.WIF, [], [follower], 'follow', json, (err, result) => {
+        if (err) reject(err)
+        else resolve(result)
+      })
+    })
+  }
+
+  delete_comment(chain, {author, permlink}) {
+    return new Promise((resolve, reject) => {
+      const json = JSON.stringify(
+        ['delete_comment', {
+          author,
+          permlink
+        }]
+      )
+
+      this.clients[chain].broadcast.deleteComment(this.WIF, author, permlink, (err, result) => {
         if (err) reject(err)
         else resolve(result)
       })

@@ -65,7 +65,8 @@ export default () => {
       post: null,
       replies: [],
       processing: false,
-      repliesProcessing: false
+      repliesProcessing: false,
+      replieDeleteProcessing: false
     }
   }
 }

@@ -21,7 +21,7 @@ export default {
     return Vue.axios.delete(`/users/${id}/account`, {params: {chain, username}})
   },
   createComment(chain, author, permlink, body, parentAuthor, parentPermlink) {
-    return Vue.axios.post(`/posts/${chain}/comment`, {author, body, parentAuthor, parentPermlink})
+    return Vue.axios.post(`/posts/${chain}/comment`, {author, body, parentAuthor, parentPermlink, permlink})
   },
   vote(chain, voter, author, permlink, weight) {
     return Vue.axios.post(`/posts/${chain}/vote`, {voter, author, permlink, weight})
@@ -31,6 +31,9 @@ export default {
   },
   updateUser(id, data) {
     return Vue.axios.patch(`/users/${id}`, data)
+  },
+  deleteComment(chain, author, permlink) {
+    return Vue.axios.post(`/posts/${chain}/delete_comment`, {author, permlink})
   },
   params() {
     return Vue.axios.get(`/params`)

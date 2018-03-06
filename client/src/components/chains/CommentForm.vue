@@ -13,7 +13,7 @@
       ></textarea>
     <div class="post-view__post-btn-group">
       <button class="btn btn--large post-view__post-btn" type="submit" :disabled="processing || errors.any()">
-        <span v-show="!processing">{{$t('comment.post')}}</span>
+        <span v-show="!processing">{{$t(`comment.${update ? 'update' : 'post'}`)}}</span>
         <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
       </button>
       <a href="#" class="post-view__post-btn-link" @click.prevent="cancel">{{$t('comment.cancel')}}</a>
@@ -45,10 +45,10 @@ export default {
   $_veeValidate: {
     validator: 'new'
   },
-  props: ['post', 'special'],
+  props: ['post', 'special', 'update'],
   data() {
     return {
-      body: '',
+      body: this.update && this.post.body_orig ? this.post.body_orig : '',
       processing: false
     }
   },
@@ -90,17 +90,24 @@ export default {
     },
     onSubmit() {
       this.processing = true
+
+      const permlink = this.update ? this.post.permlink : ''
+      const parentPermlink = this.update ? this.post.parent_permlink : this.post.permlink
+      const parentAuthor = this.update ? this.post.parent_author : this.post.author
       Api.createComment(
         this.chain,
         this.account.username,
-        this.post.permlink,
+        permlink,
         this.body,
-        this.post.author,
-        this.post.permlink
+        parentAuthor,
+        parentPermlink
       ).then(response => {
         this.processing = false
         this.body = ''
-        response.data.body = parser.prepareHTML(this.chain, response.data.body).html
+        response.data.body = parser.prepareHTML(
+          this.chain,
+          response.data.body
+        ).html
         response.data.total_payout_value = '0'
         this.$emit('success', response.data)
         // fix for v-html with iframe

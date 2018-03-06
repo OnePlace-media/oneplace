@@ -1,5 +1,5 @@
 <template>
-<div class="post-view__thread-wrapper" :class="{'payout_declined': true}">
+<div class="post-view__thread-wrapper" :class="{'payout_declined': true}" v-if="!deleted">
   <div class="comment">
     <div class="comment__wrapper">
       <div class="post-view__post-avatar avatar" :style="`background-image: url('${item.avatar || DEFAULT_AVATAR}');`"></div>
@@ -15,7 +15,10 @@
         </a>
         <span class="post-view__post-author-rep">{{item.author_rep}}</span> · <time-ago :time="item.created"></time-ago>
       </div>
-      <div class="comment__body markdown markdown--small" v-html="item.body"></div>
+      <div class="comment__body" >
+        <div class="markdown markdown--small" v-html="item.body" v-if="!editCommentShow"></div>
+        <comment-form :post="item" :update="true" :special="false" @cancel="()=>setEditCommentShow(false)" @success="updateComment" v-if="editCommentShow"></comment-form>
+      </div>
        <post-bottom 
           type="comment"
           :post="item" 
@@ -23,6 +26,8 @@
           :chain="chain"
           @vote="vote"
           @reply="reply"
+          @edit="editPostBottom"
+          @delete="deleteComment"
           :is-max-deep="isMaxDeep"
           :up-vote-processing="upVoteProcessing"
           :down-vote-processing="downVoteProcessing"
@@ -40,7 +45,7 @@
       @reply="childrenReply" 
       :account="account">
     </comment>
-    <comment-form :post="item" :special="false" @change="checkCommentFormBody" @success="addComment" v-if="(!isMaxDeep && showCommentForm && !parentForm) || commentFormNotEmpty" @cancel="showCommentForm = false"></comment-form>
+    <comment-form :post="item" :special="false" @change="checkCommentFormBody" @success="addComment" v-if="(commentFormAvailable && showCommentForm) || commentFormNotEmpty" @cancel="showCommentForm = false"></comment-form>
   </div>
 </div>
 </template>
@@ -60,7 +65,9 @@ export default {
       commentFormNotEmpty: false,
       nextLevel: this.level + 1,
       upVoteProcessing: false,
-      downVoteProcessing: false
+      downVoteProcessing: false,
+      editCommentShow: false,
+      deleted: false
     }
   },
   components: {
@@ -72,6 +79,20 @@ export default {
     this.$helper.videoWrapperHandler()
   },
   methods: {
+    deleteComment() {
+      this.deleted = true
+    },
+    updateComment(item) {
+      this.$store.commit('updateReplie', { replie: item })
+      Vue.nextTick(() => this.$helper.videoWrapperHandler())
+      this.setEditCommentShow(false)
+    },
+    setEditCommentShow(flag) {
+      this.editCommentShow = flag
+    },
+    editPostBottom() {
+      this.setEditCommentShow(!this.editCommentShow)
+    },
     goToProfile(username) {
       this.$store.commit('setPostViewData', null)
       this.$router.push({
@@ -115,6 +136,16 @@ export default {
     },
     childrenReply() {
       this.showCommentForm = false
+    },
+    commentFormAvailable() {
+      return (
+        !this.parentForm &&
+        !this.isMaxDeep &&
+        this.account.username &&
+        (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ||
+          this.$store.state.postView.post.mode !==
+            CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED)
+      )
     }
   },
   computed: {

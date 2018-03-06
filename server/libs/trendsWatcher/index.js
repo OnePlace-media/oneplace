@@ -73,6 +73,8 @@ async function getReplies(chain, post) {
   const replies = await blockChains.getContentReplies(chain, {author: post.author, permlink: post.permlink})
   const _replies = await _preparePosts(chain, replies, true, true)
   for (let replie of _replies) {
+    replie.parent_permlink = post.permlink
+    replie.parent_author = post.author
     if (replie.children) {
       replie.replies = await getReplies(chain, {author: replie.author, permlink: replie.permlink})
     }
@@ -97,6 +99,7 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
       _post.created = post.created + '+00:00'
       _post.vote_rshares = post.vote_rshares
       _post.net_rshares = post.net_rshares
+      _post.body_orig = post.body
       _post.net_votes = post.net_votes
       _post.permlink = post.permlink
       _post.author = post.author

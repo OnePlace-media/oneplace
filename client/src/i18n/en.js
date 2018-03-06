@@ -52,9 +52,10 @@ module.exports = {
   },
   comment: {
     header: 'Comments',
-    confirmDeleteComment:'Confirm delete comment',
+    confirmDeleteComment: 'Confirm delete comment',
     post: 'Post',
     cancel: 'Cancel',
+    update: 'Update',
     preview: 'Preview',
     dislike: 'Dislike',
     like: 'Like',

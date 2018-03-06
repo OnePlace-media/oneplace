@@ -55,6 +55,7 @@ module.exports = {
     confirmDeleteComment: 'Подтвердите удаление комментария',
     post: 'Отправить',
     cancel: 'Отмена',
+    update: 'Обновить',
     preview: 'Предварительный просмотр',
     dislike: 'Мне не нравится',
     like: 'Мне нравится',

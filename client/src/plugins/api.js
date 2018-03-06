@@ -21,7 +21,7 @@ export default {
     return Vue.axios.delete(`/users/${id}/account`, {params: {chain, username}})
   },
   createComment(chain, author, permlink, body, parentAuthor, parentPermlink) {
-    return Vue.axios.post(`/posts/${chain}/comment`, {author, body, parentAuthor, parentPermlink})
+    return Vue.axios.post(`/posts/${chain}/comment`, {author, body, parentAuthor, parentPermlink, permlink})
   },
   vote(chain, voter, author, permlink, weight) {
     return Vue.axios.post(`/posts/${chain}/vote`, {voter, author, permlink, weight})

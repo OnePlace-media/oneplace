@@ -40,7 +40,7 @@
         </svg>
       </a>{{dislikeVotes}}
     </span>
-    <span class="post-view__post-data-item" v-if="isPost || isBlog">
+    <span class="post-view__post-data-item" v-if="(isPost || isBlog)">
       <a class="post-view__post-reply" :title="$t('common.reply')" @click.prevent="focusToComment" v-scroll-to="'#comment-input-root'">
         <svg 
           class="post-view__icon post-view__icon-comment"
@@ -50,7 +50,7 @@
       </a>{{post.children}}
     </span>
     <a href="#"
-      v-if="isComment && !isMaxDeep && account.username"
+      v-if="isComment && replyIsAvailable"
         class="post-view__post-data-item link" 
       :title="$t('common.reply')"
       v-scroll-to="`#comment-input-${post.permlink}`"
@@ -59,6 +59,7 @@
     <a v-if="showEditOption" 
       href="#" 
       class="post-view__post-data-item link" 
+      @click.prevent="$emit('edit')"
       :title="$t('common.edit')">
       {{$t('common.edit')}}
     </a>
@@ -123,11 +124,15 @@ export default {
   },
   methods: {
     deleteComment() {
-      this.$store.dispatch('deleteComment', {
-        chain: this.chain,
-        author: this.post.author,
-        permlink: this.post.permlink
-      })
+      this.$store
+        .dispatch('deleteComment', {
+          chain: this.chain,
+          author: this.post.author,
+          permlink: this.post.permlink
+        })
+        .then(() => {
+          this.$emit('delete')
+        })
     },
     closeRemoveModal() {
       this.setRemoveModal(false)
@@ -154,6 +159,15 @@ export default {
     }
   },
   computed: {
+    replyIsAvailable() {
+      return (
+        !this.isMaxDeep &&
+        this.account.username &&
+        (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ||
+          this.$store.state.postView.post.mode !==
+            CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED)
+      )
+    },
     replieDeleteProcessing() {
       return this.$store.state.postView.replieDeleteProcessing
     },

@@ -131,7 +131,6 @@ export default {
     return Api
       .deleteComment(chain, author, permlink)
       .then(response => {
-        commit('removeReplie', {author, permlink})
         commit('setReplieDeleteProcessing', false)
       })
   },

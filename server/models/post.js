@@ -44,7 +44,7 @@ module.exports = Model => {
 
   const Remarkable = require('remarkable')
   const md = new Remarkable
-  Model.comment = async function(req, chain, author, body, parentAuthor, parentPermlink) {
+  Model.comment = async function(req, chain, author, body, parentAuthor, parentPermlink, permlink) {
     const accessIsGranted = await Model.app.models.user.checkAccountLink(chain, author, req.accessToken.userId)
     if (!accessIsGranted) {
       const error = new Error('This account not linked with current profile')
@@ -57,9 +57,11 @@ module.exports = Model => {
         author,
         body,
         parentAuthor,
-        parentPermlink
+        parentPermlink,
+        permlink
       })
     } catch (error) {
+      console.log(error)
       error = new Error('Bad request, somethign wrong with blockchain request')
       error.status = 400
       throw error
@@ -77,6 +79,7 @@ module.exports = Model => {
       {arg: 'body', type: 'string', required: true},
       {arg: 'parentAuthor', type: 'string', required: true},
       {arg: 'parentPermlink', type: 'string', required: true},
+      {arg: 'permlink', type: 'string'},
     ],
     returns: {arg: 'body', type: 'object', root: true},
     http: {path: '/:chain(g|s)/comment', verb: 'post'}

@@ -92,8 +92,12 @@ export default {
       this.processing = true
 
       const permlink = this.update ? this.post.permlink : ''
-      const parentPermlink = this.update ? this.post.parent_permlink : this.post.permlink
-      const parentAuthor = this.update ? this.post.parent_author : this.post.author
+      const parentPermlink = this.update
+        ? this.post.parent_permlink
+        : this.post.permlink
+      const parentAuthor = this.update
+        ? this.post.parent_author
+        : this.post.author
       Api.createComment(
         this.chain,
         this.account.username,
@@ -101,18 +105,23 @@ export default {
         this.body,
         parentAuthor,
         parentPermlink
-      ).then(response => {
-        this.processing = false
-        this.body = ''
-        response.data.body = parser.prepareHTML(
-          this.chain,
-          response.data.body
-        ).html
-        response.data.total_payout_value = '0'
-        this.$emit('success', response.data)
-        // fix for v-html with iframe
-        this.$helper.videoWrapperHandler()
-      })
+      )
+        .then(response => {
+          this.processing = false
+          this.body = ''
+          response.data.body = parser.prepareHTML(
+            this.chain,
+            response.data.body
+          ).html
+          response.data.total_payout_value = '0'
+          this.$emit('success', response.data)
+          // fix for v-html with iframe
+          this.$helper.videoWrapperHandler()
+        })
+        .catch(err => {
+          this.processing = false
+          this.$toast.bottom(this.$t(`errors.${err.response.data.error.code}`))
+        })
     }
   }
 }

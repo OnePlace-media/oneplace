@@ -1,5 +1,6 @@
 module.exports = {
   errors: {
+    STEEMIT_MIN_REPLY_INTERVAL: 'Вы можете комментировать только 1 раз в 20 секунд',
     FAILED_APPEND_POST_BY_AUTHOR: 'Ошибка загрузки постов, попробуйте позже',
     UNKNOW_ERROR: 'Неизвестная ошибка.',
     STEEMIT_MAX_VOTE_CHANGES: 'Вы использовали максимальное число изменений голоса для данной записи',

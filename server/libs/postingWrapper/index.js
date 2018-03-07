@@ -26,7 +26,13 @@ class PostingWrapper {
       const title = ''
       const jsonMetadata = '{}'
       const isUpdate = !!permlink
-      permlink = permlink || this.clients[chain].formatter.commentPermlink(parentAuthor, parentPermlink)
+      if (!permlink) {
+        permlink = this.clients[chain].formatter.commentPermlink(parentAuthor, parentPermlink)
+        if (permlink.length > 255)
+          permlink.substr(permlink.length - 255, permlink.length)
+
+        permlink = permlink.toLowerCase().replace(/[^a-z0-9-]+/g, "")
+      }
 
       const operations = [
         ['comment', {

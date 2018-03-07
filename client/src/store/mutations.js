@@ -156,5 +156,19 @@ export default {
     }
 
     state.postView.replies = updateReplie(state.postView.replies, replie)
+  },
+  deleteReplie(state, {replie}) {
+    function deleteReplie(replies, replie) {
+      return replies.filter(_replie => {
+        let result = true
+        if (replie.author === _replie.author && replie.permlink === _replie.permlink)
+          result = false
+        else if (_replie.replies && _replie.replies.length)
+          _replie.replies = deleteReplie(_replie.replies, replie)
+        return result
+      })
+    }
+
+    state.postView.replies = deleteReplie(state.postView.replies, replie)
   }
 }

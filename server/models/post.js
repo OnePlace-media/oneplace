@@ -61,8 +61,17 @@ module.exports = Model => {
         permlink
       })
     } catch (error) {
-      console.log(error)
+      let code = 'UNKNOW_ERROR'
+      if (error.data && error.data.stack) {
+        if (~error.data.stack[0].format.indexOf('STEEMIT_MIN_REPLY_INTERVAL')) {
+          code = 'STEEMIT_MIN_REPLY_INTERVAL'
+        } else {
+          code = error.data.stack[0].format
+        }
+      }
+
       error = new Error('Bad request, somethign wrong with blockchain request')
+      error.code = code
       error.status = 400
       throw error
     }

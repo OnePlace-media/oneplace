@@ -258,7 +258,7 @@ class TrendsWatcher {
         console.log('Start update cache', new Date())
         const restart = err => {
           if (err) console.log(err)
-          setTimeout(() => updater(), 60 * 1000)
+          setTimeout(() => updater(), 2 * 60 * 1000)
           console.log('Stop update cache', new Date())
         }
 
@@ -266,12 +266,14 @@ class TrendsWatcher {
           self.redis.zrangebyscore([KEYS.TOP_TAGS, chain].join(':'), '-inf', '+inf', 'LIMIT', 0, 100, (err, tags) => {
             if (err) reject(err)
             else {
-              tags.reduce((p, tag) => {
+              const chainOfPromises = tags.reduce((p, tag) => {
                 return p.then(() => Promise.all([
                   self.getTrendsByTag(chain, tag, [], true),
                   self.getTrendsByRecent(chain, tag, true)
                 ]))
               }, Promise.resolve())
+
+              chainOfPromises
                 .then(() => {
                   resolve()
                 })

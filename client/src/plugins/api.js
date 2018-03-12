@@ -34,7 +34,7 @@ export default {
   },
   savePost(chain, author, data) {
     data.author = author
-    return Vue.axios.post(`/posts/${chain}/create`, data)
+    return Vue.axios.post(`/posts/${chain}/comment`, data)
   },
   createComment(chain, author, permlink, body, parentAuthor, parentPermlink) {
     return Vue.axios.post(`/posts/${chain}/comment`, {author, body, parentAuthor, parentPermlink, permlink})

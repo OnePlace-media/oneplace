@@ -40,7 +40,7 @@
             <button 
               class="btn btn--large publish__btn-post" 
               :class="{'publish__btn-post--active': isValid}"
-              @click="onPublish"
+              @click="submitForm"
             >
               {{$t('publish.publish')}}
             </button>
@@ -136,8 +136,16 @@ export default {
           console.log(err)
         })
     },
-    onPublish() {
-      this.$store.dispatch('publish/submitForm', { account })
+    submitForm() {
+      this.$store
+        .dispatch('publish/submitForm', {
+          chain: this.chain,
+          account: this.account
+        })
+        .catch(err => {
+          console.log(err)
+          this.$toast.bottom(this.$t(`errors.${err.response.data.error.code}`))
+        })
     }
   }
 }

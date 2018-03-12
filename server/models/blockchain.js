@@ -169,7 +169,15 @@ module.exports = Model => {
 
   Model.getContent = async function(chain, username, permlink) {
     let post = await blockChains.getContent(chain, {author: username, permlink})
-    post = await Model.app.trendsWatcher.preparePosts(chain, [post], true)
-    return post[0]
+    if (post.id) {
+      post = await Model.app.trendsWatcher.preparePosts(chain, [post], true)
+      return post[0]
+    } else {
+      error = new Error('Not found')
+      error.code = 'NOT_FOUND'
+      error.status = 404
+      throw error
+    }
+
   }
 }

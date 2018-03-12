@@ -1,4 +1,8 @@
 import Api from '../../plugins/api'
+import getSlug from 'speakingurl'
+import base58 from 'bs58'
+import secureRandom from 'secure-random'
+
 const CONSTANTS = require('@oneplace/constants')
 
 const TYPES = {
@@ -9,12 +13,33 @@ const TYPES = {
   SET_DRAFTS_COLLECTION: 'SET_DRAFTS_COLLECTION'
 }
 
+const generatePermLink = (chain, data, prefix = '') => {
+  if (data.permlink) return Promise.resolve()
+  else {
+    let permlink = getSlug(data.title.replace(/[<>]/g, ''), {truncate: 128})
+    if (prefix) permlink = [prefix, permlink].join('-')
+    return Api.getContent(chain, data.author, permlink)
+      .then(response => {
+        const prefix = base58.encode(secureRandom.randomBuffer(4))
+        return generatePermLink(chain, data, prefix)
+      })
+      .catch(err => {
+        if (err.response && err.response.status === 404) {
+          data.permlink = permlink
+          return data
+        } else
+          throw err
+      })
+  }
+}
+
 export default () => {
   const initState = () => {
     return {
       form: {
         chain: null,
         processing: false,
+        permlink: null,
         body: '',
         tags: [],
         rewardsOpts: '50',
@@ -87,9 +112,12 @@ export default () => {
           commit(TYPES.SET_DRAFTS_OBJECT, {collection})
         })
     },
-    submitForm({commit, state}, {account}) {
+    submitForm({commit, state}, {chain, account}) {
       commit(TYPES.SET_FORM_OBJECT, {processing: true})
-      return Api.savePost(account.username, state.form)
+      const data = state.form
+      data.author = account.username
+      return generatePermLink(chain, data)
+        .then(() => Api.savePost(chain, account.username, state.form))
         .then(response => {
           console.log(response)
         })

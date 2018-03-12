@@ -1,5 +1,5 @@
 'use strict';
-
+process.setMaxListeners(0);
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 

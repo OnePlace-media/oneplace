@@ -11,6 +11,18 @@ export default {
       }
     })
   },
+  getDrafts(userId) {
+    return Vue.axios.get(`/users/${userId}/drafts`)
+  },
+  createDraft(userId, data) {
+    return Vue.axios.post(`/users/${userId}/drafts`, data)
+  },
+  saveDraft(userId, data, draft) {
+    return Vue.axios.put(`/users/${userId}/drafts/${draft.id}`, data)
+  },
+  deleteDraft(draft) {
+    return Vue.axios.delete(`/users/${draft.userId}/drafts/${draft.id}`)
+  },
   saveTags(id, chain, tags) {
     return Vue.axios.post(`/users/${id}/tags`, {chain, tags})
   },
@@ -19,6 +31,10 @@ export default {
   },
   removeAccount(id, chain, username) {
     return Vue.axios.delete(`/users/${id}/account`, {params: {chain, username}})
+  },
+  savePost(chain, author, data) {
+    data.author = author
+    return Vue.axios.post(`/posts/${chain}/create`, data)
   },
   createComment(chain, author, permlink, body, parentAuthor, parentPermlink) {
     return Vue.axios.post(`/posts/${chain}/comment`, {author, body, parentAuthor, parentPermlink, permlink})

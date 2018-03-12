@@ -8,6 +8,7 @@ module.exports = {
     NET_PROBLEM: 'Произошла сетевая ошибка, проверьте ваше подключение и попробуйте снова'
   },
   common: {
+    cancel: 'Отмена',
     orderBy: 'Сортировать по',
     in: 'в',
     reply: 'Ответить',
@@ -55,7 +56,6 @@ module.exports = {
     header: 'Комментарии',
     confirmDeleteComment: 'Подтвердите удаление комментария',
     post: 'Отправить',
-    cancel: 'Отмена',
     update: 'Обновить',
     preview: 'Предварительный просмотр',
     dislike: 'Мне не нравится',
@@ -165,6 +165,23 @@ module.exports = {
     clearFilters: 'Сбросить фильтры',
     removeTag: 'Исключить тег',
     accBlogs: 'Блог {username}'
+  },
+  publish: {
+    publish: 'Публикация',
+    readyToPublish: 'Готовы к публикации?',
+    addTags_upTo5: 'Добавьте теги (не более 5)',
+    typeTagsHere: 'Введите тег...',
+    payoutSettings: 'Настройки выплат',
+    '50': '50% / 50% (Рекомендовано)',
+    '100': '100% Сила голоса',
+    '0': 'Отказаться от вознаграждения',
+    upVotePost: 'Голосовать за пост',
+    enterPostTitle: 'Введите заголовок поста',
+    typeYourStoryHere: 'Напишите свою историю здесь...',
+
+    drafts: 'Черновики',
+    youHaveNoDrafts: 'У вас 0 черновиков',
+    createNewDraft: 'Создать новый черновик'
   },
   auth: {
     SignIn: 'Войти',

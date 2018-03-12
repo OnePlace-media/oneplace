@@ -8,6 +8,7 @@ module.exports = {
     NET_PROBLEM: 'A network error has occurred, check your connection and try again'
   },
   common: {
+    cancel: 'Cancel',
     orderBy: 'Order by',
     in: 'in',
     reply: 'Reply',
@@ -55,7 +56,6 @@ module.exports = {
     header: 'Comments',
     confirmDeleteComment: 'Confirm delete comment',
     post: 'Post',
-    cancel: 'Cancel',
     update: 'Update',
     preview: 'Preview',
     dislike: 'Dislike',
@@ -164,6 +164,23 @@ module.exports = {
     allTags: 'All tags',
     removeTag: 'Remove tag',
     accBlogs: '{username}\'s blog'
+  },
+  publish: {
+    publish: 'Publish',
+    readyToPublish: 'Ready to publish?',
+    addTags_upTo5: 'Add tags (up to 5)',
+    typeTagsHere: 'Type tags here...',
+    payoutSettings: 'Payout settings',
+    '50': '50% / 50% (Recommended)',
+    '100': '100% STEEM POWER',
+    '0': 'Decline rewards',
+    upVotePost: 'Upvote post',
+    enterPostTitle: 'Enter post title',
+    typeYourStoryHere:'Type your story here...',
+
+    drafts: 'Drafts',
+    youHaveNoDrafts: 'You have no drafts.',
+    createNewDraft: 'Create new draft'
   },
   auth: {
     SignIn: 'Log in',

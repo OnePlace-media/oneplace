@@ -1,0 +1,44 @@
+{
+  "name": "draft",
+  "plural": "drafts",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "mysql": {
+      "table": "drafts"
+    },
+    "validateUpsert": true
+  },
+  "relations": {
+    "users": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "userId"
+    }
+  },
+  "properties": {
+    "id": {
+      "id": true,
+      "type": "number"
+    },
+    "userId": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "string",
+      "required": true
+    },
+    "time": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "acls": [],
+  "methods": {}
+}

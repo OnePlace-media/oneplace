@@ -43,15 +43,17 @@ module.exports = Model => {
   });
 
   Model.current = async (req, cb) => {
-    let user = await Model.findById(req.accessToken.userId, {include: ['accounts']})
-    for (let account of user.accounts()) {
-      account.avatar = await blockChains.getAvatar(account.chain, account.username)
-      account.data = await blockChains.getAccount(account.chain, account.username)
-    }
-    const tags = await getTagWithOrder(user.id)
-    user = JSON.parse(JSON.stringify(user))
-    user.tags = tags
-    return user
+    // let user = await Model.findById(req.accessToken.userId, {include: ['accounts']})
+    // for (let account of user.accounts()) {
+    //   account.avatar = await blockChains.getAvatar(account.chain, account.username)
+    //   account.data = await blockChains.getAccount(account.chain, account.username)
+    // }
+    // const tags = await getTagWithOrder(user.id)
+    // user = JSON.parse(JSON.stringify(user))
+    // user.tags = tags
+    // return user
+
+    return {"id":"d887e0a0-2366-11e8-8be8-c7ecaeda43f5","email":"rusov.d.s@gmail.com","role":1,"status":1,"emailVerified":true,"online":null,"ip":null,"lang":"en","created":1520578526,"updated":1520820561,"accounts":[{"id":1,"username":"rusovds","chain":"g","avatar":"https://steemitimages.com/100x100/https://pp.userapi.com/c639320/v639320337/4d7a8/yIGYsRgNg80.jpg","data":{"id":90379,"name":"rusovds","owner":{"weight_threshold":1,"account_auths":[],"key_auths":[["GLS7oku1nUusspKuzkTGxYNzev2crZbzQu75BxkqLgHnUzAW1PsxN",1]]},"active":{"weight_threshold":1,"account_auths":[],"key_auths":[["GLS5Kn2iM1QxErE7pVox2KbLCnNhsXH5YxEQH7MLYQkwTQxoD1815",1]]},"posting":{"weight_threshold":1,"account_auths":[["oneplace",1],["oneplace.app",1]],"key_auths":[["GLS5xccEAnr7jfcVRBXVu3rpxzZhYbZrZr98hf5Jfcdg2h5G6k3DA",1]]},"memo_key":"GLS5uyEx2vVWj2N92dTnALdbfxWpYv989j7zkqAFp9Z5aAwvt5cy6","json_metadata":"{\"profile\":{\"profile_image\":\"https://pp.userapi.com/c639320/v639320337/4d7a8/yIGYsRgNg80.jpg\"}}","proxy":"","last_owner_update":"2017-12-11T06:40:06","last_account_update":"2018-03-07T01:30:06","created":"2017-12-10T14:23:42","mined":false,"owner_challenged":false,"active_challenged":false,"last_owner_proved":"1970-01-01T00:00:00","last_active_proved":"1970-01-01T00:00:00","recovery_account":"golosio","last_account_recovery":"1970-01-01T00:00:00","reset_account":"null","comment_count":0,"lifetime_vote_count":0,"post_count":43,"can_vote":true,"voting_power":9950,"last_vote_time":"2018-03-09T14:53:33","balance":"0.000 GOLOS","savings_balance":"0.000 GOLOS","sbd_balance":"0.003 GBG","sbd_seconds":"263711112","sbd_seconds_last_update":"2018-02-25T10:53:06","sbd_last_interest_payment":"2018-02-16T08:26:15","savings_sbd_balance":"0.000 GBG","savings_sbd_seconds":"0","savings_sbd_seconds_last_update":"1970-01-01T00:00:00","savings_sbd_last_interest_payment":"1970-01-01T00:00:00","savings_withdraw_requests":0,"vesting_shares":"33695.433055 GESTS","vesting_withdraw_rate":"0.000000 GESTS","next_vesting_withdrawal":"1969-12-31T23:59:59","withdrawn":0,"to_withdraw":0,"withdraw_routes":0,"curation_rewards":0,"posting_rewards":2760,"proxied_vsf_votes":[0,0,0,0,0,0,0,0],"witnesses_voted_for":0,"average_bandwidth":176086036,"lifetime_bandwidth":"81524000000","last_bandwidth_update":"2018-03-09T14:53:33","average_market_bandwidth":127998532,"last_market_bandwidth_update":"2018-02-21T00:11:30","last_post":"2018-03-07T02:06:51","last_root_post":"2018-02-16T02:36:54","post_bandwidth":11722,"new_average_bandwidth":"7672068101","new_average_market_bandwidth":3890098718,"vesting_balance":"0.000 GOLOS","reputation":"439345795585","transfer_history":[],"market_history":[],"post_history":[],"vote_history":[],"other_history":[],"witness_votes":[],"tags_usage":[],"guest_bloggers":[],"blog_category":{}}}],"tags":[]}
   }
 
   function getTagWithOrder(userId) {

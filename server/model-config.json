@@ -27,6 +27,10 @@
     "public": false,
     "dataSource": "mysql"
   },
+  "draft": {
+    "public": false,
+    "dataSource": "mysql"
+  },
   "account": {
     "public": true,
     "dataSource": "mysql"

@@ -80,7 +80,7 @@
             <span v-show="replieDeleteProcessing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
             <span v-show="!replieDeleteProcessing">{{$t('common.delete')}}</span>
           </button>
-          <a @click.prevent="closeRemoveModal" href="#" class="modal__btn-link link--ul">{{$t('comment.cancel')}}</a>
+          <a @click.prevent="closeRemoveModal" href="#" class="modal__btn-link link--ul">{{$t('common.cancel')}}</a>
         </div>
       </div>
     </div>

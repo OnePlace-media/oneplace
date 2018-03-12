@@ -16,7 +16,7 @@
         <span v-show="!processing">{{$t(`comment.${update ? 'update' : 'post'}`)}}</span>
         <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
       </button>
-      <a href="#" class="post-view__post-btn-link" @click.prevent="cancel">{{$t('comment.cancel')}}</a>
+      <a href="#" class="post-view__post-btn-link" @click.prevent="cancel">{{$t('common.cancel')}}</a>
     </div>
     <div v-if="body">
       <h4 class="h4 post-view__preview-title">{{$t('comment.preview')}}</h4>

@@ -17,6 +17,8 @@ const cacheMethodsMap = {
   get_content: false
 }
 const cache = {}
+const timeout = process.env.NODE_ENV === 'production' ? 2000 : 10000
+
 function _call(chain, method, params, noCache) {
   if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS) {
     if (params[0].tag) {
@@ -43,6 +45,7 @@ function _call(chain, method, params, noCache) {
       request({
         url: `http://${clientsURL[chain]}`,
         method: 'POST',
+        timeout,
         json
       }, (err, res, body) => {
         if (err) reject(err)

@@ -16,7 +16,7 @@ import Meta from 'vue-meta'
 import GlobalComponents from './plugins/globalComponents'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
-
+import SocialSharing from 'vue-social-sharing'
 
 const CONSTANTS = require('@oneplace/constants')
 
@@ -28,7 +28,7 @@ Vue.use(Toast, {
 })
 
 Vue.use(Chains)
-
+Vue.use(SocialSharing)
 Vue.use(GlobalComponents)
 Vue.use(VueI18n)
 Vue.use(Vue2TouchEvents)

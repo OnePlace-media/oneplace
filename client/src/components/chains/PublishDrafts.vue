@@ -6,17 +6,17 @@
         <pulse-loader :color="'#383838'" :size="'10px'"></pulse-loader>
       </center>
 
-      <div class="publish__drafts-new" v-if="!processing">{{$t('publish.createNewDraft')}}</div>
+      <div class="publish__drafts-new" v-if="!processing" @click.stop="createDraft">{{$t('publish.createNewDraft')}}</div>
       <div class="publish__no-drafts" v-if="!processing && drafts && !drafts.length">{{$t('publish.youHaveNoDrafts')}}</div>
       <div class="publish__drafts-list">
-        <div class="publish__drafts-item" v-for="draft in drafts" :key="draft.id">
+        <div class="publish__drafts-item" v-for="draft in drafts" :key="draft.id" @click.stop="selectDraft(draft)">
           <div class="column-wrapper">
             <span class="publish__drafts-name">{{draft.title}}</span>
             <span class="publish__drafts-time">
               <time-ago :time="draft.time.toString()"></time-ago>
             </span>
           </div>
-          <a href="#" title="Delete draft" @click.prevent="deleteDraft(draft)">
+          <a href="#" title="Delete draft" @click.stop="deleteDraft(draft)">
             <svg class="publish__icon">
               <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#delete"></use>
             </svg>
@@ -77,8 +77,20 @@ export default {
     close() {
       this.setIsVisible(false)
     },
+    createDraft() {
+      this.$store.dispatch('publish/createDraft').then(() => {
+        this.$emit('update')
+      })
+    },
     deleteDraft(draft) {
-      this.$store.dispatch('publish/deleteDraft', { draft })
+      this.$store.dispatch('publish/deleteDraft', { draft }).then(() => {
+        this.$emit('update')
+      })
+    },
+    selectDraft(draft) {
+      this.$store.dispatch('publish/selectDraft', { draft })
+      this.isVisible = false
+      this.$emit('update')
     }
   }
 }

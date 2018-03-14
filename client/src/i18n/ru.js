@@ -179,7 +179,9 @@ module.exports = {
     upVotePost: 'Голосовать за пост',
     enterPostTitle: 'Введите заголовок поста',
     typeYourStoryHere: 'Напишите свою историю здесь...',
-
+    newPost: 'Новая запись',
+    draft: 'Черновик',
+    edit: 'Редактирование',
     drafts: 'Черновики',
     youHaveNoDrafts: 'У вас 0 черновиков',
     createNewDraft: 'Создать новый черновик'

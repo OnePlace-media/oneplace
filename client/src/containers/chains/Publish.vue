@@ -5,10 +5,11 @@
       :accounts-by-chain="accountsByChain"
       :account="account" 
       :chain="chain"
+      @update="onUpdate"
     ></publish-header>
 
-    <section class="publish__post-editor">
-      <textarea class="publish__input-title input" :placeholder="$t('publish.enterPostTitle')" v-model="title"></textarea>
+    <section class="publish__post-editor" v-on:drop="onDrop">
+      <textarea class="publish__input-title input" :placeholder="$t('publish.enterPostTitle')" v-model="title" ref="title" maxlength="256"></textarea>
       <textarea :placeholder="$t('publish.typeYourStoryHere')" ref="area"></textarea>
     </section>
   </div>
@@ -44,6 +45,19 @@ export default {
   components: {
     PublishHeader
   },
+  methods: {
+    onDrop($event) {
+      for (let i = 0; i < $event.dataTransfer.items.length; i++) {
+        if ($event.dataTransfer.items[i].kind === 'file') {
+          const file = $event.dataTransfer.items[i].getAsFile()
+          console.log('... file[' + i + '].name = ' + file.name)
+        }
+      }
+    },
+    onUpdate() {
+      this.mde.value(this.body)
+    }
+  },
   mounted() {
     const SimpleMDE = require('simplemde')
 
@@ -57,80 +71,20 @@ export default {
       },
       element: this.$refs.area,
       toolbar: [
-        {
-          name: 'bold',
-          action: SimpleMDE.toggleBold,
-          className: 'fa fa-bold',
-          title: 'Bold'
-        },
-        {
-          name: 'italic',
-          action: SimpleMDE.toggleItalic,
-          className: 'fa fa-italic',
-          title: 'Italic'
-        },
-        {
-          name: 'heading',
-          action: SimpleMDE.toggleHeadingSmaller,
-          className: 'fa fa-header',
-          title: 'Heading'
-        },
-        {
-          name: 'heading-smaller',
-          action: SimpleMDE.toggleHeadingSmaller,
-          className: 'fa fa-header fa-header-x fa-header-smaller',
-          title: 'Smaller Heading'
-        },
-        {
-          name: 'heading-bigger',
-          action: SimpleMDE.toggleHeadingBigger,
-          className: 'fa fa-header fa-header-x fa-header-bigger',
-          title: 'Bigger Heading'
-        },
-        '|', // Separator
-        {
-          name: 'code',
-          action: SimpleMDE.toggleCodeBlock,
-          className: 'fa fa-code',
-          title: 'Code'
-        },
-        {
-          name: 'quote',
-          action: SimpleMDE.toggleBlockquote,
-          className: 'fa fa-quote-left',
-          title: 'Quote'
-        },
-        {
-          name: 'unordered-list',
-          action: SimpleMDE.toggleUnorderedList,
-          className: 'fa fa-list-ul',
-          title: 'Generic List'
-        },
-        {
-          name: 'ordered-list',
-          action: SimpleMDE.toggleOrderedList,
-          className: 'fa fa-list-ol',
-          title: 'Numbered List'
-        },
-        '|', // Separator
-        {
-          name: 'link',
-          action: SimpleMDE.drawLink,
-          className: 'fa fa-link',
-          title: 'Create Link'
-        },
-        {
-          name: 'image',
-          action: SimpleMDE.drawImage,
-          className: 'fa fa-picture-o',
-          title: 'Insert Image'
-        },
-        {
-          name: 'horizontal-rule',
-          action: SimpleMDE.drawHorizontalRule,
-          className: 'fa fa-minus',
-          title: 'Insert Horizontal Line'
-        },
+        'bold',
+        'italic',
+        'heading',
+        'heading-smaller',
+        'heading-bigger',
+        '|',
+        'code',
+        'quote',
+        'unordered-list',
+        'ordered-list',
+        '|',
+        'link',
+        'image',
+        'horizontal-rule',
         '|',
         {
           name: 'side-by-side',
@@ -149,12 +103,7 @@ export default {
           title: 'Toggle Fullscreen'
         },
         '|',
-        {
-          name: 'guide',
-          action: "https://simplemde.com/markdown-guide",
-          className: 'fa fa-question-circle',
-          title: 'Markdown Guide'
-        }
+        'guide'
       ],
       promptURLs: true,
       spellChecker: false,
@@ -162,10 +111,20 @@ export default {
       styleSelectedText: false
     })
 
-    this.mde.value(this.value)
+    this.mde.value(this.body)
     this.mde.codemirror.on('change', () => {
       this.body = this.mde.value()
     })
+  },
+  watch: {
+    title(to, from) {
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+      context.font = "bold 32px 'Noto Sans', sans-serif"
+      const metrics = context.measureText(to)
+      const q = Math.floor(metrics.width / 830) + 1
+      this.$refs.title.style.height = q * 48 + 'px'
+    }
   },
   computed: {
     body: stateModel('body'),

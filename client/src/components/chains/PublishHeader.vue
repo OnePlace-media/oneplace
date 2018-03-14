@@ -12,11 +12,11 @@
           >
             {{account.username}}
           </router-link>
-          <span>New post</span>
+          <span>{{$t(`publish.${mode}`)}}</span>
         </div>
       </div>
       <div>
-        <publish-drafts></publish-drafts>
+        <publish-drafts @update="$emit('update')"></publish-drafts>
         <publish-options :chain="chain" :account="account"></publish-options>
       </div>
     </div>
@@ -55,6 +55,12 @@ export default {
   computed: {
     DEFAULT_AVATAR() {
       return CONSTANTS.DEFAULT.AVATAR_IMAGE
+    },
+    mode() {
+      let mode = 'newPost'
+      if (this.$store.state.publish.drafts.loadFromDraft) mode = 'draft'
+      if (this.$store.state.publish.form.permlink) mode = 'edit'
+      return mode
     }
   },
   methods: {

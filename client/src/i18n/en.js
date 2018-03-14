@@ -178,7 +178,9 @@ module.exports = {
     upVotePost: 'Upvote post',
     enterPostTitle: 'Enter post title',
     typeYourStoryHere:'Type your story here...',
-
+    newPost: 'New post',
+    draft: 'Draft',
+    edit: 'Edit',
     drafts: 'Drafts',
     youHaveNoDrafts: 'You have no drafts.',
     createNewDraft: 'Create new draft'

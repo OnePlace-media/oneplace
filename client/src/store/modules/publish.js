@@ -8,19 +8,17 @@ const CONSTANTS = require('@oneplace/constants')
 const TYPES = {
   INIT_FORM_OBJECT: 'INIT_FORM_OBJECT',
   SET_FORM_OBJECT: 'SET_FORM_OBJECT',
-  SET_DRAFTS_OBJECT: 'SET_DRAFTS_OBJECT',
-  SET_DRAFTS_PROCESSING: 'SET_DRAFTS_PROCESSING',
-  SET_DRAFTS_COLLECTION: 'SET_DRAFTS_COLLECTION'
+  SET_DRAFTS_OBJECT: 'SET_DRAFTS_OBJECT'
 }
 
 const generatePermLink = (chain, data, prefix = '') => {
   if (data.permlink) return Promise.resolve()
   else {
-    let permlink = getSlug(data.title.replace(/[<>]/g, ''), {truncate: 128})
+    let permlink = getSlug(data.title.replace(/[<>]/g, ''), {truncate: 128}).toLowerCase()
     if (prefix) permlink = [prefix, permlink].join('-')
     return Api.getContent(chain, data.author, permlink)
       .then(response => {
-        const prefix = base58.encode(secureRandom.randomBuffer(4))
+        const prefix = base58.encode(secureRandom.randomBuffer(4)).toLowerCase()
         return generatePermLink(chain, data, prefix)
       })
       .catch(err => {
@@ -41,6 +39,7 @@ export default () => {
         processing: false,
         permlink: null,
         body: '',
+        title: '',
         tags: [],
         rewardsOpts: '50',
         upVotePost: false
@@ -65,12 +64,6 @@ export default () => {
     },
     [TYPES.SET_DRAFTS_OBJECT](state, params) {
       state.drafts = Object.assign(state.drafts, params)
-    },
-    [TYPES.SET_DRAFTS_PROCESSING](state, flag) {
-      state.drafts.processing = flag
-    },
-    [TYPES.SET_DRAFTS_COLLECTION](state, collection) {
-      state.drafts.collection = collection
     }
   }
 
@@ -101,16 +94,34 @@ export default () => {
             else
               params.collection = state.drafts.collection.map(draft => active.id === draft.id ? Object.assign(draft, active) : draft)
 
+            params.collection.sort((a, b) => a.time - b.time)
             commit(TYPES.SET_DRAFTS_OBJECT, params)
           })
       }
     },
+    createDraft({commit, state}) {
+      commit(TYPES.SET_DRAFTS_OBJECT, {loadFromDraft: false, active: null})
+      commit(TYPES.SET_FORM_OBJECT, {body: '', title: ''})
+    },
     deleteDraft({commit, state}, {draft}) {
       return Api.deleteDraft(draft)
         .then(response => {
-          const collection = state.drafts.collection.filter(_draft => _draft.id !== draft.id)
-          commit(TYPES.SET_DRAFTS_OBJECT, {collection})
+          const params = {}
+          params.collection = state.drafts.collection.filter(_draft => _draft.id !== draft.id)
+
+          if (state.drafts.active && state.drafts.active.id === draft.id) {
+            params.active = null
+            params.loadFromDraft = false
+            commit(TYPES.SET_FORM_OBJECT, {body: '', title: ''})
+          }
+          commit(TYPES.SET_DRAFTS_OBJECT, params)
         })
+    },
+    selectDraft({commit, state}, {draft}) {
+      const {body, title} = draft
+
+      commit(TYPES.SET_DRAFTS_OBJECT, {loadFromDraft: true, active: draft})
+      commit(TYPES.SET_FORM_OBJECT, {body, title})
     },
     submitForm({commit, state}, {chain, account}) {
       commit(TYPES.SET_FORM_OBJECT, {processing: true})

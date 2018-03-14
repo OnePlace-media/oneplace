@@ -29,7 +29,10 @@ class PostingWrapper {
         jsonMetadata.tags = tags
       }
       jsonMetadata.app = 'oneplace'
+
       const isPost = !parentAuthor && !parentPermlink
+      if (!parentPermlink) parentPermlink = tags.length ? tags[0] : 'general'
+
       const isUpdate = !!permlink
       if (!permlink && !isPost) {
         permlink = this.clients[chain].formatter.commentPermlink(parentAuthor, parentPermlink)

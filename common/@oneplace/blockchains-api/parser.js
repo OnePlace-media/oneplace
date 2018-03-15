@@ -19,8 +19,8 @@ const XMLSerializer = new xmldom.XMLSerializer()
 
 function traverse(chain, node, state, depth = 0) {
   if (!node || !node.childNodes) return
-  Object.keys(node.childNodes).forEach(key => {
-    const child = node.childNodes[key]
+  for (let i = 0; i < node.childNodes.length; i++) {
+    const child = node.childNodes.item(i)
     const tag = child.tagName ? child.tagName.toLowerCase() : null
     if (tag) state.htmltags.add(tag)
     if (tag === 'img') img(chain, state, child)
@@ -28,7 +28,7 @@ function traverse(chain, node, state, depth = 0) {
     else if (tag === 'a') link(chain, state, child)
     else if (child.nodeName === '#text') linkifyNode(chain, child, state);
     traverse(chain, child, state, depth + 1)
-  })
+  }
 }
 
 function img(chain, state, child) {

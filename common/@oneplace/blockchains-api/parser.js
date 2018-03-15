@@ -18,6 +18,7 @@ const XMLSerializer = new xmldom.XMLSerializer()
 
 
 function traverse(chain, node, state, depth = 0) {
+  const replaces = []
   if (!node || !node.childNodes) return
   for (let i = 0; i < node.childNodes.length; i++) {
     const child = node.childNodes.item(i)
@@ -26,9 +27,18 @@ function traverse(chain, node, state, depth = 0) {
     if (tag === 'img') img(chain, state, child)
     else if (tag === 'iframe') iframe(state, child)
     else if (tag === 'a') link(chain, state, child)
-    else if (child.nodeName === '#text') linkifyNode(chain, child, state);
+    else if (child.nodeName === '#text') {
+      const newChild = linkifyNode(chain, child, state)
+      if (newChild) {
+        replaces.push([newChild, child])
+      }
+    }
     traverse(chain, child, state, depth + 1)
   }
+
+  replaces.forEach(([newChild, child]) => {
+    child.parentNode.replaceChild(newChild, child)
+  })
 }
 
 function img(chain, state, child) {
@@ -228,7 +238,7 @@ function linkifyNode(chain, child, state) {
       const newChild = DOMParser.parseFromString(
         `<span>${content}</span>`
       );
-      child.parentNode.replaceChild(newChild, child)
+      // child.parentNode.replaceChild(newChild, child)
       return newChild
     }
   } catch (error) {

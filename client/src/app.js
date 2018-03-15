@@ -17,6 +17,7 @@ import GlobalComponents from './plugins/globalComponents'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
 import SocialSharing from 'vue-social-sharing'
+import EventBus from './event-bus'
 
 const CONSTANTS = require('@oneplace/constants')
 
@@ -49,6 +50,7 @@ axios.interceptors.response.use(
   }
 )
 
+
 export function createApp(ssrContext) {
   const i18n = new VueI18n({
     locale: 'en',
@@ -76,6 +78,7 @@ export function createApp(ssrContext) {
       i18n.locale = language
       moment.locale(language)
       Vue.localStorage.set('locale', language)
+      EventBus.$emit('LOCALE:CHANGE', language)
     },
     current() {
       return i18n.locale

@@ -54,6 +54,12 @@ export default {
   params() {
     return Vue.axios.get(`/params`)
   },
+  uploadImage(image, config){
+    const data = new FormData()
+    data.append('image', image)
+
+    return Vue.axios.post('/images/upload', data, config)
+  },
 
   // GET BLOCKCHAINS PROXY OPERATIONS
   getContent(chain, username, permlink) {

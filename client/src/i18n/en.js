@@ -6,7 +6,7 @@ module.exports = {
     STEEMIT_MAX_VOTE_CHANGES: 'You have used the maximum number of vote changes on this comment',
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds',
     NET_PROBLEM: 'A network error has occurred, check your connection and try again',
-    STEEMIT_MIN_ROOT_COMMENT_INTERVAL:'You may only post once every 5 minutes'
+    STEEMIT_MIN_ROOT_COMMENT_INTERVAL: 'You may only post once every 5 minutes'
   },
   common: {
     cancel: 'Cancel',
@@ -177,13 +177,38 @@ module.exports = {
     '0': 'Decline rewards',
     upVotePost: 'Upvote post',
     enterPostTitle: 'Enter post title',
-    typeYourStoryHere:'Type your story here...',
+    typeYourStoryHere: 'Type your story here...',
     newPost: 'New post',
     draft: 'Draft',
     edit: 'Edit',
     drafts: 'Drafts',
     youHaveNoDrafts: 'You have no drafts.',
-    createNewDraft: 'Create new draft'
+    createNewDraft: 'Create new draft',
+
+    pasteLinkUrlHere: 'Paste link URL here...',
+    pasteImageLinkOrUploadImageFromYourDevice: 'Paste image link or upload image from your device...',
+    upload: 'Upload',
+    bold: 'Bold',
+    italic: 'Italic',
+    heading: 'Heading',
+    headingSmaller: 'Smaller Heading',
+    headingBigger: 'Bigger Heading',
+    code: 'Code',
+    quote: 'Quote',
+    unorderedList: 'Generic List',
+    orderedList: 'Numbered List',
+    insertLink: 'Insert link',
+    insertImage: 'Insert image',
+    horizontalRule: 'Insert Horizontal Line',
+    guide: 'Markdown Guide',
+    fullscreen: 'Toggle Fullscreen',
+
+    errors: {
+      TYPE: 'Upload file must have type like image/*',
+      SUPPORT: 'Only gif, png, jpeg, webp support',
+      SIZE_GIF: 'Upload file size must less then 20Mb',
+      SIZE: 'Upload file size must less then 2Mb'
+    }
   },
   auth: {
     SignIn: 'Log in',

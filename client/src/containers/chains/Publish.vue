@@ -10,8 +10,11 @@
 
     <section class="publish__post-editor" v-on:drop="onDrop">
       <textarea class="publish__input-title input" :placeholder="$t('publish.enterPostTitle')" v-model="title" ref="title" maxlength="256"></textarea>
-      <textarea :placeholder="$t('publish.typeYourStoryHere')" ref="area"></textarea>
+      <publish-editor ref='editor'></publish-editor>
     </section>
+    <publish-modal-image v-if="showModalImage" @update="onUpdate"></publish-modal-image>
+    <publish-modal-link v-if="showModalLink" @update="onUpdate"></publish-modal-link>
+    <footer-mini></footer-mini>
   </div>
 </template>
 
@@ -23,6 +26,12 @@
 
 <script>
 import PublishHeader from '../../components/chains/PublishHeader.vue'
+import PublishEditor from '../../components/chains/PublishEditor.vue'
+
+import PublishModalLink from '../../components/chains/PublishModalLink.vue'
+import PublishModalImage from '../../components/chains/PublishModalImage.vue'
+
+import FooterMini from '../../components/common/FooterMini.vue'
 
 const CONSTANTS = require('@oneplace/constants')
 const stateModel = name => {
@@ -43,7 +52,11 @@ export default {
     }
   },
   components: {
-    PublishHeader
+    PublishHeader,
+    PublishEditor,
+    PublishModalLink,
+    PublishModalImage,
+    FooterMini
   },
   methods: {
     onDrop($event) {
@@ -55,66 +68,8 @@ export default {
       }
     },
     onUpdate() {
-      this.mde.value(this.body)
+      this.$refs.editor.onUpdate()
     }
-  },
-  mounted() {
-    const SimpleMDE = require('simplemde')
-
-    this.mde = new SimpleMDE({
-      autoDownloadFontAwesome: true,
-      autofocus: true,
-      autosave: { enabled: false },
-      blockStyles: {
-        bold: '__',
-        italic: '_'
-      },
-      element: this.$refs.area,
-      toolbar: [
-        'bold',
-        'italic',
-        'heading',
-        'heading-smaller',
-        'heading-bigger',
-        '|',
-        'code',
-        'quote',
-        'unordered-list',
-        'ordered-list',
-        '|',
-        'link',
-        'image',
-        'horizontal-rule',
-        '|',
-        {
-          name: 'side-by-side',
-          action: function(editor) {},
-          className: 'fa fa-columns no-disable no-mobile d-none',
-          title: 'Toggle Side by Side'
-        },
-        {
-          name: 'fullscreen',
-          action: editor => {
-            SimpleMDE.toggleFullScreen(editor)
-            if (!this.isFullScreen) SimpleMDE.toggleSideBySide(editor)
-            this.isFullScreen = !this.isFullScreen
-          },
-          className: 'fa fa-columns no-disable no-mobile ',
-          title: 'Toggle Fullscreen'
-        },
-        '|',
-        'guide'
-      ],
-      promptURLs: true,
-      spellChecker: false,
-      status: false,
-      styleSelectedText: false
-    })
-
-    this.mde.value(this.body)
-    this.mde.codemirror.on('change', () => {
-      this.body = this.mde.value()
-    })
   },
   watch: {
     title(to, from) {
@@ -127,8 +82,13 @@ export default {
     }
   },
   computed: {
-    body: stateModel('body'),
     title: stateModel('title'),
+    showModalImage() {
+      return this.$store.state.publish.editor.showModalImage
+    },
+    showModalLink() {
+      return this.$store.state.publish.editor.showModalLink
+    },
     accountsByChain() {
       return this.accounts.filter(acc => acc.chain === this.chain)
     },

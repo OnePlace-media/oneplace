@@ -41,10 +41,10 @@
 //   },
 //   mounted() {
 //     setTimeout(() => {
-//       const bar = document.getElementsByClassName('editor-toolbar')[0]
-//       bar.parentNode.removeChild(bar)
-//       this.configs.toolbar[0].title = 'Русский'
-//       this.$refs.markdownEditor.simplemde.createToolbar(this.configs.toolbar)
+      // const bar = document.getElementsByClassName('editor-toolbar')[0]
+      // bar.parentNode.removeChild(bar)
+      // this.configs.toolbar[0].title = 'Русский'
+      // this.$refs.markdownEditor.simplemde.createToolbar(this.configs.toolbar)
 //     }, 1000)
 //   }
 // }

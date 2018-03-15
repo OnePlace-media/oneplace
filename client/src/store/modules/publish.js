@@ -8,7 +8,8 @@ const CONSTANTS = require('@oneplace/constants')
 const TYPES = {
   INIT_FORM_OBJECT: 'INIT_FORM_OBJECT',
   SET_FORM_OBJECT: 'SET_FORM_OBJECT',
-  SET_DRAFTS_OBJECT: 'SET_DRAFTS_OBJECT'
+  SET_DRAFTS_OBJECT: 'SET_DRAFTS_OBJECT',
+  SET_EDITOR_OBJECT: 'SET_EDITOR_OBJECT',
 }
 
 const generatePermLink = (chain, data, prefix = '') => {
@@ -34,6 +35,12 @@ const generatePermLink = (chain, data, prefix = '') => {
 export default () => {
   const initState = () => {
     return {
+      editor: {
+        showModalImage: false,
+        showModalLink: false,
+        startCursor: {line: 0, ch: 0, sticky: null},
+        endCursor: {line: 0, ch: 0, sticky: null}
+      },
       form: {
         chain: null,
         processing: false,
@@ -64,6 +71,9 @@ export default () => {
     },
     [TYPES.SET_DRAFTS_OBJECT](state, params) {
       state.drafts = Object.assign(state.drafts, params)
+    },
+    [TYPES.SET_EDITOR_OBJECT](state, params) {
+      state.editor = Object.assign(state.editor, params)
     }
   }
 

@@ -184,7 +184,31 @@ module.exports = {
     edit: 'Редактирование',
     drafts: 'Черновики',
     youHaveNoDrafts: 'У вас 0 черновиков',
-    createNewDraft: 'Создать новый черновик'
+    createNewDraft: 'Создать новый черновик',
+
+    pasteLinkUrlHere: 'Вставьте URL...',
+    pasteImageLinkOrUploadImageFromYourDevice: 'Вставьте ссылку или загрузите изображение с вашего устройства...',
+    upload: 'Загрузка',
+    bold: 'Жирный',
+    italic: 'Курсив',
+    heading: 'Заголовок',
+    headingSmaller: 'Меньший заголовок',
+    headingBigger: 'Больший заголовок',
+    code: 'Код',
+    quote: 'Цитата',
+    unorderedList: 'Список',
+    orderedList: 'Нумерованный список',
+    insertLink: 'Вставить ссылку',
+    insertImage: 'Вставить изображение',
+    horizontalRule: 'Вставить горизонтальную линию',
+    guide: 'Гид по Markdown',
+    fullscreen: 'Полноэкранный режим',
+    errors: {
+      TYPE: 'Загружаемый файл должен быть типа image/*',
+      SUPPORT: 'Поддерживается только gif, png, jpeg, webp',
+      SIZE_GIF: 'Размер загружаемого файла должен быть меньше 20Mb',
+      SIZE: 'Размер загружаемого файла должен быть меньше 2Mb'
+    }
   },
   auth: {
     SignIn: 'Войти',

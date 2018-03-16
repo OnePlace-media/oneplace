@@ -23,16 +23,18 @@ function traverse(chain, node, state, depth = 0) {
   for (let i = 0; i < node.childNodes.length; i++) {
     const child = node.childNodes.item(i)
     const tag = child.tagName ? child.tagName.toLowerCase() : null
+    let newChild = null
+
     if (tag) state.htmltags.add(tag)
     if (tag === 'img') img(chain, state, child)
-    else if (tag === 'iframe') iframe(state, child)
+    else if (tag === 'iframe') newChild = iframe(state, child)
     else if (tag === 'a') link(chain, state, child)
-    else if (child.nodeName === '#text') {
-      const newChild = linkifyNode(chain, child, state)
-      if (newChild) {
-        replaces.push([newChild, child])
-      }
+    else if (child.nodeName === '#text') newChild = linkifyNode(chain, child, state)
+
+    if (newChild) {
+      replaces.push([newChild, child])
     }
+
     traverse(chain, child, state, depth + 1)
   }
 
@@ -69,7 +71,8 @@ function iframe(state, child) {
   const tag = child.parentNode.tagName ? child.parentNode.tagName.toLowerCase() : child.parentNode.tagName
   if (tag === 'div' && child.parentNode.getAttribute('class') === 'video-wrapper') return
   const newDoc = DOMParser.parseFromString(`<div class="video-wrapper" data-src="${url}"></div>`)
-  child.parentNode.replaceChild(newDoc.childNodes[0], child)
+  return newDoc.childNodes[0]
+  //  child.parentNode.replaceChild(newDoc.childNodes[0], child)
 }
 
 function link(chain, state, child) {

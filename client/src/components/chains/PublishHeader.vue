@@ -11,6 +11,7 @@
         ></a>
         <div class="column-wrapper">
           <router-link 
+            v-if="account.username"
             tag="a" 
             :to="{name:'chain-account-view', params:{chain, username: account.username}}" 
             class="link link--op"

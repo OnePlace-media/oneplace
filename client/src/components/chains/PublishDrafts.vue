@@ -48,7 +48,7 @@ export default {
       if (name !== COMPONENT_NAME && flag) this.isVisible = false
     })
 
-    this.$auth.ready(() => {
+    const initDrafts = () => {
       const opts = { userId: this.$auth.user().id }
 
       this.$store.dispatch('publish/initDrafts', opts)
@@ -56,7 +56,9 @@ export default {
       this.interval = setInterval(() => {
         this.$store.dispatch('publish/saveDraft', opts)
       }, INTERVAL_BETWEEN_SAVE_DRAFT)
-    })
+    }
+    
+    this.$auth.ready() ? initDrafts() : this.$auth.ready(initDrafts)
   },
   destroyed() {
     clearInterval(this.interval)

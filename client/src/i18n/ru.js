@@ -169,8 +169,11 @@ module.exports = {
   },
   publish: {
     publish: 'Публикация',
+    update: 'Обновить',
     readyToPublish: 'Готовы к публикации?',
+    confirmUpdates: 'Подтвердить изменения?',
     addTags_upTo5: 'Добавьте теги (не более 5)',
+    editTags: 'Редактировать теги',
     typeTagsHere: 'Введите тег...',
     payoutSettings: 'Настройки выплат',
     '50': '50% / 50% (Рекомендовано)',
@@ -203,6 +206,13 @@ module.exports = {
     horizontalRule: 'Вставить горизонтальную линию',
     guide: 'Гид по Markdown',
     fullscreen: 'Полноэкранный режим',
+    wrapper: 'Форматировать',
+    centered: 'По центру',
+    justified: 'По ширине',
+    pullLeft: 'Прижать влево',
+    pullRight: 'Прижать вправо',
+    insertLine: 'Вставить линию',
+
     errors: {
       TYPE: 'Загружаемый файл должен быть типа image/*',
       SUPPORT: 'Поддерживается только gif, png, jpeg, webp',

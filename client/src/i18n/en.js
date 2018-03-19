@@ -168,8 +168,11 @@ module.exports = {
   },
   publish: {
     publish: 'Publish',
+    update:'Update',
     readyToPublish: 'Ready to publish?',
+    confirmUpdates:'Confirm updates?',
     addTags_upTo5: 'Add tags (up to 5)',
+    editTags: 'Edit tags',
     typeTagsHere: 'Type tags here...',
     payoutSettings: 'Payout settings',
     '50': '50% / 50% (Recommended)',
@@ -202,6 +205,12 @@ module.exports = {
     horizontalRule: 'Insert Horizontal Line',
     guide: 'Markdown Guide',
     fullscreen: 'Toggle Fullscreen',
+    wrapper: 'Wrap',
+    centered:'Centered',
+    justified:'Justified',
+    pullLeft:'Pull left',
+    pullRight:'Pull right',
+    insertLine:'Insert line',
 
     errors: {
       TYPE: 'Upload file must have type like image/*',

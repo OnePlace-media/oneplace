@@ -3,7 +3,12 @@
     <div class="publish__header-wrapper">
       <div class="publish__post-author">
         <div class="publish__avatar avatar" :style="`background-image: url('${account.avatar || DEFAULT_AVATAR}');`"></div>
-        <a class="header__user-switch header__user-switch--publish" title="Switch account" @click.prevent="switchAccount"></a>
+        <a 
+          class="header__user-switch header__user-switch--publish" 
+          title="Switch account" 
+          @click.prevent="switchAccount"
+          v-if="isNewRecord"
+        ></a>
         <div class="column-wrapper">
           <router-link 
             tag="a" 
@@ -16,7 +21,7 @@
         </div>
       </div>
       <div>
-        <publish-drafts @update="$emit('update')"></publish-drafts>
+        <publish-drafts @update="$emit('update')" v-if="isNewRecord"></publish-drafts>
         <publish-options :chain="chain" :account="account"></publish-options>
       </div>
     </div>
@@ -61,6 +66,9 @@ export default {
       if (this.$store.state.publish.drafts.loadFromDraft) mode = 'draft'
       if (this.$store.state.publish.form.permlink) mode = 'edit'
       return mode
+    },
+    isNewRecord() {
+      return this.$store.state.publish.form.isNewRecord
     }
   },
   methods: {

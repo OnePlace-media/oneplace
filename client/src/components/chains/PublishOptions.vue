@@ -2,9 +2,9 @@
   <span class="publish__btn publish__btn--publish" @click="setIsVisible(true)" v-on-click-outside="close" >{{$t('publish.publish')}}
     <span class="icon--arrow-down"></span>
     <div class="dropdown publish__setup" v-show="isVisible">
-      <span class="publish__setup-header"><h2 class="h2">{{$t('publish.readyToPublish')}}</h2></span>
+      <span class="publish__setup-header"><h2 class="h2">{{$t(`publish.${isNewRecord ? 'readyToPublish' : 'confirmUpdates'}`)}}</h2></span>
       <div class="publish__setup-tags">
-        <h4 class="h4">{{$t('publish.addTags_upTo5')}}:</h4>
+        <h4 class="h4">{{$t(`publish.${isNewRecord? 'addTags_upTo5' : 'editTags'}`)}}:</h4>
         <input 
           type="text" 
           class="publish__tags-input input" 
@@ -24,7 +24,7 @@
           <div v-if="errors.firstByRule('tag', 'max')">{{$t('common.validate.tagMax')}}</div>
         </span>
       </div>
-      <div class="publish__setup-payout">
+      <div class="publish__setup-payout" v-if="isNewRecord">
         <h4 class="h4 publish__setup-payout-title">{{$t('publish.payoutSettings')}}:</h4>
         <input class="publish__radio" id="option-1" type="radio" name="chain" value="50" v-model="rewardsOpts">
         <label class="publish__radio-label" for="option-1">{{$t('publish.50')}}</label>
@@ -34,17 +34,23 @@
         <label class="publish__radio-label" for="option-3">{{$t('publish.0')}}</label>
       </div>
       <div class="publish__final">
-          <input type="checkbox" value="1" id="checkbox-1" class="publish__checkbox" v-model="upVotePost">
-          <label for="checkbox-1" class="publish__checkbox-label">{{$t('publish.upVotePost')}}</label>
+          <input type="checkbox" value="1" id="checkbox-1" class="publish__checkbox" v-model="upVotePost" v-if="isNewRecord">
+          <label for="checkbox-1" class="publish__checkbox-label" v-if="isNewRecord">{{$t('publish.upVotePost')}}</label>
+
           <div class="publish__post-btn-group">
             <button 
               class="btn btn--large publish__btn-post" 
               :class="{'publish__btn-post--active': isValid}"
               @click="submitForm"
             >
-              {{$t('publish.publish')}}
+              <span v-show="!processing">{{$t(`publish.${isNewRecord ? 'publish' : 'update'}`)}}</span>
+              <div class="spinner" v-show="processing">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </button>
-            <a href="#" class="post-view__post-btn-link">Cancel</a>
+            <a href="#" class="post-view__post-btn-link" @click.stop="close">Cancel</a>
           </div>
       </div>
     </div>
@@ -101,7 +107,13 @@ export default {
     },
     rewardsOpts: stateModel('rewardsOpts'),
     upVotePost: stateModel('upVotePost'),
-    tags: stateModel('tags')
+    tags: stateModel('tags'),
+    isNewRecord() {
+      return this.$store.state.publish.form.isNewRecord
+    },
+    processing() {
+      return this.$store.state.publish.form.processing
+    }
   },
   mounted() {
     EventBus.$on(PUBLISH_HEADER_VISIBLE, ({ name, flag }) => {
@@ -117,6 +129,9 @@ export default {
       this.setIsVisible(false)
     },
     removeTag(tag) {
+      if (!this.isNewRecord && tag === this.tags[0])
+        throw new Error('You can`t remove first tag')
+
       this.tags = this.tags.filter(_tag => _tag !== tag)
     },
     addTag(input) {
@@ -141,6 +156,16 @@ export default {
         .dispatch('publish/submitForm', {
           chain: this.chain,
           account: this.account
+        })
+        .then(data => {
+          this.$router.push({
+            name: 'chain-post-view',
+            params: {
+              chain: this.chain,
+              username: data.author,
+              permlink: data.permlink
+            }
+          })
         })
         .catch(err => {
           console.log(err)

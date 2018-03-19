@@ -52,6 +52,7 @@
             :account="account" 
             :chain="chain" 
             @vote="vote"
+            @edit="edit"
             :up-vote-processing="upVoteProcessing"
             :down-vote-processing="downVoteProcessing"
           ></post-bottom>
@@ -139,6 +140,16 @@ export default {
     return this.$helper.generatePostMeta(this.post, this.$route)
   },
   methods: {
+    edit() {
+      this.$router.push({
+        name: 'post-edit',
+        params: {
+          chain: this.chain,
+          username: this.post.author,
+          permlink: this.post.permlink
+        }
+      })
+    },
     goToProfile(username) {
       if (username === this.post.author) {
         this.$store.commit('setPostViewData', null)

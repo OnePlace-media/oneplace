@@ -4230,6 +4230,9 @@ hr {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
@@ -4237,13 +4240,30 @@ hr {
   flex-direction: column;
   font-family: 'Noto Sans', sans-serif;
   position: absolute;
-  top: 0;
-  left: 32px;
-  z-index: 10;
+  top: 485px;
+  left: 511px;
+  z-index: 999999999999;
   background: #fff;
-  padding: 16px;
-  border: 1px solid #cfd2d2;
+  box-shadow: 0 0 5px rgba(0,0,0,0.15);
   border-radius: 3px;
+}
+
+.publish__toolbar-dropdown-btn {
+  padding: 8px 12px;
+  font-size: 13px;
+  text-align: left;
+  color: #383838 !important;
+  width: 100%;
+}
+
+.publish__toolbar-dropdown-btn .fa {
+  display: inline;
+  margin-right: 8px;
+}
+
+.publish__toolbar-dropdown-btn:hover {
+  cursor: pointer;
+  background: #f6f6f6;
 }
 
 .CodeMirror-code * {
@@ -4256,6 +4276,7 @@ hr {
 
 .editor-toolbar {
   position: fixed;
+  z-index: 3;
   top: 89px;
   left: calc(50% - 500px);
   display: -webkit-box;
@@ -4289,7 +4310,13 @@ hr {
   left: 16px;
   width: auto;
   height: auto;
-  z-index: 700;
+  z-index: 100;
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
+.editor-toolbar.fullscreen .fa-eye {
+  display: none;
 }
 
 .editor-toolbar .fa {
@@ -4303,6 +4330,33 @@ hr {
 
 .editor-toolbar .fa:hover {
   color: #818888 !important;
+}
+
+.editor-toolbar .has-dropdown {
+  padding-right: 8px;
+}
+
+.editor-toolbar .has-dropdown:after {
+  position: absolute;
+  top: 11px;
+  right: 4px;
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-bottom-width: initial;
+  border-left-width: initial;
+  -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
+  border-style: solid solid none none;
+  border-color: #383838;
+  border-right: 2px solid;
+  border-top: 2px solid;
+}
+
+.editor-toolbar .fa.has-dropdown--active {
+  background: #383838 !important;
+  color: #fff !important;
 }
 
 .editor-toolbar i.separator {
@@ -4403,11 +4457,15 @@ hr {
 
 .CodeMirror-fullscreen,.editor-preview-side {
   top: 0;
-  z-index: 500;
+  z-index: 99;
 }
 
 .CodeMirror-fullscreen {
   height: auto;
+}
+
+.CodeMirror-fullscreen .CodeMirror-scroll {
+  padding: 16px 0 0;
 }
 
 .CodeMirror.CodeMirror-sided {

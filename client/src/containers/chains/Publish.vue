@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content publish">
+  <div class="main-content publish" v-show="!processing">
     <publish-header 
       :accounts="accounts"
       :accounts-by-chain="accountsByChain"
@@ -14,7 +14,6 @@
     </section>
     <publish-modal-image v-if="showModalImage" @update="onUpdate"></publish-modal-image>
     <publish-modal-link v-if="showModalLink" @update="onUpdate"></publish-modal-link>
-    <footer-mini></footer-mini>
   </div>
 </template>
 
@@ -58,14 +57,44 @@ export default {
     PublishModalImage,
     FooterMini
   },
+  mounted() {
+    const init = () => {
+      try {
+        if (this.account.username === null) throw new Error('ACCESS_DENIED')
+        else {
+          const username = this.$route.params.username
+          if (username) {
+            const accounts = this.accountsByChain
+            const account = accounts.find(acc => acc.username === username)
+            if (!account) throw new Error('ACCESS_DENIED')
+            else
+              this.$store.dispatch('switchAccount', {
+                accounts,
+                targetAccId: account.id
+              })
+          }
+          this.$store.dispatch('publish/init', this.$route.params).then(() => {
+            this.onUpdate()
+          })
+        }
+      } catch (e) {
+        this.$router.push({
+          name: 'add-account',
+          params: { chain: this.chain }
+        })
+      }
+    }
+
+    this.$auth.ready() ? init() : this.$auth.ready(init)
+  },
   methods: {
     onDrop($event) {
-      for (let i = 0; i < $event.dataTransfer.items.length; i++) {
-        if ($event.dataTransfer.items[i].kind === 'file') {
-          const file = $event.dataTransfer.items[i].getAsFile()
-          console.log('... file[' + i + '].name = ' + file.name)
-        }
-      }
+      // for (let i = 0; i < $event.dataTransfer.items.length; i++) {
+      //   if ($event.dataTransfer.items[i].kind === 'file') {
+      //     const file = $event.dataTransfer.items[i].getAsFile()
+      //     console.log('... file[' + i + '].name = ' + file.name)
+      //   }
+      // }
     },
     onUpdate() {
       this.$refs.editor.onUpdate()
@@ -82,6 +111,9 @@ export default {
     }
   },
   computed: {
+    processing() {
+      return this.$store.state.publish.processing
+    },
     title: stateModel('title'),
     showModalImage() {
       return this.$store.state.publish.editor.showModalImage

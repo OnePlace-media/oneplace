@@ -6,7 +6,8 @@ import secureRandom from 'secure-random'
 const CONSTANTS = require('@oneplace/constants')
 
 const TYPES = {
-  INIT_FORM_OBJECT: 'INIT_FORM_OBJECT',
+  SET_PROCESSING: 'SET_PROCESSING',
+  INIT: 'INIT',
   SET_FORM_OBJECT: 'SET_FORM_OBJECT',
   SET_DRAFTS_OBJECT: 'SET_DRAFTS_OBJECT',
   SET_EDITOR_OBJECT: 'SET_EDITOR_OBJECT',
@@ -35,6 +36,7 @@ const generatePermLink = (chain, data, prefix = '') => {
 export default () => {
   const initState = () => {
     return {
+      processing: true,
       editor: {
         showModalImage: false,
         showModalLink: false,
@@ -42,6 +44,7 @@ export default () => {
         endCursor: {line: 0, ch: 0, sticky: null}
       },
       form: {
+        isNewRecord: true,
         chain: null,
         processing: false,
         permlink: null,
@@ -62,9 +65,14 @@ export default () => {
   const state = initState()
 
   const mutations = {
-    [TYPES.INIT_FORM_OBJECT](state, params) {
-      state.form = initState().form
-      state.drafts = initState().drafts
+    [TYPES.SET_PROCESSING](state, flag) {
+      state.processing = flag
+    },
+    [TYPES.INIT](state) {
+      const {form, drafts, editor} = initState()
+      state.form = form
+      state.drafts = drafts
+      state.editor = editor
     },
     [TYPES.SET_FORM_OBJECT](state, params) {
       state.form = Object.assign(state.form, params)
@@ -78,6 +86,35 @@ export default () => {
   }
 
   const actions = {
+    init({commit}, {chain, permlink, username}) {
+      commit(TYPES.SET_PROCESSING, true)
+      commit(TYPES.INIT)
+      if (permlink && username) {
+        return Api.getContent(chain, username, permlink)
+          .then(response => {
+            const {
+              permlink,
+              tags,
+              title,
+              body_orig
+            } = response.data
+            commit(TYPES.SET_FORM_OBJECT, {
+              isNewRecord: false,
+              permlink,
+              tags,
+              title,
+              body: body_orig
+            })
+            commit(TYPES.SET_PROCESSING, false)
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      } else {
+        commit(TYPES.SET_PROCESSING, false)
+        return Promise.resolve()
+      }
+    },
     initDrafts({commit, state}, {userId}) {
       if (state.drafts.collection === null && userId) {
         commit(TYPES.SET_DRAFTS_OBJECT, {processing: true})
@@ -139,9 +176,7 @@ export default () => {
       data.author = account.username
       return generatePermLink(chain, data)
         .then(() => Api.savePost(chain, account.username, state.form))
-        .then(response => {
-          console.log(response)
-        })
+        .then(response => response.data)
     }
   }
 

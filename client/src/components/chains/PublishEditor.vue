@@ -1,9 +1,30 @@
 <template>
-  <textarea :placeholder="$t('publish.typeYourStoryHere')" ref="area"></textarea>
+  <div>
+    <textarea :placeholder="$t('publish.typeYourStoryHere')" ref="area"></textarea>
+    <div class="publish__toolbar-dropdown" v-if="wrapperShow" v-on-click-outside="closeWrapper" :style="wrapperStyle">
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('center')">
+        <i class="fa fa-align-center"></i>{{$t('publish.centered')}}
+      </span>
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('justify')">
+        <i class="fa fa-align-justify"></i>{{$t('publish.justified')}}
+      </span>
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('pull-left')">
+        <i class="fa fa-align-left"></i>{{$t('publish.pullLeft')}}
+      </span>
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('pull-right')">
+        <i class="fa fa-align-right"></i>{{$t('publish.pullRight')}}
+      </span>
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('line')">
+        <i class="fa fa-minus"></i>{{$t('publish.insertLine')}}
+      </span>
+    </div>
+  </div>
+  
 </template>
 
 <script>
 import EventBus from '../../event-bus'
+import { mixin as onClickOutside } from 'vue-on-click-outside'
 
 const stateModel = name => {
   return {
@@ -17,6 +38,16 @@ const stateModel = name => {
 }
 export default {
   name: 'PublishEditor',
+  mixins: [onClickOutside],
+  data() {
+    return {
+      wrapperShow: false,
+      wrapperRect: {
+        x: 0,
+        y: 0
+      }
+    }
+  },
   mounted() {
     const SimpleMDE = require('simplemde')
     const generateToolbar = () => {
@@ -76,6 +107,16 @@ export default {
           className: 'fa fa-list-ol',
           title: this.$t('publish.orderedList')
         },
+        {
+          id: 'wrapper',
+          name: 'wrapper',
+          action: editor => {
+            this.wrapperRect = editor.toolbarElements.wrapper.getBoundingClientRect()
+            this.wrapperShow = true
+          },
+          className: 'fa fa-plus has-dropdown',
+          title: this.$t('publish.wrapper')
+        },
         '|',
         {
           name: 'link',
@@ -98,12 +139,6 @@ export default {
           },
           className: 'fa fa-picture-o',
           title: this.$t('publish.insertImage')
-        },
-        {
-          name: 'horizontal-rule',
-          action: SimpleMDE.drawHorizontalRule,
-          className: 'fa fa-minus',
-          title: this.$t('publish.horizontalRule')
         },
         '|',
         {
@@ -171,10 +206,40 @@ export default {
   methods: {
     onUpdate() {
       this.mde.value(this.body)
+    },
+    closeWrapper() {
+      this.wrapperShow = false
+    },
+    insertWrapper(type) {
+      let tag = 'div'
+      let className = null
+      if (type === 'center') tag = 'center'
+      else className = type
+
+      const selections = this.mde.codemirror.getSelections()
+      let selectionsReplace
+      if (type === 'line') {
+        const template = `\n\n-----\n\n`
+        selectionsReplace = selections.map(selection => selection + template)
+      } else {
+        const template = `\n<${tag}${
+          className ? ` class="${className}"` : ''
+        }>%CONTENT%</${tag}>\n`
+        selectionsReplace = selections.map(selection =>
+          template.replace('%CONTENT%', selection)
+        )
+      }
+      this.mde.codemirror.replaceSelections(selectionsReplace)
     }
   },
   computed: {
-    body: stateModel('body')
+    body: stateModel('body'),
+    wrapperStyle() {
+      return {
+        top: this.wrapperRect.y + 'px',
+        left: this.wrapperRect.x + 30 + 'px'
+      }
+    }
   }
 }
 </script>

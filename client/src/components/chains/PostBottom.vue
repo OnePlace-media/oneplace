@@ -175,10 +175,11 @@ export default {
       const isOwner = this.post.author === this.account.username
       const isGolos = this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS
       const isArchived = this.post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED
-      return this.isComment && isOwner && (!isGolos || !isArchived)
+      return !this.isBlog && isOwner && (!isGolos || !isArchived)
     },
     showDeleteOption() {
       return (
+        this.isComment &&
         this.showEditOption &&
         (!this.post.replies || !this.post.replies.length) &&
         this.post.net_rshares <= 0

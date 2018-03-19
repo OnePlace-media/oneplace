@@ -61,6 +61,20 @@ export function createRouter(i18n) {
         ]
       },
       {
+        path: `/:chain(${CONSTANTS.BLOCKCHAIN.SOURCE.STEEM}|${CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS})/@:username/:permlink/edit`,
+        component: WrapperLayout,
+        children: [
+          {
+            name: 'post-edit',
+            path: '',
+            component: Publish,
+            meta: {
+              auth: true
+            }
+          }
+        ]
+      },
+      {
         path: '/',
         component: MainLayout,
         redirect: '/s',

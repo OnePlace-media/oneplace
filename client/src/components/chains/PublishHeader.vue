@@ -7,7 +7,7 @@
           class="header__user-switch header__user-switch--publish" 
           title="Switch account" 
           @click.prevent="switchAccount"
-          v-if="isNewRecord"
+          v-if="isNewRecord && accountsByChain.length > 1"
         ></a>
         <div class="column-wrapper">
           <router-link 

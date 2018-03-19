@@ -1,0 +1,245 @@
+<template>
+  <div>
+    <textarea :placeholder="$t('publish.typeYourStoryHere')" ref="area"></textarea>
+    <div class="publish__toolbar-dropdown" v-if="wrapperShow" v-on-click-outside="closeWrapper" :style="wrapperStyle">
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('center')">
+        <i class="fa fa-align-center"></i>{{$t('publish.centered')}}
+      </span>
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('justify')">
+        <i class="fa fa-align-justify"></i>{{$t('publish.justified')}}
+      </span>
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('pull-left')">
+        <i class="fa fa-align-left"></i>{{$t('publish.pullLeft')}}
+      </span>
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('pull-right')">
+        <i class="fa fa-align-right"></i>{{$t('publish.pullRight')}}
+      </span>
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('line')">
+        <i class="fa fa-minus"></i>{{$t('publish.insertLine')}}
+      </span>
+    </div>
+  </div>
+  
+</template>
+
+<script>
+import EventBus from '../../event-bus'
+import { mixin as onClickOutside } from 'vue-on-click-outside'
+
+const stateModel = name => {
+  return {
+    get() {
+      return this.$store.state.publish.form[name]
+    },
+    set(value) {
+      this.$store.commit('publish/SET_FORM_OBJECT', { [name]: value })
+    }
+  }
+}
+export default {
+  name: 'PublishEditor',
+  mixins: [onClickOutside],
+  data() {
+    return {
+      wrapperShow: false,
+      wrapperRect: {
+        x: 0,
+        y: 0
+      }
+    }
+  },
+  mounted() {
+    const SimpleMDE = require('simplemde')
+    const generateToolbar = () => {
+      return [
+        {
+          name: 'bold',
+          action: SimpleMDE.toggleBold,
+          className: 'fa fa-bold',
+          title: this.$t('publish.bold')
+        },
+        {
+          name: 'italic',
+          action: SimpleMDE.toggleItalic,
+          className: 'fa fa-italic',
+          title: this.$t('publish.italic')
+        },
+        {
+          name: 'heading',
+          action: SimpleMDE.toggleHeadingSmaller,
+          className: 'fa fa-header',
+          title: this.$t('publish.heading')
+        },
+        {
+          name: 'heading-smaller',
+          action: SimpleMDE.toggleHeadingSmaller,
+          className: 'fa fa-header fa-header-x fa-header-smaller',
+          title: this.$t('publish.headingSmaller')
+        },
+        {
+          name: 'heading-bigger',
+          action: SimpleMDE.toggleHeadingBigger,
+          className: 'fa fa-header fa-header-x fa-header-bigger',
+          title: this.$t('publish.headingBigger')
+        },
+        '|',
+        {
+          name: 'code',
+          action: SimpleMDE.toggleCodeBlock,
+          className: 'fa fa-code',
+          title: this.$t('publish.code')
+        },
+        {
+          name: 'quote',
+          action: SimpleMDE.toggleBlockquote,
+          className: 'fa fa-quote-left',
+          title: this.$t('publish.quote')
+        },
+        {
+          name: 'unordered-list',
+          action: SimpleMDE.toggleUnorderedList,
+          className: 'fa fa-list-ul',
+          title: this.$t('publish.unorderedList')
+        },
+        {
+          name: 'ordered-list',
+          action: SimpleMDE.toggleOrderedList,
+          className: 'fa fa-list-ol',
+          title: this.$t('publish.orderedList')
+        },
+        {
+          id: 'wrapper',
+          name: 'wrapper',
+          action: editor => {
+            this.wrapperRect = editor.toolbarElements.wrapper.getBoundingClientRect()
+            this.wrapperShow = true
+          },
+          className: 'fa fa-plus has-dropdown',
+          title: this.$t('publish.wrapper')
+        },
+        '|',
+        {
+          name: 'link',
+          action: editor => {
+            this.$store.commit('publish/SET_EDITOR_OBJECT', {
+              showModalImage: false,
+              showModalLink: true
+            })
+          },
+          className: 'fa fa-link',
+          title: this.$t('publish.insertLink')
+        },
+        {
+          name: 'image',
+          action: editor => {
+            this.$store.commit('publish/SET_EDITOR_OBJECT', {
+              showModalImage: true,
+              showModalLink: false
+            })
+          },
+          className: 'fa fa-picture-o',
+          title: this.$t('publish.insertImage')
+        },
+        '|',
+        {
+          name: 'side-by-side',
+          action: function(editor) {},
+          className: 'fa fa-columns no-disable no-mobile d-none',
+          title: ''
+        },
+        {
+          name: 'fullscreen',
+          action: editor => {
+            SimpleMDE.toggleFullScreen(editor)
+            if (!this.isFullScreen) SimpleMDE.toggleSideBySide(editor)
+            this.isFullScreen = !this.isFullScreen
+          },
+          className: 'fa fa-columns no-disable no-mobile ',
+          title: this.$t('publish.fullscreen')
+        },
+        '|',
+        {
+          name: 'guide',
+          action: 'https://simplemde.com/markdown-guide',
+          className: 'fa fa-question-circle',
+          title: this.$t('publish.guide')
+        }
+      ]
+    }
+    this.mde = new SimpleMDE({
+      autoDownloadFontAwesome: true,
+      autofocus: true,
+      autosave: { enabled: false },
+      blockStyles: {
+        bold: '__',
+        italic: '_'
+      },
+      element: this.$refs.area,
+      toolbar: generateToolbar(),
+      promptURLs: true,
+      spellChecker: false,
+      status: false,
+      styleSelectedText: false
+    })
+
+    this.mde.value(this.body)
+    this.mde.codemirror.on('cursorActivity', () => {
+      const startCursor = this.mde.codemirror.getCursor('start')
+      const endCursor = this.mde.codemirror.getCursor('end')
+      this.$store.commit('publish/SET_EDITOR_OBJECT', {
+        startCursor,
+        endCursor
+      })
+    })
+
+    this.mde.codemirror.on('change', () => {
+      this.body = this.mde.value()
+    })
+
+    EventBus.$on('LOCALE:CHANGE', lang => {
+      const bar = document.getElementsByClassName('editor-toolbar')[0]
+      bar.parentNode.removeChild(bar)
+      this.mde.createToolbar(generateToolbar())
+      // this.mde.codemirror.options.placeholder = this.$t('publish.typeYourStoryHere')
+    })
+  },
+  methods: {
+    onUpdate() {
+      this.mde.value(this.body)
+    },
+    closeWrapper() {
+      this.wrapperShow = false
+    },
+    insertWrapper(type) {
+      let tag = 'div'
+      let className = null
+      if (type === 'center') tag = 'center'
+      else className = type
+
+      const selections = this.mde.codemirror.getSelections()
+      let selectionsReplace
+      if (type === 'line') {
+        const template = `\n\n-----\n\n`
+        selectionsReplace = selections.map(selection => selection + template)
+      } else {
+        const template = `\n<${tag}${
+          className ? ` class="${className}"` : ''
+        }>%CONTENT%</${tag}>\n`
+        selectionsReplace = selections.map(selection =>
+          template.replace('%CONTENT%', selection)
+        )
+      }
+      this.mde.codemirror.replaceSelections(selectionsReplace)
+    }
+  },
+  computed: {
+    body: stateModel('body'),
+    wrapperStyle() {
+      return {
+        top: this.wrapperRect.y + 'px',
+        left: this.wrapperRect.x + 30 + 'px'
+      }
+    }
+  }
+}
+</script>

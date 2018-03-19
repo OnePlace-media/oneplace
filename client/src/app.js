@@ -16,7 +16,8 @@ import Meta from 'vue-meta'
 import GlobalComponents from './plugins/globalComponents'
 import 'vue2-toast/lib/toast.css'
 import Toast from 'vue2-toast'
-
+import SocialSharing from 'vue-social-sharing'
+import EventBus from './event-bus'
 
 const CONSTANTS = require('@oneplace/constants')
 
@@ -28,7 +29,7 @@ Vue.use(Toast, {
 })
 
 Vue.use(Chains)
-
+Vue.use(SocialSharing)
 Vue.use(GlobalComponents)
 Vue.use(VueI18n)
 Vue.use(Vue2TouchEvents)
@@ -48,6 +49,7 @@ axios.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
 
 export function createApp(ssrContext) {
   const i18n = new VueI18n({
@@ -76,6 +78,7 @@ export function createApp(ssrContext) {
       i18n.locale = language
       moment.locale(language)
       Vue.localStorage.set('locale', language)
+      EventBus.$emit('LOCALE:CHANGE', language)
     },
     current() {
       return i18n.locale

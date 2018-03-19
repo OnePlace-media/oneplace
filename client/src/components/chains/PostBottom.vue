@@ -80,7 +80,7 @@
             <span v-show="replieDeleteProcessing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
             <span v-show="!replieDeleteProcessing">{{$t('common.delete')}}</span>
           </button>
-          <a @click.prevent="closeRemoveModal" href="#" class="modal__btn-link link--ul">{{$t('comment.cancel')}}</a>
+          <a @click.prevent="closeRemoveModal" href="#" class="modal__btn-link link--ul">{{$t('common.cancel')}}</a>
         </div>
       </div>
     </div>
@@ -175,10 +175,11 @@ export default {
       const isOwner = this.post.author === this.account.username
       const isGolos = this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS
       const isArchived = this.post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED
-      return this.isComment && isOwner && (!isGolos || !isArchived)
+      return !this.isBlog && isOwner && (!isGolos || !isArchived)
     },
     showDeleteOption() {
       return (
+        this.isComment &&
         this.showEditOption &&
         (!this.post.replies || !this.post.replies.length) &&
         this.post.net_rshares <= 0

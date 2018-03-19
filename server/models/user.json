@@ -30,6 +30,10 @@
     "accounts": {
       "type": "hasAndBelongsToMany",
       "model": "account"
+    },
+    "drafts": {
+      "type": "hasMany",
+      "model": "draft"
     }
   },
   "properties": {
@@ -103,6 +107,19 @@
       "hiddenRelationsRemoteMethods": [
         "accessTokens",
         "tags",
+        {
+          "relation": "drafts",
+          "methods": [
+            "count",
+            "delete",
+            "findById",
+            "link",
+            "unlink",
+            "exists",
+            "update",
+            "destroy"
+          ]
+        },
         "accounts"
       ]
     },

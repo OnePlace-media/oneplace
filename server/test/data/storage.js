@@ -12,6 +12,7 @@ module.exports = {
     admin: null
   },
   data: {
+    drafts:[],
     users: {
       first: {
         email: `user@domain.com`,

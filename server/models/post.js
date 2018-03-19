@@ -44,7 +44,8 @@ module.exports = Model => {
 
   const Remarkable = require('remarkable')
   const md = new Remarkable
-  Model.comment = async function(req, chain, author, body, parentAuthor, parentPermlink, permlink) {
+
+  Model.comment = async function(req, chain, author, body, title, rewardsOpts, tags, parentAuthor, parentPermlink, permlink) {
     const accessIsGranted = await Model.app.models.user.checkAccountLink(chain, author, req.accessToken.userId)
     if (!accessIsGranted) {
       const error = new Error('This account not linked with current profile')
@@ -56,15 +57,21 @@ module.exports = Model => {
       result = await Model.app.postingWrapper.comment(chain, {
         author,
         body,
+        title,
+        tags,
         parentAuthor,
         parentPermlink,
-        permlink
+        permlink,
+        rewardsOpts
       })
     } catch (error) {
+      console.log(error)
       let code = 'UNKNOW_ERROR'
       if (error.data && error.data.stack) {
         if (~error.data.stack[0].format.indexOf('STEEMIT_MIN_REPLY_INTERVAL')) {
           code = 'STEEMIT_MIN_REPLY_INTERVAL'
+        } else if (~error.data.stack[0].format.indexOf('STEEMIT_MIN_ROOT_COMMENT_INTERVAL')) {
+          code = 'STEEMIT_MIN_ROOT_COMMENT_INTERVAL'
         } else {
           code = error.data.stack[0].format
         }
@@ -77,6 +84,7 @@ module.exports = Model => {
     }
     let comment = await blockChains.getContent(chain, result)
     comment = await Model.app.trendsWatcher.preparePosts(chain, [comment], true)
+    console.log(JSON.stringify(comment[0]))
     return comment[0]
   }
 
@@ -86,8 +94,11 @@ module.exports = Model => {
       {arg: 'chain', type: 'string', required: true},
       {arg: 'author', type: 'string', required: true},
       {arg: 'body', type: 'string', required: true},
-      {arg: 'parentAuthor', type: 'string', required: true},
-      {arg: 'parentPermlink', type: 'string', required: true},
+      {arg: 'title', type: 'string'},
+      {arg: 'rewardsOpts', type: 'string'},
+      {arg: 'tags', type: 'array'},
+      {arg: 'parentAuthor', type: 'string'},
+      {arg: 'parentPermlink', type: 'string'},
       {arg: 'permlink', type: 'string'},
     ],
     returns: {arg: 'body', type: 'object', root: true},

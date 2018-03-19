@@ -21,12 +21,20 @@ class PostingWrapper {
     this.WIF = WIF
     this.CLIENT_ID = username
   }
-  comment(chain, {parentAuthor, parentPermlink, author, permlink, body}) {
+  comment(chain, {parentAuthor, parentPermlink, author, permlink, body, title, tags = [], rewardsOpts = '100'}) {
     return new Promise((resolve, reject) => {
-      const title = ''
-      const jsonMetadata = '{}'
+      const jsonMetadata = {}
+      rewardsOpts = +rewardsOpts * 100
+      if (tags.length) {
+        jsonMetadata.tags = tags
+      }
+      jsonMetadata.app = 'oneplace'
+
+      const isPost = !parentAuthor && !parentPermlink
+      if (!parentPermlink) parentPermlink = tags.length ? tags[0] : 'general'
+
       const isUpdate = !!permlink
-      if (!permlink) {
+      if (!permlink && !isPost) {
         permlink = this.clients[chain].formatter.commentPermlink(parentAuthor, parentPermlink)
         if (permlink.length > 255)
           permlink.substr(permlink.length - 255, permlink.length)
@@ -36,13 +44,13 @@ class PostingWrapper {
 
       const operations = [
         ['comment', {
-          parent_author: parentAuthor,
-          parent_permlink: parentPermlink,
+          parent_author: parentAuthor || '',
+          parent_permlink: parentPermlink || '',
           author: author,
-          permlink: permlink,
-          title: title,
+          permlink: permlink || '',
+          title: title || '',
           body: body,
-          json_metadata: jsonMetadata
+          json_metadata: JSON.stringify(jsonMetadata)
         }]
       ]
       if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM && !isUpdate) {
@@ -50,13 +58,13 @@ class PostingWrapper {
           author,
           permlink,
           max_accepted_payout: '1000000.000 SBD',
-          percent_steem_dollars: 10000,
+          percent_steem_dollars: rewardsOpts,
           allow_votes: true,
           allow_curation_rewards: true,
           extensions: [
             [0, {
               beneficiaries: [
-                {account: this.CLIENT_ID, weight: 1000}
+                {account: this.CLIENT_ID, weight: isPost ? 500 : 1000}
               ]
             }]
           ]

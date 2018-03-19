@@ -73,12 +73,11 @@ export default {
       if (file) {
         if (~this.accept.indexOf(file.type)) {
           const config = {
-            onUploadProgress(progressEvent) {
-              const percentCompleted = Math.round(
-                progressEvent.loaded * 100 / progressEvent.total
-              )
-              console.log({ percentCompleted })
-            }
+            // onUploadProgress(progressEvent) {
+            //   const percentCompleted = Math.round(
+            //     progressEvent.loaded * 100 / progressEvent.total
+            //   )
+            // }
           }
 
           this.processing = true

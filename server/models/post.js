@@ -84,7 +84,6 @@ module.exports = Model => {
     }
     let comment = await blockChains.getContent(chain, result)
     comment = await Model.app.trendsWatcher.preparePosts(chain, [comment], true)
-    console.log(JSON.stringify(comment[0]))
     return comment[0]
   }
 

@@ -1,28 +1,30 @@
 <template>
-  <social-sharing :url="url" inline-template v-show="isVisible">
-    <div class="share-icons__wrapper share-icons__wrapper--visible">
-      <network network="facebook">
-        <span data-link="#share-facebook">
-          <i class="share-icon share-icon--facebook"></i>
-        </span>
-      </network>
-      <network network="twitter">
-        <span data-link="#share-twitter">
-          <i class="share-icon share-icon--twitter"></i>
-        </span>
-      </network>
-      <network network="googleplus">
-        <span data-link="#share-googleplus">
-          <i class="share-icon share-icon--google-plus"></i>
-        </span>
-      </network>
-      <network network="vk">
-        <span data-link="#share-vk">
-          <i class="share-icon share-icon--vk"></i>
-        </span>
-      </network>
-    </div>
-  </social-sharing>
+  <div class="share-icons__wrapper" :class="{'share-icons__wrapper--visible': isVisible}">
+    <social-sharing :url="url" inline-template>
+      <div>
+        <network network="facebook">
+          <span data-link="#share-facebook">
+            <i class="share-icon share-icon--facebook"></i>
+          </span>
+        </network>
+        <network network="twitter">
+          <span data-link="#share-twitter">
+            <i class="share-icon share-icon--twitter"></i>
+          </span>
+        </network>
+        <network network="googleplus">
+          <span data-link="#share-googleplus">
+            <i class="share-icon share-icon--google-plus"></i>
+          </span>
+        </network>
+        <network network="vk">
+          <span data-link="#share-vk">
+            <i class="share-icon share-icon--vk"></i>
+          </span>
+        </network>
+      </div>
+    </social-sharing>
+  </div>
 </template>
 
 <script>
@@ -56,10 +58,11 @@ export default {
         const rect = body.getBoundingClientRect()
         const pageHeight = document.body.getBoundingClientRect().height
 
-        if (rect.height < pageHeight / 2)
+        if (rect.height < pageHeight / 2) {
           this.isVisible = rect.bottom > pageHeight / 3
-        else 
+        } else {
           this.isVisible = rect.top < 0 && rect.bottom > pageHeight / 2
+        }
       }
     }
   }

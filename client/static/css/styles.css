@@ -4374,13 +4374,20 @@ hr {
 
 .CodeMirror {
   height: auto;
-  min-height: 200px;
+  min-height: 248px;
   padding: 0 16px;
   border: none;
+  border-radius: 0;
+  transition: all 0.3s ease;
+}
+
+.CodeMirror.drop-image {
+  border: 2px dashed #cfd2d2;
 }
 
 .CodeMirror .CodeMirror-scroll {
-  padding: 0;
+  min-height: 248px;
+  padding: 0 0 30px;
 }
 
 .CodeMirror .CodeMirror-placeholder {
@@ -4408,38 +4415,7 @@ hr {
 }
 
 .CodeMirror .CodeMirror-code .cm-header {
-  line-height: 1.6;
   display: inline-block;
-}
-
-.CodeMirror .CodeMirror-code .cm-header-1 {
-  font-size: 1.6em;
-  margin: 2rem 0 1rem;
-}
-
-.CodeMirror .CodeMirror-code .cm-header-2 {
-  font-size: 1.4em;
-  margin: 2rem 0 1rem;
-}
-
-.CodeMirror .CodeMirror-code .cm-header-3 {
-  font-size: 1.2em;
-  margin: 1.5rem 0 0.75rem;
-}
-
-.CodeMirror .CodeMirror-code .cm-header-4 {
-  font-size: 1.1em;
-  margin: 1.5rem 0 0.75rem;
-}
-
-.CodeMirror .CodeMirror-code .cm-header-5 {
-  font-size: 1em;
-  margin: 1rem 0 0.5rem;
-}
-
-.CodeMirror .CodeMirror-code .cm-header-6 {
-  font-size: 0.9em;
-  margin: 0.75rem 0 0.5rem;
 }
 
 .CodeMirror-lines {

@@ -67,7 +67,7 @@ export default {
     <div class="header__wrapper container">
       <router-link :to="{name:'chain-trend', params:{chain}}" class="header__logo" tag="div"><img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive"></router-link>
       <div class="header__right-panel">
-        <router-link :to="{name:'publish', params:{chain}}" class="header__publish" :title="$t('topBar.createNewPost')">
+        <router-link :to="{name:'publish', params:{chain}}" class="header__publish" :title="$t('topBar.createNewPost')" v-if="accountsByChain.length">
           <svg class="icon--header">
             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/pencil.svg#icon"></use>
           </svg>
@@ -114,7 +114,7 @@ export default {
               </svg>
             </a>
             <div class="header__usermenu" :class="{'header__usermenu--opened':userDropDownToggle}" @click="closeDropDown">
-              <router-link :to="{name:'publish', params:{chain}}" class="header__usermenu-item link">{{$t('topBar.createNewPost')}}</router-link>
+              <router-link :to="{name:'publish', params:{chain}}" class="header__usermenu-item link" v-if="accountsByChain.length">{{$t('topBar.createNewPost')}}</router-link>
               <router-link :to="{name:'settings'}" class="header__usermenu-item header__usermenu-item--hr link">{{$t('topBar.settings')}}</router-link>
     					<a href="#" class="header__usermenu-item header__usermenu-item--submenu link" v-if="accounts.length > 1">{{$t('topBar.switchAccount')}}
                 <div class="header__submenu">

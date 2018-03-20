@@ -148,7 +148,13 @@ export default {
         '|',
         {
           name: 'preview',
-          action: SimpleMDE.togglePreview,
+          action: editor => {
+            SimpleMDE.togglePreview(editor)
+            const elemList = document.getElementsByClassName('editor-preview')
+            if (elemList.length) {
+              elemList[0].classList.add('makrdown')
+            }
+          },
           className: 'fa fa-eye no-disable',
           title: this.$t('publish.togglePreview')
         },
@@ -164,6 +170,12 @@ export default {
             SimpleMDE.toggleFullScreen(editor)
             if (!this.isFullScreen) SimpleMDE.toggleSideBySide(editor)
             this.isFullScreen = !this.isFullScreen
+            const elemList = document.getElementsByClassName(
+              ' editor-preview-side'
+            )
+            if (elemList.length) {
+              elemList[0].classList.add('makrdown')
+            }
           },
           className: 'fa fa-columns no-disable no-mobile ',
           title: this.$t('publish.fullscreen')
@@ -220,8 +232,33 @@ export default {
         this.mde.codemirror.getCursor('start')
       )
     })
+
+    Vue.nextTick(() => {
+      const elements = document.getElementsByClassName('CodeMirror-scroll')
+      if (elements.length) {
+        const codeMirror = elements[0]
+        codeMirror.addEventListener('dragenter', this.onDragEnter)
+        codeMirror.addEventListener('dragleave', this.onDragLeave)
+      }
+    })
+  },
+  destroyed() {
+    const elements = document.getElementsByClassName('CodeMirror-scroll')
+    if (elements.length) {
+      const codeMirror = elements[0]
+      codeMirror.removeEventListener('dragenter', this.onDragEnter)
+      codeMirror.removeEventListener('dragleave', this.onDragLeave)
+    }
   },
   methods: {
+    onDragLeave($event) {
+      const elements = document.getElementsByClassName('CodeMirror')
+      if (elements.length) elements[0].classList.remove('drop-image')
+    },
+    onDragEnter($event) {
+      const elements = document.getElementsByClassName('CodeMirror')
+      if (elements.length) elements[0].classList.add('drop-image')
+    },
     onUpdate() {
       this.mde.value(this.body)
     },

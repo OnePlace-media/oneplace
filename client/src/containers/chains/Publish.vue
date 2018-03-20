@@ -8,7 +8,7 @@
       @update="onUpdate"
     ></publish-header>
 
-    <section class="publish__post-editor" v-on:drop="onDrop">
+    <section class="publish__post-editor" v-on:drop.prevent="onDrop">
       <textarea class="publish__input-title input" :placeholder="$t('publish.enterPostTitle')" v-model="title" ref="title" maxlength="256"></textarea>
       <publish-editor ref='editor'></publish-editor>
     </section>
@@ -24,6 +24,8 @@
 </style>
 
 <script>
+import EventBus from '../../event-bus'
+import Vue from 'vue'
 import PublishHeader from '../../components/chains/PublishHeader.vue'
 import PublishEditor from '../../components/chains/PublishEditor.vue'
 
@@ -89,12 +91,19 @@ export default {
   },
   methods: {
     onDrop($event) {
-      // for (let i = 0; i < $event.dataTransfer.items.length; i++) {
-      //   if ($event.dataTransfer.items[i].kind === 'file') {
-      //     const file = $event.dataTransfer.items[i].getAsFile()
-      //     console.log('... file[' + i + '].name = ' + file.name)
-      //   }
-      // }
+      if ($event.dataTransfer.items) {
+        const i = 0
+        if ($event.dataTransfer.items[i].kind === 'file') {
+          const file = $event.dataTransfer.items[i].getAsFile()
+          this.$store.commit('publish/SET_EDITOR_OBJECT', {
+            showModalImage: true,
+            showModalLink: false
+          })
+          Vue.nextTick(() => {
+            EventBus.$emit('EDITOR:UPLOAD', { file })
+          })
+        }
+      }
     },
     onUpdate() {
       this.$refs.editor.onUpdate()

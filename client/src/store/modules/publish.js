@@ -58,7 +58,7 @@ export default () => {
         loadFromDraft: false,
         active: null,
         processing: false,
-        collection: null
+        collection: []
       }
     }
   }
@@ -116,13 +116,11 @@ export default () => {
       }
     },
     initDrafts({commit, state}, {userId}) {
-      if (state.drafts.collection === null && userId) {
-        commit(TYPES.SET_DRAFTS_OBJECT, {processing: true})
-        Api.getDrafts(userId)
-          .then(response => {
-            commit(TYPES.SET_DRAFTS_OBJECT, {collection: response.data, processing: false})
-          })
-      }
+      commit(TYPES.SET_DRAFTS_OBJECT, {collection: [], processing: true})
+      Api.getDrafts(userId)
+        .then(response => {
+          commit(TYPES.SET_DRAFTS_OBJECT, {collection: response.data, processing: false})
+        })
     },
     saveDraft({commit, state}, {userId}) {
       if (state.form.body && state.form.title) {

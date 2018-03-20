@@ -22,7 +22,7 @@
         </div>
       </div>
       <div>
-        <publish-drafts @update="$emit('update')" v-if="isNewRecord"></publish-drafts>
+        <publish-drafts @update="$emit('update')" v-if="publishDraftsRender"></publish-drafts>
         <publish-options :chain="chain" :account="account"></publish-options>
       </div>
     </div>
@@ -70,6 +70,9 @@ export default {
     },
     isNewRecord() {
       return this.$store.state.publish.form.isNewRecord
+    },
+    publishDraftsRender() {
+      return this.isNewRecord && this.$auth && this.$auth.ready()
     }
   },
   methods: {

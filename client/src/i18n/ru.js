@@ -127,6 +127,7 @@ module.exports = {
     aboutRemove: '<em>Удаление аккаунта</em>. Вы отменяете авторизацию для приложения OnePlace. Подтвердите эту операцию приватным активным ключом.',
   },
   topBar: {
+    createNewPost: 'Новая запись',
     addAccount: 'Добавить аккаунт',
     getStarted: 'Войти',
     settings: 'Настройки',
@@ -205,6 +206,7 @@ module.exports = {
     insertImage: 'Вставить изображение',
     horizontalRule: 'Вставить горизонтальную линию',
     guide: 'Гид по Markdown',
+    togglePreview: 'Предварительный просмотр',
     fullscreen: 'Полноэкранный режим',
     wrapper: 'Форматировать',
     centered: 'По центру',

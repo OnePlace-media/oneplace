@@ -43,6 +43,7 @@
 
 <script>
 import { mixin as onClickOutside } from 'vue-on-click-outside'
+import EventBus from '../../event-bus'
 import Api from '../../plugins/api'
 
 export default {
@@ -54,6 +55,11 @@ export default {
       errorCode: null,
       processing: false
     }
+  },
+  mounted() {
+    EventBus.$on('EDITOR:UPLOAD', ({ file }) => {
+      this.uploadImage({ target: { files: [file] } })
+    })
   },
   computed: {
     disabled() {
@@ -72,16 +78,8 @@ export default {
       this.errorCode = null
       if (file) {
         if (~this.accept.indexOf(file.type)) {
-          const config = {
-            // onUploadProgress(progressEvent) {
-            //   const percentCompleted = Math.round(
-            //     progressEvent.loaded * 100 / progressEvent.total
-            //   )
-            // }
-          }
-
           this.processing = true
-          Api.uploadImage(file, config)
+          Api.uploadImage(file)
             .then(response => {
               this.link = [
                 window.location.origin,
@@ -103,14 +101,9 @@ export default {
       }
     },
     onSubmit() {
-      let body = this.$store.state.publish.form.body
-      const startCursor = this.$store.state.publish.editor.startCursor
-      const beforeSubStr = body.substring(0, startCursor.ch)
-      const afterSubStr = body.substring(startCursor.ch, body.length)
-      body = beforeSubStr + `![${this.link}](${this.link})` + afterSubStr
-      this.$store.commit('publish/SET_FORM_OBJECT', { body })
+      const content = `![${this.link}](${this.link})`
+      EventBus.$emit('EDITOR:INSERT', { content })
       this.$store.commit('publish/SET_EDITOR_OBJECT', { showModalImage: false })
-      this.$emit('update')
     }
   }
 }

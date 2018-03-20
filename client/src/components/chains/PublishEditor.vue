@@ -1,11 +1,12 @@
 <template>
   <div>
     <textarea :placeholder="$t('publish.typeYourStoryHere')" ref="area"></textarea>
-    <div class="publish__toolbar-dropdown" v-if="wrapperShow" v-on-click-outside="closeWrapper" :style="wrapperStyle">
+
+    <div class="publish__toolbar-dropdown" v-if="wrapperShow" v-on-click-outside="closeWrapper" ref="wrapper">
       <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('center')">
         <i class="fa fa-align-center"></i>{{$t('publish.centered')}}
       </span>
-      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('justify')">
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('text-justify')">
         <i class="fa fa-align-justify"></i>{{$t('publish.justified')}}
       </span>
       <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('pull-left')">
@@ -24,6 +25,7 @@
 
 <script>
 import EventBus from '../../event-bus'
+import Vue from 'vue'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 
 const stateModel = name => {
@@ -41,11 +43,8 @@ export default {
   mixins: [onClickOutside],
   data() {
     return {
-      wrapperShow: false,
-      wrapperRect: {
-        x: 0,
-        y: 0
-      }
+      wrapperEl: null,
+      wrapperShow: false
     }
   },
   mounted() {
@@ -111,8 +110,14 @@ export default {
           id: 'wrapper',
           name: 'wrapper',
           action: editor => {
-            this.wrapperRect = editor.toolbarElements.wrapper.getBoundingClientRect()
             this.wrapperShow = true
+            Vue.nextTick(() => {
+              editor.toolbarElements.wrapper.appendChild(this.$refs.wrapper)
+              editor.toolbarElements.wrapper.classList.add(
+                'has-dropdown--active'
+              )
+            })
+            this.wrapperEl = editor.toolbarElements.wrapper
           },
           className: 'fa fa-plus has-dropdown',
           title: this.$t('publish.wrapper')
@@ -141,6 +146,12 @@ export default {
           title: this.$t('publish.insertImage')
         },
         '|',
+        {
+          name: 'preview',
+          action: SimpleMDE.togglePreview,
+          className: 'fa fa-eye no-disable',
+          title: this.$t('publish.togglePreview')
+        },
         {
           name: 'side-by-side',
           action: function(editor) {},
@@ -202,6 +213,13 @@ export default {
       this.mde.createToolbar(generateToolbar())
       // this.mde.codemirror.options.placeholder = this.$t('publish.typeYourStoryHere')
     })
+
+    EventBus.$on('EDITOR:INSERT', ({ content }) => {
+      this.mde.codemirror.replaceRange(
+        content,
+        this.mde.codemirror.getCursor('start')
+      )
+    })
   },
   methods: {
     onUpdate() {
@@ -209,6 +227,8 @@ export default {
     },
     closeWrapper() {
       this.wrapperShow = false
+      if (this.wrapperEl)
+        this.wrapperEl.classList.remove('has-dropdown--active')
     },
     insertWrapper(type) {
       let tag = 'div'
@@ -224,22 +244,17 @@ export default {
       } else {
         const template = `\n<${tag}${
           className ? ` class="${className}"` : ''
-        }>%CONTENT%</${tag}>\n`
+        }>\n%CONTENT%\n</${tag}>\n`
         selectionsReplace = selections.map(selection =>
           template.replace('%CONTENT%', selection)
         )
       }
       this.mde.codemirror.replaceSelections(selectionsReplace)
+      this.closeWrapper()
     }
   },
   computed: {
-    body: stateModel('body'),
-    wrapperStyle() {
-      return {
-        top: this.wrapperRect.y + 'px',
-        left: this.wrapperRect.x + 30 + 'px'
-      }
-    }
+    body: stateModel('body')
   }
 }
 </script>

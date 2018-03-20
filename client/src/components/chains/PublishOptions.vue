@@ -11,11 +11,14 @@
           :placeholder="$t('publish.typeTagsHere')" 
           v-validate="'firstIsLetter|lastIsLetterOrDigit|validTag|max:64'"
           name="tag" 
-          :disabled="tags.length >= 5"
+          v-show="tags.length < 5"
           @keydown.enter.prevent="addTag($event.target)"
         >
         <div class="publish__tags-wrapper">
-          <span class="tags-list__item" v-for="tag in tags" :key="tag">{{tag | unGolosTag}} <span class="tags-list__remove-item" @click="removeTag(tag)"></span></span> 
+          <span class="tags-list__item" v-for="(tag, index) in tags" :key="tag">
+            {{tag | unGolosTag | toLowerCase}} 
+            <span class="tags-list__remove-item" @click="removeTag(tag)" v-if="isNewRecord || index"></span>
+          </span> 
         </div>
         <span class="tags-setup__input-alert" :class="{'tags-setup__input-alert--active': errors.any()}">
           <div v-if="errors.firstByRule('tag', 'firstIsLetter')">{{$t('common.validate.firstIsLetter')}}</div>

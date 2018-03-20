@@ -295,25 +295,25 @@ hr {
 
 .header__publish {
   display: block;
-  height: 32px;
-  margin-right: 20px;
+  height: 24px;
+  margin-right: 16px;
 }
 
-.icon--publish {
+.icon--header {
   position: relative;
   transition: all 0.3s ease;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   fill: #cfd2d2;
 }
 
-.icon--publish:hover {
+.icon--header:hover {
   fill: #a8adad;
 }
 
 .header__chain-wrapper {
   width: 90px;
-  margin-right: 23px;
+  margin-right: 19px;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -561,8 +561,6 @@ hr {
   position: relative;
   width: 24px;
   height: 24px;
-  background: url("/static/img/settings.svg") 50% 50% no-repeat transparent;
-  background-size: cover;
   margin-left: 24px;
 }
 
@@ -4240,9 +4238,8 @@ hr {
   flex-direction: column;
   font-family: 'Noto Sans', sans-serif;
   position: absolute;
-  top: 485px;
-  left: 511px;
-  z-index: 999999999999;
+  top: 0;
+  left: 40px;
   background: #fff;
   box-shadow: 0 0 5px rgba(0,0,0,0.15);
   border-radius: 3px;
@@ -4475,6 +4472,7 @@ hr {
 
 .editor-preview-side {
   width: calc(50% - 32px);
+  padding: 16px;
   border: none;
   border-left: 1px solid #f2f2f2;
   overflow-y: auto;
@@ -4482,7 +4480,7 @@ hr {
 
 .modal__overlay {
   background: rgba(0,0,0,0.65);
-  z-index: 99;
+  z-index: 100;
   position: fixed;
   top: 0;
   right: 0;

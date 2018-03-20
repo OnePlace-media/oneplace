@@ -7,7 +7,7 @@
       </center>
 
       <div class="publish__drafts-new" v-if="!processing" @click.stop="createDraft">{{$t('publish.createNewDraft')}}</div>
-      <div class="publish__no-drafts" v-if="!processing && drafts && !drafts.length">{{$t('publish.youHaveNoDrafts')}}</div>
+      <div class="publish__no-drafts" v-if="!processing && (!drafts || !drafts.length)">{{$t('publish.youHaveNoDrafts')}}</div>
       <div class="publish__drafts-list">
         <div class="publish__drafts-item" v-for="draft in drafts" :key="draft.id" @click.stop="selectDraft(draft)">
           <div class="column-wrapper">
@@ -33,7 +33,7 @@ import EventBus from '../../event-bus'
 const PUBLISH_HEADER_VISIBLE = 'PUBLISH_HEADER_VISIBLE'
 const COMPONENT_NAME = 'PublishDrafts'
 
-const INTERVAL_BETWEEN_SAVE_DRAFT = 5 * 1000
+const INTERVAL_BETWEEN_SAVE_DRAFT = 30 * 1000
 export default {
   name: COMPONENT_NAME,
   mixins: [onClickOutside],
@@ -48,17 +48,11 @@ export default {
       if (name !== COMPONENT_NAME && flag) this.isVisible = false
     })
 
-    const initDrafts = () => {
-      const opts = { userId: this.$auth.user().id }
-
-      this.$store.dispatch('publish/initDrafts', opts)
-
-      this.interval = setInterval(() => {
-        this.$store.dispatch('publish/saveDraft', opts)
-      }, INTERVAL_BETWEEN_SAVE_DRAFT)
-    }
-    
-    this.$auth.ready() ? initDrafts() : this.$auth.ready(initDrafts)
+    const opts = { userId: this.$auth.user().id }
+    this.$store.dispatch('publish/initDrafts', opts)
+    this.interval = setInterval(() => {
+      this.$store.dispatch('publish/saveDraft', opts)
+    }, INTERVAL_BETWEEN_SAVE_DRAFT)
   },
   destroyed() {
     clearInterval(this.interval)

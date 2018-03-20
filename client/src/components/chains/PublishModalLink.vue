@@ -23,6 +23,7 @@
 
 <script>
 import { mixin as onClickOutside } from 'vue-on-click-outside'
+import EventBus from '../../event-bus'
 
 export default {
   name: 'PublishModalLink',
@@ -42,14 +43,9 @@ export default {
       this.$store.commit('publish/SET_EDITOR_OBJECT', { showModalLink: false })
     },
     onSubmit() {
-      let body = this.$store.state.publish.form.body
-      const startCursor = this.$store.state.publish.editor.startCursor
-      const beforeSubStr = body.substring(0, startCursor.ch)
-      const afterSubStr = body.substring(startCursor.ch, body.length)
-      body = beforeSubStr + `[${this.link}](${this.link})` + afterSubStr
-      this.$store.commit('publish/SET_FORM_OBJECT', { body })
+      const content = `[${this.link}](${this.link})`
+      EventBus.$emit('EDITOR:INSERT', { content })
       this.$store.commit('publish/SET_EDITOR_OBJECT', { showModalLink: false })
-      this.$emit('update')
     }
   }
 }

@@ -33,14 +33,13 @@ import EventBus from '../../event-bus'
 const PUBLISH_HEADER_VISIBLE = 'PUBLISH_HEADER_VISIBLE'
 const COMPONENT_NAME = 'PublishDrafts'
 
-const INTERVAL_BETWEEN_SAVE_DRAFT = 30 * 1000
 export default {
   name: COMPONENT_NAME,
   mixins: [onClickOutside],
   data() {
     return {
       isVisible: false,
-      interval: null
+      draftSaveTimeout: null
     }
   },
   mounted() {
@@ -50,14 +49,22 @@ export default {
 
     const opts = { userId: this.$auth.user().id }
     this.$store.dispatch('publish/initDrafts', opts)
-    this.interval = setInterval(() => {
-      this.$store.dispatch('publish/saveDraft', opts)
-    }, INTERVAL_BETWEEN_SAVE_DRAFT)
   },
-  destroyed() {
-    clearInterval(this.interval)
+  watch: {
+    title() {
+      this.saveDraft()
+    },
+    body() {
+      this.saveDraft()
+    }
   },
   computed: {
+    title() {
+      return this.$store.state.publish.form.title
+    },
+    body() {
+      return this.$store.state.publish.form.body
+    },
     drafts() {
       return this.$store.state.publish.drafts.collection
     },
@@ -77,6 +84,13 @@ export default {
       this.$store.dispatch('publish/createDraft').then(() => {
         this.$emit('update')
       })
+    },
+    saveDraft() {
+      clearTimeout(this.draftSaveTimeout)
+      this.draftSaveTimeout = setTimeout(() => {
+        const opts = { userId: this.$auth.user().id }
+        this.$store.dispatch('publish/saveDraft', opts)
+      }, 5000)
     },
     deleteDraft(draft) {
       this.$store.dispatch('publish/deleteDraft', { draft }).then(() => {

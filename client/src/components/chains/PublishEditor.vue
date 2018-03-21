@@ -223,7 +223,6 @@ export default {
       const bar = document.getElementsByClassName('editor-toolbar')[0]
       bar.parentNode.removeChild(bar)
       this.mde.createToolbar(generateToolbar())
-      // this.mde.codemirror.options.placeholder = this.$t('publish.typeYourStoryHere')
     })
 
     EventBus.$on('EDITOR:INSERT', ({ content }) => {
@@ -237,6 +236,7 @@ export default {
       const elements = document.getElementsByClassName('CodeMirror-scroll')
       if (elements.length) {
         const codeMirror = elements[0]
+        codeMirror.addEventListener('drop', this.onDrop)
         codeMirror.addEventListener('dragenter', this.onDragEnter)
         codeMirror.addEventListener('dragleave', this.onDragLeave)
       }
@@ -246,11 +246,28 @@ export default {
     const elements = document.getElementsByClassName('CodeMirror-scroll')
     if (elements.length) {
       const codeMirror = elements[0]
+      codeMirror.removeEventListener('drop', this.onDrop)
       codeMirror.removeEventListener('dragenter', this.onDragEnter)
       codeMirror.removeEventListener('dragleave', this.onDragLeave)
     }
   },
   methods: {
+    onDrop($event) {
+      this.onDragLeave($event)
+      if ($event.dataTransfer.items) {
+        const i = 0
+        if ($event.dataTransfer.items[i].kind === 'file') {
+          const file = $event.dataTransfer.items[i].getAsFile()
+          this.$store.commit('publish/SET_EDITOR_OBJECT', {
+            showModalImage: true,
+            showModalLink: false
+          })
+          Vue.nextTick(() => {
+            EventBus.$emit('EDITOR:UPLOAD', { file })
+          })
+        }
+      }
+    },
     onDragLeave($event) {
       const elements = document.getElementsByClassName('CodeMirror')
       if (elements.length) elements[0].classList.remove('drop-image')

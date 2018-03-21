@@ -18,6 +18,7 @@ const XMLSerializer = new xmldom.XMLSerializer()
 
 
 function traverse(chain, node, state, depth = 0) {
+  console.log(depth)
   const replaces = []
   if (!node || !node.childNodes) return
   for (let i = 0; i < node.childNodes.length; i++) {
@@ -163,11 +164,11 @@ function embedYouTubeNode(child, links, images) {
     )
 
     // <iframe width="560" height="310" src="https://www.youtube.com/embed/${yt.id}" frameborder="0" allowfullscreen></iframe>
-    child.parentNode.replaceChild(v, child)
+    // child.parentNode.replaceChild(v, child)
     if (links) links.add(yt.url)
     if (images)
       images.add('https://img.youtube.com/vi/' + yt.id + '/0.jpg')
-    return true
+    return v
   } catch (error) {
     console.log(error)
     return false
@@ -207,9 +208,9 @@ function embedVimeoNode(child, links /*images*/) {
   `)
 
     // <iframe width="560" height="310" src="${url}" frameborder="0" allowfullscreen></iframe>
-    child.parentNode.replaceChild(v, child)
+    // child.parentNode.replaceChild(v, child)
     if (links) links.add(url)
-    return true
+    return v
   } catch (error) {
     console.log(error)
     return false
@@ -224,9 +225,13 @@ function linkifyNode(chain, child, state) {
     if (tag === 'code') return
     if (tag === 'a') return
 
+    let newChild
     if (!child.data) return
-    if (embedYouTubeNode(child, state.links, state.images)) return
-    if (embedVimeoNode(child, state.links, state.images)) return
+
+    newChild = embedYouTubeNode(child, state.links, state.images)
+    if (newChild) return newChild
+    newChild = embedVimeoNode(child, state.links, state.images)
+    if (newChild) return newChild
 
     const data = XMLSerializer.serializeToString(child)
     const content = linkify(
@@ -238,7 +243,7 @@ function linkifyNode(chain, child, state) {
       state.links
     );
     if (content !== data) {
-      const newChild = DOMParser.parseFromString(
+      newChild = DOMParser.parseFromString(
         `<span>${content}</span>`
       );
       // child.parentNode.replaceChild(newChild, child)

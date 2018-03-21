@@ -18,7 +18,6 @@ const XMLSerializer = new xmldom.XMLSerializer()
 
 
 function traverse(chain, node, state, depth = 0) {
-  console.log(depth)
   const replaces = []
   if (!node || !node.childNodes) return
   for (let i = 0; i < node.childNodes.length; i++) {

@@ -152,7 +152,7 @@ export default {
             SimpleMDE.togglePreview(editor)
             const elemList = document.getElementsByClassName('editor-preview')
             if (elemList.length) {
-              elemList[0].classList.add('makrdown')
+              elemList[0].classList.add('markdown')
             }
           },
           className: 'fa fa-eye no-disable',
@@ -174,7 +174,7 @@ export default {
               ' editor-preview-side'
             )
             if (elemList.length) {
-              elemList[0].classList.add('makrdown')
+              elemList[0].classList.add('markdown')
             }
           },
           className: 'fa fa-columns no-disable no-mobile ',

@@ -64,9 +64,10 @@ module.exports = Model => {
         permlink,
         rewardsOpts
       })
-      if (upVotePost) 
-        let vote = await Model.app.postingWrapper.vote(chain, {voter: author, author, permlink: result.permlink, weight: 10000})
 
+      if (upVotePost) {
+        const vote = await Model.app.postingWrapper.vote(chain, {voter: author, author, permlink: result.permlink, weight: 10000})
+      }
     } catch (error) {
       console.log(error)
       let code = 'UNKNOW_ERROR'

@@ -45,7 +45,7 @@ module.exports = Model => {
   const Remarkable = require('remarkable')
   const md = new Remarkable
 
-  Model.comment = async function(req, chain, author, body, title, rewardsOpts, tags, parentAuthor, parentPermlink, permlink) {
+  Model.comment = async function(req, chain, author, body, title, rewardsOpts, tags, parentAuthor, parentPermlink, permlink, upVotePost) {
     const accessIsGranted = await Model.app.models.user.checkAccountLink(chain, author, req.accessToken.userId)
     if (!accessIsGranted) {
       const error = new Error('This account not linked with current profile')
@@ -64,6 +64,9 @@ module.exports = Model => {
         permlink,
         rewardsOpts
       })
+      if (upVotePost) 
+        let vote = await Model.app.postingWrapper.vote(chain, {voter: author, author, permlink: result.permlink, weight: 10000})
+
     } catch (error) {
       console.log(error)
       let code = 'UNKNOW_ERROR'
@@ -99,6 +102,7 @@ module.exports = Model => {
       {arg: 'parentAuthor', type: 'string'},
       {arg: 'parentPermlink', type: 'string'},
       {arg: 'permlink', type: 'string'},
+      {arg: 'upVotePost', type: 'boolean'}
     ],
     returns: {arg: 'body', type: 'object', root: true},
     http: {path: '/:chain(g|s)/comment', verb: 'post'}

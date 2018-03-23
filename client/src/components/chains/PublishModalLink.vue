@@ -43,8 +43,7 @@ export default {
       this.$store.commit('publish/SET_EDITOR_OBJECT', { showModalLink: false })
     },
     onSubmit() {
-      const content = `[${this.link}](${this.link})`
-      EventBus.$emit('EDITOR:INSERT', { content })
+      EventBus.$emit('EDITOR:INSERT:LINK', { link: this.link })
       this.$store.commit('publish/SET_EDITOR_OBJECT', { showModalLink: false })
     }
   }

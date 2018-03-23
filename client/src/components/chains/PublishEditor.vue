@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="editor-wrapper">
     <textarea :placeholder="$t('publish.typeYourStoryHere')" ref="area"></textarea>
 
     <div class="publish__toolbar-dropdown" v-if="wrapperShow" v-on-click-outside="closeWrapper" ref="wrapper">
@@ -10,10 +10,13 @@
         <i class="fa fa-align-justify"></i>{{$t('publish.justified')}}
       </span>
       <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('pull-left')">
-        <i class="fa fa-align-left"></i>{{$t('publish.pullLeft')}}
+        <i class="fa fa-pull-left"></i>{{$t('publish.pullLeft')}}
       </span>
       <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('pull-right')">
-        <i class="fa fa-align-right"></i>{{$t('publish.pullRight')}}
+        <i class="fa fa-pull-right"></i>{{$t('publish.pullRight')}}
+      </span>
+      <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('indient')">
+        <i class="fa fa-indent"></i>{{$t('publish.indient')}}
       </span>
       <span class="publish__toolbar-dropdown-btn" @click.stop="insertWrapper('line')">
         <i class="fa fa-minus"></i>{{$t('publish.insertLine')}}
@@ -119,7 +122,7 @@ export default {
             })
             this.wrapperEl = editor.toolbarElements.wrapper
           },
-          className: 'fa fa-plus has-dropdown',
+          className: 'fa fa-align-left has-dropdown',
           title: this.$t('publish.wrapper')
         },
         '|',
@@ -171,9 +174,14 @@ export default {
             if (!this.isFullScreen) SimpleMDE.toggleSideBySide(editor)
             this.isFullScreen = !this.isFullScreen
             const elemList = document.getElementsByClassName(
-              ' editor-preview-side'
+              'editor-preview-side'
             )
             if (elemList.length) {
+              Vue.nextTick(() => {
+                const className = 'editor-preview-active-side'
+                if (!elemList[0].classList.contains(className))
+                  SimpleMDE.toggleSideBySide(editor)
+              })
               elemList[0].classList.add('markdown')
             }
           },
@@ -190,7 +198,8 @@ export default {
       ]
     }
     this.mde = new SimpleMDE({
-      autoDownloadFontAwesome: true,
+      dragDrop: true,
+      autoDownloadFontAwesome: false,
       autofocus: true,
       autosave: { enabled: false },
       blockStyles: {
@@ -225,31 +234,33 @@ export default {
       this.mde.createToolbar(generateToolbar())
     })
 
-    EventBus.$on('EDITOR:INSERT', ({ content }) => {
-      this.mde.codemirror.replaceRange(
-        content,
-        this.mde.codemirror.getCursor('start')
+    EventBus.$on('EDITOR:INSERT:LINK', ({ link, isImage = false }) => {
+      const selections = this.mde.codemirror.getSelections()
+      let selectionsReplace
+      const template = `${isImage ? '!' : ''}[%NAME%](${link})`
+      selectionsReplace = selections.map(selection =>
+        template.replace('%NAME%', selection || link)
       )
+      this.mde.codemirror.replaceSelections(selectionsReplace)
     })
 
     Vue.nextTick(() => {
       const elements = document.getElementsByClassName('CodeMirror-scroll')
       if (elements.length) {
-        const codeMirror = elements[0]
-        codeMirror.addEventListener('drop', this.onDrop)
-        codeMirror.addEventListener('dragenter', this.onDragEnter)
-        codeMirror.addEventListener('dragleave', this.onDragLeave)
+        const div = document.createElement('DIV')
+        div.id = 'drag-zone'
+        elements[0].appendChild(div)
+        div.addEventListener('drop', this.onDrop)
+        div.addEventListener('dragleave', this.onDragLeave)
       }
     })
+
+    this.mde.codemirror.on('dragenter', this.onDragEnter)
   },
   destroyed() {
-    const elements = document.getElementsByClassName('CodeMirror-scroll')
-    if (elements.length) {
-      const codeMirror = elements[0]
-      codeMirror.removeEventListener('drop', this.onDrop)
-      codeMirror.removeEventListener('dragenter', this.onDragEnter)
-      codeMirror.removeEventListener('dragleave', this.onDragLeave)
-    }
+    const div = document.getElementById('drag-zone')
+    div.removeEventListener('drop', this.onDrop)
+    div.removeEventListener('dragleave', this.onDragLeave)
   },
   methods: {
     onDrop($event) {
@@ -269,12 +280,14 @@ export default {
       }
     },
     onDragLeave($event) {
-      const elements = document.getElementsByClassName('CodeMirror')
-      if (elements.length) elements[0].classList.remove('drop-image')
+      const div = document.getElementById('drag-zone')
+      div.classList.remove('drag-zone-visible')
+      div.classList.remove('drop-image')
     },
     onDragEnter($event) {
-      const elements = document.getElementsByClassName('CodeMirror')
-      if (elements.length) elements[0].classList.add('drop-image')
+      const div = document.getElementById('drag-zone')
+      div.classList.add('drag-zone-visible')
+      div.classList.add('drop-image')
     },
     onUpdate() {
       this.mde.value(this.body)
@@ -292,18 +305,25 @@ export default {
 
       const selections = this.mde.codemirror.getSelections()
       let selectionsReplace
-      if (type === 'line') {
-        const template = `\n\n-----\n\n`
-        selectionsReplace = selections.map(selection => selection + template)
+      if (type === 'indient') {
+        const template = `&#8195;`
+        const start = this.mde.codemirror.getCursor('start')
+        start.ch = 0
+        this.mde.codemirror.replaceRange(template, start, start)
       } else {
-        const template = `\n<${tag}${
-          className ? ` class="${className}"` : ''
-        }>\n%CONTENT%\n</${tag}>\n`
-        selectionsReplace = selections.map(selection =>
-          template.replace('%CONTENT%', selection)
-        )
+        if (type === 'line') {
+          const template = `\n\n-----\n\n`
+          selectionsReplace = selections.map(selection => selection + template)
+        } else {
+          const template = `<${tag}${
+            className ? ` class="${className}"` : ''
+          }>%CONTENT%</${tag}>`
+          selectionsReplace = selections.map(selection =>
+            template.replace('%CONTENT%', selection)
+          )
+        }
+        this.mde.codemirror.replaceSelections(selectionsReplace)
       }
-      this.mde.codemirror.replaceSelections(selectionsReplace)
       this.closeWrapper()
     }
   },
@@ -312,3 +332,23 @@ export default {
   }
 }
 </script>
+
+<style>
+#drag-zone {
+  position: absolute;
+  width: 100%;
+  height: 96%;
+  z-index: 99999999999999999;
+  display: none;
+  top: 0;
+  left: 0;
+}
+
+#drag-zone.drop-image {
+  border: 1px dotted #cfd2d2;
+}
+
+.drag-zone-visible {
+  display: block !important;
+}
+</style>

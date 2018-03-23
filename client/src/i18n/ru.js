@@ -214,6 +214,7 @@ module.exports = {
     pullLeft: 'Прижать влево',
     pullRight: 'Прижать вправо',
     insertLine: 'Вставить линию',
+    indient: 'Красная строка',
 
     errors: {
       TYPE: 'Загружаемый файл должен быть типа image/*',

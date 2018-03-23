@@ -101,8 +101,7 @@ export default {
       }
     },
     onSubmit() {
-      const content = `![${this.link}](${this.link})`
-      EventBus.$emit('EDITOR:INSERT', { content })
+      EventBus.$emit('EDITOR:INSERT:LINK', { link: this.link, isImage: true })
       this.$store.commit('publish/SET_EDITOR_OBJECT', { showModalImage: false })
     }
   }

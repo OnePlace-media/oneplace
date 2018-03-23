@@ -213,6 +213,7 @@ module.exports = {
     pullLeft: 'Pull left',
     pullRight: 'Pull right',
     insertLine: 'Insert line',
+    indient: 'Indent text',
 
     errors: {
       TYPE: 'Upload file must have type like image/*',

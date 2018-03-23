@@ -23,9 +23,7 @@
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
         </svg>
         <slider v-if="voteSliderActive && !isLike && !post.voteProcessing" :value.sync="voteWeight"></slider>
-      </a>
-      <span class="post-view__votes" @mouseover="showDropdownsVotes = true">
-        {{likeVotes}}
+      </a><span class="post-view__votes" @mouseover="showDropdownsVotes = true">{{likeVotes}}
         <dropdown-votes :post="post" :chain="chain" v-if="likeVotes && showDropdownsVotes" ></dropdown-votes>
       </span>
     </span>

@@ -170,17 +170,24 @@ export default {
         {
           name: 'fullscreen',
           action: editor => {
+            this.isFullScreen = !document.getElementsByClassName(
+              'CodeMirror-fullscreen'
+            ).length
+
             SimpleMDE.toggleFullScreen(editor)
-            if (!this.isFullScreen) SimpleMDE.toggleSideBySide(editor)
-            this.isFullScreen = !this.isFullScreen
+            if (this.isFullScreen) SimpleMDE.toggleSideBySide(editor)
             const elemList = document.getElementsByClassName(
               'editor-preview-side'
             )
             if (elemList.length) {
               Vue.nextTick(() => {
                 const className = 'editor-preview-active-side'
-                if (!elemList[0].classList.contains(className))
+                if (
+                  this.isFullScreen &&
+                  !elemList[0].classList.contains(className)
+                ) {
                   SimpleMDE.toggleSideBySide(editor)
+                }
               })
               elemList[0].classList.add('markdown')
             }

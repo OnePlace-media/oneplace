@@ -53,7 +53,7 @@
                 <div></div>
               </div>
             </button>
-            <a href="#" class="post-view__post-btn-link" @click.stop="close">Cancel</a>
+            <a href="#" class="post-view__post-btn-link" @click.stop="close">{{$t('common.cancel')}}</a>
           </div>
       </div>
     </div>

@@ -4116,7 +4116,7 @@ hr {
 
 .publish__post-editor {
   width: 872px;
-  padding-top: 24px;
+  padding: 24px 0 32px;
   margin: 0 auto;
 }
 
@@ -4396,17 +4396,14 @@ hr {
 .CodeMirror {
   height: auto;
   min-height: 450px;
-  padding: 0 15px;
+  padding: 0 16px;
   border-radius: 0;
-  border: 1px dashed transparent;
+  border: none !important;
   transition: all 0.3s ease;
 }
 
-.CodeMirror.drop-image {
-  border-color: #cfd2d2;
-}
-
 .CodeMirror .CodeMirror-scroll {
+  position: relative;
   min-height: 450px;
   padding: 4px 0 30px;
 }
@@ -4437,6 +4434,26 @@ hr {
   display: inline-block;
 }
 
+#drag-zone {
+  display: none;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border: 1px dashed transparent;
+}
+
+#drag-zone.drop-image {
+  border-color: #cfd2d2;
+  background: rgba(255,255,255,0.75);
+}
+
+#drag-zone.drag-zone-visible {
+  display: block !important;
+}
+
 .CodeMirror-lines {
   padding: 0;
 }
@@ -4454,11 +4471,11 @@ hr {
 
 .CodeMirror-fullscreen {
   height: auto;
-  padding: 0 31px 0 15px;
+  padding: 0 32px 0 16px;
 }
 
 .CodeMirror-fullscreen .CodeMirror-scroll {
-  padding: 15px 0 0;
+  padding: 16px 0 0;
 }
 
 .CodeMirror.CodeMirror-sided {
@@ -5027,6 +5044,16 @@ hr {
   }
 }
 
+@media screen and (max-width: 1140px) {
+  .publish__setup {
+    right: calc(50% - 94px);
+  }
+
+  .publish__setup:before,.publish__setup:after {
+    right: calc(50% - 62px);
+  }
+}
+
 @media screen and (max-width: 1130px) {
   .post-view__modal {
     width: 900px;
@@ -5067,6 +5094,10 @@ hr {
 
   .tag-block__aside {
     width: 320px;
+  }
+
+  .editor-toolbar {
+    left: calc(50% - 496px);
   }
 }
 

@@ -249,7 +249,9 @@ export default {
       if (elements.length) {
         const div = document.createElement('DIV')
         div.id = 'drag-zone'
-        elements[0].appendChild(div)
+        div.classList.add('drop-image')
+        elements[0].parentNode.appendChild(div)
+        div.ondragover = () => false
         div.addEventListener('drop', this.onDrop)
         div.addEventListener('dragleave', this.onDragLeave)
       }
@@ -264,6 +266,7 @@ export default {
   },
   methods: {
     onDrop($event) {
+      if ($event.preventDefault) $event.preventDefault()
       this.onDragLeave($event)
       if ($event.dataTransfer.items) {
         const i = 0
@@ -280,14 +283,14 @@ export default {
       }
     },
     onDragLeave($event) {
+      if ($event.preventDefault) $event.preventDefault()
       const div = document.getElementById('drag-zone')
       div.classList.remove('drag-zone-visible')
-      div.classList.remove('drop-image')
     },
     onDragEnter($event) {
+      if ($event.preventDefault) $event.preventDefault()
       const div = document.getElementById('drag-zone')
       div.classList.add('drag-zone-visible')
-      div.classList.add('drop-image')
     },
     onUpdate() {
       this.mde.value(this.body)
@@ -332,23 +335,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#drag-zone {
-  position: absolute;
-  width: 100%;
-  height: 96%;
-  z-index: 99999999999999999;
-  display: none;
-  top: 0;
-  left: 0;
-}
-
-#drag-zone.drop-image {
-  border: 1px dotted #cfd2d2;
-}
-
-.drag-zone-visible {
-  display: block !important;
-}
-</style>

@@ -37,6 +37,8 @@ describe('API', function() {
     [
       // 'blockchains-api',
       'usersAndAuth',
+      'drafts',
+      'imageUpload'
     ].forEach(module => {
       require(`${__dirname}/modules/${module}`)(STORAGE);
     })

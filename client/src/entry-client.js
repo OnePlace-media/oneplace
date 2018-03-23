@@ -3,20 +3,16 @@ import {createApp} from './app'
 import VueAuth from "@websanova/vue-auth"
 import VueCookie from 'vue-cookie'
 import AsyncData from './plugins/asyncData'
-// import VueSimplemde from 'vue-simplemde'
-// import markdownEditor from 'vue-simplemde/src/markdown-editor.vue'
 
 const VueScrollTo = require('vue-scrollto')
 const {app, router, store, i18n} = createApp()
 
-// Vue.use(VueSimplemde)
 Vue.use(VueScrollTo, {
   duration: 500,
   easing: "ease",
   offset: -70
 })
 
-// Vue.component('markdownEditor', markdownEditor)
 
 router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0)

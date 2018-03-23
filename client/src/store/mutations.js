@@ -138,5 +138,37 @@ export default {
   },
   setParamsProcessing(state, {chain, flag}) {
     state.params[chain].processing = flag
+  },
+
+  setReplieDeleteProcessing(state, flag) {
+    state.postView.replieDeleteProcessing = flag
+  },
+  updateReplie(state, {replie}) {
+    function updateReplie(replies, replie) {
+      return replies.map(_replie => {
+        if (replie.author === _replie.author && replie.permlink === _replie.permlink)
+          _replie = Object.assign(_replie, replie)
+        else if (_replie.replies && _replie.replies.length)
+          _replie.replies = updateReplie(_replie.replies, replie)
+
+        return _replie
+      })
+    }
+
+    state.postView.replies = updateReplie(state.postView.replies, replie)
+  },
+  deleteReplie(state, {replie}) {
+    function deleteReplie(replies, replie) {
+      return replies.filter(_replie => {
+        let result = true
+        if (replie.author === _replie.author && replie.permlink === _replie.permlink)
+          result = false
+        else if (_replie.replies && _replie.replies.length)
+          _replie.replies = deleteReplie(_replie.replies, replie)
+        return result
+      })
+    }
+
+    state.postView.replies = deleteReplie(state.postView.replies, replie)
   }
 }

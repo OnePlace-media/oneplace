@@ -1,5 +1,6 @@
 <template>
-  <div class="post-view__overlay" v-if="!processing">
+  <div class="post-view__overlay" v-if="!processing" id="post-overlay">
+    <post-share v-if="post"></post-share>
     <div class="post-view__modal">
       <post-view v-on-click-outside="close" v-if="post" :is-modal="true"></post-view>
       <comments-wrapper :post="post" v-if="post"></comments-wrapper>
@@ -11,12 +12,14 @@
 import PostView from './PostView.vue'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 import CommentsWrapper from './CommentsWrapper.vue'
+import PostShare from './PostShare.vue'
 const KEY_CODE_ESC = 27
 export default {
   name: 'PostModal',
   components: {
     PostView,
-    CommentsWrapper
+    CommentsWrapper,
+    PostShare
   },
   mixins: [onClickOutside],
   mounted() {

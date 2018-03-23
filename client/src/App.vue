@@ -1,4 +1,5 @@
 <style>
+@import '~simplemde/dist/simplemde.min.css';
 @import url('../static/css/styles.css');
 .login-form__alert {
   display: block;

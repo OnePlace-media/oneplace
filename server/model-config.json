@@ -27,11 +27,19 @@
     "public": false,
     "dataSource": "mysql"
   },
+  "draft": {
+    "public": false,
+    "dataSource": "mysql"
+  },
   "account": {
     "public": true,
     "dataSource": "mysql"
   },
   "blockchain": {
+    "public": true,
+    "dataSource": "db"
+  },
+  "image": {
     "public": true,
     "dataSource": "db"
   },

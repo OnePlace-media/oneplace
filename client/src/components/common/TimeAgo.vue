@@ -19,7 +19,8 @@ export default {
   computed: {
     timeAgoString() {
       timeagoInstance.setLocale(this.$locale.current())
-      return timeagoInstance.format(moment(this.time).unix() * 1000)
+
+      return timeagoInstance.format((/^\d+$/.test(this.time) ? this.time : moment(this.time).unix()) * 1000)
     }
   }
 }

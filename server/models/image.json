@@ -1,0 +1,8 @@
+{
+    "name": "image",
+    "plural": "images",
+    "base": "Model",
+    "properties": {},
+    "validations": [],
+    "methods": {}
+  }

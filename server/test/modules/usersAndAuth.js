@@ -146,81 +146,81 @@ module.exports = STORAGE => {
       });
     })
 
-    describe('#POST /users/:id/account', function() {
-      it('Without AccessToken, status 401', function(done) {
-        request(BASE_URL)
-          .post(`/users/${STORAGE.data.users.first.id}/account`)
-          .set('Accept', 'application/json')
-          .end((err, res) => {
-            res.should.have.status(401);
-            done();
-          });
-      });
+    // describe('#POST /users/:id/account', function() {
+    //   it('Without AccessToken, status 401', function(done) {
+    //     request(BASE_URL)
+    //       .post(`/users/${STORAGE.data.users.first.id}/account`)
+    //       .set('Accept', 'application/json')
+    //       .end((err, res) => {
+    //         res.should.have.status(401);
+    //         done();
+    //       });
+    //   });
 
-      it('with token, bad params, status 400', function(done) {
-        request(BASE_URL)
-          .post(`/users/${STORAGE.data.users.first.id}/account`)
-          .send({username: 't'})
-          .set('Accept', 'application/json')
-          .set('authorization', STORAGE.tokens.first)
-          .end((err, res) => {
-            res.should.have.status(400)
-            done()
-          })
-      })
+    //   it('with token, bad params, status 400', function(done) {
+    //     request(BASE_URL)
+    //       .post(`/users/${STORAGE.data.users.first.id}/account`)
+    //       .send({username: 't'})
+    //       .set('Accept', 'application/json')
+    //       .set('authorization', STORAGE.tokens.first)
+    //       .end((err, res) => {
+    //         res.should.have.status(400)
+    //         done()
+    //       })
+    //   })
 
-      it('with token, success, answer have basic property, status 200', function(done) {
-        request(BASE_URL)
-          .post(`/users/${STORAGE.data.users.first.id}/account`)
-          .send({username: 'test', sign: 'any sign for test', chain: BLOCKCHAIN.SOURCE.STEEM})
-          .set('Accept', 'application/json')
-          .set('authorization', STORAGE.tokens.first)
-          .end((err, res) => {
-            res.should.have.status(200)
-            res.body.should.be.a('object')
-            res.body.should.have.property('id')
-            res.body.should.have.property('username')
-            res.body.should.have.property('chain')
-            done()
-          })
-      })
-    })
+    //   it('with token, success, answer have basic property, status 200', function(done) {
+    //     request(BASE_URL)
+    //       .post(`/users/${STORAGE.data.users.first.id}/account`)
+    //       .send({username: 'test', sign: 'any sign for test', chain: BLOCKCHAIN.SOURCE.STEEM})
+    //       .set('Accept', 'application/json')
+    //       .set('authorization', STORAGE.tokens.first)
+    //       .end((err, res) => {
+    //         res.should.have.status(200)
+    //         res.body.should.be.a('object')
+    //         res.body.should.have.property('id')
+    //         res.body.should.have.property('username')
+    //         res.body.should.have.property('chain')
+    //         done()
+    //       })
+    //   })
+    // })
 
-    describe('#DELETE /users/:id/account', function() {
-      it('Without AccessToken, status 401', function(done) {
-        request(BASE_URL)
-          .delete(`/users/${STORAGE.data.users.first.id}/account`)
-          .set('Accept', 'application/json')
-          .end((err, res) => {
-            res.should.have.status(401);
-            done();
-          });
-      });
+    // describe('#DELETE /users/:id/account', function() {
+    //   it('Without AccessToken, status 401', function(done) {
+    //     request(BASE_URL)
+    //       .delete(`/users/${STORAGE.data.users.first.id}/account`)
+    //       .set('Accept', 'application/json')
+    //       .end((err, res) => {
+    //         res.should.have.status(401);
+    //         done();
+    //       });
+    //   });
 
-      it('with token, bad params, status 400', function(done) {
-        request(BASE_URL)
-          .delete(`/users/${STORAGE.data.users.first.id}/account`)
-          .send({username: 't'})
-          .set('Accept', 'application/json')
-          .set('authorization', STORAGE.tokens.first)
-          .end((err, res) => {
-            res.should.have.status(400)
-            done()
-          })
-      })
+    //   it('with token, bad params, status 400', function(done) {
+    //     request(BASE_URL)
+    //       .delete(`/users/${STORAGE.data.users.first.id}/account`)
+    //       .send({username: 't'})
+    //       .set('Accept', 'application/json')
+    //       .set('authorization', STORAGE.tokens.first)
+    //       .end((err, res) => {
+    //         res.should.have.status(400)
+    //         done()
+    //       })
+    //   })
 
-      it('with token, success, answer have basic property, status 204', function(done) {
-        request(BASE_URL)
-          .delete(`/users/${STORAGE.data.users.first.id}/account`)
-          .send({username: 'test', sign: 'any sign for test', chain: BLOCKCHAIN.SOURCE.STEEM})
-          .set('Accept', 'application/json')
-          .set('authorization', STORAGE.tokens.first)
-          .end((err, res) => {
-            res.should.have.status(204)
-            done()
-          })
-      })
-    })
+    //   it('with token, success, answer have basic property, status 204', function(done) {
+    //     request(BASE_URL)
+    //       .delete(`/users/${STORAGE.data.users.first.id}/account`)
+    //       .send({username: 'test', sign: 'any sign for test', chain: BLOCKCHAIN.SOURCE.STEEM})
+    //       .set('Accept', 'application/json')
+    //       .set('authorization', STORAGE.tokens.first)
+    //       .end((err, res) => {
+    //         res.should.have.status(204)
+    //         done()
+    //       })
+    //   })
+    // })
 
     // describe('#PUT|PATCH /users/:id', function() {
     //   it('Without AccessToken, status 401', function(done) {

@@ -10,6 +10,37 @@
             <p class="tag-block__info">{{$t('chains.emptyCategoryHelp')}}</p>
           </div>
           <div class="container" v-if="trend.posts.length">
+            <aside class="tag-block__aside">
+              <section class="tag-block__recent">
+                <header class="tag-block__recent-header">
+                  <h4 class="h4 tag-block__recent-heading">{{$t('common.headers.recentPosts')}}</h4>
+                </header>
+                <section class="tag-block__recent-body">
+                  <div class="tag-block__recent-post" v-for="post in trend.recentPosts" :key="post.id">
+                    <h4 class="h4 tag-block__recent-post-heading">
+                      <a @click.prevent="showPost(post)" :href="$helper.makePathForPost(post, chain)" class="link">{{post.title}}</a>
+                    </h4>
+                    <div class="tag-block__post-other tag-block__recent-post-other">
+                      <i18n path="common.timeAgoWithAuthor" tag="p">
+                        <span class="tag-block__post-time" place="timeago">
+                          <time-ago :time="post.created"></time-ago>
+                        </span>
+                        <router-link 
+                          tag="a" 
+                          place="author"
+                          :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
+                          class="tag-block__post-author link">
+                          {{post.author}}
+                        </router-link>
+                        <!-- <a :href="`/${$route.params.chain}/@${post.author}`" place="author" class="tag-block__post-author link">
+                          {{post.author}}
+                        </a> -->
+                      </i18n>
+                    </div>
+                  </div>
+                </section>
+              </section>
+            </aside>
             <section class="tag-block__trending">
               <article class="tag-block__top-post" v-for="(post, index) in trend.posts" :key="index">
                 <a 
@@ -70,37 +101,6 @@
                 </div>
               </article>
             </section>
-            <aside class="tag-block__aside">
-              <section class="tag-block__recent">
-                <header class="tag-block__recent-header">
-                  <h4 class="h4 tag-block__recent-heading">{{$t('common.headers.recentPosts')}}</h4>
-                </header>
-                <section class="tag-block__recent-body">
-                  <div class="tag-block__recent-post" v-for="post in trend.recentPosts" :key="post.id">
-                    <h4 class="h4 tag-block__recent-post-heading">
-                      <a @click.prevent="showPost(post)" :href="$helper.makePathForPost(post, chain)" class="link">{{post.title}}</a>
-                    </h4>
-                    <div class="tag-block__post-other tag-block__recent-post-other">
-                      <i18n path="common.timeAgoWithAuthor" tag="p">
-                        <span class="tag-block__post-time" place="timeago">
-                          <time-ago :time="post.created"></time-ago>
-                        </span>
-                        <router-link 
-                          tag="a" 
-                          place="author"
-                          :to="{name:'chain-account-view', params:{chain: $route.params.chain, username: post.author}}" 
-                          class="tag-block__post-author link">
-                          {{post.author}}
-                        </router-link>
-                        <!-- <a :href="`/${$route.params.chain}/@${post.author}`" place="author" class="tag-block__post-author link">
-                          {{post.author}}
-                        </a> -->
-                      </i18n>
-                    </div>
-                  </div>
-                </section>
-              </section>
-            </aside>
           </div>
         </section>
       </section>

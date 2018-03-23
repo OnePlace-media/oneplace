@@ -15,7 +15,7 @@
         </div>
       </no-ssr>
 
-      <comment-form @success="addComment" :special="true" :post="post" v-if="account.username"></comment-form>
+      <comment-form @success="addComment" :special="true" :post="post" v-if="showCommentForm"></comment-form>
       
       <div class="post-view__comments-header" v-if="!repliesProcessing && replies.length">
         <h3 class="h3 post-view__comments-title">{{$t('comment.header')}}</h3>
@@ -62,6 +62,13 @@ export default {
     }
   },
   computed: {
+    showCommentForm() {
+      return (
+        this.account.username &&
+        (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ||
+          this.post.mode !== CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED)
+      )
+    },
     chainName() {
       return {
         s: 'Steem',

@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import core from './modules/core'
 import profile from './modules/profile'
+import publish from './modules/publish'
 import tag from './modules/tag'
 import state from './state'
 
@@ -14,7 +15,8 @@ export function createStore() {
     modules: {
       core: core(),
       profile: profile(),
-      tag: tag()
+      tag: tag(),
+      publish: publish()
     },
     state: state(),
     actions: require('./actions').default,

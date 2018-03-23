@@ -1,18 +1,23 @@
 module.exports = {
   errors: {
+    STEEMIT_MIN_REPLY_INTERVAL: 'You may only comment once every 20 seconds',
     FAILED_APPEND_POST_BY_AUTHOR: 'Loading posts error, please try again later',
     UNKNOW_ERROR: 'Something is wrong.',
     STEEMIT_MAX_VOTE_CHANGES: 'You have used the maximum number of vote changes on this comment',
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds',
-    NET_PROBLEM: 'A network error has occurred, check your connection and try again'
+    NET_PROBLEM: 'A network error has occurred, check your connection and try again',
+    STEEMIT_MIN_ROOT_COMMENT_INTERVAL: 'You may only post once every 5 minutes'
   },
   common: {
+    cancel: 'Cancel',
     orderBy: 'Order by',
     in: 'in',
     reply: 'Reply',
     back: 'Back',
     tags: 'Tags',
     author: 'Author',
+    edit: 'Edit',
+    delete: 'Delete',
     returnToOnePlace: 'Return to OnePlace',
     validate: {
       emailRequired: 'E-mail address can\'t be blank',
@@ -50,8 +55,9 @@ module.exports = {
   },
   comment: {
     header: 'Comments',
+    confirmDeleteComment: 'Confirm delete comment',
     post: 'Post',
-    cancel: 'Cancel',
+    update: 'Update',
     preview: 'Preview',
     dislike: 'Dislike',
     like: 'Like',
@@ -120,6 +126,7 @@ module.exports = {
     aboutRemove: '<em>Remove account</em>. You are going to remove posting authority from OnePlace app. Confirm this operation with your private active key.',
   },
   topBar: {
+    createNewPost: 'Create new post',
     addAccount: 'Add account',
     getStarted: 'Get started',
     settings: 'Settings',
@@ -158,7 +165,63 @@ module.exports = {
     clearFilters: 'Clear filters',
     allTags: 'All tags',
     removeTag: 'Remove tag',
-    accBlogs:'{username}\'s blog'
+    accBlogs: '{username}\'s blog'
+  },
+  publish: {
+    publish: 'Publish',
+    update: 'Update',
+    readyToPublish: 'Ready to publish?',
+    confirmUpdates: 'Confirm updates?',
+    addTags_upTo5: 'Add tags (up to 5)',
+    editTags: 'Edit tags',
+    typeTagsHere: 'Type tags here...',
+    payoutSettings: 'Payout settings',
+    '50': '50% / 50% (Recommended)',
+    '100s': '100% STEEM POWER',
+    '100g': '100% GOLOS POWER',
+    '0': 'Decline rewards',
+    upVotePost: 'Upvote post',
+    enterPostTitle: 'Title',
+    typeYourStoryHere: 'Type your story here...',
+    newPost: 'New post',
+    draft: 'Draft',
+    edit: 'Edit',
+    drafts: 'Drafts',
+    youHaveNoDrafts: 'You have no drafts.',
+    createNewDraft: 'Create new draft',
+
+    pasteLinkUrlHere: 'Paste URL here...',
+    pasteImageLinkOrUploadImageFromYourDevice: 'Paste image URL or upload from your device...',
+    upload: 'Upload',
+    bold: 'Bold',
+    italic: 'Italic',
+    heading: 'Heading',
+    headingSmaller: 'Smaller Heading',
+    headingBigger: 'Bigger Heading',
+    code: 'Code',
+    quote: 'Quote',
+    unorderedList: 'Generic List',
+    orderedList: 'Numbered List',
+    insertLink: 'Insert Link',
+    insertImage: 'Insert Image',
+    horizontalRule: 'Insert Line',
+    guide: 'Markdown Guide',
+    togglePreview: 'Toggle Preview',
+    fullscreen: 'Toggle Fullscreen',
+    wrapper: 'Formatting',
+    centered: 'Centered',
+    justified: 'Justified',
+    pullLeft: 'Pull Left',
+    pullRight: 'Pull Right',
+    insertLine: 'Insert Line',
+    indient: 'Indent Text',
+
+    errors: {
+      TYPE: 'Uploaded file must have type like image/*',
+      SUPPORT: 'Only gif, png, jpeg, webp formats are supported',
+      SIZE_GIF: 'Uploaded file size must be less than 20Mb',
+      SIZE: 'Uploaded file size must be less than 2Mb'
+    }
   },
   auth: {
     SignIn: 'Log in',

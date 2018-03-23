@@ -126,6 +126,16 @@ export default {
       })
   },
 
+  deleteComment({commit, state}, {chain, author, permlink}) {
+    commit('setReplieDeleteProcessing', true)
+    return Api
+      .deleteComment(chain, author, permlink)
+      .then(response => {
+        commit('deleteReplie', {replie: {author, permlink}})
+        commit('setReplieDeleteProcessing', false)
+      })
+  },
+
   removeAccount({commit}, {id, chain, username}) {
     return Api.removeAccount(id, chain, username)
   },

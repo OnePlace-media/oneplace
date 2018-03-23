@@ -73,6 +73,8 @@ async function getReplies(chain, post) {
   const replies = await blockChains.getContentReplies(chain, {author: post.author, permlink: post.permlink})
   const _replies = await _preparePosts(chain, replies, true, true)
   for (let replie of _replies) {
+    replie.parent_permlink = post.permlink
+    replie.parent_author = post.author
     if (replie.children) {
       replie.replies = await getReplies(chain, {author: replie.author, permlink: replie.permlink})
     }
@@ -95,6 +97,10 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
       _post.title = post.title
       _post.last_payout = post.last_payout + '+00:00'
       _post.created = post.created + '+00:00'
+      _post.vote_rshares = post.vote_rshares
+      _post.net_rshares = post.net_rshares
+      _post.body_orig = post.body
+      _post.net_votes = post.net_votes
       _post.permlink = post.permlink
       _post.author = post.author
       _post.category = post.parent_permlink
@@ -252,7 +258,7 @@ class TrendsWatcher {
         console.log('Start update cache', new Date())
         const restart = err => {
           if (err) console.log(err)
-          setTimeout(() => updater(), 60 * 1000)
+          setTimeout(() => updater(), 2 * 60 * 1000)
           console.log('Stop update cache', new Date())
         }
 
@@ -260,12 +266,14 @@ class TrendsWatcher {
           self.redis.zrangebyscore([KEYS.TOP_TAGS, chain].join(':'), '-inf', '+inf', 'LIMIT', 0, 100, (err, tags) => {
             if (err) reject(err)
             else {
-              tags.reduce((p, tag) => {
+              const chainOfPromises = tags.reduce((p, tag) => {
                 return p.then(() => Promise.all([
                   self.getTrendsByTag(chain, tag, [], true),
                   self.getTrendsByRecent(chain, tag, true)
                 ]))
               }, Promise.resolve())
+
+              chainOfPromises
                 .then(() => {
                   resolve()
                 })

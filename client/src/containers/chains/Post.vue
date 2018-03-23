@@ -1,6 +1,7 @@
 <template>
   <section class="main-content">
     <section class="post-page__wrapper">
+      <post-share></post-share>
       <div class="container">
         <center><pulse-loader :loading="!post" :color="'#383838'" :size="'10px'"></pulse-loader></center>
         <post-view v-if="post" :is-modal="false"></post-view>
@@ -17,15 +18,20 @@
 <script>
 import PostView from '../../components/chains/PostView.vue'
 import CommentsWrapper from '../../components/chains/CommentsWrapper.vue'
+import PostShare from '../../components/chains/PostShare.vue'
 
 export default {
   name: 'Post',
   components: {
     PostView,
-    CommentsWrapper
+    CommentsWrapper,
+    PostShare
   },
   asyncData({ store, route, router }) {
-    if (!store.state.postView.post || store.state.postView.post.permlink !== route.params.permlink) {
+    if (
+      !store.state.postView.post ||
+      store.state.postView.post.permlink !== route.params.permlink
+    ) {
       return store
         .dispatch('fetchPostByPermlink', {
           chain: route.params.chain,

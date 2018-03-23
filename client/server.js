@@ -37,6 +37,7 @@ const serve = (path, cache) => express.static(resolve(path), {
 
 app.use('/static', serve('./static', true))
 app.use('/dist', serve('./dist', true))
+app.use('/storage', serve('../server/storage', true))
 // app.use(require('cookie-parser')())
 app.use(favicon(path.resolve(__dirname, 'static/favicon.ico')))
 // app.use('/service-worker.js', serve('./dist/service-worker.js'))

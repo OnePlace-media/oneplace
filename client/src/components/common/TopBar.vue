@@ -8,7 +8,7 @@ export default {
   name: 'TopBar',
   mixins: [onClickOutside],
   computed: {
-    DEFAULT_AVATAR(){
+    DEFAULT_AVATAR() {
       return CONSTANTS.DEFAULT.AVATAR_IMAGE
     },
     userDropDownToggle() {
@@ -21,7 +21,6 @@ export default {
       return this.$route.params.chain || this.$store.state.chain || 's'
     },
     account() {
-      
       let result = { avatar: CONSTANTS.DEFAULT.AVATAR_IMAGE, username: null }
       if (this.$auth && this.$auth.check() && this.accountsByChain.length) {
         result =
@@ -68,6 +67,11 @@ export default {
     <div class="header__wrapper container">
       <router-link :to="{name:'chain-trend', params:{chain}}" class="header__logo" tag="div"><img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive"></router-link>
       <div class="header__right-panel">
+        <router-link :to="{name:'publish', params:{chain}}" class="header__publish" :title="$t('topBar.createNewPost')" v-if="accountsByChain.length">
+          <svg class="icon--header">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/pencil.svg#icon"></use>
+          </svg>
+        </router-link>
         <div class="header__chain-wrapper">
           <router-link 
             :to="{name:'chain-trend', params:{chain: CHAINS.STEEM}}" 
@@ -104,9 +108,14 @@ export default {
             <!-- <a :href="`/${chain}/@${account.username}`" class="header__user-name link link--op">
               {{account.username}}
             </a> -->
-            <a class="header__profile-btn" @click="$store.dispatch('toggleDropDown')"></a>
+            <a class="header__profile-btn" @click="$store.dispatch('toggleDropDown')">
+              <svg class="icon--header">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/settings.svg#icon"></use>
+              </svg>
+            </a>
             <div class="header__usermenu" :class="{'header__usermenu--opened':userDropDownToggle}" @click="closeDropDown">
-              <router-link :to="{name:'settings'}" class="header__usermenu-item link">{{$t('topBar.settings')}}</router-link>
+              <router-link :to="{name:'publish', params:{chain}}" class="header__usermenu-item link" v-if="accountsByChain.length">{{$t('topBar.createNewPost')}}</router-link>
+              <router-link :to="{name:'settings'}" class="header__usermenu-item header__usermenu-item--hr link">{{$t('topBar.settings')}}</router-link>
     					<a href="#" class="header__usermenu-item header__usermenu-item--submenu link" v-if="accounts.length > 1">{{$t('topBar.switchAccount')}}
                 <div class="header__submenu">
                   <span class="header__submenu-item" 

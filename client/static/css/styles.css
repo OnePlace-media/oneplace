@@ -19,6 +19,15 @@ input,textarea,select,button {
   box-sizing: border-box;
 }
 
+.clearfix:before,.clearfix:after {
+  content: '';
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
 .container {
   width: 1000px;
   margin: 0 auto;
@@ -1892,6 +1901,15 @@ hr {
 .tag-block__body {
   padding: 20px 0 30px;
   min-height: 75px;
+}
+
+.tag-block__body:before,.tag-block__body:after {
+  content: '';
+  display: table;
+}
+
+.tag-block__body:after {
+  clear: both;
 }
 
 .tag-block__info {

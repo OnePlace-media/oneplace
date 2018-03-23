@@ -32,7 +32,7 @@
         <input class="publish__radio" id="option-1" type="radio" name="chain" value="50" v-model="rewardsOpts">
         <label class="publish__radio-label" for="option-1">{{$t('publish.50')}}</label>
         <input class="publish__radio" id="option-2" type="radio" name="chain" value="100" v-model="rewardsOpts">
-        <label class="publish__radio-label" for="option-2">{{$t('publish.100')}}</label>
+        <label class="publish__radio-label" for="option-2">{{$t(`publish.100${chain}`)}}</label>
         <input class="publish__radio" id="option-3" type="radio" name="chain" value="0" v-model="rewardsOpts">
         <label class="publish__radio-label" for="option-3">{{$t('publish.0')}}</label>
       </div>

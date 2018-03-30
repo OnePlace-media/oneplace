@@ -10,7 +10,7 @@
 
     <section class="publish__post-editor">
       <textarea class="publish__input-title input" :placeholder="$t('publish.enterPostTitle')" v-model="title" ref="title" maxlength="256"></textarea>
-      <publish-editor ref='editor'></publish-editor>
+      <publish-editor ref='editor' :chain="chain"></publish-editor>
     </section>
     <publish-modal-image v-if="showModalImage" @update="onUpdate"></publish-modal-image>
     <publish-modal-link v-if="showModalLink" @update="onUpdate"></publish-modal-link>
@@ -19,6 +19,9 @@
 
 <style>
 .d-none {
+  display: none !important;
+}
+.CodeMirror-vscrollbar {
   display: none !important;
 }
 </style>
@@ -107,6 +110,7 @@ export default {
       return this.$store.state.publish.processing
     },
     title: stateModel('title'),
+    body: stateModel('body'),
     showModalImage() {
       return this.$store.state.publish.editor.showModalImage
     },

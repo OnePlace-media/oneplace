@@ -30,6 +30,7 @@
 import EventBus from '../../event-bus'
 import Vue from 'vue'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
+const parser = require('@oneplace/blockchains-api/parser')
 
 const stateModel = name => {
   return {
@@ -44,6 +45,12 @@ const stateModel = name => {
 export default {
   name: 'PublishEditor',
   mixins: [onClickOutside],
+  props: {
+    chain: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       wrapperEl: null,
@@ -210,8 +217,11 @@ export default {
       autofocus: true,
       autosave: { enabled: false },
       blockStyles: {
-        bold: '__',
-        italic: '_'
+        bold: '**',
+        italic: '*'
+      },
+      previewRender: plainText => {
+        return parser.prepareHTML(this.chain, plainText).html
       },
       element: this.$refs.area,
       toolbar: generateToolbar(),
@@ -309,25 +319,22 @@ export default {
     },
     insertWrapper(type) {
       let tag = 'div'
-      let className = null
-      if (type === 'center') tag = 'center'
-      else className = type
 
       const selections = this.mde.codemirror.getSelections()
       let selectionsReplace
       if (type === 'indient') {
         const template = `&#8195;`
         const start = this.mde.codemirror.getCursor('start')
-        start.ch = 0
         this.mde.codemirror.replaceRange(template, start, start)
       } else {
         if (type === 'line') {
           const template = `\n\n-----\n\n`
           selectionsReplace = selections.map(selection => selection + template)
         } else {
-          const template = `<${tag}${
-            className ? ` class="${className}"` : ''
-          }>%CONTENT%</${tag}>`
+          let template =
+            type === 'center'
+              ? `<center>%CONTENT%</center>`
+              : `<div class="${type}">\n\n%CONTENT%\n</div>\n\n`
           selectionsReplace = selections.map(selection =>
             template.replace('%CONTENT%', selection)
           )

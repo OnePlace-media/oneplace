@@ -161,13 +161,15 @@ export default {
           account: this.account
         })
         .then(data => {
-          this.$router.push({
-            name: 'chain-post-view',
-            params: {
-              chain: this.chain,
-              username: data.author,
-              permlink: data.permlink
-            }
+          setTimeout(() => {
+            this.$router.push({
+              name: 'chain-post-view',
+              params: {
+                chain: this.chain,
+                username: data.author,
+                permlink: data.permlink
+              }
+            }, 1000)
           })
         })
         .catch(err => {

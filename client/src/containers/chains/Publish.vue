@@ -21,9 +21,6 @@
 .d-none {
   display: none !important;
 }
-.CodeMirror-vscrollbar {
-  display: none !important;
-}
 </style>
 
 <script>

@@ -123,12 +123,14 @@ export default () => {
         })
     },
     saveDraft({commit, state}, {userId}) {
-      if (state.form.body && state.form.title) {
+      if (state.form.body) {
         const isNewRecord = state.drafts.active === null
         const {title, body} = state.form
+        const data = {body}
+        if (title) data.title = title
         const result = isNewRecord
-          ? Api.createDraft(userId, {title, body})
-          : Api.saveDraft(userId, {title, body}, state.drafts.active)
+          ? Api.createDraft(userId, data)
+          : Api.saveDraft(userId, data, state.drafts.active)
 
         result
           .then(response => {

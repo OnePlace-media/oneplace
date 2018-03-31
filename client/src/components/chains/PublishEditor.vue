@@ -160,9 +160,36 @@ export default {
           name: 'preview',
           action: editor => {
             SimpleMDE.togglePreview(editor)
-            const elemList = document.getElementsByClassName('editor-preview')
-            if (elemList.length) {
-              elemList[0].classList.add('markdown')
+            const [editorPreview] = document.getElementsByClassName(
+              'editor-preview'
+            )
+            if (editorPreview) {
+              editorPreview.classList.add('markdown')
+              Vue.nextTick(() => {
+                function findImageAndAddHanler(node, handler) {
+                  const tag = node.tagName ? node.tagName.toLowerCase() : null
+
+                  if (tag === 'img')
+                    node.addEventListener('load', handler, { once: true })
+
+                  if (node.childNodes.length)
+                    [].forEach.call(node.childNodes, child =>
+                      findImageAndAddHanler(child, handler)
+                    )
+                }
+
+                function onLoadHandler($event) {
+                  setTimeout(() => {
+                    const height =
+                      editorPreview.childNodes[0].clientHeight
+                    const [codeMirror] = document.getElementsByClassName(
+                      'CodeMirror'
+                    )
+                    codeMirror.style.height = height + 'px'
+                  }, 0)
+                }
+                findImageAndAddHanler(editorPreview, onLoadHandler)
+              })
             }
           },
           className: 'fa fa-eye no-disable',

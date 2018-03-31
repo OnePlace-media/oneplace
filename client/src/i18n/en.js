@@ -168,6 +168,7 @@ module.exports = {
     accBlogs: '{username}\'s blog'
   },
   publish: {
+    untitled:'Untitled',
     publish: 'Publish',
     update: 'Update',
     readyToPublish: 'Ready to publish?',

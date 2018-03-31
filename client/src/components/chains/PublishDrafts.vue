@@ -11,7 +11,7 @@
       <div class="publish__drafts-list">
         <div class="publish__drafts-item" v-for="draft in drafts" :key="draft.id" @click.stop="selectDraft(draft)">
           <div class="column-wrapper">
-            <span class="publish__drafts-name">{{draft.title}}</span>
+            <span class="publish__drafts-name">{{draft.title || $t('publish.untitled')}}</span>
             <span class="publish__drafts-time">
               <time-ago :time="draft.time.toString()"></time-ago>
             </span>

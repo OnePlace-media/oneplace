@@ -1,5 +1,5 @@
 module.exports = Model => {
-  Model.validatesLengthOf('title', {max: 255})
+  Model.validate('title', function(inValid) {if (this.title && this.title.length > 255) inValid()}, {message: 'Title must be less then 255'})
 
   Model.observe('before save', (ctx, next) => {
     if (ctx.instance) {

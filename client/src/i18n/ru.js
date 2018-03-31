@@ -169,6 +169,7 @@ module.exports = {
     accBlogs: 'Блог {username}'
   },
   publish: {
+    untitled: 'Без названия',
     publish: 'Публикация',
     update: 'Обновить',
     readyToPublish: 'Готовы к публикации?',

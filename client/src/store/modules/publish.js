@@ -132,10 +132,16 @@ export default () => {
           ? Api.createDraft(userId, data)
           : Api.saveDraft(userId, data, state.drafts.active)
 
-        result
+        return result
           .then(response => {
             const active = response.data
-            const params = {active}
+            const params = {}
+
+            const condUpdateActive = (isNewRecord && !state.drafts.active)
+              || (!isNewRecord && state.drafts.active && state.drafts.active.id === active.id)
+
+            if (condUpdateActive) params.active = active
+
             if (isNewRecord)
               params.collection = state.drafts.collection.concat([response.data])
             else
@@ -166,7 +172,7 @@ export default () => {
     },
     selectDraft({commit, state}, {draft}) {
       const {body, title} = draft
-
+      actions.saveDraft({commit, state}, {userId: draft.userId})
       commit(TYPES.SET_DRAFTS_OBJECT, {loadFromDraft: true, active: draft})
       commit(TYPES.SET_FORM_OBJECT, {body, title})
     },

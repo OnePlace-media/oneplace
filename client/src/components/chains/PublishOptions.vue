@@ -1,5 +1,5 @@
 <template>
-  <span class="publish__btn publish__btn--publish" @click="setIsVisible(true)" v-on-click-outside="close" >{{$t('publish.publish')}}
+  <span class="publish__btn publish__btn--publish" @click="setIsVisible(true)" v-on-click-outside="close">{{$t('publish.publish')}}
     <span class="icon--arrow-down"></span>
     <div class="dropdown publish__setup" v-show="isVisible">
       <span class="publish__setup-header"><h2 class="h2">{{$t(`publish.${isNewRecord ? 'readyToPublish' : 'confirmUpdates'}`)}}</h2></span>

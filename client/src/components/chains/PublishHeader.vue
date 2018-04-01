@@ -1,32 +1,34 @@
 <template>
-  <header class="publish__header">
-    <div class="publish__header-wrapper">
-      <div class="publish__post-author">
-        <div class="publish__avatar avatar" :style="`background-image: url('${account.avatar || DEFAULT_AVATAR}');`"></div>
-        <a 
-          class="header__user-switch header__user-switch--publish" 
-          title="Switch account" 
-          @click.prevent="switchAccount"
-          v-if="isNewRecord && accountsByChain.length > 1"
-        ></a>
-        <div class="column-wrapper">
-          <router-link 
-            v-if="account.username"
-            tag="a" 
-            :to="{name:'chain-account-view', params:{chain, username: account.username}}" 
-            class="link link--op"
-          >
-            {{account.username}}
-          </router-link>
-          <span>{{$t(`publish.${mode}`)}}</span>
+  <no-ssr>
+    <header class="publish__header">
+      <div class="publish__header-wrapper">
+        <div class="publish__post-author">
+          <div class="publish__avatar avatar" :style="`background-image: url('${account.avatar || DEFAULT_AVATAR}');`"></div>
+          <a 
+            class="header__user-switch header__user-switch--publish" 
+            title="Switch account" 
+            @click.prevent="switchAccount"
+            v-if="isNewRecord && accountsByChain.length > 1"
+          ></a>
+          <div class="column-wrapper">
+            <router-link 
+              v-if="account.username"
+              tag="a" 
+              :to="{name:'chain-account-view', params:{chain, username: account.username}}" 
+              class="link link--op"
+            >
+              {{account.username}}
+            </router-link>
+            <span>{{$t(`publish.${mode}`)}}</span>
+          </div>
+        </div>
+        <div>
+          <publish-drafts @update="$emit('update')" v-if="publishDraftsRender"></publish-drafts>
+          <publish-options :chain="chain" :account="account"></publish-options>
         </div>
       </div>
-      <div>
-        <publish-drafts @update="$emit('update')" v-if="publishDraftsRender"></publish-drafts>
-        <publish-options :chain="chain" :account="account"></publish-options>
-      </div>
-    </div>
-  </header>
+    </header>
+  </no-ssr>
 </template>
 
 <script>

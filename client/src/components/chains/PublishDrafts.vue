@@ -9,7 +9,7 @@
       <div class="publish__drafts-new" v-if="!processing" @click.stop="createDraft">{{$t('publish.createNewDraft')}}</div>
       <div class="publish__no-drafts" v-if="!processing && (!drafts || !drafts.length)">{{$t('publish.youHaveNoDrafts')}}</div>
       <div class="publish__drafts-list">
-        <div class="publish__drafts-item" v-for="draft in drafts" :key="draft.id" @click.stop="selectDraft(draft)">
+        <div class="publish__drafts-item" v-for="draft in sortedDrafts" :key="draft.id" @click.stop="selectDraft(draft)">
           <div class="column-wrapper">
             <span class="publish__drafts-name">{{draft.title || $t('publish.untitled')}}</span>
             <span class="publish__drafts-time">
@@ -65,6 +65,11 @@ export default {
     body() {
       return this.$store.state.publish.form.body
     },
+    sortedDrafts() {
+      const drafts = [...this.drafts]
+      drafts.sort((a, b) => b.time - a.time)
+      return drafts
+    },
     drafts() {
       return this.$store.state.publish.drafts.collection
     },
@@ -98,6 +103,7 @@ export default {
       })
     },
     selectDraft(draft) {
+      if (this.draftSaveTimeout) clearTimeout(this.draftSaveTimeout)
       this.$store.dispatch('publish/selectDraft', { draft })
       this.isVisible = false
       this.$emit('update')

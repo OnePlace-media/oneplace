@@ -168,7 +168,7 @@ module.exports = {
     accBlogs: '{username}\'s blog'
   },
   publish: {
-    untitled:'Untitled',
+    untitled: 'Untitled',
     publish: 'Publish',
     update: 'Update',
     readyToPublish: 'Ready to publish?',
@@ -221,7 +221,8 @@ module.exports = {
       TYPE: 'Uploaded file must have type like image/*',
       SUPPORT: 'Only gif, png, jpeg, webp formats are supported',
       SIZE_GIF: 'Uploaded file size must be less than 20Mb',
-      SIZE: 'Uploaded file size must be less than 2Mb'
+      SIZE: 'Uploaded file size must be less than 2Mb',
+      null: ''
     }
   },
   auth: {

@@ -300,7 +300,7 @@ class Parser {
       links: new Set()
     }
     body = body.replace(/&amp;(mdash|rdquo|ndash|ldquo|laquo|raquo|zwj)/g, string => string.replace(/&amp;/, '&'))
-    let html = md.render(entities.decode(body))
+    let html = md.render(body)
     try {
       let doc = DOMParser.parseFromString(`<div>${html}</div>`, 'text/html')
       traverse(chain, doc, state)

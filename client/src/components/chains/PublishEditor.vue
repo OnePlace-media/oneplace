@@ -159,36 +159,45 @@ export default {
         {
           name: 'preview',
           action: editor => {
+            const isPreviewActive = editor.isPreviewActive()
             SimpleMDE.togglePreview(editor)
             const [editorPreview] = document.getElementsByClassName(
               'editor-preview'
             )
             if (editorPreview) {
               editorPreview.classList.add('markdown')
+
               Vue.nextTick(() => {
-                function findImageAndAddHanler(node, handler) {
-                  const tag = node.tagName ? node.tagName.toLowerCase() : null
+                if (isPreviewActive) {
+                  const [codeMirror] = document.getElementsByClassName(
+                    'CodeMirror'
+                  )
 
-                  if (tag === 'img')
-                    node.addEventListener('load', handler, { once: true })
+                  if (codeMirror) codeMirror.style.height = 'auto'
+                } else {
+                  function findImageAndAddHanler(node, handler) {
+                    const tag = node.tagName ? node.tagName.toLowerCase() : null
 
-                  if (node.childNodes.length)
-                    [].forEach.call(node.childNodes, child =>
-                      findImageAndAddHanler(child, handler)
-                    )
+                    if (tag === 'img')
+                      node.addEventListener('load', handler, { once: true })
+
+                    if (node.childNodes.length)
+                      [].forEach.call(node.childNodes, child =>
+                        findImageAndAddHanler(child, handler)
+                      )
+                  }
+
+                  function onLoadHandler($event) {
+                    setTimeout(() => {
+                      const height = editorPreview.childNodes[0].clientHeight
+                      const [codeMirror] = document.getElementsByClassName(
+                        'CodeMirror'
+                      )
+                      codeMirror.style.height = height + 'px'
+                    }, 0)
+                  }
+                  findImageAndAddHanler(editorPreview, onLoadHandler)
                 }
-
-                function onLoadHandler($event) {
-                  setTimeout(() => {
-                    const height =
-                      editorPreview.childNodes[0].clientHeight
-                    const [codeMirror] = document.getElementsByClassName(
-                      'CodeMirror'
-                    )
-                    codeMirror.style.height = height + 'px'
-                  }, 0)
-                }
-                findImageAndAddHanler(editorPreview, onLoadHandler)
               })
             }
           },
@@ -255,7 +264,11 @@ export default {
       promptURLs: true,
       spellChecker: false,
       status: false,
-      styleSelectedText: false
+      styleSelectedText: false,
+      renderingConfig: {
+        singleLineBreaks: false,
+        codeSyntaxHighlighting: true
+      }
     })
 
     this.mde.value(this.body)
@@ -305,8 +318,10 @@ export default {
   },
   destroyed() {
     const div = document.getElementById('drag-zone')
-    div.removeEventListener('drop', this.onDrop)
-    div.removeEventListener('dragleave', this.onDragLeave)
+    if (div) {
+      div.removeEventListener('drop', this.onDrop)
+      div.removeEventListener('dragleave', this.onDragLeave)
+    }
   },
   methods: {
     onDrop($event) {
@@ -338,6 +353,9 @@ export default {
     },
     onUpdate() {
       this.mde.value(this.body)
+      const renderedHTML = this.mde.options.previewRender(this.body)
+      const [preview] = document.getElementsByClassName('editor-preview')
+      if (preview) preview.innerHTML = renderedHTML
     },
     closeWrapper() {
       this.wrapperShow = false

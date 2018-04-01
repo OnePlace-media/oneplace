@@ -29,10 +29,11 @@
     </span>
     <span class="post-view__post-data-item" v-if="isComment">
       <a 
-        @click.prevent="$emit('vote', true, voteWeight)"
+        @click.prevent="$emit('vote', false, voteWeight)"
         class="post-view__post-like" 
         :class="{'post-view__post-like--active': isDislike, 'post-view__post-like--processing': downVoteProcessing}" 
         :title="isDislike ? $t('comment.removeVote') : $t('comment.dislike')">
+        <div class="spinner-rolling"><div></div></div>
         <svg class="post-view__icon post-view__icon--small post-view__icon-dislike">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
         </svg>

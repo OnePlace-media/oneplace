@@ -19,7 +19,7 @@ const cacheMethodsMap = {
 const cache = {}
 const timeout = process.env.NODE_ENV === 'production' ? 5000 : 10000
 
-function _call(chain, method, params, noCache) {
+function _call(chain, api, method, params, noCache) {
   if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS) {
     if (params[0].tag) {
       params[0].select_tags = [params[0].tag]
@@ -37,11 +37,10 @@ function _call(chain, method, params, noCache) {
     } else {
       const json = {
         id: 1,
-        method,
-        params,
+        method: 'call',
+        params: [api, method, params],
         jsonrpc: "2.0"
       }
-
       request({
         url: `http://${clientsURL[chain]}`,
         method: 'POST',
@@ -90,7 +89,7 @@ class BlockChainApi {
   }
 
   static getAccount(chain, username, noCache = false) {
-    return _call(chain, 'get_accounts', [[username]], noCache)
+    return _call(chain, 'database_api', 'get_accounts', [[username]], noCache)
       .then(accounts => {
         if (!accounts || !accounts.length) throw new Error('Account not found')
         return accounts[0]
@@ -98,23 +97,23 @@ class BlockChainApi {
   }
 
   static getDiscussionsByTrending(chain, params) {
-    return _call(chain, 'get_discussions_by_trending', [params])
+    return _call(chain, 'social_network', 'get_discussions_by_trending', [params])
   }
 
   static getDiscussionsByCreated(chain, params) {
-    return _call(chain, 'get_discussions_by_created', [params])
+    return _call(chain, 'social_network', 'get_discussions_by_created', [params])
   }
 
   static getDiscussionsByHot(chain, params) {
-    return _call(chain, 'get_discussions_by_hot', [params])
+    return _call(chain, 'social_network', 'get_discussions_by_hot', [params])
   }
 
   static getContent(chain, {author, permlink}) {
-    return _call(chain, 'get_content', [author, permlink])
+    return _call(chain, 'social_network', 'get_content', [author, permlink])
   }
 
   static getContentReplies(chain, {author, permlink}) {
-    return _call(chain, 'get_content_replies', [author, permlink])
+    return _call(chain, 'social_network', 'get_content_replies', [author, permlink])
   }
 
   static getProfile(chain, username) {
@@ -134,23 +133,23 @@ class BlockChainApi {
   }
 
   static getActiveVotes(chain, {author, permlink}) {
-    return _call(chain, 'get_active_votes', [author, permlink])
+    return _call(chain, 'social_network', 'get_active_votes', [author, permlink])
   }
 
   static getState(chain, {path}) {
-    return _call(chain, 'get_state', [path])
+    return _call(chain, 'database_api', 'get_state', [path])
   }
 
   static getFollowCount(chain, {username}) {
-    return _call(chain, 'call', ['follow_api', 'get_follow_count', [username]])
+    return _call(chain, 'follow', 'get_follow_count', [username])
   }
 
   static getDiscussionsByAuthorBeforeDate(chain, {author, start_permalink, before_date, limit = 15}) {
-    return _call(chain, 'get_discussions_by_author_before_date', [author, start_permalink, before_date, limit])
+    return _call(chain, 'social_network', 'get_discussions_by_author_before_date', [author, start_permalink, before_date, limit])
   }
 
   static getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit = 15}) {
-    return _call(chain, 'call', ['database_api', 'get_discussions_by_blog', [{tag, start_author, start_permlink, limit}]])
+    return _call(chain, 'social_network', 'get_discussions_by_blog', [{tag, start_author, start_permlink, limit}])
   }
 
   static getAvatar(chain, username) {
@@ -178,7 +177,11 @@ class BlockChainApi {
   }
 
   static getFollowers(chain, {following, startFollower, followType, limit = 100}) {
-    return _call(chain, 'call', ['follow_api', 'get_followers', [following, startFollower, followType, limit]])
+    return _call(chain, 'follow', 'get_followers', [following, startFollower, followType, limit])
+  }
+
+  static getBlog(chain, {username, entryId = 0, limit = 15}) {
+    return _call(chain, 'follow', 'get_blog', [username, entryId, limit])
   }
 }
 

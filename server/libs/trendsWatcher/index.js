@@ -129,21 +129,21 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
         }
       }
 
-      if (full && chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED) {
-        const stateData = await blockChains.getState(chain, {path: `@${post.author}/transfers`})
-        _post.separatePayots = stateData
-          .accounts[post.author]
-          .transfer_history
-          .filter(item => item[1].op[0] === 'author_reward' && item[1].op[1].permlink === post.permlink)
-          .reduce((obj, item) => {
-            let mode = CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
-            if (moment(item[1].timestamp + '+00:00').unix() > moment(_post.created).subtract(-30, 'days').unix()) {
-              mode = CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
-            }
-            obj[mode] = item[1].op[1]
-            return obj
-          }, {})
-      }
+      // if (full && chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED) {
+      //   const stateData = await blockChains.getState(chain, {path: `@${post.author}/transfers`})
+      //   _post.separatePayots = stateData
+      //     .accounts[post.author]
+      //     .transfer_history
+      //     .filter(item => item[1].op[0] === 'author_reward' && item[1].op[1].permlink === post.permlink)
+      //     .reduce((obj, item) => {
+      //       let mode = CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+      //       if (moment(item[1].timestamp + '+00:00').unix() > moment(_post.created).subtract(-30, 'days').unix()) {
+      //         mode = CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+      //       }
+      //       obj[mode] = item[1].op[1]
+      //       return obj
+      //     }, {})
+      // }
 
       const payout = parseFloat(post.pending_payout_value) + parseFloat(post.total_payout_value) + parseFloat(post.curator_payout_value)
       _post.payout = (payout * CURRENCY[chain].q).toFixed(2)

@@ -54,19 +54,23 @@ export default {
   params() {
     return Vue.axios.get(`/params`)
   },
-  uploadImage(image, config){
+  uploadImage(image, config) {
     const data = new FormData()
     data.append('image', image)
-
     return Vue.axios.post('/images/upload', data, config)
   },
-
   // GET BLOCKCHAINS PROXY OPERATIONS
   getContent(chain, username, permlink) {
     return Vue.axios.get(`/blockchains/${chain}/getContent`, {params: {username, permlink}})
   },
   getState(chain, {path}) {
     return Vue.axios.get(`/blockchains/${chain}/getState`, {params: {path}})
+  },
+  getAccount(chain, {username}) {
+    return Vue.axios.get(`/blockchains/${chain}/getAccount`, {params: {username}})
+  },
+  getBlog(chain, {username}){
+    return Vue.axios.get(`/blockchains/${chain}/getBlog`, {params: {username}})
   },
   getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit}) {
     return Vue.axios.get(`/blockchains/${chain}/getDiscussionsByBlog`, {params: {tag, start_author, start_permlink, limit}})

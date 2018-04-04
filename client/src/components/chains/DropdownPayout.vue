@@ -10,11 +10,7 @@ export default {
       return this.$store.state.core.now
     },
     havePayoutPending() {
-      const daysAfterCreated = moment().diff(moment(this.post.created), 'days')
-      return (
-        daysAfterCreated <
-        CONSTANTS.BLOCKCHAIN.MAX_PAYOUT_PENDING_DAYS[this.chain]
-      )
+      return moment(this.post.cashout_time).unix() > -1
     },
     havePayout() {
       return !!moment(this.post.last_payout).unix()
@@ -43,11 +39,19 @@ export default {
       const result = []
       const total_payout = this.post.total_payout || 0
       const total_payout_value = this.post.total_payout_value || 0
-       if (isGolos) {
+      if (isGolos) {
         result.push(this.$n(total_payout, 'currency', 'ru'))
-        result.push(`(${!total_payout_value.toFixed ? 0.00 : total_payout_value.toFixed(3)} GBG)`)
+        result.push(
+          `(${
+            !total_payout_value.toFixed ? 0.0 : total_payout_value.toFixed(3)
+          } GBG)`
+        )
       } else {
-        result.push(`${!total_payout_value.toFixed ? 0.00 : total_payout_value.toFixed(3)} SBD`)
+        result.push(
+          `${
+            !total_payout_value.toFixed ? 0.0 : total_payout_value.toFixed(3)
+          } SBD`
+        )
       }
       return result.join(' ')
     }

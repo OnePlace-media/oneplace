@@ -171,26 +171,28 @@ export default () => {
   const actions = {
     fetchState({commit}, {chain, username}) {
       commit(TYPES.SET_ACCOUNT_PROCESSING, true)
-      return Api.getState(chain, {path: `@${username}`})
+
+      return Api
+        .getAccount(chain, {username})
         .then(response => {
-          if (response.data.accounts[username]) {
-            const posts = Object.keys(response.data.content).map(link => response.data.content[link])
-            posts.sort((a, b) => {
-              const aCreated = a.first_reblogged_on || a.created
-              const bCreated = b.first_reblogged_on || b.created
-              return new Date(bCreated).getTime() - new Date(aCreated).getTime()
-            })
-            commit(TYPES.SET_CHAIN, chain)
-            commit(TYPES.SET_ACCOUNT_DATA, {data: response.data.accounts[username]})
-            commit(TYPES.SET_POSTS_DATA, {posts})
-            commit(TYPES.SET_TAGS, {username, posts})
-            commit(TYPES.SET_ACCOUNT_PROCESSING, false)
-            commit(TYPES.SET_POSTS_PROCESSING, false)
-          } else {
-            const error = new Error('account not found')
-            error.status = 404
-            throw error
-          }
+          // const error = new Error('account not found')
+          // error.status = 404
+          // throw error
+          commit(TYPES.SET_ACCOUNT_DATA, {data: response.data})
+          return Api.getBlog(chain, {username})
+        })
+        .then(response => {
+          const posts = response.data
+          posts.sort((a, b) => {
+            const aCreated = a.reblog_on || a.created
+            const bCreated = b.reblog_on || b.created
+            return new Date(bCreated).getTime() - new Date(aCreated).getTime()
+          })
+          commit(TYPES.SET_CHAIN, chain)
+          commit(TYPES.SET_POSTS_DATA, {posts})
+          commit(TYPES.SET_TAGS, {username, posts})
+          commit(TYPES.SET_ACCOUNT_PROCESSING, false)
+          commit(TYPES.SET_POSTS_PROCESSING, false)
         })
     },
     fetchPostByBlog({commit, state}, {chain, tag, start_author, start_permlink, limit}) {

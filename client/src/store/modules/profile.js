@@ -1,4 +1,5 @@
 import Api from '../../plugins/api'
+import CONSTANTS from '@oneplace/constants'
 import moment from 'moment'
 import Vue from 'vue'
 
@@ -172,28 +173,50 @@ export default () => {
     fetchState({commit}, {chain, username}) {
       commit(TYPES.SET_ACCOUNT_PROCESSING, true)
 
-      return Api
-        .getAccount(chain, {username})
-        .then(response => {
-          // const error = new Error('account not found')
-          // error.status = 404
-          // throw error
-          commit(TYPES.SET_ACCOUNT_DATA, {data: response.data})
-          return Api.getBlog(chain, {username})
-        })
-        .then(response => {
-          const posts = response.data
-          posts.sort((a, b) => {
-            const aCreated = a.reblog_on || a.created
-            const bCreated = b.reblog_on || b.created
-            return new Date(bCreated).getTime() - new Date(aCreated).getTime()
+      function setData({data, posts}) {
+        commit(TYPES.SET_ACCOUNT_DATA, {data})
+        commit(TYPES.SET_CHAIN, chain)
+        commit(TYPES.SET_POSTS_DATA, {posts})
+        commit(TYPES.SET_TAGS, {username, posts})
+        commit(TYPES.SET_ACCOUNT_PROCESSING, false)
+        commit(TYPES.SET_POSTS_PROCESSING, false)
+      }
+
+      function postSort(field) {
+        return (a, b) => {
+          const aCreated = a[field] || a.created
+          const bCreated = b[field] || b.created
+          return new Date(bCreated).getTime() - new Date(aCreated).getTime()
+        }
+      }
+
+      if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS) {
+        return Api
+          .getAccount(chain, {username})
+          .then(response => {
+            const data = response.data
+            return Api.getBlog(chain, {username}).then(res => [data, res])
           })
-          commit(TYPES.SET_CHAIN, chain)
-          commit(TYPES.SET_POSTS_DATA, {posts})
-          commit(TYPES.SET_TAGS, {username, posts})
-          commit(TYPES.SET_ACCOUNT_PROCESSING, false)
-          commit(TYPES.SET_POSTS_PROCESSING, false)
-        })
+          .then(([data, response]) => {
+            const posts = response.data
+            posts.sort(postSort('reblog_on'))
+            setData({data, posts})
+          })
+      } else {
+        return Api.getState(chain, {path: `@${username}`})
+          .then(response => {
+            if (response.data.accounts[username]) {
+              const posts = Object.keys(response.data.content).map(link => response.data.content[link])
+              posts.sort(postSort('first_reblogged_on'))
+              setData({data, posts})
+            } else {
+              const error = new Error('account not found')
+              error.status = 404
+              throw error
+            }
+          })
+      }
+
     },
     fetchPostByBlog({commit, state}, {chain, tag, start_author, start_permlink, limit}) {
       commit(TYPES.SET_POSTS_PROCESSING, true)

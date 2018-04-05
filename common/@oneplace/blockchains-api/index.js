@@ -8,6 +8,7 @@ const clientsURL = {
   [CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS]: config.postingWrapper.golosDomain
 }
 
+
 const cacheMethodsMap = {
   get_accounts: false,
   get_discussions_by_trending: false,
@@ -28,6 +29,9 @@ function _call(chain, api, method, params, noCache) {
       params[2][0].select_authors = [params[2][0].tag]
       delete params[2][0].tag
     }
+  } else {
+    if(api === 'follow') api = 'follow_api'
+    else if(api === 'social_network') api = 'database_api'
   }
   return new Promise((resolve, reject) => {
     if (!clientsURL[chain]) throw new Error(`Unknown chain ${chain}`)

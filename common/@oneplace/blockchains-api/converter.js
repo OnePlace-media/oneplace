@@ -41,13 +41,15 @@ class Converter {
     const lastPayout = moment(post.last_payout).unix()
 
     let result
+    const isLiner =
+      chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ||
+      post.mode !== CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED ||
+      moment(post.created).unix() > moment("2018-04-04T00:00:00+00:00").unix()
 
-    if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM) {
-      let q = (reward_balance * base) / recent_claims
-      if (lastPayout) {
-        const sumRshares = active_votes.reduce((sum, _vote) => sum += +_vote.rshares, 0)
-        q = post.total_payout_value / sumRshares
-      }
+    if (isLiner) {
+      const allPayout = +post.pending_payout + +post.total_payout
+      const sumRshares = active_votes.reduce((sum, _vote) => sum += +_vote.rshares, 0)
+      const q = allPayout / sumRshares
 
       if (append)
         result = lastPayout ? +post.payout : (+post.payout + vote.rshares * q).toFixed(2)
@@ -113,9 +115,9 @@ class Converter {
         let vShares = Converter.calculateVshares(activeRshares)
         if (vote.mode !== post.mode || post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
           if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
-            if(vote.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT)
+            if (vote.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT)
               q = post.pending_payout_value / vShares
-            else 
+            else
               q = post.total_payout_value / vShares
           } else {
             if (post.separatePayots[vote.mode]) {

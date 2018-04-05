@@ -40,17 +40,6 @@ Vue.use(Helper)
 Vue.use(VueLocalStorage)
 
 
-axios.interceptors.response.use(
-  response => response,
-  error => {
-    if (!error.response) {
-      Vue.prototype.$toast.bottom(i18n.t('errors.NET_PROBLEM'))
-    }
-    return Promise.reject(error)
-  }
-)
-
-
 export function createApp(ssrContext) {
   const i18n = new VueI18n({
     locale: 'en',
@@ -72,6 +61,16 @@ export function createApp(ssrContext) {
       ru: require('./i18n/ru')
     }
   })
+
+  axios.interceptors.response.use(
+    response => response,
+    error => {
+      if (!error.response) {
+        Vue.prototype.$toast.bottom(i18n.t('errors.NET_PROBLEM'))
+      }
+      return Promise.reject(error)
+    }
+  )
 
   Vue.prototype.$locale = {
     change(language) {

@@ -10,19 +10,22 @@ module.exports = Model => {
       {arg: 'chain', type: 'string', required: true},
       {arg: 'username', type: 'string', required: true}
     ],
-    returns: {arg: 'body', type: 'object', root: true},
+    returns: {arg: 'body', type: 'array', root: true},
     http: {path: '/:chain(g|s)/getBlog', verb: 'get'}
   })
 
   Model.getBlog = async function(chain, username) {
     let blog = await blockChains.getBlog(chain, {username})
     let posts = []
-    for (item of blog) {
-      const post = await blockChains.getContent(chain, {author: item.comment.author, permlink: item.comment.permlink})
-      posts.push(post)
+    if (blog) {
+      for (item of blog) {
+        const post = await blockChains.getContent(chain, {author: item.comment.author, permlink: item.comment.permlink})
+        posts.push(post)
+      }
     }
+
     posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
-    return posts || {}
+    return posts || []
   }
 
   // ----- GET ACCOUNT BY USERNAME -----
@@ -146,42 +149,42 @@ module.exports = Model => {
 
   // ----- GET STATE -----
 
-  // Model.remoteMethod('getState', {
-  //   accepts: [
-  //     {arg: 'chain', type: 'string', required: true},
-  //     {arg: 'path', type: 'string', required: true}
-  //   ],
-  //   returns: {arg: 'body', type: 'object', root: true},
-  //   http: {path: '/:chain(g|s)/getState', verb: 'get'}
-  // })
+  Model.remoteMethod('getState', {
+    accepts: [
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'path', type: 'string', required: true}
+    ],
+    returns: {arg: 'body', type: 'object', root: true},
+    http: {path: '/:chain(g|s)/getState', verb: 'get'}
+  })
 
-  // Model.getState = async function(chain, path) {
-  //   const state = await blockChains.getState(chain, {path})
-  //   if (state) {
-  //     if (state.accounts) {
-  //       for (let username in state.accounts) {
-  //         state.accounts[username].reputation = chainParser.convertReputation(state.accounts[username].reputation)
-  //         state.accounts[username].followCount = await blockChains.getFollowCount(chain, {username})
+  Model.getState = async function(chain, path) {
+    const state = await blockChains.getState(chain, {path})
+    if (state) {
+      if (state.accounts) {
+        for (let username in state.accounts) {
+          state.accounts[username].reputation = chainParser.convertReputation(state.accounts[username].reputation)
+          state.accounts[username].followCount = await blockChains.getFollowCount(chain, {username})
 
-  //         if (state.accounts[username].json_metadata)
-  //           try {
-  //             state.accounts[username].meta = JSON.parse(state.accounts[username].json_metadata)
-  //           } catch (err) {
-  //             state.accounts[username].meta = {}
-  //           }
-  //       }
-  //     }
+          if (state.accounts[username].json_metadata)
+            try {
+              state.accounts[username].meta = JSON.parse(state.accounts[username].json_metadata)
+            } catch (err) {
+              state.accounts[username].meta = {}
+            }
+        }
+      }
 
-  //     if (state.content) {
-  //       for (let post in state.content) {
-  //         const posts = await Model.app.trendsWatcher.preparePosts(chain, [state.content[post]], true)
-  //         state.content[post] = posts[0]
-  //       }
-  //     }
-  //   }
+      if (state.content) {
+        for (let post in state.content) {
+          const posts = await Model.app.trendsWatcher.preparePosts(chain, [state.content[post]], true)
+          state.content[post] = posts[0]
+        }
+      }
+    }
 
-  //   return state || {}
-  // }
+    return state || {}
+  }
 
   // ----- GET FOLLOWERS -----
 

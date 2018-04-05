@@ -208,6 +208,7 @@ export default () => {
             if (response.data.accounts[username]) {
               const posts = Object.keys(response.data.content).map(link => response.data.content[link])
               posts.sort(postSort('first_reblogged_on'))
+              const data = response.data.accounts[username]
               setData({data, posts})
             } else {
               const error = new Error('account not found')

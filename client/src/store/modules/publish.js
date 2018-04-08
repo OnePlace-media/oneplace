@@ -183,6 +183,10 @@ export default () => {
       return generatePermLink(chain, data)
         .then(() => Api.savePost(chain, account.username, state.form))
         .then(response => response.data)
+        .catch(err => {
+          commit(TYPES.SET_FORM_OBJECT, {processing: false})
+          throw err
+        })
     }
   }
 

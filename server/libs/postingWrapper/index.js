@@ -21,7 +21,7 @@ class PostingWrapper {
     this.WIF = WIF
     this.CLIENT_ID = username
   }
-  comment(chain, {parentAuthor, parentPermlink, author, permlink, body, title, tags = [], rewardsOpts = '100'}) {
+  comment(chain, {parentAuthor, parentPermlink, author, permlink, body, title, tags = [], rewardsOpts = '100', isUpdate = false}) {
     return new Promise((resolve, reject) => {
       const jsonMetadata = {}
       rewardsOpts = +rewardsOpts * 100
@@ -33,7 +33,6 @@ class PostingWrapper {
       const isPost = !parentAuthor && !parentPermlink
       if (!parentPermlink) parentPermlink = tags.length ? tags[0] : 'general'
 
-      const isUpdate = !!permlink
       if (!permlink && !isPost) {
         permlink = this.clients[chain].formatter.commentPermlink(parentAuthor, parentPermlink)
         if (permlink.length > 255)
@@ -53,11 +52,12 @@ class PostingWrapper {
           json_metadata: JSON.stringify(jsonMetadata)
         }]
       ]
-      if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM && !isUpdate) {
+
+      if (!isUpdate) {
         const options = {
           author,
           permlink,
-          max_accepted_payout: '1000000.000 SBD',
+          max_accepted_payout: `1000000.000 ${chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ? 'SBD' : 'GBG'}`,
           percent_steem_dollars: rewardsOpts,
           allow_votes: true,
           allow_curation_rewards: true,

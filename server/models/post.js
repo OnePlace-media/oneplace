@@ -52,6 +52,8 @@ module.exports = Model => {
       error.status = 401
       throw error
     }
+    let post = await blockChains.getContent(chain, {author, permlink})
+    let isUpdate = !!post.id
     let result = {}
     try {
       result = await Model.app.postingWrapper.comment(chain, {
@@ -62,7 +64,8 @@ module.exports = Model => {
         parentAuthor,
         parentPermlink,
         permlink,
-        rewardsOpts
+        rewardsOpts,
+        isUpdate
       })
 
       if (upVotePost) {

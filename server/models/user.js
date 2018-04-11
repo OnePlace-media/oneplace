@@ -117,6 +117,13 @@ module.exports = Model => {
         error.status = 400
         throw error
       }
+
+      const auth = account.posting.account_auths.find(i => i[0] === Model.app.get('postingWrapper').username)
+      if (!auth) {
+        const error = new Error('bad permissions')
+        error.status = 400
+        throw error
+      }
     }
 
     const Account = Model.app.models.account

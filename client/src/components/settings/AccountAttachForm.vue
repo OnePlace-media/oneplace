@@ -52,7 +52,7 @@
       <router-link :to="{name:'confirm-account', params:{chain}}" class="link account-action__advanced">
         {{$t('addAccount.advancedMode')}}
       </router-link>
-      <a class="login-form__bottom-link link" href="#" @click.prevent="$emit('close')">
+      <a class="account-action__bottom-link link" href="#" @click.prevent="$emit('close')">
         {{$t('accountForm.cancelRemoveAccount')}}
       </a>
     </div>
@@ -101,11 +101,11 @@
         {{$t('common.validate.activeKeyNotPassed')}}
       </div>
     </div>
-    <router-link :to="{name:'welcome-step-confirm', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link>
+//    <router-link :to="{name:'welcome-step-confirm', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link>
     <p class="login-form__text login-form__text--alert" v-html="$t('accountForm.aboutPrivate')"></p>
     <div class="login-form__btn-wrapper">
       <button type="submit" class="btn btn--large login-form__btn login-form__btn--bchain" :disabled="processing">
-        <span v-show="!processing">{{$t('welcome.attachStep.addBlockchainAccount')}}</span>
+        <span v-show="!processing">{{$t('welcome.attachStep.addBlockchainAccount', {blockchain: this.chainName})}}</span>
         <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
       </button>
       <a 
@@ -166,11 +166,11 @@
         </div>
       </div>
     </div>
-    <router-link :to="{name:'confirm-account', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link>
+//    <router-link :to="{name:'confirm-account', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link>
     <p class="login-form__text login-form__text--alert" v-html="$t('accountForm.aboutPrivate')"></p>
     <div class="login-form__btn-wrapper">
       <button type="submit" class="btn login-form__btn btn--large" :disabled="processing">
-        <span v-show="!processing">{{$t('welcome.attachStep.addBlockchainAccountReplace', {blockchain: this.chainName})}}</span>
+        <span v-show="!processing">{{$t('welcome.attachStep.addBlockchainAccount', {blockchain: this.chainName})}}</span>
         <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
       </button>
       <a 

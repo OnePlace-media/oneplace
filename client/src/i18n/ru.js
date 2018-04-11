@@ -27,7 +27,7 @@ module.exports = {
       passwordRepeat: 'Пароль не совпадает',
       emailVerified: 'Адрес e-mail не был подтвержден',
       emailNotFound: 'Адрес e-mail не найден',
-      activeKeyRequired: 'Активный ключ не может быть пустым',
+      activeKeyRequired: 'Приватный ключ не может быть пустым',
       activeKeyNotPassed: 'Активный ключ не прошел проверку',
       usernameRequired: 'Имя пользователя не может быть пустым',
       usernameNotFound: 'Аккаунта с таким именем не существует',
@@ -78,7 +78,7 @@ module.exports = {
 
   },
   addAccount: {
-    header: 'Пришло время добавить ваш {blockchain} аккаунт.',
+    header: 'Добавить аккаунт {blockchain}.',
     help: 'Пожалуйста, введите необходимую информацию в форму ниже. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
     backToOnePlace: 'Вернуться на OnePlace',
     advancedMode: 'Расширенный режим'
@@ -103,14 +103,13 @@ module.exports = {
     attachStep: {
       header: 'Спасибо за регистрацию!',
       help: 'Пожалуйста, прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
-      addBlockchainAccount: 'Добавить блокчейн аккаунт',
-      addBlockchainAccountReplace: 'Добавить {blockchain} аккаунт',
+      addBlockchainAccount: 'Добавить аккаунт {blockchain}',
       skipThisStep: 'Пропустить этот шаг'
     },
     confirmStep: {
       header: 'Подтвердить аккаунт',
-      help: 'Подтвердите владение учетной записью, выполнив вход с помощью приватного постинг ключа.',
-      help2: 'OnePlace не хранит ваши приватные ключи.',
+      help: 'Подтвердите доступ к учетной записи, выполнив вход с помощью приватного постинг ключа.',
+      help2: 'OnePlace не сохраняет ваши приватные ключи.',
       confirmAccount: 'Подтвердить аккаунт'
     },
     tagsStep: {

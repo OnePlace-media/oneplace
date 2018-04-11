@@ -45,22 +45,19 @@
     </div>
     <p class="login-form__text login-form__text--security">{{$t('welcome.confirmStep.help2')}}</p>
 
-    <div class="login-form__btn-wrapper">
-      <button type="submit" class="btn btn--large login-form__btn login-form__btn--bchain" :disabled="processing">
+      <button type="submit" class="btn btn--large login-form__btn" :disabled="processing">
         <span v-show="!processing">{{$t('welcome.confirmStep.confirmAccount')}}</span>
         <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
       </button>
-      <span></span>
-    </div>
 
     <div style="overflow:hidden" v-if="view === VIEWS.welcome">
       <a href="" class="login-form__bottom-link link" @click.prevent="skip">
         {{$t('welcome.attachStep.skipThisStep')}}
       </a>
     </div>
-    <div style="overflow:hidden" v-else>
-      <router-link class="login-form__bottom-link link" :to="backRoute">{{$t('addAccount.backToOnePlace')}}</router-link>
-    </div>
+//    <div style="overflow:hidden" v-else>
+//      <router-link class="login-form__bottom-link link" :to="backRoute">{{$t('addAccount.backToOnePlace')}}</router-link>
+//    </div>
   </div>
 </form>
 

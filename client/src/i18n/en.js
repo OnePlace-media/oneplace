@@ -27,7 +27,7 @@ module.exports = {
       passwordRepeat: 'Password doesn\'t match',
       emailVerified: 'E-mail hasn\'t been verified',
       emailNotFound: 'E-mail not found',
-      activeKeyRequired: 'Active key can\'t be blank',
+      activeKeyRequired: 'Private key can\'t be blank',
       activeKeyNotPassed: 'Active key not passed',
       usernameRequired: 'Username can\'t be blank',
       usernameNotFound: 'Account with this username not found',
@@ -77,7 +77,7 @@ module.exports = {
     loginOrRegisterToReply: '{login-link}{nbsp}or{nbsp}{reg-link} to reply.'
   },
   addAccount: {
-    header: 'It\'s time to add your {blockchain} account!',
+    header: 'Add {blockchain} account',
     help: 'Please enter required information in the form below. You can later add more accounts in your profile.',
     backToOnePlace: 'Back to OnePlace',
     advancedMode:'Advanced mode'
@@ -102,13 +102,12 @@ module.exports = {
     attachStep: {
       header: 'Thank you for registration!',
       help: 'Please attach Steem or Golos account. You can later add more accounts in your profile.',
-      addBlockchainAccount: 'Add blockchain account',
-      addBlockchainAccountReplace: 'Add {blockchain} account',
+      addBlockchainAccount: 'Add {blockchain} account',
       skipThisStep: 'Skip this step',
     },
     confirmStep: {
       header: 'Confirm Account',
-      help: 'Please confirm account ownership by signing in with private posting key.',
+      help: 'Please confirm account access by signing in with private posting key.',
       help2: 'OnePlace does not store your private keys.',
       confirmAccount: 'Confirm account'
     },

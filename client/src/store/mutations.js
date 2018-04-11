@@ -41,24 +41,6 @@ export default {
     state.trends.data[CONSTANTS.BLOCKCHAIN.SOURCE.STEEM].collection = []
   },
 
-  /** Welcome page mutations */
-  updateWelcomeTags(state, tags) {
-    state.welcome.tags = tags
-  },
-  toggleWelcomeTag(state, tag) {
-    if (!~state.welcome.tags.indexOf(tag)) {
-      state.welcome.tags.push(tag)
-    } else {
-      state.welcome.tags = state.welcome.tags.filter(item => item !== tag)
-    }
-  },
-  setWelcomeStep(state, step) {
-    state.welcome.step = step
-  },
-  setWelcomeChain(state, chain) {
-    state.welcome.chain = chain
-  },
-
   /** TagsForm mutations */
   toggleUserTag(state, {tag, chain}) {
     if (!~state.tagsForm.storages[chain].findIndex(_tag => _tag.text === tag.text)) {
@@ -73,7 +55,6 @@ export default {
     }
   },
   setInitFormTags(state, tags) {
-    state.welcome.chain = null
     state.tagsForm.storages[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS] = tags.filter(tag => tag.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
     state.tagsForm.storages[CONSTANTS.BLOCKCHAIN.SOURCE.STEEM] = tags.filter(tag => tag.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM)
   },
@@ -82,11 +63,6 @@ export default {
   },
   setTagsFormStorages(state, {chain, tags}) {
     state.tagsForm.storages[chain] = tags
-  },
-
-  /** AccountForm mutations */
-  setAccountFormChain(state, chain) {
-    state.accountForm.chain = chain
   },
 
   /** PostView mutations */

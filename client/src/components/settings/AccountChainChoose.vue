@@ -8,13 +8,22 @@
 </template>
 
 <script>
-const CONSTANTS = require('@oneplace/constants')
+const { BLOCKCHAIN } = require('@oneplace/constants')
 export default {
   name: 'ChainChoose',
-  props: ['chain', 'isSettings'],
+  props: {
+    chain: {
+      type: String,
+      required: true
+    },
+    isSettings: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     CHAINS() {
-      return CONSTANTS.BLOCKCHAIN.SOURCE
+      return BLOCKCHAIN.SOURCE
     }
   }
 }

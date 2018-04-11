@@ -49,6 +49,7 @@ module.exports = {
       username: 'Username',
       addAccountUsername: '{blockchain} username',
       addAccountActiveKey: '{blockchain} active key (private)',
+      confirmAccountPostingKey: 'Private posting key',
       activeKey: 'Active key (private)',
       leaveAComment: 'Leave a comment...'
     }
@@ -78,7 +79,8 @@ module.exports = {
   addAccount: {
     header: 'It\'s time to add your {blockchain} account!',
     help: 'Please enter required information in the form below. You can later add more accounts in your profile.',
-    backToOnePlace: 'Back to OnePlace'
+    backToOnePlace: 'Back to OnePlace',
+    advancedMode:'Advanced mode'
   },
   chains: {
     imageIsHidden: 'Image is hidden. Click to show image.',
@@ -97,14 +99,20 @@ module.exports = {
     chooseChainStep: {
       help: 'Please attach Steem or Golos account. You can later add more accounts in your profile'
     },
-    attachChainStep: {
+    attachStep: {
       header: 'Thank you for registration!',
       help: 'Please attach Steem or Golos account. You can later add more accounts in your profile.',
       addBlockchainAccount: 'Add blockchain account',
       addBlockchainAccountReplace: 'Add {blockchain} account',
       skipThisStep: 'Skip this step',
     },
-    setupTagsStep: {
+    confirmStep: {
+      header: 'Confirm Account',
+      help: 'Please confirm account ownership by signing in with private posting key.',
+      help2: 'OnePlace does not store your private keys.',
+      confirmAccount: 'Confirm account'
+    },
+    tagsStep: {
       header: 'Please choose topics you\'re interested in',
       startYourJourney: 'Start your journey'
     }
@@ -124,6 +132,8 @@ module.exports = {
     cancelRemoveAccount: 'Cancel',
     aboutPrivate: '<em>OnePlace does not store your private keys</em>. Once you sign in with your blockchain account you authorize OnePlace app to vote, post and edit comments on your behalf. You can revoke that authority at any time.',
     aboutRemove: '<em>Remove account</em>. You are going to remove posting authority from OnePlace app. Confirm this operation with your private active key.',
+    addWithSteemConnect: 'Add with SteemConnect',
+    removeWithSteemConnect:'Remove with SteemConnect'
   },
   topBar: {
     createNewPost: 'Create new post',

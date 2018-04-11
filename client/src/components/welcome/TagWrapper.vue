@@ -15,11 +15,17 @@
 <script>
 export default {
   name: 'TagWrapper',
-  props: ['item'],
-  computed: {
-    chain() {
-      return this.$store.state.welcome.chain
+  props: {
+    item: {
+      type: Object,
+      required: true
     },
+    chain: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
     selected() {
       return ~this.$store.state.tagsForm.storages[this.chain].findIndex(
         tag => tag.text === this.item.tag

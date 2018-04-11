@@ -16,7 +16,7 @@ export default {
   },
   computed:{
     chain() {
-      return this.$route.params.chain || this.$store.state.chain
+      return this.$route.params.chain || this.$store.state.chain || 's'
     }
   }
 }

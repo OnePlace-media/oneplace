@@ -47,10 +47,6 @@ export default () => {
         }
       }
     },
-    welcome: {
-      step: CONSTANTS.WELCOME.STEPS.ATTACH_CHAIN,
-      chain: null
-    },
     tagsForm: {
       chain: null,
       storages: {

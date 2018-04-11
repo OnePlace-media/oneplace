@@ -993,6 +993,22 @@ hr {
   margin: 0 0 16px;
 }
 
+.login-form__btn-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: baseline;
+  -webkit-align-items: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+  font-size: 13px;
+}
+
 .login-form__btn {
   margin: 0 auto 16px;
   background: #cfd2d2;
@@ -1004,6 +1020,30 @@ hr {
 
 .login-form__btn:last-child {
   margin-bottom: 0;
+}
+
+.login-form__btn:first-child {
+  margin-bottom: 16px;
+}
+
+.login-form__btn--bchain {
+  margin: 0 0 16px;
+  text-transform: capitalize;
+}
+
+.login-form__btn--sc {
+  max-width: 256px;
+  margin-left: 8px;
+  text-transform: none;
+  font-weight: 400;
+  color: #259cb7;
+  background: #fff;
+  border: 1px solid #259cb7;
+}
+
+.login-form__btn--sc:hover {
+  border: 1px solid #2ab1cf;
+  background: rgba(37,156,183,0.05);
 }
 
 .login-form__select-chain {
@@ -1102,11 +1142,36 @@ hr {
 }
 
 .login-form__text--alert {
+  font-size: 14px;
   border-left: 2px solid #db4c2a;
+  text-align: justify;
+}
+
+.login-form__text--security {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  color: #818888;
+  font-size: 14px;
+  margin: 0 auto 24px;
+  padding-left: 21px;
+  background: url("/static/img/padlock.svg") 0 50% no-repeat transparent;
+  background-size: 13px 16px;
 }
 
 .login-form__text--error {
   color: #db4c2a;
+}
+
+.login-form__advanced {
+  float: right;
+  font-size: 12px;
+  margin-top: -22px;
+  color: #a8adad;
+}
+
+.login-form__advanced:hover {
+  text-decoration: underline;
 }
 
 .register__steps-wrapper {
@@ -1681,6 +1746,7 @@ hr {
 
 .account-action__btn {
   width: 100%;
+  text-transform: none;
   color: #fff;
   background: #259cb7;
   margin-bottom: 16px;
@@ -1688,6 +1754,42 @@ hr {
 
 .account-action__btn:hover {
   background: #2ab1cf;
+}
+
+.account-action__btn--sc {
+  font-weight: 400;
+  color: #259cb7;
+  background: #fff;
+  border: 1px solid #259cb7;
+}
+
+.account-action__btn--sc:hover {
+  border: 1px solid #2ab1cf;
+  background: rgba(37,156,183,0.05);
+}
+
+.account-action__bottom-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.account-action__bottom-link:hover {
+  text-decoration: underline;
+}
+
+.account-action__advanced {
+  color: #a8adad;
+}
+
+.account-action__advanced:hover {
+  text-decoration: underline;
 }
 
 .settings__select-chain {
@@ -3803,8 +3905,9 @@ hr {
 }
 
 .feed__post-title {
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 17px;
+  line-height: 23px;
+  max-height: 46px;
   margin-top: -5px;
   margin-bottom: 8px;
   overflow: hidden;
@@ -3821,9 +3924,19 @@ hr {
   text-overflow: ellipsis;
   display: -webkit-box;
   line-height: 21px;
+  max-height: 63px;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.feed__post-text.lines-2x {
   max-height: 42px;
   -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+}
+
+.feed__post-text.lines-1x {
+  max-height: 21px;
+  -webkit-line-clamp: 1;
 }
 
 .feed__post-info {
@@ -4649,6 +4762,10 @@ hr {
   display: inline-block;
 }
 
+.CodeMirror-vscrollbar {
+  display: none;
+}
+
 #drag-zone {
   display: none;
   position: absolute;
@@ -4671,10 +4788,6 @@ hr {
 
 .CodeMirror-lines {
   padding: 0;
-}
-
-.CodeMirror-vscrollbar {
-  display: none;
 }
 
 .editor-preview {
@@ -5128,10 +5241,9 @@ hr {
 
 .error-block__back {
   display: inline-block;
-  position: absolute;
+  position: relative;
+  top: calc(100% + 18px);
   font-size: 15px;
-  bottom: -40px;
-  left: calc(50% - 68px);
 }
 
 .error-block__back:hover {
@@ -5801,7 +5913,7 @@ hr {
   }
 
   .error-block__back {
-    bottom: -32px;
+    top: calc(100% + 10px);
   }
 }
 

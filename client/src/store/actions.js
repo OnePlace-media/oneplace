@@ -143,13 +143,8 @@ export default {
     commit('setTagsFormStorages', {chain, tags})
     return Api.saveTags(id, chain, tags.map(tag => tag.text))
   },
-  saveAccountWelcome({commit}, {id, chain, username, sign}) {
-    return Api.saveAccount(id, chain, username, sign).then(() => {
-      commit('setWelcomeStep', CONSTANTS.WELCOME.STEPS.SETUP_TAGS)
-    })
-  },
-  saveAccount({commit}, {id, chain, username, sign}) {
-    return Api.saveAccount(id, chain, username, sign)
+  saveAccount({commit}, {id, chain, username, sign, isPostingKey}) {
+    return Api.saveAccount(id, chain, username, sign, isPostingKey)
   },
   removeUserTag({commit, state}, {tag, userId}) {
     commit('toggleUserTag', {tag, chain: tag.chain})

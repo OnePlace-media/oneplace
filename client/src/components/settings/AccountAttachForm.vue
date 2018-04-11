@@ -23,24 +23,21 @@
       </div>
     </div>
     <div class="login-form__item">
-      <div class="login-form__item">
-        <input 
-          id="activeKey-input"
-          v-model="model.wif"
-          v-validate="'required'"
-          @keydown="clearErrors"
-          name="activeKey"
-          type="password"
-          :placeholder="$t('common.placeholders.addAccountActiveKey', {blockchain: this.chainName})"
-          class="login-form__input"
-          :class="{'login-form__input--error': errors.has('activeKey')}"/>
-
-        <div v-if="errors.firstByRule('activeKey', 'required')" id="vError-activeKey-required" class="login-form__alert">
-          {{$t('common.validate.activeKeyRequired')}}
-        </div>
-        <div v-if="errors.firstByRule('activeKey', 'notPassed')" id="vError-activeKey-notPassed" class="login-form__alert">
-          {{$t('common.validate.activeKeyNotPassed')}}
-        </div>
+      <input 
+        id="activeKey-input"
+        v-model="model.wif"
+        v-validate="'required'"
+        @keydown="clearErrors"
+        name="activeKey"
+        type="password"
+        :placeholder="$t('common.placeholders.addAccountActiveKey', {blockchain: this.chainName})"
+        class="login-form__input"
+        :class="{'login-form__input--error': errors.has('activeKey')}"/>
+      <div v-if="errors.firstByRule('activeKey', 'required')" id="vError-activeKey-required" class="login-form__alert">
+        {{$t('common.validate.activeKeyRequired')}}
+      </div>
+      <div v-if="errors.firstByRule('activeKey', 'notPassed')" id="vError-activeKey-notPassed" class="login-form__alert">
+        {{$t('common.validate.activeKeyNotPassed')}}
       </div>
     </div>
     <p class="login-form__text login-form__text--small login-form__text--alert" v-html="$t('accountForm.aboutPrivate')"></p>
@@ -48,14 +45,24 @@
       <span v-show="!processing">{{$t('accountForm.addAccount')}}</span>
       <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
     </button>
-    <a class="login-form__bottom-link link" href="#" @click.prevent="$emit('close')">{{$t('accountForm.cancelRemoveAccount')}}</a>
+    <a class="btn btn--large account-action__btn account-action__btn--sc" @click="addWithSteemConnect" v-if="chain === CHAINS.STEEM">
+      {{$t('accountForm.addWithSteemConnect')}}
+    </a>
+    <div class="account-action__bottom-wrapper">
+      <router-link :to="{name:'confirm-account', params:{chain}}" class="link account-action__advanced">
+        {{$t('addAccount.advancedMode')}}
+      </router-link>
+      <a class="login-form__bottom-link link" href="#" @click.prevent="$emit('close')">
+        {{$t('accountForm.cancelRemoveAccount')}}
+      </a>
+    </div>
+    
   </div>
 </form>
 
 <form @submit.prevent="onSubmit" class="login-form__body"  v-else-if="view === VIEWS.WELCOME" autocomplete="off">
-  <p class="login-form__text">{{$t('welcome.attachChainStep.help')}}</p>
+  <p class="login-form__text">{{$t('welcome.attachStep.help')}}</p>
   <chain-choose :is-settings="true" :chain.sync="chain"></chain-choose>
-
   <div class="login-form__wrapper">
     <div class="login-form__item">
         <input 
@@ -77,33 +84,41 @@
       </div>
     </div>
     <div class="login-form__item">
-      <div class="login-form__item">
-        <input 
-          id="activeKey-input"
-          v-model="model.wif"
-          v-validate="'required'"
-          @keydown="clearErrors"
-          name="activeKey"
-          type="password"
-          :placeholder="$t('common.placeholders.addAccountActiveKey', {blockchain: this.chainName})"
-          class="login-form__input"
-          :class="{'login-form__input--error': errors.has('activeKey')}"/>
-
-        <div v-if="errors.firstByRule('activeKey', 'required')" id="vError-activeKey-required" class="login-form__alert">
-          {{$t('common.validate.activeKeyRequired')}}
-        </div>
-        <div v-if="errors.firstByRule('activeKey', 'notPassed')" id="vError-activeKey-notPassed" class="login-form__alert">
-          {{$t('common.validate.activeKeyNotPassed')}}
-        </div>
+      <input 
+        id="activeKey-input"
+        v-model="model.wif"
+        v-validate="'required'"
+        @keydown="clearErrors"
+        name="activeKey"
+        type="password"
+        :placeholder="$t('common.placeholders.addAccountActiveKey', {blockchain: this.chainName})"
+        class="login-form__input"
+        :class="{'login-form__input--error': errors.has('activeKey')}"/>
+      <div v-if="errors.firstByRule('activeKey', 'required')" id="vError-activeKey-required" class="login-form__alert">
+        {{$t('common.validate.activeKeyRequired')}}
+      </div>
+      <div v-if="errors.firstByRule('activeKey', 'notPassed')" id="vError-activeKey-notPassed" class="login-form__alert">
+        {{$t('common.validate.activeKeyNotPassed')}}
       </div>
     </div>
+    <router-link :to="{name:'welcome-step-confirm', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link>
     <p class="login-form__text login-form__text--alert" v-html="$t('accountForm.aboutPrivate')"></p>
-    <button type="submit" class="btn login-form__btn btn--large" :disabled="processing">
-      <span v-show="!processing">{{$t('welcome.attachChainStep.addBlockchainAccount')}}</span>
-      <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
-    </button>
+    <div class="login-form__btn-wrapper">
+      <button type="submit" class="btn btn--large login-form__btn login-form__btn--bchain" :disabled="processing">
+        <span v-show="!processing">{{$t('welcome.attachStep.addBlockchainAccount')}}</span>
+        <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
+      </button>
+      <a 
+        class="btn btn--large login-form__btn login-form__btn--bchain login-form__btn--sc" 
+        @click="addWithSteemConnect"
+        v-if="chain === CHAINS.STEEM">
+        {{$t('accountForm.addWithSteemConnect')}}
+      </a>
+      <span></span>
+    </div>
+
     <div style="overflow:hidden">
-      <a href="#" class="login-form__bottom-link link" @click.prevent="skip">{{$t('welcome.attachChainStep.skipThisStep')}}</a>
+      <a href="" class="login-form__bottom-link link" @click.prevent="skip">{{$t('welcome.attachStep.skipThisStep')}}</a>
     </div>
   </div>
 </form>
@@ -151,11 +166,22 @@
         </div>
       </div>
     </div>
+    <router-link :to="{name:'confirm-account', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link>
     <p class="login-form__text login-form__text--alert" v-html="$t('accountForm.aboutPrivate')"></p>
-    <button type="submit" class="btn login-form__btn btn--large" :disabled="processing">
-      <span v-show="!processing">{{$t('welcome.attachChainStep.addBlockchainAccountReplace', {blockchain: this.chainName})}}</span>
-      <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
-    </button>
+    <div class="login-form__btn-wrapper">
+      <button type="submit" class="btn login-form__btn btn--large" :disabled="processing">
+        <span v-show="!processing">{{$t('welcome.attachStep.addBlockchainAccountReplace', {blockchain: this.chainName})}}</span>
+        <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
+      </button>
+      <a 
+        class="btn btn--large login-form__btn login-form__btn--bchain login-form__btn--sc" 
+        @click="addWithSteemConnect"
+        v-if="chain === CHAINS.STEEM">
+        {{$t('accountForm.addWithSteemConnect')}}
+      </a>
+      <span></span>
+    </div>
+    
     <div style="overflow:hidden">
       <router-link class="login-form__bottom-link link" :to="backRoute">{{$t('addAccount.backToOnePlace')}}</router-link>
     </div>
@@ -164,9 +190,9 @@
 </template>
 
 <script>
-import Api from '../../../plugins/api'
+import Api from '../../plugins/api'
 const CONSTANTS = require('@oneplace/constants')
-import ChainChoose from './_chainChoose.vue'
+import ChainChoose from './AccountChainChoose.vue'
 
 const hasAuthority = (user, role = 'posting') => {
   const auths = user[role].account_auths.map(auth => auth[0])
@@ -211,11 +237,17 @@ const addPostingAuthority = ({ username, wif }, client) => {
   })
 }
 export default {
-  name: 'AccountForm',
+  name: 'AccountAttachForm',
   $_veeValidate: {
     validator: 'new'
   },
-  props: ['view'],
+  props: {
+    view: {
+      type: String,
+      default: 'welcome',
+      required: true
+    }
+  },
   components: {
     ChainChoose
   },
@@ -232,9 +264,6 @@ export default {
         SETTINGS: 'settings',
         ADD_ACCOUNT: 'add-account'
       }
-    },
-    removeMode() {
-      return this.$store.state.accountForm.removeMode
     },
     chainName() {
       return {
@@ -267,57 +296,50 @@ export default {
     }
   },
   methods: {
+    addWithSteemConnect() {
+      let redirectUri
+      if (this.view === this.VIEWS.WELCOME) {
+        redirectUri = `/welcome/step/${this.chain}/confirm/`
+      } else {
+        redirectUri = `/${this.chain}/confirm-account/`
+      }
+      redirectUri = encodeURIComponent(window.location.origin + redirectUri)
+
+      const appName = 'oneplace.app'
+      window.open(
+        `https://steemconnect.com/authorize/@${appName}?&redirect_uri=${redirectUri}`,
+        '_blank'
+      )
+    },
     clearErrors() {
       this.errors.remove('username', 'notFound')
       this.errors.remove('activeKey', 'notPassed')
     },
     skip() {
-      this.$store.commit('setWelcomeChain', this.chain)
-      this.$store.commit('setTagsFormChain', this.chain)
-      this.$store.commit('setWelcomeStep', CONSTANTS.WELCOME.STEPS.SETUP_TAGS)
+      this.$emit('skip', { chain: this.chain })
     },
     onSubmit() {
       this.$validator.validateAll().then(() => {
         if (this.errors.any()) throw new Error('INVALID_FORM')
         this.processing = true
-        this.$store.commit('setWelcomeChain', this.chain)
+        // this.$store.commit('setWelcomeChain', this.chain)
         this.$chains.setChain(this.chain)
         addPostingAuthority(this.model, this.$chains.client)
           .then(result => {
             const { Signature } = require('steem/lib/auth/ecc')
             const sign = Signature.sign('test', this.model.wif).toHex()
-            const method =
-              this.view === this.VIEWS.WELCOME
-                ? 'saveAccountWelcome'
-                : 'saveAccount'
             return this.$store
-              .dispatch(method, {
+              .dispatch('saveAccount', {
                 id: this.$auth.user().id,
                 sign,
                 chain: this.chain,
                 username: this.model.username
               })
               .then(() => {
-                if (
-                  ~[this.VIEWS.SETTINGS, this.VIEWS.ADD_ACCOUNT].indexOf(
-                    this.view
-                  )
-                ) {
-                  this.$auth.fetch()
-                  this.$emit('success')
-                }
                 this.model.username = ''
                 this.model.wif = ''
                 this.processing = false
-
-                this.$store.commit('setWelcomeChain', this.chain)
-                this.$store.commit('setTagsFormChain', this.chain)
-                this.$store.commit(
-                  'setWelcomeStep',
-                  CONSTANTS.WELCOME.STEPS.SETUP_TAGS
-                )
-
-                this.$emit('success')
+                this.$emit('success', { chain: this.chain })
               })
           })
           .catch(err => {

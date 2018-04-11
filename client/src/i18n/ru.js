@@ -49,6 +49,7 @@ module.exports = {
       username: 'Имя пользователя',
       addAccountUsername: 'Имя пользователя {blockchain}',
       addAccountActiveKey: 'Активный приватный ключ',
+      confirmAccountPostingKey: 'Приватный постинг  ключ',
       activeKey: 'Активный приватный ключ',
       leaveAComment: 'Добавить комментарий...'
     }
@@ -79,7 +80,8 @@ module.exports = {
   addAccount: {
     header: 'Пришло время добавить ваш {blockchain} аккаунт.',
     help: 'Пожалуйста, введите необходимую информацию в форму ниже. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
-    backToOnePlace: 'Вернуться на OnePlace'
+    backToOnePlace: 'Вернуться на OnePlace',
+    advancedMode: 'Расширенный режим'
   },
   chains: {
     imageIsHidden: 'Изображение скрыто. Нажмите, чтобы увидеть изображение.',
@@ -98,14 +100,20 @@ module.exports = {
     chooseChainStep: {
       help: 'Пожалуйста, прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.'
     },
-    attachChainStep: {
+    attachStep: {
       header: 'Спасибо за регистрацию!',
       help: 'Пожалуйста, прикрепите аккаунт Steem или Golos. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
       addBlockchainAccount: 'Добавить блокчейн аккаунт',
       addBlockchainAccountReplace: 'Добавить {blockchain} аккаунт',
       skipThisStep: 'Пропустить этот шаг'
     },
-    setupTagsStep: {
+    confirmStep: {
+      header: 'Подтвердить аккаунт',
+      help: 'Подтвердите владение учетной записью, выполнив вход с помощью приватного постинг ключа.',
+      help2: 'OnePlace не хранит ваши приватные ключи.',
+      confirmAccount: 'Подтвердить аккаунт'
+    },
+    tagsStep: {
       header: 'Выберите интересующие вас категории',
       startYourJourney: 'Начать погружение'
     }
@@ -125,6 +133,8 @@ module.exports = {
     cancelRemoveAccount: 'Отмена',
     aboutPrivate: '<em>OnePlace не хранит ваш приватный ключ</em>. Добавляя свой блокчейн аккаунт, вы авторизуете приложение OnePlace для голосования, публикации и редактирования записей от вашего имени. Вы можете отменить это разрешение в любой момент.',
     aboutRemove: '<em>Удаление аккаунта</em>. Вы отменяете авторизацию для приложения OnePlace. Подтвердите эту операцию приватным активным ключом.',
+    addWithSteemConnect: 'Добавить через SteemConnect',
+    removeWithSteemConnect: 'Удалить через SteemConnect'
   },
   topBar: {
     createNewPost: 'Новая запись',

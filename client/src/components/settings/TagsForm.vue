@@ -1,6 +1,6 @@
 <template>
   <form class="tags-setup__form" @submit.prevent="onSubmit" v-if="view === 'welcome'" autocomplete="off">
-    <h2 class="h2 tags-setup__title">{{$t('welcome.setupTagsStep.header')}}</h2>
+    <h2 class="h2 tags-setup__title">{{$t('welcome.tagsStep.header')}}</h2>
     <div class="tags-setup__input-wrapper">
       <div class="tags-setup__input-text">
         <span class="tags-setup__input-name">{{$t('tagsForm.addTagsWithChain', {blockchain: chainName})}}:</span>
@@ -36,8 +36,7 @@
         </span>
       </draggable>
     </div>
-    <button type="submit" class="btn tags-setup__btn">{{$t('welcome.setupTagsStep.startYourJourney')}}</button>
-    <!--<a href="#" class="login-form__bottom-link link">Choose later</a>-->
+    <button type="submit" class="btn tags-setup__btn">{{$t('welcome.tagsStep.startYourJourney')}}</button>
   </form>
 
   <div class="settings__tags-panel-wrapper" v-else>
@@ -50,7 +49,7 @@
           </span>
         </draggable>
       </div>
-      <a href="#" class="btn-expand" @click.prevent="$store.commit('setTagsFormChain', CHAINS.STEEM)"></a>
+      <a href="#" class="btn-expand" @click.prevent="setChain(CHAINS.STEEM)"></a>
     </div>
     <div class="settings__tags-panel" :class="{'settings__tags-panel--active': chain === CHAINS.GOLOS}">
       <h3 class="settings__tags-chain settings__tags-chain--golos">Golos</h3>
@@ -61,7 +60,7 @@
           </span>
         </draggable>
       </div>
-      <a href="#" class="btn-expand" @click.prevent="$store.commit('setTagsFormChain', CHAINS.GOLOS)"></a>
+      <a href="#" class="btn-expand" @click.prevent="setChain(CHAINS.GOLOS)"></a>
     </div>
     <div class="settings__tags-setup" v-if="chain">
       <div class="tags-setup__input-wrapper">
@@ -119,13 +118,25 @@ export default {
     validator: 'new'
   },
   name: 'TagsForm',
-  props: ['view'],
+  props: {
+    view: {
+      type: String, // welcome, settings
+      required: true
+    },
+    chainExt: {
+      type: String // s, g
+    }
+  },
   components: {
     draggable
   },
+  created() {
+    if (this.chainExt) this.chain = this.chainExt
+  },
   data() {
     return {
-      clearApproveShow: false
+      clearApproveShow: false,
+      chain: CONSTANTS.BLOCKCHAIN.SOURCE.STEEM
     }
   },
   computed: {
@@ -143,9 +154,6 @@ export default {
         s: 'Steem',
         g: 'Golos'
       }[this.chain]
-    },
-    chain() {
-      return this.$store.state.tagsForm.chain
     },
     storages: {
       get(chain) {
@@ -184,6 +192,10 @@ export default {
     }
   },
   methods: {
+    setChain(chain) {
+      this.errors.remove('tag', 'maxCount')
+      this.chain = chain
+    },
     clearTags() {
       this.$store.dispatch('clearUserTags', {
         chain: this.chain,

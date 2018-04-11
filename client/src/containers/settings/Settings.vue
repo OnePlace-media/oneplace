@@ -1,13 +1,13 @@
 <script>
 import TagsForm from '../../components/settings/TagsForm.vue'
-import AccountForm from '../../components/settings/AccountForm/AccountForm.vue'
+import AccountAttachForm from '../../components/settings/AccountAttachForm.vue'
 import AccountRemoveForm from '../../components/settings/AccountRemoveForm.vue'
 const CONSTANTS = require('@oneplace/constants')
 export default {
   name: 'Settings',
   components: {
     TagsForm,
-    AccountForm,
+    AccountAttachForm,
     AccountRemoveForm
   },
   data() {
@@ -19,6 +19,18 @@ export default {
   methods: {
     closeAccountForm() {
       this.attachFormShow = false
+    },
+    successAttachform() {
+      this.$auth.fetch()
+      this.closeAccountForm()
+    },
+    removeAccountByUserName(chain, username) {
+      const account = this.accounts.find(
+        acc => acc.chain === chain && acc.username === username
+      )
+      if (account) {
+        this.removeAccount(account)
+      }
     },
     removeAccount(account) {
       this.accountRemove = null
@@ -65,6 +77,13 @@ export default {
         else tags = tags.concat(steemDefaultTags)
 
         this.$store.commit('setInitFormTags', tags)
+
+        if (this.$route.query.rm) {
+          const rm = this.$route.query.rm
+          const [chain, username] = decodeURIComponent(rm).split(':')
+          this.removeAccountByUserName(chain, username)
+          this.$router.replace({ name: 'settings' })
+        }
       }
     }
     if (this.$auth.ready()) stateInit()
@@ -128,7 +147,7 @@ export default {
                 <div class="settings__no-accounts" v-if="!accounts.length">{{$t('settings.noAddedAccountsYet')}}</div>
                 <a href="#" class="btn-expand btn-expand--accounts" v-show="!attachFormShow && !accountRemove" @click.prevent="attachFormShow = true"></a>
               </div>
-              <account-form view="settings" v-if="attachFormShow && !accountRemove" @success="closeAccountForm" @close="closeAccountForm"></account-form>
+              <account-attach-form view="settings" v-if="attachFormShow && !accountRemove" @success="closeAccountForm" @close="closeAccountForm"></account-attach-form>
               <account-remove-form :account="accountRemove" @cancel="accountRemove = null" @success="removeAccount" v-if="accountRemove"></account-remove-form>
             </div>
             </div>

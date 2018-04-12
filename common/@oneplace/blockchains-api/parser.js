@@ -8,6 +8,12 @@ const md = new Remarkable({
   typographer: false,
   quotes: '“”‘’'
 })
+
+md.renderer.rules.link_open = function(tokens, idx) {
+  const title = tokens[idx].title ? (' title="' + tokens[idx].title + '"') : ''
+  return '<a target="_blank" href="' + tokens[idx].href + '"' + title + '>'
+}
+
 const Entities = require('html-entities').AllHtmlEntities
 const entities = new Entities()
 const xmldom = require('xmldom')
@@ -76,9 +82,9 @@ function iframe(state, child) {
 }
 
 function link(chain, state, child) {
-  const url = child.getAttribute('href');
+  const url = child.getAttribute('href')
   if (url) {
-    state.links.add(url);
+    state.links.add(url)
     if (!/^((#)|(\/(?!\/))|((https?:)?\/\/))/.test(url)) {
       child.setAttribute('href', 'https://' + url)
     }
@@ -108,7 +114,8 @@ function link(chain, state, child) {
         chain = 's'
 
       child.setAttribute('href', `/${chain}/${username}/${permlink}`)
-    }
+    } else
+      child.setAttribute('target', '_blank')
   }
 }
 

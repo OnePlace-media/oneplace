@@ -60,11 +60,11 @@ export default () => {
             else {
               params.globalProps = result
               if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS) {
-                params.rewardFunds.reward_balance = result.total_reward_fund_steem.replace(
+                params.rewardFunds.reward_balance = +result.total_reward_fund_steem.replace(
                   ' GOLOS',
                   ''
                 )
-                params.rewardFunds.recent_claims = result.total_reward_shares2
+                params.rewardFunds.recent_claims = +result.total_reward_shares2
               }
               params.steem_per_mvests = 1000000.0 *
                 parseFloat(result['total_vesting_fund_steem'].split(' ')[0]) /
@@ -91,11 +91,11 @@ export default () => {
             $chains.client.api.getRewardFund('post', (err, result) => {
               if (err) reject
               else {
-                params.rewardFunds.reward_balance = result.reward_balance.replace(
+                params.rewardFunds.reward_balance = +result.reward_balance.replace(
                   ' STEEM',
                   ''
                 )
-                params.rewardFunds.recent_claims = result.recent_claims
+                params.rewardFunds.recent_claims = +result.recent_claims
                 resolve()
               }
             })

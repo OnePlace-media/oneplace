@@ -16,6 +16,11 @@ export default {
       accountRemove: null
     }
   },
+  metaInfo() {
+    return {
+      title: 'Settings'
+    }
+  },
   methods: {
     closeAccountForm() {
       this.attachFormShow = false

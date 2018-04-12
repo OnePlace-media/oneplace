@@ -36,10 +36,10 @@
           :class="{'login-form__input--error': errors.has('activeKey')}"/>
 
         <div v-if="errors.firstByRule('activeKey', 'required')" id="vError-activeKey-required" class="login-form__alert">
-          {{$t('common.validate.activeKeyRequired')}}
+          {{$t('common.validate.postingKeyRequired')}}
         </div>
         <div v-if="errors.firstByRule('activeKey', 'notPassed')" id="vError-activeKey-notPassed" class="login-form__alert">
-          {{$t('common.validate.activeKeyNotPassed')}}
+          {{$t('common.validate.postingKeyNotPassed')}}
         </div>
       </div>
     </div>
@@ -55,9 +55,9 @@
         {{$t('welcome.attachStep.skipThisStep')}}
       </a>
     </div>
-//    <div style="overflow:hidden" v-else>
-//      <router-link class="login-form__bottom-link link" :to="backRoute">{{$t('addAccount.backToOnePlace')}}</router-link>
-//    </div>
+    <!-- <div style="overflow:hidden" v-else>
+      <router-link class="login-form__bottom-link link" :to="backRoute">{{$t('addAccount.backToOnePlace')}}</router-link>
+    </div> -->
   </div>
 </form>
 

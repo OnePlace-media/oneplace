@@ -68,7 +68,7 @@ module.exports = ({large = true, highQualityPost = true, noImage = false, saniti
     // style is subject to attack, filtering more below
     td: ['style'],
     img: ['src', 'alt'],
-    a: ['href', 'rel'],
+    a: ['href', 'rel', 'target'],
   },
   transformTags: {
     iframe: (tagName, attribs) => {
@@ -143,6 +143,7 @@ module.exports = ({large = true, highQualityPost = true, noImage = false, saniti
       if (!href.match(/^(\/(?!\/)|https:\/\/(golos\.blog|golos\.club|golos\.io|goldvoice\.club|busy\.org|steemit\.com))/)) {
         // attys.target = '_blank' // pending iframe impl https://mathiasbynens.github.io/rel-noopener/
         attys.rel = highQualityPost ? 'noopener' : 'nofollow noopener'
+        attys.target = '_blank'
       }
       return {
         tagName,

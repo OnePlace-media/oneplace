@@ -291,12 +291,12 @@ export default {
       this.mde.createToolbar(generateToolbar())
     })
 
-    EventBus.$on('EDITOR:INSERT:LINK', ({ link, isImage = false }) => {
+    EventBus.$on('EDITOR:INSERT:LINK', ({ name, link, isImage = false }) => {
       const selections = this.mde.codemirror.getSelections()
       let selectionsReplace
       const template = `${isImage ? '!' : ''}[%NAME%](${link})`
       selectionsReplace = selections.map(selection =>
-        template.replace('%NAME%', selection || link)
+        template.replace('%NAME%', selection || name || link)
       )
       this.mde.codemirror.replaceSelections(selectionsReplace)
     })

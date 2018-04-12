@@ -101,7 +101,7 @@
         {{$t('common.validate.activeKeyNotPassed')}}
       </div>
     </div>
-//    <router-link :to="{name:'welcome-step-confirm', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link>
+    <!-- <router-link :to="{name:'welcome-step-confirm', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link> -->
     <p class="login-form__text login-form__text--alert" v-html="$t('accountForm.aboutPrivate')"></p>
     <div class="login-form__btn-wrapper">
       <button type="submit" class="btn btn--large login-form__btn login-form__btn--bchain" :disabled="processing">
@@ -166,7 +166,7 @@
         </div>
       </div>
     </div>
-//    <router-link :to="{name:'confirm-account', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link>
+    <!-- <router-link :to="{name:'confirm-account', params:{chain}}" class="login-form__advanced link">{{$t('addAccount.advancedMode')}}</router-link> -->
     <p class="login-form__text login-form__text--alert" v-html="$t('accountForm.aboutPrivate')"></p>
     <div class="login-form__btn-wrapper">
       <button type="submit" class="btn login-form__btn btn--large" :disabled="processing">
@@ -306,10 +306,7 @@ export default {
       redirectUri = encodeURIComponent(window.location.origin + redirectUri)
 
       const appName = 'oneplace.app'
-      window.open(
-        `https://steemconnect.com/authorize/@${appName}?&redirect_uri=${redirectUri}`,
-        '_blank'
-      )
+      window.location.href = `https://steemconnect.com/authorize/@${appName}?&redirect_uri=${redirectUri}`
     },
     clearErrors() {
       this.errors.remove('username', 'notFound')

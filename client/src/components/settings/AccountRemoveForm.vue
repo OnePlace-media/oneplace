@@ -162,12 +162,12 @@ export default {
         })
     },
     removeWithSteemConnect() {
-      const redirectUri = encodeURIComponent(window.location.origin + `/settings?rm=${this.account.chain}:${this.account.username}`)
-      const appName = 'oneplace.app'
-      window.open(
-        `https://steemconnect.com/revoke/@${appName}?&redirect_uri=${redirectUri}`,
-        '_blank'
+      const redirectUri = encodeURIComponent(
+        window.location.origin +
+          `/settings?rm=${this.account.chain}:${this.account.username}`
       )
+      const appName = 'oneplace.app'
+      window.location.href = `https://steemconnect.com/revoke/@${appName}?&cb=${redirectUri}`
     }
   }
 }

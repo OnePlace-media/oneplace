@@ -27,8 +27,10 @@ module.exports = {
       passwordRepeat: 'Пароль не совпадает',
       emailVerified: 'Адрес e-mail не был подтвержден',
       emailNotFound: 'Адрес e-mail не найден',
-      activeKeyRequired: 'Приватный ключ не может быть пустым',
-      activeKeyNotPassed: 'Активный ключ не прошел проверку',
+      activeKeyRequired: 'Приватный active ключ не может быть пустым',
+      activeKeyNotPassed: 'Приватный active ключ не прошел проверку',
+      postingKeyRequired: 'Приватный posting ключ не может быть пустым',
+      postingKeyNotPassed: 'Приватный posting ключ не прошел проверку',
       usernameRequired: 'Имя пользователя не может быть пустым',
       usernameNotFound: 'Аккаунта с таким именем не существует',
       tagRequired: 'Строка тегов не может быть пустой',
@@ -48,9 +50,9 @@ module.exports = {
       passwordRepeat: 'Повторите пароль',
       username: 'Имя пользователя',
       addAccountUsername: 'Имя пользователя {blockchain}',
-      addAccountActiveKey: 'Активный приватный ключ',
-      confirmAccountPostingKey: 'Приватный постинг  ключ',
-      activeKey: 'Активный приватный ключ',
+      addAccountActiveKey: 'Приватный active  ключ',
+      confirmAccountPostingKey: 'Приватный posting ключ',
+      activeKey: 'Приватный active ключ',
       leaveAComment: 'Добавить комментарий...'
     }
   },
@@ -108,7 +110,7 @@ module.exports = {
     },
     confirmStep: {
       header: 'Подтвердить аккаунт',
-      help: 'Подтвердите доступ к учетной записи, выполнив вход с помощью приватного постинг ключа.',
+      help: 'Подтвердите доступ к учетной записи, выполнив вход с помощью приватного posting ключа.',
       help2: 'OnePlace не сохраняет ваши приватные ключи.',
       confirmAccount: 'Подтвердить аккаунт'
     },
@@ -131,7 +133,7 @@ module.exports = {
     addAccount: 'Добавить аккаунт',
     cancelRemoveAccount: 'Отмена',
     aboutPrivate: '<em>OnePlace не хранит ваш приватный ключ</em>. Добавляя свой блокчейн аккаунт, вы авторизуете приложение OnePlace для голосования, публикации и редактирования записей от вашего имени. Вы можете отменить это разрешение в любой момент.',
-    aboutRemove: '<em>Удаление аккаунта</em>. Вы отменяете авторизацию для приложения OnePlace. Подтвердите эту операцию приватным активным ключом.',
+    aboutRemove: '<em>Удаление аккаунта</em>. Вы отменяете авторизацию для приложения OnePlace. Подтвердите эту операцию приватным active ключом.',
     addWithSteemConnect: 'Добавить через SteemConnect',
     removeWithSteemConnect: 'Удалить через SteemConnect'
   },

@@ -52,6 +52,7 @@ export default {
   data() {
     return {
       link: '',
+      name: '',
       errorCode: null,
       processing: false
     }
@@ -81,6 +82,7 @@ export default {
           this.processing = true
           Api.uploadImage(file)
             .then(response => {
+              this.name = file.name
               this.link = [
                 window.location.origin,
                 'storage',
@@ -101,7 +103,11 @@ export default {
       }
     },
     onSubmit() {
-      EventBus.$emit('EDITOR:INSERT:LINK', { link: this.link, isImage: true })
+      EventBus.$emit('EDITOR:INSERT:LINK', {
+        name: this.name,
+        link: this.link,
+        isImage: true
+      })
       this.$store.commit('publish/SET_EDITOR_OBJECT', { showModalImage: false })
     }
   }

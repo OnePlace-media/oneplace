@@ -89,9 +89,11 @@ module.exports = Model => {
       error.status = 400
       throw error
     }
-    let comment = await blockChains.getContent(chain, result)
-    comment = await Model.app.trendsWatcher.preparePosts(chain, [comment], true)
-    return comment[0]
+    const commentRaw = await blockChains.getContent(chain, result)
+    const [comment] = await Model.app.trendsWatcher.preparePosts(chain, [commentRaw], true)
+    comment.parent_author = parentAuthor
+    comment.parent_permlink = parentPermlink
+    return comment
   }
 
   Model.remoteMethod('comment', {

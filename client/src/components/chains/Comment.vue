@@ -153,7 +153,9 @@ export default {
       return CONSTANTS.DEFAULT.AVATAR_IMAGE
     },
     isMaxDeep() {
-      return this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && this.level >= 5
+      return false
+      // After hardfork 17, Golos support more then 5 comments level, wil be deprecated
+      // return this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS && this.level >= 5
     },
     chain() {
       return this.$route.params.chain || this.$store.state.chain

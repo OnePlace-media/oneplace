@@ -33,7 +33,9 @@ class Converter {
   }
 
   static voteToFiat(vote, chain, params, post, append = true) {
-    const CURRENCY_Q = CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? params.goldPrice : 1
+    const CHAINS = CONSTANTS.BLOCKCHAIN.SOURCE
+    const MODES = CONSTANTS.BLOCKCHAIN.MODES
+    const CURRENCY_Q = chain === CHAINS.GOLOS ? params.goldPrice : 1
     const feedPrice = params.feedPrice
     const base = parseFloat(feedPrice.base.split(' ')[0]) / parseFloat(feedPrice.quote.split(' ')[0])
     const {recent_claims, reward_balance} = params.rewardFunds
@@ -42,15 +44,14 @@ class Converter {
 
     let result
     const isLiner =
-      chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ||
-      post.mode !== CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED ||
+      chain === CHAINS.STEEM ||
+      post.mode !== MODES.ARCHIVED ||
       moment(post.created).unix() > moment("2018-04-04T00:00:00+00:00").unix()
 
     if (isLiner) {
       const allPayout = +post.pending_payout + +post.total_payout
       const sumRshares = active_votes.reduce((sum, _vote) => sum += +_vote.rshares, 0)
-      const q = allPayout / sumRshares
-
+      const q = ((reward_balance * base) / recent_claims) * CURRENCY_Q
       if (append)
         result = lastPayout ? +post.payout : (+post.payout + vote.rshares * q).toFixed(2)
       else
@@ -60,7 +61,7 @@ class Converter {
       const created = moment(post.created).unix()
 
       if (append) {
-        if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED)
+        if (post.mode === MODES.ARCHIVED)
           result = (post.total_payout_value * CURRENCY_Q).toFixed(2)
         else {
           const currentActiveRshares =
@@ -86,18 +87,18 @@ class Converter {
 
       } else {
         const setVoteMode = (time, post) => {
-          if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT)
-            return CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
+          if (post.mode === MODES.FIRST_PAYOUT)
+            return MODES.FIRST_PAYOUT
 
-          if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT)
+          if (post.mode === MODES.SECOND_PAYOUT)
             return time <= moment(post.last_payout).unix()
-              ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
-              : CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+              ? MODES.FIRST_PAYOUT
+              : MODES.SECOND_PAYOUT
 
-          if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.ARCHIVED)
+          if (post.mode === MODES.ARCHIVED)
             return time <= moment(post.last_payout).subtract(30, 'days').unix()
-              ? CONSTANTS.BLOCKCHAIN.MODES.FIRST_PAYOUT
-              : CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT
+              ? MODES.FIRST_PAYOUT
+              : MODES.SECOND_PAYOUT
         }
 
         vote.mode = setVoteMode(time, post)
@@ -113,9 +114,9 @@ class Converter {
 
         let q = (reward_balance * base) / recent_claims
         let vShares = Converter.calculateVshares(activeRshares)
-        if (vote.mode !== post.mode || post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
-          if (post.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT) {
-            if (vote.mode === CONSTANTS.BLOCKCHAIN.MODES.SECOND_PAYOUT)
+        if (vote.mode !== post.mode || post.mode === MODES.SECOND_PAYOUT) {
+          if (post.mode === MODES.SECOND_PAYOUT) {
+            if (vote.mode === MODES.SECOND_PAYOUT)
               q = post.pending_payout_value / vShares
             else
               q = post.total_payout_value / vShares

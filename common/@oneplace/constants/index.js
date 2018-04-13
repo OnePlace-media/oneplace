@@ -7,6 +7,11 @@ module.exports = {
   },
   WELCOME: {
     STEPS: {
+      ATTACH: 2,
+      CONFIRM:3,
+      TAGS: 4,
+      
+
       CHOOSE_CHAIN: 1,
       ATTACH_CHAIN: 2,
       SETUP_TAGS: 3

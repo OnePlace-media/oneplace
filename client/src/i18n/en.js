@@ -27,8 +27,10 @@ module.exports = {
       passwordRepeat: 'Password doesn\'t match',
       emailVerified: 'E-mail hasn\'t been verified',
       emailNotFound: 'E-mail not found',
-      activeKeyRequired: 'Active key can\'t be blank',
-      activeKeyNotPassed: 'Active key not passed',
+      activeKeyRequired: 'Private active key can\'t be blank',
+      activeKeyNotPassed: 'Private active key not passed',
+      postingKeyRequired: 'Private posting key can\'t be blank',
+      postingKeyNotPassed: 'Private posting key not passed',
       usernameRequired: 'Username can\'t be blank',
       usernameNotFound: 'Account with this username not found',
       tagRequired: 'Tag can\'t be blank',
@@ -37,6 +39,7 @@ module.exports = {
       tagMax: 'Max length 64',
       firstIsLetter: 'Must begin with a letter',
       lastIsLetterOrDigit: 'Must end with a letter or a digit',
+      usernameMissingPermission:'Missing posting permission for this account'
     },
     timeAgoWithAuthor: '{timeago} by {author}',
     headers: {
@@ -49,6 +52,7 @@ module.exports = {
       username: 'Username',
       addAccountUsername: '{blockchain} username',
       addAccountActiveKey: '{blockchain} active key (private)',
+      confirmAccountPostingKey: 'Private posting key',
       activeKey: 'Active key (private)',
       leaveAComment: 'Leave a comment...'
     }
@@ -76,9 +80,10 @@ module.exports = {
     loginOrRegisterToReply: '{login-link}{nbsp}or{nbsp}{reg-link} to reply.'
   },
   addAccount: {
-    header: 'It\'s time to add your {blockchain} account!',
+    header: 'Add {blockchain} account',
     help: 'Please enter required information in the form below. You can later add more accounts in your profile.',
-    backToOnePlace: 'Back to OnePlace'
+    backToOnePlace: 'Back to OnePlace',
+    advancedMode:'Advanced mode'
   },
   chains: {
     imageIsHidden: 'Image is hidden. Click to show image.',
@@ -97,14 +102,19 @@ module.exports = {
     chooseChainStep: {
       help: 'Please attach Steem or Golos account. You can later add more accounts in your profile'
     },
-    attachChainStep: {
+    attachStep: {
       header: 'Thank you for registration!',
       help: 'Please attach Steem or Golos account. You can later add more accounts in your profile.',
-      addBlockchainAccount: 'Add blockchain account',
-      addBlockchainAccountReplace: 'Add {blockchain} account',
+      addBlockchainAccount: 'Add {blockchain} account',
       skipThisStep: 'Skip this step',
     },
-    setupTagsStep: {
+    confirmStep: {
+      header: 'Confirm Account',
+      help: 'Please confirm account access by signing in with private posting key.',
+      help2: 'OnePlace does not store your private keys.',
+      confirmAccount: 'Confirm account'
+    },
+    tagsStep: {
       header: 'Please choose topics you\'re interested in',
       startYourJourney: 'Start your journey'
     }
@@ -124,6 +134,8 @@ module.exports = {
     cancelRemoveAccount: 'Cancel',
     aboutPrivate: '<em>OnePlace does not store your private keys</em>. Once you sign in with your blockchain account you authorize OnePlace app to vote, post and edit comments on your behalf. You can revoke that authority at any time.',
     aboutRemove: '<em>Remove account</em>. You are going to remove posting authority from OnePlace app. Confirm this operation with your private active key.',
+    addWithSteemConnect: 'Add with SteemConnect',
+    removeWithSteemConnect:'Remove with SteemConnect'
   },
   topBar: {
     createNewPost: 'Create new post',

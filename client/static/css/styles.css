@@ -67,7 +67,7 @@ input,textarea,select,button {
   height: 40px;
   border-radius: 0;
   text-align: center;
-  line-height: 38px;
+  line-height: 36px;
   font-size: 15px;
   font-weight: 700;
   text-transform: uppercase;
@@ -480,6 +480,10 @@ hr {
 
 .header__usermenu-item--hr {
   border-top: 1px solid #f2f2f2;
+}
+
+.header__usermenu-item--hr:first-child {
+  border-top: none;
 }
 
 .header__usermenu-item--submenu {
@@ -981,7 +985,7 @@ hr {
 .login-form__alert {
   display: none;
   position: absolute;
-  bottom: -20px;
+  top: 42px;
   left: 16px;
   font-size: 12px;
   color: #db4c2a;
@@ -991,6 +995,22 @@ hr {
   color: #383838;
   font-size: 13px;
   margin: 0 0 16px;
+}
+
+.login-form__btn-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: baseline;
+  -webkit-align-items: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+  font-size: 13px;
 }
 
 .login-form__btn {
@@ -1004,6 +1024,29 @@ hr {
 
 .login-form__btn:last-child {
   margin-bottom: 0;
+}
+
+.login-form__btn:first-child {
+  margin-bottom: 16px;
+}
+
+.login-form__btn--bchain {
+  margin: 0 0 16px;
+}
+
+.login-form__btn--sc {
+  max-width: 256px;
+  margin-left: 8px;
+  text-transform: none;
+  font-weight: 400;
+  color: #259cb7;
+  background: #fff;
+  border: 1px solid #259cb7;
+}
+
+.login-form__btn--sc:hover {
+  border: 1px solid #2ab1cf;
+  background: rgba(37,156,183,0.05);
 }
 
 .login-form__select-chain {
@@ -1102,11 +1145,36 @@ hr {
 }
 
 .login-form__text--alert {
+  font-size: 14px;
   border-left: 2px solid #db4c2a;
+  padding-left: 14px;
+}
+
+.login-form__text--security {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  color: #818888;
+  font-size: 14px;
+  margin: 0 auto 24px;
+  padding-left: 21px;
+  background: url("/static/img/padlock.svg") 0 50% no-repeat transparent;
+  background-size: 13px 16px;
 }
 
 .login-form__text--error {
   color: #db4c2a;
+}
+
+.login-form__advanced {
+  float: right;
+  font-size: 12px;
+  margin-top: -22px;
+  color: #a8adad;
+}
+
+.login-form__advanced:hover {
+  text-decoration: underline;
 }
 
 .register__steps-wrapper {
@@ -1681,6 +1749,7 @@ hr {
 
 .account-action__btn {
   width: 100%;
+  text-transform: uppercase;
   color: #fff;
   background: #259cb7;
   margin-bottom: 16px;
@@ -1688,6 +1757,43 @@ hr {
 
 .account-action__btn:hover {
   background: #2ab1cf;
+}
+
+.account-action__btn--sc {
+  text-transform: none;
+  font-weight: 400;
+  color: #259cb7;
+  background: #fff;
+  border: 1px solid #259cb7;
+}
+
+.account-action__btn--sc:hover {
+  border: 1px solid #2ab1cf;
+  background: rgba(37,156,183,0.05);
+}
+
+.account-action__bottom-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.account-action__bottom-link:hover {
+  text-decoration: underline;
+}
+
+.account-action__advanced {
+  color: #a8adad;
+}
+
+.account-action__advanced:hover {
+  text-decoration: underline;
 }
 
 .settings__select-chain {
@@ -2577,6 +2683,7 @@ hr {
 
 .post-view__votes {
   position: relative;
+  display: inline-block;
 }
 
 .post-view__votes:hover .post-view__voters {
@@ -2586,15 +2693,19 @@ hr {
 .post-view__voters {
   display: none;
   font-size: 13px;
-  min-width: 200px;
-  padding: 8px 16px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 8px 12px;
   top: 32px;
-  left: -80px;
+  left: 50%;
+  -webkit-transform: translatex(-50%);
+  transform: translatex(-50%);
   color: #383838;
 }
 
 .post-view__voters:before,.post-view__voters:after {
-  left: 80px;
+  left: calc(50% - 8px);
 }
 
 .post-view__voter-list {
@@ -2611,14 +2722,19 @@ hr {
   -webkit-justify-content: space-between;
   -ms-flex-pack: justify;
   justify-content: space-between;
+  -webkit-box-align: baseline;
+  -webkit-align-items: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
 }
 
 .post-view__voter-name {
-  padding-right: 16px;
+  padding: 0;
 }
 
 .post-view__voter-amount {
   color: #818888;
+  margin-left: 16px;
 }
 
 .post-view__voters-all {
@@ -3803,8 +3919,9 @@ hr {
 }
 
 .feed__post-title {
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 17px;
+  line-height: 23px;
+  max-height: 46px;
   margin-top: -5px;
   margin-bottom: 8px;
   overflow: hidden;
@@ -3821,9 +3938,19 @@ hr {
   text-overflow: ellipsis;
   display: -webkit-box;
   line-height: 21px;
+  max-height: 63px;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.feed__post-text.lines-2x {
   max-height: 42px;
   -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+}
+
+.feed__post-text.lines-1x {
+  max-height: 21px;
+  -webkit-line-clamp: 1;
 }
 
 .feed__post-info {
@@ -4649,6 +4776,10 @@ hr {
   display: inline-block;
 }
 
+.CodeMirror-vscrollbar {
+  display: none;
+}
+
 #drag-zone {
   display: none;
   position: absolute;
@@ -4671,10 +4802,6 @@ hr {
 
 .CodeMirror-lines {
   padding: 0;
-}
-
-.CodeMirror-vscrollbar {
-  display: none;
 }
 
 .editor-preview {
@@ -4762,11 +4889,11 @@ hr {
   content: "\e908";
 }
 
-.fa-facebook:before {
+.fa-facebook:before,.share-icon--facebook:before {
   content: "\e909";
 }
 
-.fa-google:before {
+.fa-google:before,.share-icon--google-plus:before {
   content: "\e90a";
 }
 
@@ -4814,11 +4941,11 @@ hr {
   content: "\e916";
 }
 
-.fa-twitter:before {
+.fa-twitter:before,.share-icon--twitter:before {
   content: "\e917";
 }
 
-.fa-vk:before {
+.fa-vk:before,.share-icon--vk:before {
   content: "\e918";
 }
 
@@ -5128,10 +5255,9 @@ hr {
 
 .error-block__back {
   display: inline-block;
-  position: absolute;
+  position: relative;
+  top: calc(100% + 18px);
   font-size: 15px;
-  bottom: -40px;
-  left: calc(50% - 68px);
 }
 
 .error-block__back:hover {
@@ -5165,67 +5291,61 @@ hr {
 .share-icon {
   position: relative;
   display: block;
+  background: #fff;
   width: 40px;
   height: 40px;
-  background: url("/static/img/share-buttons.svg") 0 0 no-repeat transparent;
-  background-size: 160px 40px;
+  border-radius: 50%;
+  padding: 11px 0;
+  text-align: center;
+  color: #818888;
+  font-size: 18px;
+  font-family: 'fa-icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: all 0.3s ease;
 }
 
-.share-icon:before,.share-icon:after {
+.share-icon:after {
   position: absolute;
   display: block;
   content: '';
   transition: all 0.3s ease;
   border-radius: 50%;
-}
-
-.share-icon:before {
-  top: 1px;
-  left: 1px;
-  right: 1px;
-  bottom: 1px;
-  background: #a8adad;
-  z-index: -1;
-}
-
-.share-icon:after {
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  border: 1px solid transparent;
+  border: 1px solid #f2f2f2;
 }
 
 .share-icon:hover {
   cursor: pointer;
 }
 
-.share-icon:hover:before {
-  background: #383838;
-}
-
 .share-icon:hover:after {
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  border-color: #a8adad;
+  border-color: #cfd2d2;
 }
 
-.share-icon--facebook {
-  background-position: 0 0;
+.share-icon--facebook:hover {
+  color: #3b5998;
 }
 
-.share-icon--google-plus {
-  background-position: 66.67% 0;
+.share-icon--google-plus:hover {
+  color: #dd4b39;
 }
 
-.share-icon--twitter {
-  background-position: 33.33% 0;
+.share-icon--twitter:hover {
+  color: #55acee;
 }
 
-.share-icon--vk {
-  background-position: 100% 0;
+.share-icon--vk:hover {
+  color: #45668e;
 }
 
 @font-face {
@@ -5297,15 +5417,16 @@ hr {
 
 @media screen and (max-width: 1060px) {
   .share-icons__wrapper {
-    width: 32px;
-    bottom: calc(50vh - 82px);
-    left: 16px;
+    width: 36px;
+    bottom: calc(50vh - 90px);
+    left: 12px;
   }
 
   .share-icon {
-    width: 32px;
-    height: 32px;
-    background-size: 128px 32px;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    padding: 10px 0;
   }
 }
 
@@ -5801,7 +5922,7 @@ hr {
   }
 
   .error-block__back {
-    bottom: -32px;
+    top: calc(100% + 10px);
   }
 }
 

@@ -87,7 +87,20 @@ module.exports = Model => {
   const blockChains = require('@oneplace/blockchains-api')
   const {Signature, PublicKey} = require('steem/lib/auth/ecc')
 
-  Model.saveAccount = async function(id, sign, username, chain) {
+  Model.remoteMethod('saveAccount', {
+    accepts: [
+      {arg: 'id', type: 'string', required: true},
+      {arg: 'sign', type: 'string', required: true},
+      {arg: 'username', type: 'string', required: true},
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'isPostingKey', type: 'boolean'},
+    ],
+    returns: {type: 'object', root: true},
+    http: {path: '/:id/account', verb: 'post'},
+    description: 'Save link user and account',
+  })
+
+  Model.saveAccount = async function(id, sign, username, chain, isPostingKey = false) {
     const account = await blockChains.getAccount(chain, username);
     if (!account) {
       const error = new Error('account not found')
@@ -96,16 +109,22 @@ module.exports = Model => {
     }
 
     if (process.env.NODE_ENV !== 'test') {
-      const key = account.active.key_auths[0][0]
+      const key = account[isPostingKey ? 'posting' : 'active'].key_auths[0][0]
       const publicKey = PublicKey.fromString(key, BLOCKCHAIN.PREFIXES[chain])
       const signature = Signature.fromHex(sign)
       if (!signature.verifyBuffer(new Buffer('test'), publicKey)) {
-        const error = new Error('bad sign')
+        const error = new Error('Bad Request: bad sign')
         error.status = 400
         throw error
       }
-    }
 
+      const auth = account.posting.account_auths.find(i => i[0] === Model.app.get('postingWrapper').username)
+      if (!auth) {
+        const error = new Error('Failed Dependency: bad permissions')
+        error.status = 424
+        throw error
+      }
+    }
 
     const Account = Model.app.models.account
     const data = {username, chain}
@@ -149,18 +168,6 @@ module.exports = Model => {
 
     })
   }
-
-  Model.remoteMethod('saveAccount', {
-    accepts: [
-      {arg: 'id', type: 'string', required: true},
-      {arg: 'sign', type: 'string', required: true},
-      {arg: 'username', type: 'string', required: true},
-      {arg: 'chain', type: 'string', required: true}
-    ],
-    returns: {type: 'object', root: true},
-    http: {path: '/:id/account', verb: 'post'},
-    description: 'Save link user and account',
-  });
 
   Model.removeAccount = async function(id, username, chain) {
     const Account = Model.app.models.account

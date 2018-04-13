@@ -87,6 +87,11 @@ export default {
 
     this.$auth.ready() ? init() : this.$auth.ready(init)
   },
+  metaInfo() {
+    return {
+      title: `Publish to ${this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ? 'STEEM' : 'GOLOS'}`
+    }
+  },
   methods: {
     onUpdate() {
       this.$refs.editor.onUpdate()

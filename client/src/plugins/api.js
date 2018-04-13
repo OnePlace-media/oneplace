@@ -26,8 +26,8 @@ export default {
   saveTags(id, chain, tags) {
     return Vue.axios.post(`/users/${id}/tags`, {chain, tags})
   },
-  saveAccount(id, chain, username, sign) {
-    return Vue.axios.post(`/users/${id}/account`, {chain, sign, username})
+  saveAccount(id, chain, username, sign, isPostingKey) {
+    return Vue.axios.post(`/users/${id}/account`, {chain, sign, username, isPostingKey})
   },
   removeAccount(id, chain, username) {
     return Vue.axios.delete(`/users/${id}/account`, {params: {chain, username}})
@@ -69,7 +69,7 @@ export default {
   getAccount(chain, {username}) {
     return Vue.axios.get(`/blockchains/${chain}/getAccount`, {params: {username}})
   },
-  getBlog(chain, {username}){
+  getBlog(chain, {username}) {
     return Vue.axios.get(`/blockchains/${chain}/getBlog`, {params: {username}})
   },
   getDiscussionsByBlog(chain, {tag, start_author, start_permlink, limit}) {

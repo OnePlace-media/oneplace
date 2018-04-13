@@ -37,6 +37,9 @@
         <span v-show="!processing">{{$t('accountForm.removeAccount')}}</span>
         <span v-show="processing"><pulse-loader :loading="true" :color="'#FFFFFF'" :size="'10px'"></pulse-loader></span>
       </button>
+      <a class="btn btn--large account-action__btn account-action__btn--sc" @click="removeWithSteemConnect" v-if="chain === CHAINS.STEEM">
+        {{$t('accountForm.removeWithSteemConnect')}}
+      </a>
       <a href="#" class="login-form__bottom-link link" @click.prevent="$emit('cancel')">{{$t('accountForm.cancelRemoveAccount')}}</a>
     </div>
   </form>
@@ -92,22 +95,24 @@ export default {
   $_veeValidate: {
     validator: 'new'
   },
-  props: ['account'],
+  props: {
+    account: {
+      type: Object,
+      required: true
+    }
+  },
   computed: {
     CHAINS() {
       return CONSTANTS.BLOCKCHAIN.SOURCE
     },
-    removeMode() {
-      return this.$store.state.accountForm.removeMode
+    chain() {
+      return this.account.chain
     },
     chainName() {
       return {
         s: 'steem',
         g: 'golos'
       }[this.chain]
-    },
-    chain() {
-      return this.$store.state.accountForm.chain
     }
   },
   data() {
@@ -123,16 +128,6 @@ export default {
     clearErrors() {
       this.errors.remove('username', 'notFound')
       this.errors.remove('activeKey', 'notPassed')
-    },
-    back() {
-      this.$store.commit('setAccountFormChain', null)
-      if (this.view === this.VIEWS.WELCOME) {
-        this.$store.commit('setWelcomeChain', null)
-        this.$store.commit(
-          'setWelcomeStep',
-          CONSTANTS.WELCOME.STEPS.CHOOSE_CHAIN
-        )
-      }
     },
     onSubmit() {
       this.processing = true
@@ -165,6 +160,14 @@ export default {
           }
           this.processing = false
         })
+    },
+    removeWithSteemConnect() {
+      const redirectUri = encodeURIComponent(
+        window.location.origin +
+          `/settings?rm=${this.account.chain}:${this.account.username}`
+      )
+      const appName = 'oneplace.app'
+      window.location.href = `https://steemconnect.com/revoke/@${appName}?&cb=${redirectUri}`
     }
   }
 }

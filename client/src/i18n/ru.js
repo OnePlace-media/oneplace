@@ -27,10 +27,10 @@ module.exports = {
       passwordRepeat: 'Пароль не совпадает',
       emailVerified: 'Адрес e-mail не был подтвержден',
       emailNotFound: 'Адрес e-mail не найден',
-      activeKeyRequired: 'Приватный active ключ не может быть пустым',
-      activeKeyNotPassed: 'Приватный active ключ не прошел проверку',
-      postingKeyRequired: 'Приватный posting ключ не может быть пустым',
-      postingKeyNotPassed: 'Приватный posting ключ не прошел проверку',
+      activeKeyRequired: 'Приватный активный ключ не может быть пустым',
+      activeKeyNotPassed: 'Приватный активный ключ не прошел проверку',
+      postingKeyRequired: 'Приватный постинг ключ не может быть пустым',
+      postingKeyNotPassed: 'Приватный постинг ключ не прошел проверку',
       usernameRequired: 'Имя пользователя не может быть пустым',
       usernameNotFound: 'Аккаунта с таким именем не существует',
       tagRequired: 'Строка тегов не может быть пустой',
@@ -39,6 +39,7 @@ module.exports = {
       tagMax: 'Максимальная длина 64',
       firstIsLetter: 'Тег должен начинаться с буквы',
       lastIsLetterOrDigit: 'Тег должен заканчиваться буквой или цифрой',
+      usernameMissingPermission: 'Отсутствует авторизация постинга для данного аккаунта'
     },
     timeAgoWithAuthor: '{timeago} {author}',
     headers: {
@@ -50,9 +51,9 @@ module.exports = {
       passwordRepeat: 'Повторите пароль',
       username: 'Имя пользователя',
       addAccountUsername: 'Имя пользователя {blockchain}',
-      addAccountActiveKey: 'Приватный active  ключ',
-      confirmAccountPostingKey: 'Приватный posting ключ',
-      activeKey: 'Приватный active ключ',
+      addAccountActiveKey: 'Приватный активный ключ',
+      confirmAccountPostingKey: 'Приватный постинг ключ',
+      activeKey: 'Приватный активный ключ',
       leaveAComment: 'Добавить комментарий...'
     }
   },
@@ -80,7 +81,7 @@ module.exports = {
 
   },
   addAccount: {
-    header: 'Добавить аккаунт {blockchain}.',
+    header: 'Добавить аккаунт {blockchain}',
     help: 'Пожалуйста, введите необходимую информацию в форму ниже. Позже вы сможете добавить дополнительные аккаунты в своем профиле.',
     backToOnePlace: 'Вернуться на OnePlace',
     advancedMode: 'Расширенный режим'
@@ -110,7 +111,7 @@ module.exports = {
     },
     confirmStep: {
       header: 'Подтвердить аккаунт',
-      help: 'Подтвердите доступ к учетной записи, выполнив вход с помощью приватного posting ключа.',
+      help: 'Подтвердите доступ к учетной записи, выполнив вход с помощью приватного постинг ключа.',
       help2: 'OnePlace не сохраняет ваши приватные ключи.',
       confirmAccount: 'Подтвердить аккаунт'
     },
@@ -133,7 +134,7 @@ module.exports = {
     addAccount: 'Добавить аккаунт',
     cancelRemoveAccount: 'Отмена',
     aboutPrivate: '<em>OnePlace не хранит ваш приватный ключ</em>. Добавляя свой блокчейн аккаунт, вы авторизуете приложение OnePlace для голосования, публикации и редактирования записей от вашего имени. Вы можете отменить это разрешение в любой момент.',
-    aboutRemove: '<em>Удаление аккаунта</em>. Вы отменяете авторизацию для приложения OnePlace. Подтвердите эту операцию приватным active ключом.',
+    aboutRemove: '<em>Удаление аккаунта</em>. Вы отменяете авторизацию для приложения OnePlace. Подтвердите эту операцию приватным активным ключом.',
     addWithSteemConnect: 'Добавить через SteemConnect',
     removeWithSteemConnect: 'Удалить через SteemConnect'
   },

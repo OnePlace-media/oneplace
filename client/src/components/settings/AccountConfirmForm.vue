@@ -21,6 +21,9 @@
       <div v-if="errors.firstByRule('username', 'notFound')" id="vError-username-notfound" class="login-form__alert">
         {{$t('common.validate.usernameNotFound')}}
       </div>
+      <div v-if="errors.firstByRule('username', 'missingPermission')" id="vError-username-missingPermission" class="login-form__alert">
+        {{$t('common.validate.usernameMissingPermission')}}
+      </div>
     </div>
     <div class="login-form__item">
       <div class="login-form__item">
@@ -124,6 +127,7 @@ export default {
   methods: {
     clearErrors() {
       this.errors.remove('username', 'notFound')
+      this.errors.remove('username', 'missingPermission')
       this.errors.remove('activeKey', 'notPassed')
     },
     skip() {
@@ -173,6 +177,14 @@ export default {
                 scope: 'notFound',
                 id: ['username', 'notFound'].join(),
                 msg: 'Account not found'
+              })
+            } else if(err.response.status === 424){
+              this.errors.add({
+                field: 'username',
+                rule: 'missingPermission',
+                scope: 'missingPermission',
+                id: ['username', 'missingPermission'].join(),
+                msg: 'Missing posting permission for this account'
               })
             } else if (err.response.status === 400 || err.name === 'AssertionError') {
               this.errors.add({

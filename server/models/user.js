@@ -113,15 +113,15 @@ module.exports = Model => {
       const publicKey = PublicKey.fromString(key, BLOCKCHAIN.PREFIXES[chain])
       const signature = Signature.fromHex(sign)
       if (!signature.verifyBuffer(new Buffer('test'), publicKey)) {
-        const error = new Error('bad sign')
+        const error = new Error('Bad Request: bad sign')
         error.status = 400
         throw error
       }
 
       const auth = account.posting.account_auths.find(i => i[0] === Model.app.get('postingWrapper').username)
       if (!auth) {
-        const error = new Error('bad permissions')
-        error.status = 400
+        const error = new Error('Failed Dependency: bad permissions')
+        error.status = 424
         throw error
       }
     }

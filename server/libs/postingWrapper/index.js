@@ -1,30 +1,33 @@
-const CONSTANTS = require('@oneplace/constants')
+const {BLOCKCHAIN} = require('@oneplace/constants')
 
 class PostingWrapper {
   constructor({steemDomain, golosDomain, WIF, username}) {
     const clients = {
-      [CONSTANTS.BLOCKCHAIN.SOURCE.STEEM]: require('steem')
+      [BLOCKCHAIN.SOURCE.STEEM]: require('steem')
     }
     Object.keys(require.cache).forEach(key => {
       if (~key.indexOf('node_modules/steem')) {
         delete require.cache[key]
       }
     })
-    clients[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS] = require('steem')
+    clients[BLOCKCHAIN.SOURCE.GOLOS] = require('steem')
 
-    clients[CONSTANTS.BLOCKCHAIN.SOURCE.STEEM].api.setOptions({url: `http://${steemDomain}`})
-    clients[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS].api.setOptions({url: `http://${golosDomain}`})
-    clients[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS].config.set('address_prefix', 'GLS');
-    clients[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS].config.set('chain_id', '782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12')
+    clients[BLOCKCHAIN.SOURCE.STEEM].api.setOptions({url: `http://${steemDomain}`})
+    clients[BLOCKCHAIN.SOURCE.GOLOS].api.setOptions({url: `http://${golosDomain}`})
+    clients[BLOCKCHAIN.SOURCE.GOLOS].config.set('address_prefix', 'GLS');
+    clients[BLOCKCHAIN.SOURCE.GOLOS].config.set('chain_id', '782a3039b478c839e4cb0c941ff4eaeb7df40bdd68bd441afd444b9da763de12')
 
     this.clients = clients
     this.WIF = WIF
     this.CLIENT_ID = username
   }
-  comment(chain, {parentAuthor, parentPermlink, author, permlink, body, title, tags = [], rewardsOpts = '100', isUpdate = false}) {
+  comment(chain, {parentAuthor, parentPermlink, author, permlink, body, title, tags = [], rewardsOpts = '50', isUpdate = false}) {
+    rewardsOpts = +rewardsOpts
+    const percent_steem_dollars = rewardsOpts === 100 ? 0 : 10000
+    const max_accepted_payout = `${rewardsOpts ? '1000000.000' : '0.000'} ${chain === BLOCKCHAIN.SOURCE.STEEM ? 'SBD' : 'GBG'}`
+
     return new Promise((resolve, reject) => {
       const jsonMetadata = {}
-      rewardsOpts = +rewardsOpts * 100
       if (tags.length) {
         jsonMetadata.tags = tags
       }
@@ -52,13 +55,13 @@ class PostingWrapper {
           json_metadata: JSON.stringify(jsonMetadata)
         }]
       ]
-
+      rewardsOpts = +rewardsOpts
       if (!isUpdate) {
         const options = {
           author,
           permlink,
-          max_accepted_payout: `1000000.000 ${chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ? 'SBD' : 'GBG'}`,
-          percent_steem_dollars: rewardsOpts,
+          max_accepted_payout,
+          percent_steem_dollars,
           allow_votes: true,
           allow_curation_rewards: true,
           extensions: [

@@ -83,28 +83,18 @@ function iframe(state, child) {
 
 function link(chain, state, child) {
   const url = child.getAttribute('href')
+
   if (url) {
     state.links.add(url)
     if (!/^((#)|(\/(?!\/))|((https?:)?\/\/))/.test(url)) {
       child.setAttribute('href', 'https://' + url)
     }
 
-    // const accountRegExp = /^((http|https):\/\/)?(golos\.io|steemit\.com)?\/(@[-a-zA-Z0-9]+)$/
-    // if (accountRegExp.test(url)) {
-    //   const matched = url.match(accountRegExp)
-    //   const username = matched[4]
-    //   const domain = matched[3]
-    //   if (domain === 'golos.io')
-    //     chain = 'g'
-    //   else if (domain === 'steemit.com')
-    //     chain = 's'
+    const articleRegExp = /^((http|https):\/\/)?(golos\.blog|golos\.io|goldvoice\.club|busy\.org|steemit\.com)?(\/[-a-zA-Z0-9]+)?\/(@[-\.a-zA-Z0-9]+)\/([-a-zA-Z0-9]+)$/
+    const articleAltRegExp = /^\/?(@[-\.a-zA-Z0-9]+)\/([-a-zA-Z0-9]+)\/?$/
 
-    //   child.setAttribute('href', `/${chain}/${username}`)
-    // }
-
-    const atricleRegExp = /^((http|https):\/\/)?(golos\.blog|golos\.io|goldvoice\.club|busy\.org|steemit\.com)?(\/[-a-zA-Z0-9]+)?\/(@[-\.a-zA-Z0-9]+)\/([-a-zA-Z0-9]+)$/
-    if (atricleRegExp.test(url)) {
-      const matched = url.match(atricleRegExp)
+    if (articleRegExp.test(url)) {
+      const matched = url.match(articleRegExp)
       const domain = matched[3]
       const username = matched[5]
       const permlink = matched[6]
@@ -113,6 +103,11 @@ function link(chain, state, child) {
       else if (domain === 'steemit.com')
         chain = 's'
 
+      child.setAttribute('href', `/${chain}/${username}/${permlink}`)
+    } else if (articleAltRegExp.test(url)) {
+      const matched = url.match(articleAltRegExp)
+      const username = matched[1]
+      const permlink = matched[2]
       child.setAttribute('href', `/${chain}/${username}/${permlink}`)
     } else
       child.setAttribute('target', '_blank')

@@ -39,7 +39,7 @@ module.exports = {
       tagMax: 'Max length 64',
       firstIsLetter: 'Must begin with a letter',
       lastIsLetterOrDigit: 'Must end with a letter or a digit',
-      usernameMissingPermission:'Missing posting permission for this account'
+      usernameMissingPermission: 'Missing posting permission for this account'
     },
     timeAgoWithAuthor: '{timeago} by {author}',
     headers: {
@@ -83,7 +83,7 @@ module.exports = {
     header: 'Add {blockchain} account',
     help: 'Please enter required information in the form below. You can later add more accounts in your profile.',
     backToOnePlace: 'Back to OnePlace',
-    advancedMode:'Advanced mode'
+    advancedMode: 'Advanced mode'
   },
   chains: {
     imageIsHidden: 'Image is hidden. Click to show image.',
@@ -135,7 +135,7 @@ module.exports = {
     aboutPrivate: '<em>OnePlace does not store your private keys</em>. Once you sign in with your blockchain account you authorize OnePlace app to vote, post and edit comments on your behalf. You can revoke that authority at any time.',
     aboutRemove: '<em>Remove account</em>. You are going to remove posting authority from OnePlace app. Confirm this operation with your private active key.',
     addWithSteemConnect: 'Add with SteemConnect',
-    removeWithSteemConnect:'Remove with SteemConnect'
+    removeWithSteemConnect: 'Remove with SteemConnect'
   },
   topBar: {
     createNewPost: 'Create new post',
@@ -155,6 +155,11 @@ module.exports = {
     addBlockChainAccount: 'Please attach your Steem or Golos account',
     categoriesList: 'Followed categories',
     noAddedAccountsYet: 'No added accounts yet'
+  },
+  feed: {
+    repostedBy: 'Reposted by',
+    filterByTags: 'Filter by tags',
+    following: 'Following'
   },
   profile: {
     isFollower: 'Following',

@@ -27,7 +27,7 @@
 
 <script>
 import Vue from 'vue'
-import Api from '../../plugins/api'
+import Api from '../../../plugins/api'
 import Remarkable from 'remarkable'
 import CONSTANTS from '@oneplace/constants'
 const parser = require('@oneplace/blockchains-api/parser')

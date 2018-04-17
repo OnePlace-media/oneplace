@@ -5,13 +5,10 @@
     </div>
     <profile-blog-article
       v-for="post in posts" :key="post.id"
-      :with-repost="withRepost"
       :post="post"
       :account="account"
       :accountCurrent="accountCurrent"
       :chain="chain"
-      @show="post=>$emit('show', post)"
-      @focus="post=>$emit('focus', post)"
     ></profile-blog-article>
     <no-ssr>
       <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
@@ -28,6 +25,7 @@
 import CONSTANTS from '@oneplace/constants'
 import ProfileBlogArticle from './ProfileBlogArticle.vue'
 import InfiniteLoading from 'vue-infinite-loading'
+import EventBus from '../../../event-bus'
 const LIMIT = 5
 
 export default {
@@ -40,45 +38,39 @@ export default {
     account: {
       type: Object,
       required: true
-    },
-    withRepost: {
-      type: Boolean,
-      required: true
     }
   },
   data() {
     return {
-      complete: false
+      complete: false,
+      include: {},
+      exclude: {}
     }
   },
+  mounted() {
+    EventBus.$on('PROFILE:FILTER:CHANGE', this.handlerFilterChange)
+  },
+  destroyed() {
+    EventBus.$off('PROFILE:FILTER:CHANGE', this.handlerFilterChange)
+  },
   methods: {
+    handlerFilterChange({ include, exclude }) {
+      this.include = include
+      this.exclude = exclude
+    },
     infiniteHandler($state) {
-      const posts = this.withRepost
-        ? this.$store.state.profile.posts.collection
-        : this.$store.state.profile.postsAuthor.collection
+      const posts = this.$store.state.profile.posts.collection
 
       if (!this.postsProcessing) {
         let lastPost = (lastPost = posts[posts.length - 1])
-        let dispatchPromise
-        if (this.withRepost) {
-          dispatchPromise = this.$store.dispatch('profile/fetchPostByBlog', {
+        this.$store
+          .dispatch('profile/fetchPostByBlog', {
             chain: this.chain,
             tag: this.$route.params.username,
             start_author: lastPost.author,
             start_permlink: lastPost.permlink,
             limit: LIMIT + 1
           })
-        } else {
-          dispatchPromise = this.$store.dispatch('profile/fetchPostByAuthor', {
-            chain: this.chain,
-            author: this.$route.params.username,
-            before_date: lastPost.created.replace('+00:00', ''),
-            start_permlink: lastPost.permlink,
-            limit: LIMIT + 1
-          })
-        }
-
-        dispatchPromise
           .then(posts => {
             $state.loaded()
             if (posts.length < LIMIT) {
@@ -90,25 +82,16 @@ export default {
             $state.loaded()
             $state.complete()
             this.complete = true
-            this.$toast.bottom(this.$t(`errors.failedAppendPostByAuthor`))
+            this.$toast.bottom(this.$t(`errors.FAILED_APPEND_POST_BY_AUTHOR`))
           })
       } else setTimeout($state.loaded, 2000)
     }
   },
   computed: {
     messageOfEmptyPosts() {
-      let message
-      if (this.withRepost) {
-        message = this.postsWithoutFilters.length
-          ? 'emptyBlogByFilters'
-          : 'emptyBlog'
-      } else {
-        message = this.postsWithoutRepost.length
-          ? 'emptyBlogByFilters'
-          : 'emptyBlog'
-      }
-
-      return message
+      return this.postsWithoutFilters.length
+        ? 'emptyBlogByFilters'
+        : 'emptyBlog'
     },
     accountsByChain() {
       return this.accounts.filter(acc => acc.chain === this.chain)
@@ -136,34 +119,14 @@ export default {
       return this.$store.state.profile.postsAuthor.collection
     },
     posts() {
-      const posts = this.withRepost
-        ? this.postsWithoutFilters
-        : this.postsWithoutRepost
+      const posts = this.postsWithoutFilters
+      const include = this.include
+      const exclude = this.exclude
 
-      let postsFilter = posts.filter(post => {
-        let result = true
-        const clearRepostsTags = tags => {
-          let clearTags = Object.assign({}, tags)
-          if (!this.withRepost) {
-            clearTags = Object.keys(clearTags).reduce((obj, tagName) => {
-              if (clearTags[tagName].owner) obj[tagName] = clearTags[tagName]
-              return obj
-            }, {})
-          }
-          return clearTags
-        }
-        const include = clearRepostsTags(this.$store.state.profile.tags.include)
-        const exclude = clearRepostsTags(this.$store.state.profile.tags.exclude)
-
-        if (Object.keys(include).length && Object.keys(exclude).length)
-          result =
-            post.tags.every(tag => !exclude[tag]) &&
-            post.tags.some(tag => include[tag])
-        else if (Object.keys(include).length)
-          result = post.tags.some(tag => include[tag])
-        else if (Object.keys(exclude).length)
-          result = post.tags.every(tag => !exclude[tag])
-        return result
+      const postsFilter = this.$helper.filterPostByTags({
+        posts,
+        include,
+        exclude
       })
 
       if (postsFilter.length < LIMIT && !this.complete) {
@@ -177,9 +140,7 @@ export default {
       return postsFilter
     },
     postsProcessing() {
-      return this.withRepost
-        ? this.$store.state.profile.posts.processing
-        : this.$store.state.profile.postsAuthor.processing
+      return this.$store.state.profile.posts.processing
     }
   }
 }

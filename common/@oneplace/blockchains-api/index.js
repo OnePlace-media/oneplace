@@ -30,8 +30,8 @@ function _call(chain, api, method, params, noCache) {
       delete params[2][0].tag
     }
   } else {
-    if(api === 'follow') api = 'follow_api'
-    else if(api === 'social_network') api = 'database_api'
+    if (api === 'follow') api = 'follow_api'
+    else if (api === 'social_network') api = 'database_api'
   }
   return new Promise((resolve, reject) => {
     if (!clientsURL[chain]) throw new Error(`Unknown chain ${chain}`)
@@ -186,6 +186,10 @@ class BlockChainApi {
 
   static getBlog(chain, {username, entryId = 0, limit = 15}) {
     return _call(chain, 'follow', 'get_blog', [username, entryId, limit])
+  }
+
+  static getFeedEntries(chain, {username, start = 0, end = 20}) {
+    return _call(chain, 'follow', 'get_feed_entries', [username, start, end])
   }
 }
 

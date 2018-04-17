@@ -18,7 +18,7 @@ export default {
     AuthCheck
   },
   metaInfo() {
-    this.$helper.generateAppMeta(this.$route)
+    this.$metaGenerator.app(this.$route)
   }
 }
 </script>

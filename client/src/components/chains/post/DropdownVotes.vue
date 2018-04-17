@@ -9,7 +9,18 @@ const CONSTANTS = require('@oneplace/constants')
 
 export default {
   name: 'DropdownVotes',
-  props: ['post', 'chain'],
+  props: {
+    post: {
+      type: Object,
+      required: true
+    },
+    chain: {
+      type: String,
+      default() {
+        return this.$router.params.chain
+      }
+    }
+  },
   methods: {
     calcFiat(vote) {
       let locale = 'ru'

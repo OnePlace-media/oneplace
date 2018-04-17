@@ -86,5 +86,8 @@ export default {
   },
   getFollowers(chain, {following, startFollower, followType, limit}) {
     return Vue.axios.get(`/blockchains/${chain}/getFollowers`, {params: {following, startFollower, followType, limit}})
+  },
+  getFeed(chain, {username, start, end}) {
+    return Vue.axios.get(`/blockchains/${chain}/getFeed`, {params: {username, start, end}})
   }
 }

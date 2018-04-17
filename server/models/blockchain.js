@@ -228,6 +228,38 @@ module.exports = Model => {
       error.status = 404
       throw error
     }
+  }
 
+  // ----- GET FEED -----
+  Model.remoteMethod('getFeed', {
+    accepts: [
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'username', type: 'string', required: true},
+      {arg: 'start', type: 'number', required: true},
+      {arg: 'end', type: 'number', required: true}
+    ],
+    returns: {arg: 'body', type: 'array', root: true},
+    http: {path: '/:chain(g|s)/getFeed', verb: 'get'}
+  })
+
+  Model.getFeed = async function(chain, username, start, end) {
+    const posts = []
+    const enteries = await blockChains.getFeedEntries(chain, {username, start, end})
+    if (enteries.length) {
+      for (item of enteries) {
+        const postRaw = await blockChains.getContent(chain, item)
+        let [post] = await Model.app.trendsWatcher.preparePosts(chain, [postRaw], true)
+        if (item.reblog_by.length) {
+          item.reblog_avatars = []
+          for (user of item.reblog_by) {
+            const avatar = await blockChains.getAvatar(chain, user)
+            item.reblog_avatars.push(avatar)
+          }
+        }
+        posts.push(Object.assign(post, item))
+      }
+    }
+
+    return posts
   }
 }

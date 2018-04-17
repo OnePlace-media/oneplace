@@ -17,16 +17,6 @@ export default {
     NotFound
   },
   computed: {
-    showPostModal() {
-      return (
-        this.$route.name !== 'chain-post-view' &&
-        (this.$store.state.postView.post ||
-          this.$store.state.postView.processing)
-      )
-    },
-    processing() {
-      return this.$store.state.postView.processing
-    },
     page404Flag() {
       return this.$store.state.page404Flag
     }
@@ -42,10 +32,7 @@ export default {
       <router-view></router-view>
       <footer-bar></footer-bar>
     </div>
-    <div class="post-view" v-if="showPostModal">
-      <div class="post-view__spinner" v-show="processing"><img src="/static/img/spinner-dark.gif" alt=""></div>
-      <post-modal></post-modal>
-    </div>
+    <post-modal></post-modal>
   </div>
   
   <div id="app" class="wrapper" v-else data-server-rendered="true">

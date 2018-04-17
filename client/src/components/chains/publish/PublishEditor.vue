@@ -285,21 +285,8 @@ export default {
       this.body = this.mde.value()
     })
 
-    EventBus.$on('LOCALE:CHANGE', lang => {
-      const bar = document.getElementsByClassName('editor-toolbar')[0]
-      bar.parentNode.removeChild(bar)
-      this.mde.createToolbar(generateToolbar())
-    })
-
-    EventBus.$on('EDITOR:INSERT:LINK', ({ name, link, isImage = false }) => {
-      const selections = this.mde.codemirror.getSelections()
-      let selectionsReplace
-      const template = `${isImage ? '!' : ''}[%NAME%](${link})`
-      selectionsReplace = selections.map(selection =>
-        template.replace('%NAME%', selection || name || link)
-      )
-      this.mde.codemirror.replaceSelections(selectionsReplace)
-    })
+    EventBus.$on('LOCALE:CHANGE', this.changeLocale)
+    EventBus.$on('EDITOR:INSERT:LINK', this.insertLink)
 
     Vue.nextTick(() => {
       const elements = document.getElementsByClassName('CodeMirror-scroll')
@@ -322,8 +309,24 @@ export default {
       div.removeEventListener('drop', this.onDrop)
       div.removeEventListener('dragleave', this.onDragLeave)
     }
+    EventBus.$off('LOCALE:CHANGE', this.changeLocale)
+    EventBus.$off('EDITOR:INSERT:LINK', this.insertLink)
   },
   methods: {
+    changeLocale(lang) {
+      const bar = document.getElementsByClassName('editor-toolbar')[0]
+      bar.parentNode.removeChild(bar)
+      this.mde.createToolbar(generateToolbar())
+    },
+    insertLink({ name, link, isImage = false }) {
+      const selections = this.mde.codemirror.getSelections()
+      let selectionsReplace
+      const template = `${isImage ? '!' : ''}[%NAME%](${link})`
+      selectionsReplace = selections.map(selection =>
+        template.replace('%NAME%', selection || name || link)
+      )
+      this.mde.codemirror.replaceSelections(selectionsReplace)
+    },
     onDrop($event) {
       if ($event.preventDefault) $event.preventDefault()
       this.onDragLeave($event)

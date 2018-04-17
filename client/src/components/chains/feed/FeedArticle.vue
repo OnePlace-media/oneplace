@@ -1,8 +1,9 @@
 <template>
   <article class="feed__post">
     <a 
-      href="#" 
       class="feed__post-image" 
+      :href="link"
+      @click.prevent="show"
       :style="`background-image: url('${post.image}')`">
     </a>
     <div class="feed__post-content">
@@ -12,36 +13,45 @@
           class="feed__repost-avatar" 
           :style="`background-image: url('${post.reblog_avatars[0]}');`"
         ></span>
-        <a href="#" class="link link--op">{{post.reblog_by[0]}}</a>
+        <router-link tag="a" :to="{name:'chain-account-view', params:{chain: chain, username:post.author}}" class="link link--op">
+          {{post.reblog_by[0]}}
+        </router-link>
       </div>
   
         <h3 class="feed__post-title h3">
-          <a href="#" class="link">{{cutTitle}}</a>
+          <a 
+            :href="link"
+            @click.prevent="show"
+            class="link">{{cutTitle}}
+          </a>
         </h3>
-        <p class="feed__post-text"><a href="#" class="link">{{cutPreview}}</a></p>
+        <p class="feed__post-text">
+          <a 
+            :href="link"
+            @click.prevent="show"
+            class="link">{{cutPreview}}
+          </a>
+        </p>
   
       <div class="feed__post-info">
         <div class="feed__post-author">
-          <a href="#" 
-            class="feed__post-avatar avatar" 
-            :style="`background-image: url('${post.avatar}');`">
-          </a>
+          <router-link 
+            tag="a" 
+            :to="{name:'chain-account-view', params:{chain: chain, username:post.author}}" 
+            :style="`background-image: url('${post.avatar}');`"
+            class="feed__post-avatar avatar">
+          </router-link>
           <div class="column-wrapper">
             <router-link tag="a" :to="{name:'chain-account-view', params:{chain: chain, username:post.author}}" class="link link--op">{{post.author}}</router-link>
             <time-ago :time="post.created"></time-ago>
           </div>
         </div>
   
-          <!-- <post-bottom
+          <post-bottom
             type="blog"
             :post="post"
-            :account="accountCurrent"
-            :chain="chain"
-            @focus="()=>$emit('focus', post)"
-            @vote="(isLike, weight) => vote(post, isLike, weight)"
-            :up-vote-processing="voteProcessing.upVoteProcessing"
-            :down-vote-processing="voteProcessing.downVoteProcessing"
-          ></post-bottom> -->
+            :account="account"
+          ></post-bottom>
       </div>
     </div>
   </article>
@@ -49,6 +59,7 @@
 
 <script>
 import PostBottom from './../post/PostBottom.vue'
+import EventBus from '../../../event-bus'
 const parser = require('@oneplace/blockchains-api/parser')
 export default {
   name: 'FeedArticle',
@@ -67,7 +78,18 @@ export default {
       }
     }
   },
+  methods: {
+    show() {
+      EventBus.$emit('POST:MODAL:SHOW', {
+        post: this.post,
+        chain: this.chain
+      })
+    }
+  },
   computed: {
+    link() {
+      return this.$helper.makePathForPost(this.post, this.chain)
+    },
     cutTitle() {
       return parser.cutTitle(this.chain, this.post.title)
     },
@@ -76,6 +98,22 @@ export default {
     },
     isRepost() {
       return this.post.reblog_by.length > 0
+    },
+    accounts() {
+      return this.$auth && this.$auth.check() ? this.$auth.user().accounts : []
+    },
+    accountsByChain() {
+      return this.accounts.filter(acc => acc.chain === this.chain)
+    },
+    account() {
+      let result = { avatar: this.DEFAULT_AVATAR, username: null }
+      if (this.$auth && this.$auth.check() && this.accountsByChain.length) {
+        result =
+          this.accountsByChain.find(
+            acc => acc.id === this.$store.state.user.accounts[this.chain].active
+          ) || this.accountsByChain[0]
+      }
+      return result
     }
   }
 }

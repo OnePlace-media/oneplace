@@ -16,7 +16,7 @@
         :class="{'post-view__post-like--active': isLike, 'post-view__post-like--processing': upVoteProcessing}">
         <div class="spinner-rolling"><div></div></div>
         <svg 
-          @click.prevent="$emit('vote', true, voteWeight)" 
+          @click.prevent="voteLike" 
           class="post-view__icon post-view__icon-like post-view__icon--disabled"
           :class="{'post-view__icon--small': isComment || isBlog}"
         >
@@ -29,7 +29,7 @@
     </span>
     <span class="post-view__post-data-item" v-if="isComment">
       <a 
-        @click.prevent="$emit('vote', false, voteWeight)"
+        @click.prevent="voteDislike"
         class="post-view__post-like" 
         :class="{'post-view__post-like--active': isDislike, 'post-view__post-like--processing': downVoteProcessing}" 
         :title="isDislike ? $t('comment.removeVote') : $t('comment.dislike')">
@@ -58,7 +58,7 @@
     <a v-if="showEditOption" 
       href="#" 
       class="post-view__post-data-item link" 
-      @click.prevent="$emit('edit')"
+      @click.prevent="edit"
       :title="$t('common.edit')">
       {{$t('common.edit')}}
     </a>
@@ -93,18 +93,30 @@ import { mixin as onClickOutside } from 'vue-on-click-outside'
 import DropdownPayout from './DropdownPayout.vue'
 import DropdownVotes from './DropdownVotes.vue'
 import Converter from '@oneplace/blockchains-api/converter'
+import EventBus from '../../../event-bus'
 
 export default {
   name: 'PostBottom',
-  props: [
-    'post',
-    'account',
-    'chain',
-    'type',
-    'isMaxDeep',
-    'upVoteProcessing',
-    'downVoteProcessing'
-  ],
+  props: {
+    post: {
+      type: Object,
+      required: true
+    },
+    account: {
+      type: Object,
+      required: true
+    },
+    type: {
+      type: String,
+      default: 'post'
+    },
+    chain: {
+      type: String,
+      default() {
+        return this.$route.params.chain
+      }
+    }
+  },
   mixins: [onClickOutside],
   data() {
     return {
@@ -113,7 +125,9 @@ export default {
       timerOver: null,
       timerOut: null,
       showDropdownsVotes: false,
-      removeModal: false
+      removeModal: false,
+      upVoteProcessing: false,
+      downVoteProcessing: false
     }
   },
   components: {
@@ -122,6 +136,44 @@ export default {
     DropdownVotes
   },
   methods: {
+    vote({ isLike, weight = 10000 }) {
+      const field = isLike ? 'upVoteProcessing' : 'downVoteProcessing'
+      this[field] = true
+      this.$store
+        .dispatch('vote', {
+          chain: this.chain,
+          post: this.post,
+          account: this.account,
+          isLike,
+          weight
+        })
+        .then(() => {
+          this[field] = false
+        })
+        .catch(err => {
+          this[field] = false
+          this.$toast.bottom(this.$t(`errors.${err.response.data.error.code}`))
+        })
+    },
+    edit() {
+      if (this.isComment) {
+        this.emit('edit')
+      } else
+        this.$router.push({
+          name: 'post-edit',
+          params: {
+            chain: this.chain,
+            username: this.post.author,
+            permlink: this.post.permlink
+          }
+        })
+    },
+    voteLike() {
+      this.vote({ isLike: true, weight: this.voteWeight })
+    },
+    voteDislike() {
+      this.vote({ isLike: false, weight: this.voteWeight })
+    },
     deleteComment() {
       this.$store
         .dispatch('deleteComment', {
@@ -154,13 +206,17 @@ export default {
     focusToComment() {
       const commentInputRoot = document.getElementById('comment-input-root')
       if (commentInputRoot) commentInputRoot.focus()
-      else this.$emit('focus')
+      else {
+        EventBus.$emit('POST:MODAL:FOCUS_COMMENT', {
+          post: this.post,
+          chain: this.chain
+        })
+      }
     }
   },
   computed: {
     replyIsAvailable() {
       return (
-        !this.isMaxDeep &&
         this.account.username &&
         (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ||
           this.$store.state.postView.post.mode !==

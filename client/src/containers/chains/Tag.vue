@@ -123,7 +123,7 @@ export default {
       })
   },
   metaInfo() {
-    return this.$helper.generateTagMeta(this.tag, this.$route, this.chainName)
+    return this.$metaGenerator.tag(this.tag, this.$route, this.chainName)
   },
   computed: {
     DEFAULT_AVATAR() {

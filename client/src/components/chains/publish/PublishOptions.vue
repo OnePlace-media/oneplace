@@ -119,11 +119,15 @@ export default {
     }
   },
   mounted() {
-    EventBus.$on(PUBLISH_HEADER_VISIBLE, ({ name, flag }) => {
-      if (name !== COMPONENT_NAME && flag) this.isVisible = false
-    })
+    EventBus.$on(PUBLISH_HEADER_VISIBLE, this.handlerPublishHeaderVisible)
+  },
+  destroyed() {
+    EventBus.$off(PUBLISH_HEADER_VISIBLE, this.handlerPublishHeaderVisible)
   },
   methods: {
+    handlerPublishHeaderVisible({ name, flag }) {
+      if (name !== COMPONENT_NAME && flag) this.isVisible = false
+    },
     setIsVisible(flag) {
       this.isVisible = flag
       EventBus.$emit(PUBLISH_HEADER_VISIBLE, { name: COMPONENT_NAME, flag })
@@ -162,14 +166,17 @@ export default {
         })
         .then(data => {
           setTimeout(() => {
-            this.$router.push({
-              name: 'chain-post-view',
-              params: {
-                chain: this.chain,
-                username: data.author,
-                permlink: data.permlink
-              }
-            }, 1000)
+            this.$router.push(
+              {
+                name: 'chain-post-view',
+                params: {
+                  chain: this.chain,
+                  username: data.author,
+                  permlink: data.permlink
+                }
+              },
+              1000
+            )
           })
         })
         .catch(err => {

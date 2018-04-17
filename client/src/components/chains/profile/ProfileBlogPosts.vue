@@ -9,8 +9,6 @@
       :account="account"
       :accountCurrent="accountCurrent"
       :chain="chain"
-      @show="post=>$emit('show', post)"
-      @focus="post=>$emit('focus', post)"
     ></profile-blog-article>
     <no-ssr>
       <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
@@ -50,12 +48,16 @@ export default {
     }
   },
   mounted() {
-    EventBus.$on('PROFILE:FILTER:CHANGE', ({ include, exclude }) => {
-      this.include = include
-      this.exclude = exclude
-    })
+    EventBus.$on('PROFILE:FILTER:CHANGE', this.handlerFilterChange)
+  },
+  destroyed() {
+    EventBus.$off('PROFILE:FILTER:CHANGE', this.handlerFilterChange)
   },
   methods: {
+    handlerFilterChange({ include, exclude }) {
+      this.include = include
+      this.exclude = exclude
+    },
     infiniteHandler($state) {
       const posts = this.$store.state.profile.posts.collection
 
@@ -118,19 +120,13 @@ export default {
     },
     posts() {
       const posts = this.postsWithoutFilters
-      let postsFilter = posts.filter(post => {
-        let result = true
-        const include = this.include
-        const exclude = this.exclude
-        if (Object.keys(include).length && Object.keys(exclude).length)
-          result =
-            post.tags.every(tag => !exclude[tag]) &&
-            post.tags.some(tag => include[tag])
-        else if (Object.keys(include).length)
-          result = post.tags.some(tag => include[tag])
-        else if (Object.keys(exclude).length)
-          result = post.tags.every(tag => !exclude[tag])
-        return result
+      const include = this.include
+      const exclude = this.exclude
+
+      const postsFilter = this.$helper.filterPostByTags({
+        posts,
+        include,
+        exclude
       })
 
       if (postsFilter.length < LIMIT && !this.complete) {

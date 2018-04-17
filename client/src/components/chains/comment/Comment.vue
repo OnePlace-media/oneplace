@@ -24,13 +24,9 @@
           :post="item" 
           :account="account" 
           :chain="chain"
-          @vote="vote"
-          @reply="reply"
+          @reply="deleteComment"
           @edit="editPostBottom"
           @delete="deleteComment"
-          :is-max-deep="isMaxDeep"
-          :up-vote-processing="upVoteProcessing"
-          :down-vote-processing="downVoteProcessing"
         ></post-bottom>
     </div>
   </div>

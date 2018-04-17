@@ -33,6 +33,9 @@ export default {
   components: {
     FeedPosts,
     FeedFilterByTags
+  },
+  metaInfo() {
+    return this.$metaGenerator.feed(this.$route)
   }
 }
 </script>

@@ -43,12 +43,13 @@ export default {
     }
   },
   mounted() {
-    EventBus.$on(PUBLISH_HEADER_VISIBLE, ({ name, flag }) => {
-      if (name !== COMPONENT_NAME && flag) this.isVisible = false
-    })
+    EventBus.$on(PUBLISH_HEADER_VISIBLE, this.handlerPublishHeaderVisible)
 
     const opts = { userId: this.$auth.user().id }
     this.$store.dispatch('publish/initDrafts', opts)
+  },
+  destroyed() {
+    EventBus.$off(PUBLISH_HEADER_VISIBLE, this.handlerPublishHeaderVisible)
   },
   watch: {
     title() {
@@ -78,6 +79,9 @@ export default {
     }
   },
   methods: {
+    handlerPublishHeaderVisible({ name, flag }) {
+      if (name !== COMPONENT_NAME && flag) this.isVisible = false
+    },
     setIsVisible(flag) {
       this.isVisible = flag
       EventBus.$emit(PUBLISH_HEADER_VISIBLE, { name: COMPONENT_NAME, flag })

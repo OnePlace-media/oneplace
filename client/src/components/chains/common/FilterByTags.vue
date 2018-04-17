@@ -44,7 +44,7 @@
 <script>
 import TagLabel from './TagLabel.vue'
 import FilterByTagsModal from './FilterByTagsModal.vue'
-const TOP_LIMIT = 5
+const TOP_LIMIT = 10
 export default {
   name: 'FilterByTags',
   components: {

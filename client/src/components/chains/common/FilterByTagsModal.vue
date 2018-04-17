@@ -64,8 +64,7 @@ export default {
   },
   methods: {
     toggleBodyClass({ flag }) {
-      if (flag) document.body.classList.add('modal-shown')
-      else document.body.classList.remove('modal-shown')
+      this.$helper.toggleBodyModalClass({flag})
     },
     hide() {
       this.$emit('update:isShow', false)

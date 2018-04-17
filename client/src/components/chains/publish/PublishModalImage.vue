@@ -58,9 +58,10 @@ export default {
     }
   },
   mounted() {
-    EventBus.$on('EDITOR:UPLOAD', ({ file }) => {
-      this.uploadImage({ target: { files: [file] } })
-    })
+    EventBus.$on('EDITOR:UPLOAD', this.upload)
+  },
+  destroyed() {
+    EventBus.$off('EDITOR:UPLOAD', this.upload)
   },
   computed: {
     disabled() {
@@ -71,6 +72,9 @@ export default {
     }
   },
   methods: {
+    upload({ file }) {
+      this.uploadImage({ target: { files: [file] } })
+    },
     close() {
       this.$store.commit('publish/SET_EDITOR_OBJECT', { showModalImage: false })
     },

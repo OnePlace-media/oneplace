@@ -20,6 +20,7 @@
 <script>
 import FeedArticle from './FeedArticle.vue'
 import InfiniteLoading from 'vue-infinite-loading'
+import EventBus from '../../../event-bus'
 const LIMIT = 15
 export default {
   name: 'FeedPosts',
@@ -42,15 +43,51 @@ export default {
       exclude: {}
     }
   },
+  mounted() {
+    this.$store.dispatch('core/fetchParams', {
+      chain: this.chain,
+      $chains: this.$chains
+    })
+
+    EventBus.$on('FEED:FILTER:CHANGE', this.handlerFilterChange)
+  },
+  destroyed() {
+    EventBus.$off('FEED:FILTER:CHANGE', this.handlerFilterChange)
+  },
   computed: {
-    posts() {
+    postsWithoutFilters() {
       return this.$store.state.feed.posts.collection
+    },
+    posts() {
+      const posts = this.postsWithoutFilters
+      const include = this.include
+      const exclude = this.exclude
+
+      const postsFilter = this.$helper.filterPostByTags({
+        posts,
+        include,
+        exclude
+      })
+
+      if (postsFilter.length < LIMIT && !this.complete) {
+        this.$nextTick(() => {
+          if (this.$refs.infiniteLoading) {
+            this.$refs.infiniteLoading.attemptLoad()
+          }
+        })
+      }
+
+      return postsFilter
     },
     postsProcessing() {
       return this.$store.state.feed.posts.processing
     }
   },
   methods: {
+    handlerFilterChange({ include, exclude }) {
+      this.include = include
+      this.exclude = exclude
+    },
     infiniteHandler($state) {
       if (!this.postsProcessing) {
         this.$store

@@ -91,7 +91,7 @@ export default {
     } else return Promise.resolve()
   },
   metaInfo() {
-    return this.$helper.generateProfileMeta(this.account, this.$route)
+    return this.$metaGenerator.profile(this.account, this.$route)
   },
   computed: {
     showAllTagsModal() {

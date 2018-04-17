@@ -51,10 +51,10 @@
 </template>
 
 <script>
-import Api from '../../plugins/api'
+import Api from '../../../plugins/api'
 import CONSTANTS from '@oneplace/constants'
 import CommentForm from './CommentForm.vue'
-import PostBottom from './PostBottom.vue'
+import PostBottom from './../post/PostBottom.vue'
 import Vue from 'vue'
 export default {
   name: 'comment',

@@ -98,10 +98,10 @@
 
 <script>
 import CONSTANTS from '@oneplace/constants'
-import Api from '../../plugins/api'
+import Api from '../../../plugins/api'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 import PostBottom from './PostBottom.vue'
-import ProfileFollowBtn from '../../components/chains/ProfileFollowBtn.vue'
+import ProfileFollowBtn from './../profile/ProfileFollowBtn.vue'
 
 export default {
   name: 'PostView',

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import EventBus from '../../event-bus'
+import EventBus from '../../../event-bus'
 import Vue from 'vue'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 const parser = require('@oneplace/blockchains-api/parser')

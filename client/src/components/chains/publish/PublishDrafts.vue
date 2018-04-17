@@ -29,7 +29,7 @@
 
 <script>
 import { mixin as onClickOutside } from 'vue-on-click-outside'
-import EventBus from '../../event-bus'
+import EventBus from '../../../event-bus'
 const PUBLISH_HEADER_VISIBLE = 'PUBLISH_HEADER_VISIBLE'
 const COMPONENT_NAME = 'PublishDrafts'
 

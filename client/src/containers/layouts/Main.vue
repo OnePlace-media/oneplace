@@ -2,7 +2,7 @@
 import TopBar from '../../components/common/TopBar.vue'
 import SideBar from '../../components/common/SideBar.vue'
 import FooterBar from '../../components/common/FooterBar.vue'
-import PostModal from '../../components/chains/PostModal.vue'
+import PostModal from '../../components/chains/post/PostModal.vue'
 import NotFound from '../../containers/NotFound.vue'
 import FooterMini from '../../components/common/FooterMini.vue'
 

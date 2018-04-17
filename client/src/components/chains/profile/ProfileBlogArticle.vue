@@ -45,7 +45,8 @@
 
 <script>
 import CONSTANTS from '@oneplace/constants'
-import PostBottom from './PostBottom.vue'
+import PostBottom from './../post/PostBottom.vue'
+const parser = require('@oneplace/blockchains-api/parser')
 export default {
   name: 'ProfileBlogArticle',
   components: {
@@ -67,10 +68,6 @@ export default {
     post: {
       type: Object,
       required: true
-    },
-    withRepost: {
-      type: Boolean,
-      required: true
     }
   },
   data() {
@@ -89,38 +86,10 @@ export default {
       return this.account.name !== this.post.author
     },
     cutTitle() {
-      const STR_LIMIT =
-        this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? 70 : 80
-      let str = this.post.title
-      if (str.length > STR_LIMIT) {
-        str =
-          str.substring(
-            0,
-            str
-              .substr(0, STR_LIMIT)
-              .split('')
-              .lastIndexOf(' ')
-          ) + '...'
-      }
-      return str
+      return parser.cutTitle(this.chain, this.post.title)
     },
     cutPreview() {
-      let STR_LIMIT = this.isRepost ? 50 : 110
-      if (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
-        STR_LIMIT = this.isRepost ? 50 : 90
-
-      let str = this.post.preview
-      if (str.length > STR_LIMIT) {
-        str =
-          str.substring(
-            0,
-            str
-              .substr(0, STR_LIMIT)
-              .split('')
-              .lastIndexOf(' ')
-          ) + '...'
-      }
-      return str
+      return parser.cutPreview(this.chain, this.post.preview, this.isRepost)
     }
   },
   methods: {

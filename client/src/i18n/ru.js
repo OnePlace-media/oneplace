@@ -157,6 +157,11 @@ module.exports = {
     categoriesList: 'Подписка на категории',
     noAddedAccountsYet: 'Нет добавленных аккаунтов'
   },
+  feed: {
+    repostedBy: 'Репост от',
+    filterByTags: 'Фильтр по тегам',
+    following: 'Подписки'
+  },
   profile: {
     isFollower: 'Вы подписаны',
     follow: 'Подписаться',

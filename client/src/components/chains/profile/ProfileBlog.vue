@@ -1,14 +1,11 @@
 <template>
   <section class="blog">
     <div class="blog__header">
-      <div class="blog__header-tab" :class="{'blog__header-tab--active': withRepost}">
+      <div class="blog__header-tab blog__header-tab--active">
         {{$t('profile.accBlogs',{username: name})}}
       </div>
-      <!-- <div class="blog__header-tab" :class="{'blog__header-tab--active': !withRepost}" @click="$emit('update:withRepost', false)">
-        {{$t('profile.accountPosts', {username: account.name})}}
-      </div> -->
     </div>
-    <profile-blog-posts :with-repost="withRepost" :account="account" @show="showPost" @focus="focusComment"></profile-blog-posts>
+    <profile-blog-posts :account="account" @show="showPost" @focus="focusComment"></profile-blog-posts>
   </section>
 </template>
 
@@ -21,10 +18,6 @@ export default {
   props: {
     account: {
       type: Object,
-      required: true
-    },
-    withRepost: {
-      type: Boolean,
       required: true
     }
   },

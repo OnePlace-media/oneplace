@@ -57,6 +57,7 @@ function checkTags(tags) {
 }
 
 function setImage(chain, metadata) {
+  
   if (metadata.length == 0) return CONSTANTS.DEFAULT.POST_IMAGE
   let meta = {}
   try {
@@ -64,7 +65,6 @@ function setImage(chain, metadata) {
   } catch (e) {
     return CONSTANTS.DEFAULT.POST_IMAGE
   }
-
   if (!meta.image && meta.images) meta.image = meta.images
   return meta.image && meta.image[0] ? chainParser.proxyImagePrefix(chain, meta.image[0]) : CONSTANTS.DEFAULT.POST_IMAGE
 }
@@ -125,7 +125,7 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
         _post.body = prepareHTML.html
 
         if (_post.image === CONSTANTS.DEFAULT.POST_IMAGE && prepareHTML.state && prepareHTML.state.images && Array.from(prepareHTML.state.images).length) {
-          _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.state.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
+          _post.image = chainParser.proxyImagePrefix(chain, Array.from(prepareHTML.state.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
         }
       }
 

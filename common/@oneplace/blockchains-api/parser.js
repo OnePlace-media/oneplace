@@ -1,3 +1,4 @@
+const CONSTANTS = require('@oneplace/constants')
 const sanitize = require('sanitize-html')
 const sanitizeConfig = require('./SanitizeConfig')
 const Remarkable = require('remarkable')
@@ -359,6 +360,56 @@ class Parser {
 
   static proxyImagePrefix(chain, url) {
     return IMG_PREFIX_IPFS[chain] + '/' + url
+  }
+
+  static getTagsFromPosts(posts) {
+    const tagsObj = posts.reduce((obj, post) => {
+      post.tags.forEach(tag => {
+        if (!obj[tag]) obj[tag] = {count: 0}
+        obj[tag].count++
+      })
+      return obj
+    }, {})
+
+    return Object.keys(tagsObj).map(tag => {
+      return {
+        text: tag,
+        count: tagsObj[tag].count
+      }
+    })
+  }
+
+  static cutTitle(chain, title) {
+    const STR_LIMIT = chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? 70 : 80
+    if (title.length > STR_LIMIT) {
+      title =
+        title.substring(
+          0,
+          title
+            .substr(0, STR_LIMIT)
+            .split('')
+            .lastIndexOf(' ')
+        ) + '...'
+    }
+    return title
+  }
+
+  static cutPreview(chain, preview, isRepost) {
+    let STR_LIMIT = isRepost ? 50 : 110
+    if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
+      STR_LIMIT = isRepost ? 50 : 90
+
+    if (preview.length > STR_LIMIT) {
+      preview =
+        preview.substring(
+          0,
+          preview
+            .substr(0, STR_LIMIT)
+            .split('')
+            .lastIndexOf(' ')
+        ) + '...'
+    }
+    return preview
   }
 }
 

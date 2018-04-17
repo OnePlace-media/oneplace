@@ -11,7 +11,7 @@
 <script>
 import PostView from './PostView.vue'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
-import CommentsWrapper from './CommentsWrapper.vue'
+import CommentsWrapper from './../comment/CommentsWrapper.vue'
 import PostShare from './PostShare.vue'
 const KEY_CODE_ESC = 27
 export default {

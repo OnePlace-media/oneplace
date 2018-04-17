@@ -43,8 +43,8 @@
 
 <script>
 import { mixin as onClickOutside } from 'vue-on-click-outside'
-import EventBus from '../../event-bus'
-import Api from '../../plugins/api'
+import EventBus from '../../../event-bus'
+import Api from '../../../plugins/api'
 
 export default {
   name: 'PublishModalImage',

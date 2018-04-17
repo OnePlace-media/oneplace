@@ -245,18 +245,21 @@ module.exports = Model => {
   Model.getFeed = async function(chain, username, start, end) {
     const posts = []
     const enteries = await blockChains.getFeedEntries(chain, {username, start, end})
-    for (item of enteries) {
-      const postRaw = await blockChains.getContent(chain, item)
-      let [post] = await Model.app.trendsWatcher.preparePosts(chain, [postRaw], true)
-      if (item.reblog_by.length) {
-        item.reblog_avatars = []
-        for (user of item.reblog_by) {
-          const avatar = await blockChains.getAvatar(chain, user)
-          item.reblog_avatars.push(avatar)
+    if (enteries.length) {
+      for (item of enteries) {
+        const postRaw = await blockChains.getContent(chain, item)
+        let [post] = await Model.app.trendsWatcher.preparePosts(chain, [postRaw], true)
+        if (item.reblog_by.length) {
+          item.reblog_avatars = []
+          for (user of item.reblog_by) {
+            const avatar = await blockChains.getAvatar(chain, user)
+            item.reblog_avatars.push(avatar)
+          }
         }
+        posts.push(Object.assign(post, item))
       }
-      posts.push(Object.assign(post, item))
     }
+
     return posts
   }
 }

@@ -262,9 +262,9 @@ module.exports = Model => {
     return posts
   }
 
-   // ----- GET DISCUSSIONS BY FEED -----
+  // ----- GET DISCUSSIONS BY FEED -----
 
-   Model.remoteMethod('getDiscussionsByFeed', {
+  Model.remoteMethod('getDiscussionsByFeed', {
     accepts: [
       {arg: 'chain', type: 'string', required: true},
       {arg: 'username', type: 'string', required: true},
@@ -291,6 +291,16 @@ module.exports = Model => {
     let posts = await blockChains.getDiscussionsByFeed(chain, params)
     if (posts && posts.length)
       posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+
+    for (post of posts) {
+      if (post.reblog_by.length) {
+        post.reblog_avatars = []
+        for (user of post.reblog_by) {
+          const avatar = await blockChains.getAvatar(chain, user)
+          post.reblog_avatars.push(avatar)
+        }
+      }
+    }
     return posts || []
   }
   Model.getDiscussionsByFeed

@@ -80,23 +80,21 @@ export default {
           <img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive">
         </router-link>
         
-        <div class="header__menu" v-if="$auth && $auth.ready()">
+        <div class="header__menu" v-if="$auth && $auth.ready() && account.username">
           <router-link 
             :to="{name:'chain-trend', params:{chain}}" 
             :class="{'header__menu-item--active': isPopular}"
-            class="header__menu-item link" tag="a">Popular
+            class="header__menu-item link" tag="a">{{$t('topBar.popular')}}
           </router-link>
-          <router-link 
-            v-if="account.username"
+          <router-link
             :to="{name:'chain-account-feed', params:{chain, username: account.username}}" 
             :class="{'header__menu-item--active': isFeed}"
-            class="header__menu-item link" tag="a">Feed
+            class="header__menu-item link" tag="a">{{$t('topBar.feed')}}
           </router-link>
           <router-link 
-            v-if="account.username"
             :to="{name:'chain-account-view', params:{chain, username: account.username}}" 
             :class="{'header__menu-item--active': isBlog}"
-            class="header__menu-item link" tag="a">Blog
+            class="header__menu-item link" tag="a">{{$t('topBar.blog')}}
           </router-link>
         </div>
       </div>

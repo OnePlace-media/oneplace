@@ -49,10 +49,12 @@ export default () => {
     },
     appendPosts({commit, state}, {chain, username, limit = 15}) {
       commit(TYPES.SET_POSTS_PROCESSIGN, {processing: true})
+      const lastPost = state.posts.collection[state.posts.collection.length - 1]
       const start = state.posts.collection.length
       return Api
-        .getFeed(chain, {username, start, end: start + limit})
+        .getDiscussionsByFeed(chain, {username, start_author: lastPost.author, start_permlink: lastPost.permlink, limit})
         .then(response => {
+          response.data.shift()
           commit(TYPES.APPEND_POSTS, {collection: response.data})
           commit(TYPES.SET_POSTS_PROCESSIGN, {processing: false})
           return response.data

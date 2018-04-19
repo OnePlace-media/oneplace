@@ -108,6 +108,10 @@ class BlockChainApi {
     return _call(chain, 'social_network', 'get_discussions_by_created', [params])
   }
 
+  static getDiscussionsByFeed(chain, params) {
+    return _call(chain, 'social_network', 'get_discussions_by_feed', [params])
+  }
+
   static getDiscussionsByHot(chain, params) {
     return _call(chain, 'social_network', 'get_discussions_by_hot', [params])
   }
@@ -191,6 +195,8 @@ class BlockChainApi {
   static getFeedEntries(chain, {username, start = 0, end = 20}) {
     return _call(chain, 'follow', 'get_feed_entries', [username, start, end])
   }
+
+  
 }
 
 module.exports = BlockChainApi

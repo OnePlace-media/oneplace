@@ -143,7 +143,10 @@ module.exports = {
     getStarted: 'Get started',
     settings: 'Settings',
     switchAccount: 'Switch account',
-    logout: 'Logout'
+    logout: 'Logout',
+    popular: 'Popular',
+    feed: 'Feed',
+    blog: 'Blog'
   },
   footer: {
     createdBy: 'Created in 2017 by {link}',

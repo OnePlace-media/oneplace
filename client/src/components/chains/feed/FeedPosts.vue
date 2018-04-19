@@ -98,7 +98,7 @@ export default {
           })
           .then(posts => {
             $state.loaded()
-            if (posts.length < LIMIT) {
+            if (posts.length < LIMIT - 1) {
               $state.complete()
               this.complete = true
             }

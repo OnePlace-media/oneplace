@@ -144,7 +144,10 @@ module.exports = {
     getStarted: 'Войти',
     settings: 'Настройки',
     switchAccount: 'Сменить аккаунт',
-    logout: 'Выйти'
+    logout: 'Выйти',
+    popular: 'Популярное',
+    feed: 'Лента',
+    blog: 'Блог'
   },
   footer: {
     createdBy: 'Создано 2017 {link}',

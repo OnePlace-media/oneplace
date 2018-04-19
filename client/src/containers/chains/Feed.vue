@@ -34,6 +34,16 @@ export default {
     FeedPosts,
     FeedFilterByTags
   },
+  watch: {
+    $route(to, from) {
+      this.$store.commit('feed/CLEAR_ALL_DATA')
+      this.$options.asyncData({
+        store: this.$store,
+        route: this.$route,
+        touter: this.$router
+      })
+    }
+  },
   metaInfo() {
     return this.$metaGenerator.feed(this.$route)
   }

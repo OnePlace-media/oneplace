@@ -259,7 +259,39 @@ module.exports = Model => {
         posts.push(Object.assign(post, item))
       }
     }
-
     return posts
   }
+
+   // ----- GET DISCUSSIONS BY FEED -----
+
+   Model.remoteMethod('getDiscussionsByFeed', {
+    accepts: [
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'username', type: 'string', required: true},
+      {arg: 'start_author', type: 'string', required: true},
+      {arg: 'start_permlink', type: 'string', required: true},
+      {arg: 'limit', type: 'string', default: 10}
+    ],
+    returns: {arg: 'body', type: 'array', root: true},
+    http: {path: '/:chain(g|s)/getDiscussionsByFeed', verb: 'get'}
+  })
+
+  Model.getDiscussionsByFeed = async function(chain, username, start_author, start_permlink, limit) {
+    const params = {
+      start_author,
+      start_permlink,
+      limit
+    }
+
+    if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
+      params.select_authors = [username]
+    else
+      params.tag = username
+
+    let posts = await blockChains.getDiscussionsByFeed(chain, params)
+    if (posts && posts.length)
+      posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+    return posts || []
+  }
+  Model.getDiscussionsByFeed
 }

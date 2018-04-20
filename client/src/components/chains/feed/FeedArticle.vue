@@ -4,6 +4,7 @@
       class="feed__post-image" 
       :href="link"
       @click.prevent="show"
+      v-if="post.image !== DEFAULT_IMAGE"
       :style="`background-image: url('${post.image}')`">
     </a>
     <div class="feed__post-content">
@@ -18,11 +19,13 @@
         </router-link>
       </div>
   
-        <h3 class="feed__post-title h3">
+        <h3 class="feed__post-title h3" :class="{'lines-2x': lines2x, 'lines-1x': lines1x}">
           <a 
             :href="link"
             @click.prevent="show"
-            class="link">{{cutTitle}}
+            class="link">
+            <span class="nsfw-warning" v-show="post.nsfw">nsfw</span>
+            {{post.title}}
           </a>
         </h3>
         <p class="feed__post-text">
@@ -58,6 +61,7 @@
 </template>
 
 <script>
+import CONSTANTS from '@oneplace/constants'
 import PostBottom from './../post/PostBottom.vue'
 import EventBus from '../../../event-bus'
 const parser = require('@oneplace/blockchains-api/parser')
@@ -78,6 +82,12 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      lines2x: false,
+      lines1x: false
+    }
+  },
   methods: {
     show() {
       EventBus.$emit('POST:MODAL:SHOW', {
@@ -87,6 +97,9 @@ export default {
     }
   },
   computed: {
+    DEFAULT_IMAGE() {
+      return CONSTANTS.DEFAULT.POST_IMAGE
+    },
     link() {
       return this.$helper.makePathForPost(this.post, this.chain)
     },
@@ -114,6 +127,14 @@ export default {
           ) || this.accountsByChain[0]
       }
       return result
+    }
+  },
+  updated() {
+    const titleEl = this.$el.getElementsByClassName('feed__post-title')[0]
+    if (titleEl) {
+      const rect = titleEl.getBoundingClientRect()
+      this.lines1x = rect.height > 23 && this.isRepost
+      this.lines2x = !this.lines1x && (rect.height > 23 || this.isRepost)
     }
   }
 }

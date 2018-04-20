@@ -162,7 +162,9 @@ module.exports = {
   feed: {
     repostedBy: 'Reposted by',
     filterByTags: 'Filter by tags',
-    following: 'Following'
+    following: 'Following',
+    noPostsMessage: 'Looks like {username} might not be following anyone yet! If {username} recently added new users to follow, the personalized feed will populate once new content is available.',
+    noPostsMessageOwner: 'Looks like you might not be following anyone yet! If you recently added new users to follow, the personalized feed will populate once new content is available.'
   },
   profile: {
     isFollower: 'Following',

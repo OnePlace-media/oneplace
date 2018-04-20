@@ -24,6 +24,7 @@
 <script>
 import CONSTANTS from '@oneplace/constants'
 import ProfileBlogArticle from './ProfileBlogArticle.vue'
+import FeedArticle from '../feed/FeedArticle.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import EventBus from '../../../event-bus'
 const LIMIT = 5
@@ -32,7 +33,8 @@ export default {
   name: 'ProfileBlogPosts',
   components: {
     ProfileBlogArticle,
-    InfiniteLoading
+    InfiniteLoading,
+    FeedArticle
   },
   props: {
     account: {

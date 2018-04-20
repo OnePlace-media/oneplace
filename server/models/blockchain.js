@@ -243,6 +243,15 @@ module.exports = Model => {
   })
 
   Model.getFeed = async function(chain, username, start, end) {
+    try {
+      await blockChains.getAccount(chain, username)
+    } catch (err) {
+      error = new Error('Not found')
+      error.code = 'NOT_FOUND'
+      error.status = 404
+      throw error
+    }
+
     const posts = []
     const enteries = await blockChains.getFeedEntries(chain, {username, start, end})
     if (enteries.length) {
@@ -303,5 +312,4 @@ module.exports = Model => {
     }
     return posts || []
   }
-  Model.getDiscussionsByFeed
 }

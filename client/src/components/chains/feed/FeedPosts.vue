@@ -1,5 +1,9 @@
 <template>
   <div class="feed__posts">
+    <div class="feed__no-posts" v-show="!posts.length && !postsProcessing">
+      {{$t('feed.noPostsMessage', {username: 'test'})}}
+    </div>
+    
     <feed-article 
       v-for="post in posts" 
       :key="post.id" 
@@ -90,26 +94,32 @@ export default {
     },
     infiniteHandler($state) {
       if (!this.postsProcessing) {
-        this.$store
-          .dispatch('feed/appendPosts', {
-            chain: this.chain,
-            username: this.$route.params.username,
-            limit: LIMIT
-          })
-          .then(posts => {
-            $state.loaded()
-            if (posts.length < LIMIT - 1) {
+        if (this.posts.length) {
+          this.$store
+            .dispatch('feed/appendPosts', {
+              chain: this.chain,
+              username: this.$route.params.username,
+              limit: LIMIT
+            })
+            .then(posts => {
+              $state.loaded()
+              if (posts.length < LIMIT - 1) {
+                $state.complete()
+                this.complete = true
+              }
+            })
+            .catch(err => {
+              $state.loaded()
               $state.complete()
               this.complete = true
-            }
-          })
-          .catch(err => {
-            $state.loaded()
-            $state.complete()
-            this.complete = true
-            this.$toast.bottom(this.$t(`errors.FAILED_APPEND_POST_BY_AUTHOR`))
-          })
-      } else setTimeout($state.loaded, 2000)
+              this.$toast.bottom(this.$t(`errors.FAILED_APPEND_POST_BY_AUTHOR`))
+            })
+        } else setTimeout($state.loaded, 2000)
+      } else {
+        $state.loaded()
+        $state.complete()
+        this.complete = true
+      }
     }
   }
 }

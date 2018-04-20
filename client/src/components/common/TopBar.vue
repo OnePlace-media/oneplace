@@ -43,10 +43,10 @@ export default {
       return this.$route.name === 'chain-trend'
     },
     isFeed() {
-      return this.$route.name === 'chain-account-feed'
+      return this.$route.name === 'chain-account-feed' && this.$route.params.username === this.account.username
     },
     isBlog() {
-      return this.$route.name === 'chain-account-view'
+      return this.$route.name === 'chain-account-view' && this.$route.params.username === this.account.username
     }
   },
   methods: {

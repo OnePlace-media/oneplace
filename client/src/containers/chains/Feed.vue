@@ -24,15 +24,27 @@ export default {
   name: 'Feed',
   asyncData({ store, route, router }) {
     if (!store.state.feed.posts.collection.length) {
-      return store.dispatch('feed/fetchState', {
-        chain: route.params.chain,
-        username: route.params.username
-      })
+      return store
+        .dispatch('feed/fetchState', {
+          chain: route.params.chain,
+          username: route.params.username
+        })
+        .catch(err => {
+          if (
+            (err && ~[500, 404].indexOf(err.status)) ||
+            (err.response && ~[500, 404].indexOf(err.response.status))
+          ) {
+            store.commit('set404Page', true)
+          }
+        })
     } else return Promise.resolve()
   },
   components: {
     FeedPosts,
     FeedFilterByTags
+  },
+  destroyed() {
+    this.$store.commit('feed/CLEAR_ALL_DATA')
   },
   watch: {
     $route(to, from) {
@@ -40,7 +52,7 @@ export default {
       this.$options.asyncData({
         store: this.$store,
         route: this.$route,
-        touter: this.$router
+        router: this.$router
       })
     }
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="feed__filters" v-show="tags.length" :class="{'feed__filters--fixed': fixed}">
+  <div class="feed__filters" v-if="tags.length" :class="{'feed__filters--fixed': fixed}">
     <header class="feed__filters-header">
       <h4 class="h4 feed__filters-title">
         <svg class="icon--filter">
@@ -38,10 +38,11 @@ export default {
   methods: {
     scrollHandler() {
       const elTop = this.$el.getBoundingClientRect().top
-      const bottomBlockTop = document
-        .getElementById('blog__header')
-        .getBoundingClientRect().top
-      this.fixed = elTop <= 70 && bottomBlockTop < 30
+      const blog__header = document.getElementById('blog__header')
+      if (blog__header) {
+        const bottomBlockTop = blog__header.getBoundingClientRect().top
+        this.fixed = elTop <= 70 && bottomBlockTop < 30
+      }
     },
     change({ include, exclude }) {
       EventBus.$emit('FEED:FILTER:CHANGE', { include, exclude })

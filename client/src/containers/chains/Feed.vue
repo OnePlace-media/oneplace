@@ -9,7 +9,7 @@
     
       <div class="feed__wrapper">
         <feed-posts></feed-posts>
-        <aside>
+        <aside class="feed__aside">
           <feed-filter-by-tags></feed-filter-by-tags>
         </aside>
       </div>

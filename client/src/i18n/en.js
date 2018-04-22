@@ -93,7 +93,7 @@ module.exports = {
     pendingPayout: 'Pending payout is {payout} {fromNow}.',
     pendingDays: '1&nbsp;day | {count}&nbsp;days',
     readyPayout: 'Past payouts {payout}',
-    andMore: '...and {count} more'
+    andMore: 'and {count} more'
   },
   welcome: {
     createRegistration: 'Create profile',
@@ -125,6 +125,7 @@ module.exports = {
     addTags: 'Add tags',
     addTagsWithChain: 'Add {blockchain} tags',
     upTo20: 'Up to 20',
+    typeTagsHere: 'Type tags here',
     help: 'Add a topic by typing in the field above and pressing "enter" or by clicking on one of the popular tags. Tags will be displayed in the same order in your feed.',
     helpSettings: 'Add a topic by typing in the field above and pressing "enter". Tags will be displayed in the same order in your feed.'
   },

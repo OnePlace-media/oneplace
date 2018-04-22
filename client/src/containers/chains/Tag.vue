@@ -26,7 +26,7 @@
                 @click.prevent="post.nsfw = 'show'" href="#"
                 class="tag-block__post-image"
               >
-                <a class="nsfw-image">{{$t('chains.imageIsHidden')}}.</a>
+                <a class="nsfw-image">{{$t('chains.imageIsHidden')}}</a>
               </a>
 
               <div class="tag-block__top-post-info">

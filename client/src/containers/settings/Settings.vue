@@ -150,7 +150,7 @@ export default {
                   </li>
                 </ul>
                 <div class="settings__no-accounts" v-if="!accounts.length">{{$t('settings.noAddedAccountsYet')}}</div>
-                <a href="#" class="btn-expand btn-expand--accounts" v-show="!attachFormShow && !accountRemove" @click.prevent="attachFormShow = true"></a>
+                <a href="#" class="btn-expand btn-expand--accounts" v-show="!attachFormShow && !accountRemove" @click.prevent="attachFormShow = true" :title="$t('accountForm.addAccount')"></a>
               </div>
               <account-attach-form view="settings" v-if="attachFormShow && !accountRemove" @success="closeAccountForm" @close="closeAccountForm"></account-attach-form>
               <account-remove-form :account="accountRemove" @cancel="accountRemove = null" @success="removeAccount" v-if="accountRemove"></account-remove-form>

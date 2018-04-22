@@ -3988,6 +3988,7 @@ hr {
 .feed__post-text {
   font-size: 14px;
   color: #818888;
+  margin-bottom: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

@@ -24,7 +24,7 @@ const CURRENCY = {
   }
 }
 
-const PREVIEW_LENGTH = 130
+const PREVIEW_LENGTH = 200
 
 const stubFn = err => {
   if (err) console.log(err)

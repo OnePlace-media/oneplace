@@ -11,7 +11,6 @@
         <div class="profile__wrapper" v-if="!accountProcessing">
           <div class="profile__avatar" :style="`background-image:url('${avatar}')`"></div>
           <div class="profile__top-block">
-            <span class="profile__reputation">{{account.reputation}}</span>
             <h2 class="h2 profile__name">{{accountName}}</h2>
             <p class="profile__about" v-if="profile.about">{{profile.about}}</p>
 

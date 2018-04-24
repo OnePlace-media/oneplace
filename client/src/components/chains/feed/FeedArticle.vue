@@ -6,6 +6,11 @@
       @click.prevent="show"
       v-if="post.image !== DEFAULT_IMAGE"
       :style="`background-image: url('${post.image}')`">
+      <div class="nsfw-image" 
+        v-if="post.nsfw && post.nsfw !== 'show'"
+        @click.stop.prevent="post.nsfw = 'show'">
+        {{$t('chains.imageIsHidden')}}
+      </div>
     </a>
     <div class="feed__post-content">
       <div class="feed__post-reposted" v-if="isRepost">
@@ -14,12 +19,12 @@
           class="feed__repost-avatar" 
           :style="`background-image: url('${post.reblog_avatars[0]}');`"
         ></span>
-        <router-link tag="a" :to="{name:'chain-account-view', params:{chain: chain, username:post.author}}" class="link link--op">
+        <router-link tag="a" :to="{name:'chain-account-view', params:{chain: chain, username:post.reblog_by[0]}}" class="link link--op">
           {{post.reblog_by[0]}}
         </router-link>
       </div>
   
-        <h3 class="feed__post-title h3" :class="{'lines-2x': lines2x, 'lines-1x': lines1x}">
+        <h3 class="feed__post-title h3">
           <a 
             :href="link"
             @click.prevent="show"
@@ -28,7 +33,7 @@
             {{post.title}}
           </a>
         </h3>
-        <p class="feed__post-text">
+        <p class="feed__post-text" :class="{'lines-2x': lines2x, 'lines-1x': lines1x}">
           <a 
             :href="link"
             @click.prevent="show"
@@ -103,11 +108,8 @@ export default {
     link() {
       return this.$helper.makePathForPost(this.post, this.chain)
     },
-    cutTitle() {
-      return parser.cutTitle(this.chain, this.post.title)
-    },
     cutPreview() {
-      return parser.cutPreview(this.chain, this.post.preview, this.isRepost)
+      return parser.cutPreview(this.post.preview)
     },
     isRepost() {
       return this.post.reblog_by.length > 0

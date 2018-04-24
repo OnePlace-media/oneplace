@@ -7,6 +7,11 @@
         v-if="post.image !== DEFAULT_IMAGE"
         class="feed__post-image" 
         :style="`background-image: url('${post.image}')`">
+        <div class="nsfw-image" 
+          v-if="post.nsfw && post.nsfw !== 'show'"
+          @click.stop.prevent="post.nsfw = 'show'">
+          {{$t('chains.imageIsHidden')}}
+        </div>
       </a>
       <div class="feed__post-content">
         
@@ -15,10 +20,12 @@
           <router-link tag="a" :to="{name:'chain-account-view', params:{chain: chain, username:post.author}}" class="link link--op">{{post.author}}</router-link>
         </div>
 
-        <h3 class="feed__post-title h3" :class="{'lines-2x': lines2x, 'lines-1x': lines1x}">
-          <a @click.prevent="show" :href="$helper.makePathForPost(post, chain)" class="link" :title="post.title">{{post.title}}</a>
+        <h3 class="feed__post-title h3">
+          <a @click.prevent="show" :href="$helper.makePathForPost(post, chain)" class="link" :title="post.title">
+            <span class="nsfw-warning" v-show="post.nsfw">nsfw</span>
+            {{post.title}}</a>
         </h3>
-        <p class="feed__post-text">
+        <p class="feed__post-text" :class="{'lines-2x': lines2x, 'lines-1x': lines1x}">
           <a @click.prevent="show" :href="$helper.makePathForPost(post, chain)" class="link">{{cutPreview}}</a>
         </p>
         <div class="feed__post-info" v-if="!$store.state.core.params[chain].processing">
@@ -80,11 +87,8 @@ export default {
     isRepost() {
       return this.account.name !== this.post.author
     },
-    cutTitle() {
-      return parser.cutTitle(this.chain, this.post.title)
-    },
     cutPreview() {
-      return parser.cutPreview(this.chain, this.post.preview, this.isRepost)
+      return parser.cutPreview(this.post.preview)
     }
   },
   methods: {

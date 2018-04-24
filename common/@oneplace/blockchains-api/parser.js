@@ -374,25 +374,8 @@ class Parser {
     })
   }
 
-  static cutTitle(chain, title) {
-    const STR_LIMIT = chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS ? 70 : 80
-    if (title.length > STR_LIMIT) {
-      title =
-        title.substring(
-          0,
-          title
-            .substr(0, STR_LIMIT)
-            .split('')
-            .lastIndexOf(' ')
-        ) + '...'
-    }
-    return title
-  }
-
-  static cutPreview(chain, preview, isRepost) {
-    let STR_LIMIT = isRepost ? 50 : 110
-    if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
-      STR_LIMIT = isRepost ? 50 : 90
+  static cutPreview(preview) {
+    let STR_LIMIT = 200
 
     if (preview.length > STR_LIMIT) {
       preview =

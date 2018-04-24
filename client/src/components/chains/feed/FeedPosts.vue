@@ -54,9 +54,11 @@ export default {
     })
 
     EventBus.$on('FEED:FILTER:CHANGE', this.handlerFilterChange)
+    EventBus.$on('POST:UPDATE', this.handlerPostUpdate)
   },
   destroyed() {
     EventBus.$off('FEED:FILTER:CHANGE', this.handlerFilterChange)
+    EventBus.$off('POST:UPDATE', this.handlerPostUpdate)
   },
   computed: {
     postsWithoutFilters() {
@@ -88,6 +90,9 @@ export default {
     }
   },
   methods: {
+    handlerPostUpdate({ post }) {
+      this.$store.commit('feed/UPDATE_POST', {post})
+    },
     handlerFilterChange({ include, exclude }) {
       this.include = include
       this.exclude = exclude

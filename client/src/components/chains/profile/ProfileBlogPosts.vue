@@ -51,11 +51,16 @@ export default {
   },
   mounted() {
     EventBus.$on('PROFILE:FILTER:CHANGE', this.handlerFilterChange)
+    EventBus.$on('POST:UPDATE', this.handlerPostUpdate)
   },
   destroyed() {
     EventBus.$off('PROFILE:FILTER:CHANGE', this.handlerFilterChange)
+    EventBus.$off('POST:UPDATE', this.handlerPostUpdate)
   },
   methods: {
+    handlerPostUpdate({ post }) {
+      this.$store.commit('profile/UPDATE_POST', { post })
+    },
     handlerFilterChange({ include, exclude }) {
       this.include = include
       this.exclude = exclude

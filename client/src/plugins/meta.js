@@ -83,8 +83,9 @@ export default class Meta {
     const BC = $route.params.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ? 'STEEM' : 'GOLOS'
     const profile = account.meta && account.meta.profile ? account.meta.profile : {}
     const IMAGE = profile.profile_image ? process.env.BASE_API_URL + `img?l=${encodeURIComponent(profile.profile_image)}` : CONSTANTS.DEFAULT.AVATAR_IMAGE
+    const username = $route.params.username
     return {
-      title: `@${account.name} | ${BC}`,
+      title: `@${username} | ${BC}`,
       meta: [
         {
           vmid: 'description',
@@ -94,13 +95,13 @@ export default class Meta {
         {
           vmid: 'og:title',
           property: 'og:title',
-          content: account.name + ' | OnePlace.media'
+          content: username + ' | OnePlace.media'
         },
         {vmid: 'og:type', property: 'og:type', content: 'profile'},
         {
           vmid: 'profile:username',
           property: 'profile:username',
-          content: account.name
+          content: username
         },
         {
           vmid: 'og:url',
@@ -135,7 +136,7 @@ export default class Meta {
         {
           vmid: 'twitter:title',
           name: 'twitter:title',
-          content: account.name + ' | OnePlace.media'
+          content: username + ' | OnePlace.media'
         },
         {
           vmid: 'twitter:description',

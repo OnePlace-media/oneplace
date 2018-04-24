@@ -142,13 +142,14 @@ export default {
       this.$store
         .dispatch('vote', {
           chain: this.chain,
-          post: this.post,
           account: this.account,
+          post: this.post,
           isLike,
           weight
         })
         .then(() => {
           this[field] = false
+          EventBus.$emit('POST:UPDATE', {post: this.post})
         })
         .catch(err => {
           this[field] = false

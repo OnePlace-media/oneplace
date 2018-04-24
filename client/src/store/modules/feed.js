@@ -6,14 +6,17 @@ import Vue from 'vue'
 const TYPES = {
   CLEAR_ALL_DATA: 'CLEAR_ALL_DATA',
   SET_POSTS_PROCESSIGN: 'SET_POSTS_PROCESSIGN',
+  SET_POSTS_FIRST_FETCHED: 'SET_POSTS_FIRST_FETCHED',
   SET_POSTS: 'SET_POSTS',
-  APPEND_POSTS: 'APPEND_POSTS'
+  APPEND_POSTS: 'APPEND_POSTS',
+  UPDATE_POST: 'UPDATE_POST'
 }
 
 
 function createState() {
   return {
     posts: {
+      firstFetched: false,
       processing: true,
       collection: []
     }
@@ -29,11 +32,17 @@ export default () => {
     [TYPES.SET_POSTS_PROCESSIGN](state, {processing = true}) {
       state.posts.processing = processing
     },
+    [TYPES.SET_POSTS_FIRST_FETCHED](state) {
+      state.posts.firstFetched = true
+    },
     [TYPES.SET_POSTS](state, {collection = []}) {
       state.posts.collection = collection
     },
     [TYPES.APPEND_POSTS](state, {collection = []}) {
       state.posts.collection = state.posts.collection.concat(collection)
+    },
+    [TYPES.UPDATE_POST](state, {post}) {
+      state.posts.collection = state.posts.collection.map(_post => _post.id === post.id ? post : _post)
     }
   }
 
@@ -43,6 +52,7 @@ export default () => {
       return Api
         .getFeed(chain, {username, start: 0, end: 10})
         .then(response => {
+          commit(TYPES.SET_POSTS_FIRST_FETCHED)
           commit(TYPES.SET_POSTS, {collection: response.data})
           commit(TYPES.SET_POSTS_PROCESSIGN, {processing: false})
         })

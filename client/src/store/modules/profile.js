@@ -13,7 +13,8 @@ const TYPES = {
   SET_POSTS: 'SET_POSTS',
   APPEND_POSTS: 'APPEND_POSTS',
 
-  CLEAR_ALL_DATA: 'CLEAR_ALL_DATA'
+  CLEAR_ALL_DATA: 'CLEAR_ALL_DATA',
+  UPDATE_POST: 'UPDATE_POST'
 }
 
 function createState() {
@@ -61,6 +62,9 @@ export default () => {
     [TYPES.APPEND_POSTS](state, {posts}) {
       state.posts.collection = [...state.posts.collection, ...posts]
     },
+    [TYPES.UPDATE_POST](state, {post}) {
+      state.posts.collection = state.posts.collection.map(_post => _post.id === post.id ? post : _post)
+    }
   }
 
   const actions = {

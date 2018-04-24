@@ -1,12 +1,17 @@
 <template>
   <section class="main-content">
     <section class="feed container">
-    
-      <div class="blog__header" id="blog__header">
+      <no-ssr>
+        <center>
+          <pulse-loader :loading="!firstFetched" :color="'#383838'" :size="'10px'"></pulse-loader>
+        </center>
+      </no-ssr>
+
+      <div class="blog__header" id="blog__header" v-show="firstFetched">
         <div class="blog__header-tab blog__header-tab--active">{{$t('feed.following')}}</div>
         <!-- <div class="blog__header-tab">Recommended</div> -->
       </div>
-    
+
       <div class="feed__wrapper">
         <feed-posts></feed-posts>
         <aside class="feed__aside">
@@ -38,6 +43,11 @@ export default {
           }
         })
     } else return Promise.resolve()
+  },
+  computed:{
+    firstFetched(){
+      return this.$store.state.feed.posts.firstFetched
+    }
   },
   components: {
     FeedPosts,

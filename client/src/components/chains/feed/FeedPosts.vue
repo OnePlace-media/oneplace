@@ -1,7 +1,7 @@
 <template>
   <div class="feed__posts">
     <div class="feed__no-posts" v-show="!posts.length && !postsProcessing">
-      {{$t('feed.noPostsMessage', {username: 'test'})}}
+      {{$t('feed.noPostsMessage', {username: $route.params.username})}}
     </div>
     
     <feed-article 
@@ -9,7 +9,7 @@
       :key="post.id" 
       :post="post">
     </feed-article>
-    <no-ssr>
+    <no-ssr v-if="posts.length">
       <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
         <center slot="spinner">
           <br><pulse-loader :color="'#383838'" :size="'10px'"></pulse-loader><br>

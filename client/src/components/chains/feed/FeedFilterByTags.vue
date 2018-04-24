@@ -1,5 +1,5 @@
 <template>
-  <div class="feed__filters" v-if="tags.length" :class="{'feed__filters--fixed': fixed}">
+  <div class="feed__filters" :class="{'feed__filters--fixed': fixed}">
     <header class="feed__filters-header">
       <h4 class="h4 feed__filters-title">
         <svg class="icon--filter">
@@ -8,7 +8,7 @@
         {{$t('feed.filterByTags')}}
       </h4>
     </header>
-    <div class="feed__filters-body">
+    <div class="feed__filters-body" v-if="tags.length">
       <filter-by-tags :tags="tags" @change="change"></filter-by-tags>
     </div>
   </div>

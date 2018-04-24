@@ -97,15 +97,21 @@ export default {
         post: this.post,
         chain: this.chain
       })
+    },
+    detectLinesX() {
+      const titleEl = this.$el.getElementsByClassName('feed__post-title')[0]
+      if (titleEl) {
+        const rect = titleEl.getBoundingClientRect()
+        this.lines1x = rect.height > 23 && this.isRepost
+        this.lines2x = !this.lines1x && (rect.height > 23 || this.isRepost)
+      }
     }
   },
+  mounted(){
+    this.detectLinesX()
+  },
   updated() {
-    const titleEl = this.$el.getElementsByClassName('feed__post-title')[0]
-    if (titleEl) {
-      const rect = titleEl.getBoundingClientRect()
-      this.lines1x = rect.height > 23 && this.isRepost
-      this.lines2x = !this.lines1x && (rect.height > 23 || this.isRepost)
-    }
+    this.detectLinesX()
   }
 }
 </script>

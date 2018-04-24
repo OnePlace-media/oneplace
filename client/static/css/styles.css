@@ -3892,7 +3892,7 @@ hr {
 }
 
 .feed__posts {
-  width: 720px;
+  width: 760px;
 }
 
 .feed__aside {
@@ -5502,6 +5502,10 @@ hr {
 
   .tag-block__aside {
     width: 320px;
+  }
+
+  .feed__posts {
+    width: 720px;
   }
 
   .editor-toolbar {

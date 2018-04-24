@@ -93,9 +93,6 @@ export default {
       lines1x: false
     }
   },
-  mounted(){
-    this.detectLinesX()
-  },
   methods: {
     show() {
       EventBus.$emit('POST:MODAL:SHOW', {
@@ -143,6 +140,9 @@ export default {
     }
   },
   updated() {
+    this.detectLinesX()
+  },
+  mounted() {
     this.detectLinesX()
   }
 }

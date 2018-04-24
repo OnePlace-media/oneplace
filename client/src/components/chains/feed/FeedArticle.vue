@@ -93,12 +93,23 @@ export default {
       lines1x: false
     }
   },
+  mounted(){
+    this.detectLinesX()
+  },
   methods: {
     show() {
       EventBus.$emit('POST:MODAL:SHOW', {
         post: this.post,
         chain: this.chain
       })
+    },
+    detectLinesX() {
+      const titleEl = this.$el.getElementsByClassName('feed__post-title')[0]
+      if (titleEl) {
+        const rect = titleEl.getBoundingClientRect()
+        this.lines1x = rect.height > 23 && this.isRepost
+        this.lines2x = !this.lines1x && (rect.height > 23 || this.isRepost)
+      }
     }
   },
   computed: {
@@ -132,12 +143,7 @@ export default {
     }
   },
   updated() {
-    const titleEl = this.$el.getElementsByClassName('feed__post-title')[0]
-    if (titleEl) {
-      const rect = titleEl.getBoundingClientRect()
-      this.lines1x = rect.height > 23 && this.isRepost
-      this.lines2x = !this.lines1x && (rect.height > 23 || this.isRepost)
-    }
+    this.detectLinesX()
   }
 }
 </script>

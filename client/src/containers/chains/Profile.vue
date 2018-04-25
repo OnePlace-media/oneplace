@@ -81,6 +81,7 @@ export default {
           username: route.params.username
         })
         .catch(err => {
+          console.log(err)
           if (
             (err && ~[500, 404].indexOf(err.status)) ||
             (err.response && ~[500, 404].indexOf(err.response.status))

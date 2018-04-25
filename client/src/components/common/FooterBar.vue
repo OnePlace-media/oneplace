@@ -32,7 +32,7 @@ export default {
           target="_blank"
           :to="{name:'chain-account-view', params:{chain, username: 'oneplace'}}" 
           class="link link--op">
-          oneplace.media
+          oneplace
         </router-link>
       </i18n>
       <no-ssr>

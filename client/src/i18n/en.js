@@ -150,7 +150,7 @@ module.exports = {
     blog: 'Blog'
   },
   footer: {
-    createdBy: 'Created in 2017 by {link}',
+    createdBy: 'Created in 2018 by {link}',
     language: 'Select language'
   },
   settings: {

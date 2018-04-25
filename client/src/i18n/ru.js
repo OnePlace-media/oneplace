@@ -151,7 +151,7 @@ module.exports = {
     blog: 'Блог'
   },
   footer: {
-    createdBy: 'Создано 2017 {link}',
+    createdBy: 'Создано 2018 {link}',
     language: 'Выбрать язык'
   },
   settings: {

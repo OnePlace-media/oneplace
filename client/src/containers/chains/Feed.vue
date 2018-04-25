@@ -12,7 +12,7 @@
         <!-- <div class="blog__header-tab">Recommended</div> -->
       </div>
 
-      <div class="feed__wrapper">
+      <div class="feed__wrapper" v-show="firstFetched">
         <feed-posts></feed-posts>
         <aside class="feed__aside">
           <feed-filter-by-tags></feed-filter-by-tags>

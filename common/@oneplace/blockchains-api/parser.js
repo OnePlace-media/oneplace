@@ -359,10 +359,12 @@ class Parser {
 
   static getTagsFromPosts(posts) {
     const tagsObj = posts.reduce((obj, post) => {
-      post.tags.forEach(tag => {
-        if (!obj[tag]) obj[tag] = {count: 0}
-        obj[tag].count++
-      })
+      if (post.tags) {
+        post.tags.forEach(tag => {
+          if (!obj[tag]) obj[tag] = {count: 0}
+          obj[tag].count++
+        })
+      }
       return obj
     }, {})
 

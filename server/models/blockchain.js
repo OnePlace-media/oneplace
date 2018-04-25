@@ -160,6 +160,7 @@ module.exports = Model => {
 
   Model.getState = async function(chain, path) {
     const state = await blockChains.getState(chain, {path})
+
     if (state) {
       if (state.accounts) {
         for (let username in state.accounts) {
@@ -176,10 +177,12 @@ module.exports = Model => {
       }
 
       if (state.content) {
-        for (let post in state.content) {
-          const posts = await Model.app.trendsWatcher.preparePosts(chain, [state.content[post]], true)
-          state.content[post] = posts[0]
-        }
+        let posts = Object.keys(state.content).map(key => state.content[key])
+        posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+        state.content = Object.keys(state.content).reduce((result, key, index) => {
+          result[key] = posts[index]
+          return result
+        }, {})
       }
     }
 

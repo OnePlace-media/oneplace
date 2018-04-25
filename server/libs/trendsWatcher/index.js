@@ -57,7 +57,7 @@ function checkTags(tags) {
 }
 
 function setImage(chain, metadata) {
-  
+
   if (metadata.length == 0) return CONSTANTS.DEFAULT.POST_IMAGE
   let meta = {}
   try {
@@ -83,15 +83,16 @@ async function getReplies(chain, post) {
 }
 
 async function _preparePosts(chain, posts, full = false, replie = false) {
+  const profiles = {}
   CURRENCY[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS].q = await blockChainsHelper.getGoldPrice() / 1000
   const _posts = []
   if (posts && posts.length) {
     for (let post of posts) {
       const _post = {}
       _post.id = post.id
-      if(post.reblogged_by){
+      if (post.reblogged_by) {
         _post.reblogged_by = post.reblogged_by
-        _post.reblog_by = post.reblogged_by 
+        _post.reblog_by = post.reblogged_by
       }
       if (post.first_reblogged_on) {
         _post.first_reblogged_on = post.first_reblogged_on + '+00:00'
@@ -121,7 +122,14 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
       }
 
       if (full || _post.image === CONSTANTS.DEFAULT.POST_IMAGE) {
-        const profile = await blockChains.getProfile(chain, post.author)
+        let profile;
+        if(profiles[post.author]){
+          profile = profiles[post.author]
+        } else {
+          profile = await blockChains.getProfile(chain, post.author)
+          profiles[post.author] = profile
+        }
+
         if (profile) {
           _post.author_about = profile.about
         }

@@ -19,7 +19,7 @@ function getGoldPrice() {
         if (err) {
           resolve(2400)
         } else {
-          if (result.Metall.Record && result.Metall.Record.length) {
+          if (result.Metall && result.Metall.Record && result.Metall.Record.length) {
             const prices = result.Metall.Record.filter(record => record.$.Code === "1")
             result = prices[prices.length - 1]
             goldPrice[date_req2] = parseFloat(result.Buy[0])

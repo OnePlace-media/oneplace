@@ -38,6 +38,15 @@ export default {
     },
     CHAINS() {
       return CONSTANTS.BLOCKCHAIN.SOURCE
+    },
+    isPopular() {
+      return this.$route.name === 'chain-trend'
+    },
+    isFeed() {
+      return this.$route.name === 'chain-account-feed' && this.$route.params.username === this.account.username
+    },
+    isBlog() {
+      return this.$route.name === 'chain-account-view' && this.$route.params.username === this.account.username
     }
   },
   methods: {
@@ -65,7 +74,31 @@ export default {
 <template>
   <header class="header">
     <div class="header__wrapper container">
-      <router-link :to="{name:'chain-trend', params:{chain}}" class="header__logo" tag="div"><img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive"></router-link>
+      
+      <div class="row-wrapper">
+        <router-link :to="{name:'chain-trend', params:{chain}}" class="header__logo" tag="div">
+          <img src="/static/img/logo.svg" alt="OnePlace" class="img-responsive">
+        </router-link>
+        
+        <div class="header__menu" v-if="$auth && $auth.ready() && account.username">
+          <router-link 
+            :to="{name:'chain-trend', params:{chain}}" 
+            :class="{'header__menu-item--active': isPopular}"
+            class="header__menu-item link" tag="a">{{$t('topBar.popular')}}
+          </router-link>
+          <router-link
+            :to="{name:'chain-account-feed', params:{chain, username: account.username}}" 
+            :class="{'header__menu-item--active': isFeed}"
+            class="header__menu-item link" tag="a">{{$t('topBar.feed')}}
+          </router-link>
+          <router-link 
+            :to="{name:'chain-account-view', params:{chain, username: account.username}}" 
+            :class="{'header__menu-item--active': isBlog}"
+            class="header__menu-item link" tag="a">{{$t('topBar.blog')}}
+          </router-link>
+        </div>
+      </div>
+
       <div class="header__right-panel">
         <router-link :to="{name:'publish', params:{chain}}" class="header__publish" :title="$t('topBar.createNewPost')" v-if="accountsByChain.length">
           <svg class="icon--header">

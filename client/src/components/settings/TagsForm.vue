@@ -16,7 +16,7 @@
         v-validate="'firstIsLetter|lastIsLetterOrDigit|validTag|max:64'"
         type="text" 
         class="login-form__input" 
-        placeholder="Type tags here" 
+        :placeholder="$t('tagsForm.typeTagsHere')"
         name="tag" 
         @keydown.enter.prevent="addTag($event.target)"
       >
@@ -49,7 +49,7 @@
           </span>
         </draggable>
       </div>
-      <a href="#" class="btn-expand" @click.prevent="setChain(CHAINS.STEEM)"></a>
+      <a href="#" class="btn-expand" @click.prevent="setChain(CHAINS.STEEM)" :title="$t('tagsForm.addTagsWithChain',{blockchain: 'Steem'})"></a>
     </div>
     <div class="settings__tags-panel" :class="{'settings__tags-panel--active': chain === CHAINS.GOLOS}">
       <h3 class="settings__tags-chain settings__tags-chain--golos">Golos</h3>
@@ -60,7 +60,7 @@
           </span>
         </draggable>
       </div>
-      <a href="#" class="btn-expand" @click.prevent="setChain(CHAINS.GOLOS)"></a>
+      <a href="#" class="btn-expand" @click.prevent="setChain(CHAINS.GOLOS)" :title="$t('tagsForm.addTagsWithChain',{blockchain: 'Golos'})"></a>
     </div>
     <div class="settings__tags-setup" v-if="chain">
       <div class="tags-setup__input-wrapper">
@@ -77,7 +77,7 @@
         <input v-validate="'firstIsLetter|lastIsLetterOrDigit|validTag|max:64'"
           type="text" 
           class="login-form__input" 
-          placeholder="Type tags here" 
+          :placeholder="$t('tagsForm.typeTagsHere')"
           name="tag" 
           @keydown.enter.prevent="addTag($event.target)">
       </div>

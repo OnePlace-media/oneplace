@@ -81,10 +81,16 @@ export default {
   getDiscussionsByCreated(chain, {author, start_permlink, limit}) {
     return Vue.axios.get(`/blockchains/${chain}/getDiscussionsByCreated`, {params: {author, start_permlink, limit}})
   },
+  getDiscussionsByFeed(chain, {username, start_author, start_permlink, limit}) {
+    return Vue.axios.get(`/blockchains/${chain}/getDiscussionsByFeed`, {params: {username, start_author, start_permlink, limit}})
+  },
   getRepliesByPermlink(chain, username, permlink) {
     return Vue.axios.get(`/blockchains/${chain}/repliesByPermLink`, {params: {username, permlink}})
   },
   getFollowers(chain, {following, startFollower, followType, limit}) {
     return Vue.axios.get(`/blockchains/${chain}/getFollowers`, {params: {following, startFollower, followType, limit}})
+  },
+  getFeed(chain, {username, start, end}) {
+    return Vue.axios.get(`/blockchains/${chain}/getFeed`, {params: {username, start, end}})
   }
 }

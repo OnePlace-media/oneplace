@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import PostView from '../../components/chains/PostView.vue'
-import CommentsWrapper from '../../components/chains/CommentsWrapper.vue'
-import PostShare from '../../components/chains/PostShare.vue'
+import PostView from '../../components/chains/post/PostView.vue'
+import CommentsWrapper from '../../components/chains/comment/CommentsWrapper.vue'
+import PostShare from '../../components/chains/post/PostShare.vue'
 
 export default {
   name: 'Post',

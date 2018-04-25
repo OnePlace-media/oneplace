@@ -74,9 +74,9 @@ module.exports = {
     },
     logIn: 'Войдите',
     register: 'зарегистрируйтесь',
-    onlyRegisteredCanLeaveComments: 'Только зарегистрированные пользователи со связанным {blockchain} аккаунтом могут оставлять комментарии.',
+    onlyRegisteredCanLeaveComments: 'Только зарегистрированные пользователи со связанным аккаунтом {blockchain} могут оставлять комментарии.',
     addAccountToReply: '{add-account}, чтобы ответить.',
-    addAccounChain: 'Добавьте&nbsp;{blockchain} аккаунт',
+    addAccounChain: 'Добавьте&nbsp;аккаунт {blockchain}',
     loginOrRegisterToReply: '{login-link}{nbsp}или{nbsp}{reg-link}, чтобы ответить.'
 
   },
@@ -94,7 +94,7 @@ module.exports = {
     pendingPayout: 'Ожидаемая выплата {payout} {fromNow}.',
     pendingDays: '1&nbsp;день | {count}&nbsp;дней',
     readyPayout: 'Предыдущие выплаты {payout}',
-    andMore: '...и еще {count}'
+    andMore: 'и еще {count}'
   },
   welcome: {
     createRegistration: 'Создание профиля',
@@ -126,8 +126,9 @@ module.exports = {
     addTags: 'Добавить теги',
     addTagsWithChain: 'Добавить теги',
     upTo20: 'Не более 20',
-    help: 'Введите название темы, на которую хотите подписаться, и нажмите "enter" или выберите из предложенных тегов. В вашей ленте порядок категорий сохранится.',
-    helpSettings: 'Введите название темы, на которую хотите подписаться, и нажмите "enter" или выберите из предложенных тегов. В вашей ленте порядок категорий сохранится.'
+    typeTagsHere: 'Введите теги',
+    help: 'Введите название категории, на которую хотите подписаться, и нажмите "enter" или выберите из предложенных тегов. В вашей ленте порядок категорий сохранится.',
+    helpSettings: 'Введите название категории, на которую хотите подписаться, и нажмите "enter". В вашей ленте порядок категорий сохранится.'
   },
   accountForm: {
     removeAccount: 'Удалить аккаунт',
@@ -144,10 +145,13 @@ module.exports = {
     getStarted: 'Войти',
     settings: 'Настройки',
     switchAccount: 'Сменить аккаунт',
-    logout: 'Выйти'
+    logout: 'Выйти',
+    popular: 'Популярное',
+    feed: 'Лента',
+    blog: 'Блог'
   },
   footer: {
-    createdBy: 'Создано 2017 {link}',
+    createdBy: 'Создано 2018 {link}',
     language: 'Выбрать язык'
   },
   settings: {
@@ -156,6 +160,13 @@ module.exports = {
     addBlockChainAccount: 'Добавить аккаунт Steem или Golos',
     categoriesList: 'Подписка на категории',
     noAddedAccountsYet: 'Нет добавленных аккаунтов'
+  },
+  feed: {
+    repostedBy: 'Репост от',
+    filterByTags: 'Фильтр по тегам',
+    following: 'Подписки',
+    noPostsMessage: 'Похоже, что {username} еще ни на кого не подписан! Если {username} недавно подписался на новых пользователей, лента подписок начнет заполняться сразу после появления нового контента.',
+    noPostsMessageOwner: 'Похоже, что вы еще ни на кого не подписаны! Если вы недавно подписались на новых пользователей, лента подписок начнет заполняться сразу после появления нового контента.'
   },
   profile: {
     isFollower: 'Вы подписаны',
@@ -188,7 +199,7 @@ module.exports = {
     confirmUpdates: 'Подтвердить изменения?',
     addTags_upTo5: 'Добавьте теги (не более 5)',
     editTags: 'Редактировать теги',
-    typeTagsHere: 'Введите тег...',
+    typeTagsHere: 'Введите теги...',
     payoutSettings: 'Настройки выплаты',
     '50': '50% / 50% (Рекомендовано)',
     '100s': '100% STEEM POWER',

@@ -14,8 +14,9 @@
               <a 
                 v-if="!post.nsfw || post.nsfw === 'show'"
                 :href="$helper.makePathForPost(post, chain)"
-                class="tag-block__post-image" :class="{'tag-block__secondary-post-image': index > 0, 'tag-block__primary-post-image': !index}" 
-                :style="`background:url('${post.image}') 50% 0 no-repeat transparent;`" 
+                class="tag-block__post-image" 
+                :style="`background-image:url('${post.image}');`"
+                :title="post.title" 
               >
                 <img class="image--mobile" :src="post.image">
               </a>
@@ -23,14 +24,14 @@
               <a 
                 v-if="post.nsfw && post.nsfw !== 'show'"
                 @click.prevent="post.nsfw = 'show'" href="#"
-                class="tag-block__post-image" :class="{'tag-block__secondary-post-image': index > 0, 'tag-block__primary-post-image': !index}"
+                class="tag-block__post-image"
               >
-                <a class="nsfw-image">{{$t('chains.imageIsHidden')}}.</a>
+                <a class="nsfw-image">{{$t('chains.imageIsHidden')}}</a>
               </a>
 
               <div class="tag-block__top-post-info">
                 <h3 class="h3 tag-block__top-post-title">
-                  <a :href="$helper.makePathForPost(post, chain)" class="link">
+                  <a :href="$helper.makePathForPost(post, chain)" class="link" :title="post.title">
                     <span class="nsfw-warning" v-if="post.nsfw">nsfw</span>{{post.title}}
                   </a>
                 </h3>
@@ -70,13 +71,13 @@
           </section>
           <aside class="tag-block__aside">
             <section class="tag-block__recent">
-              <header class="tag-block__recent-header">
-                <h4 class="h4 tag-block__recent-heading">{{$t('common.headers.recentPosts')}}</h4>
+              <header class="aside-header">
+                <h4 class="h4 aside-header__title">{{$t('common.headers.recentPosts')}}</h4>
               </header>
               <section class="tag-block__recent-body">
                 <div class="tag-block__recent-post" v-for="post in recentPosts" :key="post.id">
-                  <h4 class="h4 tag-block__recent-post-heading">
-                    <a :href="$helper.makePathForPost(post, chain)" class="link">{{post.title}}</a>
+                  <h4 class="h4 tag-block__recent-post-title">
+                    <a :href="$helper.makePathForPost(post, chain)" class="link" :title="post.title">{{post.title}}</a>
                   </h4>
                   <div class="tag-block__post-other tag-block__recent-post-other">
                     <i18n path="common.timeAgoWithAuthor" tag="p">
@@ -123,7 +124,7 @@ export default {
       })
   },
   metaInfo() {
-    return this.$helper.generateTagMeta(this.tag, this.$route, this.chainName)
+    return this.$metaGenerator.tag(this.tag, this.$route, this.chainName)
   },
   computed: {
     DEFAULT_AVATAR() {

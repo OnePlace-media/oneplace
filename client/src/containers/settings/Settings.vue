@@ -132,7 +132,7 @@ export default {
         <section class="tag-block__body">
           <div class="container settings__wrapper">
             <div class="settings__accounts" :class="{'settings__accounts--active':attachFormShow || accountRemove}">
-              <div class="settings__block-header aside-header">
+              <div class="aside-header">
                 <h4 class="h4 aside-header__title">{{$t('settings.blockchainAccounts')}}</h4>
               </div>
               <div class="settings__block-body">
@@ -150,14 +150,14 @@ export default {
                   </li>
                 </ul>
                 <div class="settings__no-accounts" v-if="!accounts.length">{{$t('settings.noAddedAccountsYet')}}</div>
-                <a href="#" class="btn-expand btn-expand--accounts" v-show="!attachFormShow && !accountRemove" @click.prevent="attachFormShow = true"></a>
+                <a href="#" class="btn-expand btn-expand--accounts" v-show="!attachFormShow && !accountRemove" @click.prevent="attachFormShow = true" :title="$t('accountForm.addAccount')"></a>
               </div>
               <account-attach-form view="settings" v-if="attachFormShow && !accountRemove" @success="closeAccountForm" @close="closeAccountForm"></account-attach-form>
               <account-remove-form :account="accountRemove" @cancel="accountRemove = null" @success="removeAccount" v-if="accountRemove"></account-remove-form>
             </div>
             </div>
             <div class="settings__tags">
-              <div class="settings__block-header aside-header">
+              <div class="aside-header">
                 <h4 class="h4 aside-header__title">{{$t('settings.categoriesList')}}</h4>
               </div>
               <div class="settings__block-body settings__tags-body">

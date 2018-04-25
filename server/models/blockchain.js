@@ -160,6 +160,7 @@ module.exports = Model => {
 
   Model.getState = async function(chain, path) {
     const state = await blockChains.getState(chain, {path})
+
     if (state) {
       if (state.accounts) {
         for (let username in state.accounts) {
@@ -176,10 +177,12 @@ module.exports = Model => {
       }
 
       if (state.content) {
-        for (let post in state.content) {
-          const posts = await Model.app.trendsWatcher.preparePosts(chain, [state.content[post]], true)
-          state.content[post] = posts[0]
-        }
+        let posts = Object.keys(state.content).map(key => state.content[key])
+        posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+        state.content = Object.keys(state.content).reduce((result, key, index) => {
+          result[key] = posts[index]
+          return result
+        }, {})
       }
     }
 
@@ -228,6 +231,88 @@ module.exports = Model => {
       error.status = 404
       throw error
     }
+  }
 
+  // ----- GET FEED -----
+  Model.remoteMethod('getFeed', {
+    accepts: [
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'username', type: 'string', required: true},
+      {arg: 'start', type: 'number', required: true},
+      {arg: 'end', type: 'number', required: true}
+    ],
+    returns: {arg: 'body', type: 'array', root: true},
+    http: {path: '/:chain(g|s)/getFeed', verb: 'get'}
+  })
+
+  Model.getFeed = async function(chain, username, start, end) {
+    try {
+      await blockChains.getAccount(chain, username)
+    } catch (err) {
+      error = new Error('Not found')
+      error.code = 'NOT_FOUND'
+      error.status = 404
+      throw error
+    }
+
+    const posts = []
+    const enteries = await blockChains.getFeedEntries(chain, {username, start, end})
+    if (enteries.length) {
+      for (item of enteries) {
+        const postRaw = await blockChains.getContent(chain, item)
+        let [post] = await Model.app.trendsWatcher.preparePosts(chain, [postRaw], true)
+        if (item.reblog_by.length) {
+          item.reblog_avatars = []
+          for (user of item.reblog_by) {
+            const avatar = await blockChains.getAvatar(chain, user)
+            item.reblog_avatars.push(avatar)
+          }
+        }
+        posts.push(Object.assign(post, item))
+      }
+    }
+    return posts
+  }
+
+  // ----- GET DISCUSSIONS BY FEED -----
+
+  Model.remoteMethod('getDiscussionsByFeed', {
+    accepts: [
+      {arg: 'chain', type: 'string', required: true},
+      {arg: 'username', type: 'string', required: true},
+      {arg: 'start_author', type: 'string', required: true},
+      {arg: 'start_permlink', type: 'string', required: true},
+      {arg: 'limit', type: 'string', default: 10}
+    ],
+    returns: {arg: 'body', type: 'array', root: true},
+    http: {path: '/:chain(g|s)/getDiscussionsByFeed', verb: 'get'}
+  })
+
+  Model.getDiscussionsByFeed = async function(chain, username, start_author, start_permlink, limit) {
+    const params = {
+      start_author,
+      start_permlink,
+      limit
+    }
+
+    if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
+      params.select_authors = [username]
+    else
+      params.tag = username
+
+    let posts = await blockChains.getDiscussionsByFeed(chain, params)
+    if (posts && posts.length)
+      posts = await Model.app.trendsWatcher.preparePosts(chain, posts, true)
+
+    for (post of posts) {
+      if (post.reblog_by.length) {
+        post.reblog_avatars = []
+        for (user of post.reblog_by) {
+          const avatar = await blockChains.getAvatar(chain, user)
+          post.reblog_avatars.push(avatar)
+        }
+      }
+    }
+    return posts || []
   }
 }

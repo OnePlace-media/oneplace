@@ -24,7 +24,7 @@ const CURRENCY = {
   }
 }
 
-const PREVIEW_LENGTH = 130
+const PREVIEW_LENGTH = 200
 
 const stubFn = err => {
   if (err) console.log(err)
@@ -57,6 +57,7 @@ function checkTags(tags) {
 }
 
 function setImage(chain, metadata) {
+
   if (metadata.length == 0) return CONSTANTS.DEFAULT.POST_IMAGE
   let meta = {}
   try {
@@ -64,7 +65,6 @@ function setImage(chain, metadata) {
   } catch (e) {
     return CONSTANTS.DEFAULT.POST_IMAGE
   }
-
   if (!meta.image && meta.images) meta.image = meta.images
   return meta.image && meta.image[0] ? chainParser.proxyImagePrefix(chain, meta.image[0]) : CONSTANTS.DEFAULT.POST_IMAGE
 }
@@ -83,15 +83,21 @@ async function getReplies(chain, post) {
 }
 
 async function _preparePosts(chain, posts, full = false, replie = false) {
+  const profiles = {}
   CURRENCY[CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS].q = await blockChainsHelper.getGoldPrice() / 1000
   const _posts = []
   if (posts && posts.length) {
     for (let post of posts) {
       const _post = {}
       _post.id = post.id
+      if (post.reblogged_by) {
+        _post.reblogged_by = post.reblogged_by
+        _post.reblog_by = post.reblogged_by
+      }
       if (post.first_reblogged_on) {
         _post.first_reblogged_on = post.first_reblogged_on + '+00:00'
       }
+
       _post.cashout_time = post.cashout_time + '+00:00'
       _post.percent_steem_dollars = post.percent_steem_dollars
       _post.title = post.title
@@ -116,7 +122,14 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
       }
 
       if (full || _post.image === CONSTANTS.DEFAULT.POST_IMAGE) {
-        const profile = await blockChains.getProfile(chain, post.author)
+        let profile;
+        if(profiles[post.author]){
+          profile = profiles[post.author]
+        } else {
+          profile = await blockChains.getProfile(chain, post.author)
+          profiles[post.author] = profile
+        }
+
         if (profile) {
           _post.author_about = profile.about
         }
@@ -125,7 +138,7 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
         _post.body = prepareHTML.html
 
         if (_post.image === CONSTANTS.DEFAULT.POST_IMAGE && prepareHTML.state && prepareHTML.state.images && Array.from(prepareHTML.state.images).length) {
-          _post.image = chainParser.ipfsPrefix(chain, Array.from(prepareHTML.state.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
+          _post.image = chainParser.proxyImagePrefix(chain, Array.from(prepareHTML.state.images)[0]) || CONSTANTS.DEFAULT.POST_IMAGE
         }
       }
 

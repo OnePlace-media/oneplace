@@ -49,12 +49,7 @@
         <post-bottom 
             type="post"
             :post="post" 
-            :account="account" 
-            :chain="chain" 
-            @vote="vote"
-            @edit="edit"
-            :up-vote-processing="upVoteProcessing"
-            :down-vote-processing="downVoteProcessing"
+            :account="account"
           ></post-bottom>
       </div>
       <section class="post-view__bottom-block">
@@ -98,10 +93,10 @@
 
 <script>
 import CONSTANTS from '@oneplace/constants'
-import Api from '../../plugins/api'
+import Api from '../../../plugins/api'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
 import PostBottom from './PostBottom.vue'
-import ProfileFollowBtn from '../../components/chains/ProfileFollowBtn.vue'
+import ProfileFollowBtn from './../profile/ProfileFollowBtn.vue'
 
 export default {
   name: 'PostView',
@@ -131,25 +126,13 @@ export default {
   data() {
     return {
       showDropDownMenu: false,
-      comment: null,
-      upVoteProcessing: false,
-      downVoteProcessing: false
+      comment: null
     }
   },
   metaInfo() {
-    return this.$helper.generatePostMeta(this.post, this.$route)
+    return this.$metaGenerator.post(this.post, this.$route)
   },
   methods: {
-    edit() {
-      this.$router.push({
-        name: 'post-edit',
-        params: {
-          chain: this.chain,
-          username: this.post.author,
-          permlink: this.post.permlink
-        }
-      })
-    },
     goToProfile(username) {
       if (username === this.post.author) {
         this.$store.commit('setPostViewData', null)
@@ -167,25 +150,6 @@ export default {
       history.go(-1)
       this.$store.commit('setPostViewData', null)
     },
-    vote(isLike, weight = 10000) {
-      const field = isLike ? 'upVoteProcessing' : 'downVoteProcessing'
-      this[field] = true
-      this.$store
-        .dispatch('vote', {
-          chain: this.chain,
-          post: this.post,
-          account: this.account,
-          isLike,
-          weight
-        })
-        .then(() => {
-          this[field] = false
-        })
-        .catch(err => {
-          this[field] = false
-          this.$toast.bottom(this.$t(`errors.${err.response.data.error.code}`))
-        })
-    }
   },
   computed: {
     DEFAULT_AVATAR() {

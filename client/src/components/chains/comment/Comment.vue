@@ -24,13 +24,9 @@
           :post="item" 
           :account="account" 
           :chain="chain"
-          @vote="vote"
-          @reply="reply"
+          @reply="deleteComment"
           @edit="editPostBottom"
           @delete="deleteComment"
-          :is-max-deep="isMaxDeep"
-          :up-vote-processing="upVoteProcessing"
-          :down-vote-processing="downVoteProcessing"
         ></post-bottom>
     </div>
   </div>
@@ -51,10 +47,10 @@
 </template>
 
 <script>
-import Api from '../../plugins/api'
+import Api from '../../../plugins/api'
 import CONSTANTS from '@oneplace/constants'
 import CommentForm from './CommentForm.vue'
-import PostBottom from './PostBottom.vue'
+import PostBottom from './../post/PostBottom.vue'
 import Vue from 'vue'
 export default {
   name: 'comment',

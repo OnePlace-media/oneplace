@@ -24,11 +24,11 @@
 </style>
 
 <script>
-import PublishHeader from '../../components/chains/PublishHeader.vue'
-import PublishEditor from '../../components/chains/PublishEditor.vue'
+import PublishHeader from '../../components/chains/publish/PublishHeader.vue'
+import PublishEditor from '../../components/chains/publish/PublishEditor.vue'
 
-import PublishModalLink from '../../components/chains/PublishModalLink.vue'
-import PublishModalImage from '../../components/chains/PublishModalImage.vue'
+import PublishModalLink from '../../components/chains/publish/PublishModalLink.vue'
+import PublishModalImage from '../../components/chains/publish/PublishModalImage.vue'
 
 import FooterMini from '../../components/common/FooterMini.vue'
 

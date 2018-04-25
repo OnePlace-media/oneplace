@@ -11,7 +11,6 @@
         <div class="profile__wrapper" v-if="!accountProcessing">
           <div class="profile__avatar" :style="`background-image:url('${avatar}')`"></div>
           <div class="profile__top-block">
-            <span class="profile__reputation">{{account.reputation}}</span>
             <h2 class="h2 profile__name">{{accountName}}</h2>
             <p class="profile__about" v-if="profile.about">{{profile.about}}</p>
 
@@ -46,20 +45,18 @@
               {{$tc('profile.following', followCount.following_count)}}
             </div>
           </div>
-          <profile-tags-top :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost"></profile-tags-top>
-          <profile-tags-all :clear-filter-in-active="clearFilterInActive" :with-repost="withRepost" v-if="showAllTagsModal"></profile-tags-all>
+          <profile-filter-by-tags></profile-filter-by-tags>
         </div>
-        <profile-blog :with-repost.sync="withRepost" :account="account" v-if="!accountProcessing"></profile-blog>
+        <profile-blog :account="account" v-if="!accountProcessing"></profile-blog>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import ProfileBlog from '../../components/chains/ProfileBlog.vue'
-import ProfileFollowBtn from '../../components/chains/ProfileFollowBtn.vue'
-import ProfileTagsTop from '../../components/chains/ProfileTagsTop.vue'
-import ProfileTagsAll from '../../components/chains/ProfileTagsAll.vue'
+import ProfileBlog from '../../components/chains/profile/ProfileBlog.vue'
+import ProfileFollowBtn from '../../components/chains/profile/ProfileFollowBtn.vue'
+import ProfileFilterByTags from '../../components/chains/profile/ProfileFilterByTags.vue'
 
 import CONSTANTS from '@oneplace/constants'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
@@ -69,8 +66,7 @@ export default {
   components: {
     ProfileBlog,
     ProfileFollowBtn,
-    ProfileTagsTop,
-    ProfileTagsAll
+    ProfileFilterByTags
   },
   mixins: [onClickOutside],
   asyncData({ store, route, router }) {
@@ -83,13 +79,8 @@ export default {
           chain: route.params.chain,
           username: route.params.username
         })
-        // .then(() =>
-        //   store.dispatch('profile/fetchPostByAuthor', {
-        //     chain: route.params.chain,
-        //     author: route.params.username
-        //   })
-        // )
         .catch(err => {
+          console.log(err)
           if (
             (err && ~[500, 404].indexOf(err.status)) ||
             (err.response && ~[500, 404].indexOf(err.response.status))
@@ -97,15 +88,10 @@ export default {
             store.commit('set404Page', true)
           }
         })
-    } else return new Promise(resolve => resolve())
+    } else return Promise.resolve()
   },
   metaInfo() {
-    return this.$helper.generateProfileMeta(this.account, this.$route)
-  },
-  data() {
-    return {
-      withRepost: true
-    }
+    return this.$metaGenerator.profile(this.account, this.$route)
   },
   computed: {
     showAllTagsModal() {
@@ -160,19 +146,6 @@ export default {
       return this.profile.website
         ? this.profile.website.replace(/http(s)?:\/\//, '')
         : ''
-    },
-    clearFilterInActive() {
-      const checkActiveFilterTagsByRepost = tags => {
-        return !!Object.keys(tags).filter(tagName => {
-          return this.withRepost || tags[tagName].owner
-        }).length
-      }
-      const include = this.$store.state.profile.tags.include
-      const exclude = this.$store.state.profile.tags.exclude
-      return (
-        !checkActiveFilterTagsByRepost(include) &&
-        !checkActiveFilterTagsByRepost(exclude)
-      )
     }
   }
 }

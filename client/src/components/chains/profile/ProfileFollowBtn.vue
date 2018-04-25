@@ -15,7 +15,7 @@
 
 <script>
 import { mixin as onClickOutside } from 'vue-on-click-outside'
-import Api from '../../plugins/api'
+import Api from '../../../plugins/api'
 
 function checkFollower() {
   const startFollower = this.accountFollower.username

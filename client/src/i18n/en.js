@@ -39,7 +39,7 @@ module.exports = {
       tagMax: 'Max length 64',
       firstIsLetter: 'Must begin with a letter',
       lastIsLetterOrDigit: 'Must end with a letter or a digit',
-      usernameMissingPermission:'Missing posting permission for this account'
+      usernameMissingPermission: 'Missing posting permission for this account'
     },
     timeAgoWithAuthor: '{timeago} by {author}',
     headers: {
@@ -83,7 +83,7 @@ module.exports = {
     header: 'Add {blockchain} account',
     help: 'Please enter required information in the form below. You can later add more accounts in your profile.',
     backToOnePlace: 'Back to OnePlace',
-    advancedMode:'Advanced mode'
+    advancedMode: 'Advanced mode'
   },
   chains: {
     imageIsHidden: 'Image is hidden. Click to show image.',
@@ -93,7 +93,7 @@ module.exports = {
     pendingPayout: 'Pending payout is {payout} {fromNow}.',
     pendingDays: '1&nbsp;day | {count}&nbsp;days',
     readyPayout: 'Past payouts {payout}',
-    andMore: '...and {count} more'
+    andMore: 'and {count} more'
   },
   welcome: {
     createRegistration: 'Create profile',
@@ -125,6 +125,7 @@ module.exports = {
     addTags: 'Add tags',
     addTagsWithChain: 'Add {blockchain} tags',
     upTo20: 'Up to 20',
+    typeTagsHere: 'Type tags here',
     help: 'Add a topic by typing in the field above and pressing "enter" or by clicking on one of the popular tags. Tags will be displayed in the same order in your feed.',
     helpSettings: 'Add a topic by typing in the field above and pressing "enter". Tags will be displayed in the same order in your feed.'
   },
@@ -135,7 +136,7 @@ module.exports = {
     aboutPrivate: '<em>OnePlace does not store your private keys</em>. Once you sign in with your blockchain account you authorize OnePlace app to vote, post and edit comments on your behalf. You can revoke that authority at any time.',
     aboutRemove: '<em>Remove account</em>. You are going to remove posting authority from OnePlace app. Confirm this operation with your private active key.',
     addWithSteemConnect: 'Add with SteemConnect',
-    removeWithSteemConnect:'Remove with SteemConnect'
+    removeWithSteemConnect: 'Remove with SteemConnect'
   },
   topBar: {
     createNewPost: 'Create new post',
@@ -143,10 +144,13 @@ module.exports = {
     getStarted: 'Get started',
     settings: 'Settings',
     switchAccount: 'Switch account',
-    logout: 'Logout'
+    logout: 'Logout',
+    popular: 'Popular',
+    feed: 'Feed',
+    blog: 'Blog'
   },
   footer: {
-    createdBy: 'Created in 2017 by {link}',
+    createdBy: 'Created in 2018 by {link}',
     language: 'Select language'
   },
   settings: {
@@ -155,6 +159,13 @@ module.exports = {
     addBlockChainAccount: 'Please attach your Steem or Golos account',
     categoriesList: 'Followed categories',
     noAddedAccountsYet: 'No added accounts yet'
+  },
+  feed: {
+    repostedBy: 'Reposted by',
+    filterByTags: 'Filter by tags',
+    following: 'Following',
+    noPostsMessage: 'Looks like {username} might not be following anyone yet! If {username} recently added new users to follow, the personalized feed will populate once new content is available.',
+    noPostsMessageOwner: 'Looks like you might not be following anyone yet! If you recently added new users to follow, the personalized feed will populate once new content is available.'
   },
   profile: {
     isFollower: 'Following',

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Helper from './plugins/helper'
+import MetaGenerator from './plugins/meta'
 import {createRouter} from './router'
 import {createStore} from './store'
 import {sync} from 'vuex-router-sync'
@@ -37,6 +38,7 @@ Vue.use(VeeValidate, {inject: false, events: 'blur'})
 Vue.use(VueAxios, axios)
 Vue.axios.defaults.baseURL = process.env.BASE_API_URL
 Vue.use(Helper)
+Vue.use(MetaGenerator)
 Vue.use(VueLocalStorage)
 
 

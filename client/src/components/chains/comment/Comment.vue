@@ -24,7 +24,7 @@
           :post="item" 
           :account="account" 
           :chain="chain"
-          @reply="deleteComment"
+          @reply="reply"
           @edit="editPostBottom"
           @delete="deleteComment"
         ></post-bottom>

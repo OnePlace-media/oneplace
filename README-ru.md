@@ -48,7 +48,7 @@ cd server
 cp ./server/config.sample.json ./server/config.json
 
 # Параметры к источникам данных (mysql, redis, email)
-cp ./server/datasources.sample.json ./serverdatasources.json
+cp ./server/datasources.sample.json ./server/datasources.json
 ```
 
 #### ./server/config.json

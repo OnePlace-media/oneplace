@@ -1,8 +1,8 @@
-process.env.NODE_ENV = 'test';
-const TIME = new Date().getTime();
-const async = require('async');
-const STORAGE = require('./data/storage');
-
+process.env.NODE_ENV = 'test'
+const TIME = new Date().getTime()
+const async = require('async')
+const STORAGE = require('./data/storage')
+const exec = require('child_process').exec
 
 const clearDataBases = (mysql, done) => {
   async.waterfall([
@@ -16,22 +16,21 @@ const clearDataBases = (mysql, done) => {
       );
     },
     cbAsync => mysql.execute(`SET FOREIGN_KEY_CHECKS = 1;`, err => cbAsync(err))
-  ], err => done(err));
+  ], err => done(err))
 }
 
 describe('API', function() {
-  this.timeout(60000);
+  this.timeout(60000)
   before(function(done) {
-    STORAGE.app = require('../server');
-    STORAGE.app.start();
+    STORAGE.app = require('../server')
+    STORAGE.app.start()
     STORAGE.app.on('started', () => {
-      console.log('app ready')
-      clearDataBases(
-        STORAGE.app.dataSources.mysql.connector,
-        done
-      )
+      clearDataBases(STORAGE.app.dataSources.mysql.connector, err => {
+        console.log('app ready')
+        done(err)
+      })
     })
-  });
+  })
 
   describe('Modules', function() {
     [
@@ -45,12 +44,12 @@ describe('API', function() {
   })
 
   after(function(done) {
-    clearDataBases(
-      STORAGE.app.dataSources.mysql.connector,
-      () => {
-        done();
-        setTimeout(process.exit, 1000);
-      }
-    )
-  });
+    clearDataBases(STORAGE.app.dataSources.mysql.connector, err => {
+      STORAGE.app.stop()
+      setTimeout(() => {
+        done()
+        process.exit()
+      }, 1000)
+    })
+  })
 })

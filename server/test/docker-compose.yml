@@ -1,0 +1,23 @@
+version: '3.1'
+services:
+  mysql-test:
+    container_name: mysql-test
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3310:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "oneplace-test"
+      MYSQL_DATABASE: "oneplace"
+      MYSQL_USER: "oneplace-test"
+      MYSQL_PASSWORD: "oneplace-test"
+    volumes:
+      # - ./server/data/docker/mysql:/var/lib/mysql
+      - ../data/mysql:/docker-entrypoint-initdb.d
+  redis-test:
+    container_name: redis-test
+    image: redis:4
+    ports:
+      - "6382:6379"
+    # volumes:
+    #   - ./server/data/docker/redis:/data

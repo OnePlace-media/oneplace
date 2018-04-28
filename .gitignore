@@ -29,4 +29,3 @@ server/config.json
 server/storage/*
 client/dist
 test.js
-docs/*

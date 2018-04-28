@@ -17,10 +17,13 @@ md.renderer.rules.link_open = function(tokens, idx) {
 
 const Entities = require('html-entities').AllHtmlEntities
 const entities = new Entities()
-const xmldom = require('xmldom')
+const xmldom = require('xmldom');
 const DOMParser = new xmldom.DOMParser({
-  errorHandler: {warning: () => {}, error: () => {}}
-})
+  errorHandler: {
+    warning() {},
+    error() {}
+  }
+});
 const XMLSerializer = new xmldom.XMLSerializer()
 
 

@@ -25,7 +25,7 @@ export default {
       if (!this.processing) {
         this.processing = true
         this.wrongCredentials = false
-        this.$validator
+        return this.$validator
           .validateAll()
           .then(() => {
             if (this.errors.any()) throw new Error('INVALID_FORM')
@@ -65,7 +65,7 @@ export default {
 <template>
 <div class="login-form">
   <auth-header></auth-header>
-  <form class="login-form__body" @submit.prevent="onSubmit" novalidate>
+  <form class="login-form__body" @submit.prevent="onSubmit" novalidate  id="login-form">
     <p class="login-form__text login-form__text--error" v-if="wrongCredentials">{{$t('auth.login.wrongCredentials')}}</p>
     <div class="login-form__item">
       <input 

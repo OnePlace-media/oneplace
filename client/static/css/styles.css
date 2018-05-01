@@ -2561,21 +2561,8 @@ hr {
   color: #db4c2a;
 }
 
-.post-view__post-reply,.post-view__post-like {
+.post-view__post-reply,.post-view__post-like,.post-view__post-share {
   position: relative;
-  margin-right: 8px;
-}
-
-.post-view__post-reply:last-child,.post-view__post-like:last-child {
-  margin-right: 0;
-}
-
-.post-view__post-share {
-  margin-right: 8px;
-}
-
-.post-view__post-share:last-child {
-  margin-right: 0;
 }
 
 .post-view__post-like--active .post-view__icon-like,.post-view__post-like--active .post-view__icon-dislike {
@@ -2710,7 +2697,7 @@ hr {
   display: none;
   font-size: 13px;
   width: 200px;
-  padding: 8px 16px;
+  padding: 8px 12px;
   top: 32px;
   left: calc(50% - 100px);
   color: #383838;
@@ -2722,6 +2709,10 @@ hr {
 
 .post-view__pending-payout p {
   white-space: normal;
+}
+
+.post-view__votes,.post-view__shares,.post-view__replies {
+  margin-left: 8px;
 }
 
 .post-view__votes {
@@ -3947,6 +3938,10 @@ hr {
   width: 100%;
   position: relative;
   padding-bottom: 44px;
+}
+
+.feed__post-content--blog {
+  padding-bottom: 33px;
 }
 
 .feed__post-reposted {

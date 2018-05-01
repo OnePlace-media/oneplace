@@ -37,7 +37,7 @@
         <svg class="post-view__icon post-view__icon--small post-view__icon-dislike">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
         </svg>
-      </a><span>{{dislikeVotes}}</span>
+      </a><span class="post-view__votes">{{dislikeVotes}}</span>
     </span>
     <span class="post-view__post-data-item" v-if="(isPost || isBlog)">
       <a class="post-view__post-reply" :title="$t('common.reply')" @click.prevent="focusToComment" v-scroll-to="'#comment-input-root'">
@@ -46,7 +46,7 @@
           :class="{'post-view__icon--small': isBlog}">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#comment"></use>
         </svg>
-      </a><span>{{post.children}}</span>
+      </a><span class="post-view__replies">{{post.children}}</span>
     </span>
     <a href="#"
       v-if="isComment && replyIsAvailable"

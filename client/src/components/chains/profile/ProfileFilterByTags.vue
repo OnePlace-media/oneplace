@@ -9,9 +9,14 @@
 const TOP_LIMIT = 10
 import FilterByTags from '../../../components/chains/common/FilterByTags.vue'
 import EventBus from '../../../event-bus'
-const parser = require('@oneplace/blockchains-api/parser')
+
 export default {
   name: 'ProfileFilterByTags',
+  props: {
+    tags: {
+      type: Array
+    }
+  },
   components: {
     FilterByTags
   },
@@ -37,14 +42,6 @@ export default {
     },
     change({ include, exclude }) {
       EventBus.$emit('PROFILE:FILTER:CHANGE', { include, exclude })
-    }
-  },
-  computed: {
-    tags() {
-      const posts = this.$store.state.profile.posts.collection
-      const tags = parser.getTagsFromPosts(posts)
-      tags.sort((a, b) => b.count - a.count)
-      return tags
     }
   }
 }

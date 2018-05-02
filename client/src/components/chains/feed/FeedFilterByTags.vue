@@ -18,11 +18,16 @@
 const TOP_LIMIT = 10
 import FilterByTags from '../../../components/chains/common/FilterByTags.vue'
 import EventBus from '../../../event-bus'
-const parser = require('@oneplace/blockchains-api/parser')
+
 export default {
   name: 'FeedFilterByTags',
   components: {
     FilterByTags
+  },
+  props: {
+    tags: {
+      type: Array
+    }
   },
   data() {
     return {
@@ -46,14 +51,6 @@ export default {
     },
     change({ include, exclude }) {
       EventBus.$emit('FEED:FILTER:CHANGE', { include, exclude })
-    }
-  },
-  computed: {
-    tags() {
-      const posts = this.$store.state.feed.posts.collection
-      const tags = parser.getTagsFromPosts(posts)
-      tags.sort((a, b) => b.count - a.count)
-      return tags
     }
   }
 }

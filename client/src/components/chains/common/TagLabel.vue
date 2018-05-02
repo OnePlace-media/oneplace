@@ -15,14 +15,6 @@ export default {
     tag: {
       type: Object,
       required: true
-    },
-    include: {
-      type: Object,
-      required: true
-    },
-    exclude: {
-      type: Object,
-      required: true
     }
   },
   methods: {
@@ -35,10 +27,10 @@ export default {
   },
   computed: {
     isInclude() {
-      return this.include[this.tag.text]
+      return this.$store.state.filterByTags.include[this.tag.text]
     },
     isExclude() {
-      return this.exclude[this.tag.text]
+      return this.$store.state.filterByTags.exclude[this.tag.text]
     }
   }
 }

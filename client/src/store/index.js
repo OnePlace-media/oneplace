@@ -6,6 +6,7 @@ import profile from './modules/profile'
 import publish from './modules/publish'
 import feed from './modules/feed'
 import tag from './modules/tag'
+import filterByTags from './modules/filterByTags'
 import state from './state'
 
 Vue.use(Vuex)
@@ -18,7 +19,8 @@ export function createStore() {
       profile: profile(),
       tag: tag(),
       publish: publish(),
-      feed: feed()
+      feed: feed(),
+      filterByTags: filterByTags()
     },
     state: state(),
     actions: require('./actions').default,

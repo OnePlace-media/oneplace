@@ -15,8 +15,6 @@
         <tag-label 
           v-for="tag in tags" :key="tag.text" 
           :tag="tag"
-          :include="include"
-          :exclude="exclude"
           @add="add"
           @remove="remove"
         ></tag-label>
@@ -37,22 +35,6 @@ export default {
     tags: {
       type: Array,
       required: true
-    },
-    isShow: {
-      type: Boolean,
-      required: true
-    },
-    include: {
-      type: Object,
-      required: true
-    },
-    exclude: {
-      type: Object,
-      required: true
-    },
-    clearFilterInActive: {
-      type: Boolean,
-      required: true
     }
   },
   mixins: [onClickOutside],
@@ -62,21 +44,43 @@ export default {
   beforeDestroy() {
     this.toggleBodyClass({ flag: false })
   },
+  computed:{
+    clearFilterInActive() {
+      const includes = Object.keys(this.include).length
+      const excludes = Object.keys(this.exclude).length
+      return !(includes || excludes)
+    },
+    include(){
+      return this.$store.state.filterByTags.include
+    },
+    exclude(){
+      return this.$store.state.filterByTags.exclude
+    },
+    isShow(){
+      return this.$store.state.filterByTags.modalShow
+    }
+  },
   methods: {
+    change() {
+      this.$emit('change', { include: this.include, exclude: this.exclude })
+    },
     toggleBodyClass({ flag }) {
       this.$helper.toggleBodyModalClass({flag})
     },
     hide() {
-      this.$emit('update:isShow', false)
+     this.$store.commit('filterByTags/SET_MODAL_SHOW', false)
     },
     add(tag) {
-      this.$emit('add', tag)
+      this.$store.commit('filterByTags/ADD_TAG', tag)
+      this.change()
     },
     remove(tag) {
-      this.$emit('remove', tag)
+      this.$store.commit('filterByTags/REMOVE_TAG', tag)
+      this.change()
     },
     clear() {
-      this.$emit('clear')
+      this.$store.commit('filterByTags/CLEAR_FILTERS')
+      this.change()
     }
   }
 }

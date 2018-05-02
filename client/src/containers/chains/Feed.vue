@@ -15,7 +15,8 @@
       <div class="feed__wrapper" v-show="firstFetched">
         <feed-posts></feed-posts>
         <aside class="feed__aside">
-          <feed-filter-by-tags></feed-filter-by-tags>
+          <feed-filter-by-tags :tags="tags"></feed-filter-by-tags>
+          <filter-by-tags-modal v-if="filterByTagsShow" :tags="tags" @change="change"></filter-by-tags-modal>
         </aside>
       </div>
     </section>
@@ -24,11 +25,15 @@
 <script>
 import FeedPosts from '../../components/chains/feed/FeedPosts.vue'
 import FeedFilterByTags from '../../components/chains/feed/FeedFilterByTags.vue'
+import FilterByTagsModal from '../../components/chains/common/FilterByTagsModal.vue'
+const parser = require('@oneplace/blockchains-api/parser')
+import EventBus from '../../event-bus'
 
 export default {
   name: 'Feed',
   asyncData({ store, route, router }) {
     if (!store.state.feed.posts.collection.length) {
+      store.commit('filterByTags/CLEAR_ALL_DATA')
       return store
         .dispatch('feed/fetchState', {
           chain: route.params.chain,
@@ -44,14 +49,29 @@ export default {
         })
     } else return Promise.resolve()
   },
-  computed:{
-    firstFetched(){
+  computed: {
+    filterByTagsShow() {
+      return this.$store.state.filterByTags.modalShow
+    },
+    firstFetched() {
       return this.$store.state.feed.posts.firstFetched
+    },
+    tags() {
+      const posts = this.$store.state.feed.posts.collection
+      const tags = parser.getTagsFromPosts(posts)
+      tags.sort((a, b) => b.count - a.count)
+      return tags
+    }
+  },
+  methods: {
+    change({ include, exclude }) {
+      EventBus.$emit('FEED:FILTER:CHANGE', { include, exclude })
     }
   },
   components: {
     FeedPosts,
-    FeedFilterByTags
+    FeedFilterByTags,
+    FilterByTagsModal
   },
   destroyed() {
     this.$store.commit('feed/CLEAR_ALL_DATA')

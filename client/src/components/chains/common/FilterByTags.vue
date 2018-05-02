@@ -11,8 +11,6 @@
       <tag-label 
         v-for="tag in tagsTop" :key="tag.text" 
         :tag="tag"
-        :include="include"
-        :exclude="exclude"
         @add="add"
         @remove="remove"
         ></tag-label>
@@ -27,37 +25,16 @@
       </a>
       <a href="#" class="link" @click.prevent="showAllTags" v-if="showAllTagsBtn">{{$t('profile.showAllTags')}}</a>
     </div>
-    <filter-by-tags-modal
-      v-if="modalShow"
-      :tags="tags"
-      :is-show.sync="modalShow"
-      :include="include"
-      :exclude="exclude"
-      :clear-filter-in-active="clearFilterInActive"
-      @add="add"
-      @remove="remove"
-      @clear="clear"
-    ></filter-by-tags-modal>
   </div>
 </template>
 
 <script>
 import TagLabel from './TagLabel.vue'
-import FilterByTagsModal from './FilterByTagsModal.vue'
 const TOP_LIMIT = 10
 export default {
   name: 'FilterByTags',
   components: {
-    TagLabel,
-    FilterByTagsModal
-  },
-  data() {
-    return {
-      fixed: false,
-      modalShow: false,
-      include: {},
-      exclude: {}
-    }
+    TagLabel
   },
   props: {
     tags: {
@@ -70,24 +47,18 @@ export default {
       this.$emit('change', { include: this.include, exclude: this.exclude })
     },
     clear() {
-      this.include = {}
-      this.exclude = {}
+      this.$store.commit('filterByTags/CLEAR_FILTERS')
       this.change()
     },
     showAllTags() {
-      this.modalShow = true
+      this.$store.commit('filterByTags/SET_MODAL_SHOW', true)
     },
     add(tag) {
-      if (!this.exclude[tag.text]) {
-        if (this.include[tag.text]) this.$delete(this.include, tag.text)
-        else this.$set(this.include, tag.text, true)
-      }
-      this.$delete(this.exclude, tag.text)
+      this.$store.commit('filterByTags/ADD_TAG', tag)
       this.change()
     },
     remove(tag) {
-      this.$set(this.exclude, tag.text, true)
-      this.$delete(this.include, tag.text)
+      this.$store.commit('filterByTags/REMOVE_TAG', tag)
       this.change()
     }
   },
@@ -102,6 +73,15 @@ export default {
     },
     tagsTop() {
       return this.tags.slice(0, TOP_LIMIT)
+    },
+    include() {
+      return this.$store.state.filterByTags.include
+    },
+    exclude() {
+      return this.$store.state.filterByTags.exclude
+    },
+    modalShow() {
+      return this.$store.state.filterByTags.modalShow
     }
   }
 }

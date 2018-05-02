@@ -45,7 +45,8 @@
               {{$tc('profile.following', followCount.following_count)}}
             </div>
           </div>
-          <profile-filter-by-tags></profile-filter-by-tags>
+          <profile-filter-by-tags :tags="tags"></profile-filter-by-tags>
+          <filter-by-tags-modal v-if="filterByTagsShow" :tags="tags" @change="change"></filter-by-tags-modal>
         </div>
         <profile-blog :account="account" v-if="!accountProcessing"></profile-blog>
       </div>
@@ -57,6 +58,9 @@
 import ProfileBlog from '../../components/chains/profile/ProfileBlog.vue'
 import ProfileFollowBtn from '../../components/chains/profile/ProfileFollowBtn.vue'
 import ProfileFilterByTags from '../../components/chains/profile/ProfileFilterByTags.vue'
+const parser = require('@oneplace/blockchains-api/parser')
+import FilterByTagsModal from '../../components/chains/common/FilterByTagsModal.vue'
+import EventBus from '../../event-bus'
 
 import CONSTANTS from '@oneplace/constants'
 import { mixin as onClickOutside } from 'vue-on-click-outside'
@@ -66,7 +70,8 @@ export default {
   components: {
     ProfileBlog,
     ProfileFollowBtn,
-    ProfileFilterByTags
+    ProfileFilterByTags,
+    FilterByTagsModal
   },
   mixins: [onClickOutside],
   asyncData({ store, route, router }) {
@@ -74,6 +79,7 @@ export default {
     const chain = store.state.profile.chain
     if (username !== route.params.username || chain !== route.params.chain) {
       store.commit('profile/CLEAR_ALL_DATA')
+      store.commit('filterByTags/CLEAR_ALL_DATA')
       return store
         .dispatch('profile/fetchState', {
           chain: route.params.chain,
@@ -93,7 +99,21 @@ export default {
   metaInfo() {
     return this.$metaGenerator.profile(this.account, this.$route)
   },
+  methods: {
+    change({ include, exclude }) {
+      EventBus.$emit('PROFILE:FILTER:CHANGE', { include, exclude })
+    }
+  },
   computed: {
+    filterByTagsShow() {
+      return this.$store.state.filterByTags.modalShow
+    },
+    tags() {
+      const posts = this.$store.state.profile.posts.collection
+      const tags = parser.getTagsFromPosts(posts)
+      tags.sort((a, b) => b.count - a.count)
+      return tags
+    },
     showAllTagsModal() {
       return this.$store.state.profile.tags.showAllTags
     },

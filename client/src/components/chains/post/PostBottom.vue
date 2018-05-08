@@ -1,8 +1,8 @@
 <template>
   <div :class="{'blog__post-data': isBlog, 'post-view__post-data':isPost, 'comment__post-data': isComment}">
     <span class="post-view__post-data-item" :class="{'post-view__post-value-correction': showPayoutWithVote}">
-      <span class="post-view__post-currency" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}</span>
-      <span class="post-view__post-value">{{payoutValue}}
+      <span class="post-view__post-currency">{{currencySymbol}}</span>
+      <span class="post-view__post-value" :class="{'payout-declined': post.payout_declined}">{{payoutValue}}
         <dropdown-payout :post="post" :chain="chain"></dropdown-payout>
       </span>
     </span>

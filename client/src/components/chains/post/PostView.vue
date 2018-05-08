@@ -82,7 +82,7 @@
         <div class="post-view__tags-wrapper">
           <h2 class="h2 post-view__block-title">{{$t('common.tags')}}</h2>
           <div class="tags-list__wrapper">
-            <span class="tags-list__item" v-for="(category, index) in post.tags" :key="index">{{category | unGolosTag | toLowerCase}}</span>
+            <span class="tags-list__item" v-for="(category, index) in post.tags" :key="index"><span>{{category | unGolosTag | toLowerCase}}</span></span>
           </div>
         </div>
       </section>

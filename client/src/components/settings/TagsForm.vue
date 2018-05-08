@@ -26,12 +26,12 @@
     </div>
     <div class="tags-list__wrapper">
       <draggable v-model="steemTags" v-if="chain === CHAINS.STEEM">
-        <span class="tags-list__item" v-for="tag in steemTags" :key="tag.text">{{tag.text | unGolosTag | toLowerCase}}
+        <span class="tags-list__item" v-for="tag in steemTags" :key="tag.text"><span>{{tag.text | unGolosTag | toLowerCase}}</span>
           <span class="tags-list__remove-item" @click="removeTag(tag)"></span>
         </span>
       </draggable>
       <draggable v-model="golosTags" v-if="chain === CHAINS.GOLOS">
-        <span class="tags-list__item" v-for="tag in golosTags" :key="tag.text">{{tag.text | unGolosTag | toLowerCase}}
+        <span class="tags-list__item" v-for="tag in golosTags" :key="tag.text"><span>{{tag.text | unGolosTag | toLowerCase}}</span>
           <span class="tags-list__remove-item" @click="removeTag(tag)"></span>
         </span>
       </draggable>
@@ -44,7 +44,7 @@
       <h3 class="settings__tags-chain settings__tags-chain--steem">Steem</h3>
       <div class="tags-list__wrapper">
         <draggable v-model="steemTags">
-          <span class="tags-list__item" v-for="tag in steemTags" :key="tag.text">{{tag.text}}
+          <span class="tags-list__item" v-for="tag in steemTags" :key="tag.text"><span>{{tag.text}}</span>
             <span class="tags-list__remove-item" @click="removeTag(tag)"></span>
           </span>
         </draggable>
@@ -55,7 +55,7 @@
       <h3 class="settings__tags-chain settings__tags-chain--golos">Golos</h3>
       <div class="tags-list__wrapper">
         <draggable v-model="golosTags">
-          <span class="tags-list__item" v-for="tag in golosTags" :key="tag.text">{{tag.text | unGolosTag | toLowerCase}}
+          <span class="tags-list__item" v-for="tag in golosTags" :key="tag.text"><span>{{tag.text | unGolosTag | toLowerCase}}</span>
             <span class="tags-list__remove-item" @click="removeTag(tag)"></span>
           </span>
         </draggable>

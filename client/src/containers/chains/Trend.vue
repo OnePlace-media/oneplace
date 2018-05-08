@@ -79,7 +79,7 @@
                     </router-link>
                     <!-- <a :href="`/${$route.params.chain}/@${post.author}`" class="tag-block__post-avatar avatar" :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`"></a> -->
                     <div class="tag-block__post-data">
-                      <span class="tag-block__post-value" :class="{'payout-declined': post.payout_declined}">{{currencySymbol}}&nbsp;{{post.payout}}</span>
+                      <span class="tag-block__post-value">{{currencySymbol}}&nbsp;<span :class="{'payout-declined': post.payout_declined}">{{post.payout}}</span></span>
                       <a @click.prevent="focusComment(post)" :href="$helper.makePathForPost(post, chain)" class="tag-block__post-replies link">
                         <svg class="tag-block__icon-comment">
                           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#comment"></use>

@@ -16,7 +16,7 @@
         >
         <div class="publish__tags-wrapper">
           <span class="tags-list__item" v-for="(tag, index) in tags" :key="tag">
-            {{tag | unGolosTag | toLowerCase}} 
+            <span>{{tag | unGolosTag | toLowerCase}}</span>
             <span class="tags-list__remove-item" @click="removeTag(tag)" v-if="isNewRecord || index"></span>
           </span> 
         </div>

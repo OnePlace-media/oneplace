@@ -2184,22 +2184,29 @@ hr {
 
 .tag-block__post-data {
   float: right;
-  font-weight: 700;
   padding: 7px 0;
 }
 
-.tag-block__post-value {
+.tag-block__post-currency {
+  display: inline-block;
   font-family: 'PTS', 'Noto Sans', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  margin-right: 4px;
+}
+
+.tag-block__post-value {
   margin-right: 0;
 }
 
 .tag-block__post-replies {
-  margin-left: 12px;
+  margin-left: 16px;
 }
 
 .tag-block__icon-comment {
   width: 18px;
   height: 18px;
+  margin-right: 6px;
   transition: all 0.3s ease;
   fill: #a8adad;
   position: relative;
@@ -3122,6 +3129,7 @@ hr {
 
 .markdown pre>code {
   display: block;
+  overflow-x: auto;
   padding: 0.5rem 0.75rem;
   margin-bottom: 1rem;
 }

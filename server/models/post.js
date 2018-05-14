@@ -46,17 +46,29 @@ module.exports = Model => {
   const md = new Remarkable
 
   Model.comment = async function(req, chain, author, body, title, rewardsOpts, tags, parentAuthor, parentPermlink, permlink, upVotePost) {
-    const accessIsGranted = await Model.app.models.user.checkAccountLink(chain, author, req.accessToken.userId)
-    if (!accessIsGranted) {
-      const error = new Error('This account not linked with current profile')
-      error.status = 401
-      throw error
-    }
-    let post = await blockChains.getContent(chain, {author, permlink})
-    let isUpdate = !!post.id
-    let result = {}
     try {
+      const accessIsGranted = await Model.app.models.user.checkAccountLink(chain, author, req.accessToken.userId)
+      if (!accessIsGranted) {
+        const error = new Error('This account not linked with current profile')
+        error.status = 401
+        throw error
+      }
+
+      const checkTagsByBlackList = await Model.app.models.tag.checkByBlackList(chain, tags)
+
+      if(checkTagsByBlackList) {
+        const error = new Error('This account not linked with current profile')
+        error.status = 420
+        error.code = 'BAD_TAG'
+        throw error
+      }
+
+      let post = await blockChains.getContent(chain, {author, permlink})
+      let account = await Model.app.models.account.findOne({username: author})
+      let isUpdate = !!post.id
+      let result = {}
       result = await Model.app.postingWrapper.comment(chain, {
+        account,
         author,
         body,
         title,
@@ -71,10 +83,16 @@ module.exports = Model => {
       if (upVotePost) {
         const vote = await Model.app.postingWrapper.vote(chain, {voter: author, author, permlink: result.permlink, weight: 10000})
       }
+
+      const commentRaw = await blockChains.getContent(chain, result)
+      const [comment] = await Model.app.trendsWatcher.preparePosts(chain, [commentRaw], true)
+      comment.parent_author = parentAuthor
+      comment.parent_permlink = parentPermlink
+      return comment
     } catch (error) {
       console.log(error)
-      let code = 'UNKNOW_ERROR'
       if (error.data && error.data.stack) {
+        let code = 'UNKNOW_ERROR'
         if (~error.data.stack[0].format.indexOf('STEEMIT_MIN_REPLY_INTERVAL')) {
           code = 'STEEMIT_MIN_REPLY_INTERVAL'
         } else if (~error.data.stack[0].format.indexOf('STEEMIT_MIN_ROOT_COMMENT_INTERVAL')) {
@@ -82,18 +100,13 @@ module.exports = Model => {
         } else {
           code = error.data.stack[0].format
         }
+        error = new Error('Bad request, somethign wrong with blockchain request')
+        error.code = code
+        error.status = 400
       }
-
-      error = new Error('Bad request, somethign wrong with blockchain request')
-      error.code = code
-      error.status = 400
       throw error
+
     }
-    const commentRaw = await blockChains.getContent(chain, result)
-    const [comment] = await Model.app.trendsWatcher.preparePosts(chain, [commentRaw], true)
-    comment.parent_author = parentAuthor
-    comment.parent_permlink = parentPermlink
-    return comment
   }
 
   Model.remoteMethod('comment', {
@@ -115,19 +128,23 @@ module.exports = Model => {
   })
 
   Model.vote = async function(req, chain, voter, author, permlink, weight) {
-    const accessIsGranted = await Model.app.models.user.checkAccountLink(chain, voter, req.accessToken.userId)
-    if (!accessIsGranted) {
-      const error = new Error('This account not linked with current profile')
-      error.status = 401
-      throw error
-    }
-
-    let result = {}
     try {
+      const accessIsGranted = await Model.app.models.user.checkAccountLink(chain, voter, req.accessToken.userId)
+      if (!accessIsGranted) {
+        const error = new Error('This account not linked with current profile')
+        error.status = 401
+        throw error
+      }
+
+      let result = {}
       result = await Model.app.postingWrapper.vote(chain, {voter, author, permlink, weight})
+      const account = await blockChains.getAccount(chain, author)
+      result.reputation = chainParser.convertReputation(account.reputation)
+      return result
     } catch (err) {
-      let code = 'UNKNOW_ERROR'
+
       if (err.data && err.data.stack) {
+        let code = 'UNKNOW_ERROR'
         if (~err.data.stack[0].format.indexOf('STEEMIT_MIN_VOTE_INTERVAL_SEC')) {
           code = 'STEEMIT_MIN_VOTE_INTERVAL_SEC'
         } else if (~err.data.stack[0].format.indexOf('STEEMIT_MAX_VOTE_CHANGES')) {
@@ -135,17 +152,12 @@ module.exports = Model => {
         } else {
           code = err.data.stack[0].format
         }
+        const error = new Error('Bad request, somethign wrong with blockchain request')
+        error.code = code
+        error.status = 400
       }
-
-      const error = new Error('Bad request, somethign wrong with blockchain request')
-      error.code = code
-      error.status = 400
       throw error
     }
-
-    const account = await blockChains.getAccount(chain, author)
-    result.reputation = chainParser.convertReputation(account.reputation)
-    return result
   }
 
   Model.remoteMethod('vote', {

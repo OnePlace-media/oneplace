@@ -28,6 +28,9 @@
     },
     "chain": {
       "type": "string"
+    },
+    "inWhiteList":{
+      "type": "boolean"
     }
   },
   "validations": [],

@@ -3980,6 +3980,10 @@ hr {
   display: none;
 }
 
+.publish--edit .tags-list__item:first-child {
+  padding-right: 8px;
+}
+
 .publish--edit .tags-list__item:first-child .tags-list__remove-item {
   display: none;
 }
@@ -4199,6 +4203,10 @@ hr {
   font-size: 13px;
   line-height: 24px;
   margin-bottom: 8px;
+}
+
+.tags-list__item--publish {
+  padding-right: 24px;
 }
 
 .publish__setup-payout {

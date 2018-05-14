@@ -24,7 +24,7 @@
         </svg>
         <slider v-if="voteSliderActive && !isLike && !post.voteProcessing" :value.sync="voteWeight"></slider>
       </a><span class="post-view__votes" @mouseover="showDropdownsVotes = true">{{likeVotes}}
-        <dropdown-votes :post="post" :chain="chain" v-if="likeVotes && showDropdownsVotes" ></dropdown-votes>
+        <dropdown-votes :post="post" :chain="chain" v-if="likeVotes && showDropdownsVotes"></dropdown-votes>
       </span>
     </span>
     <span class="post-view__post-data-item" v-if="isComment">
@@ -37,7 +37,9 @@
         <svg class="post-view__icon post-view__icon--small post-view__icon-dislike">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/img/icons-sprite.svg#like"></use>
         </svg>
-      </a><span class="post-view__votes">{{dislikeVotes}}</span>
+      </a><span class="post-view__votes" @mouseover="showDropdownsDislikeVotes = true">{{dislikeVotes}}
+        <dropdown-votes :post="post" :chain="chain" :is-dislike="true" v-if="dislikeVotes && showDropdownsDislikeVotes"></dropdown-votes>
+      </span>
     </span>
     <span class="post-view__post-data-item" v-if="(isPost || isBlog)">
       <a class="post-view__post-reply" :title="$t('common.reply')" @click.prevent="focusToComment" v-scroll-to="'#comment-input-root'">
@@ -125,6 +127,7 @@ export default {
       timerOver: null,
       timerOut: null,
       showDropdownsVotes: false,
+      showDropdownsDislikeVotes: false,
       removeModal: false,
       upVoteProcessing: false,
       downVoteProcessing: false
@@ -246,7 +249,7 @@ export default {
         ? !!this.post.active_votes.find(
             vote =>
               vote.voter === this.account.username &&
-              (vote.percent > 0 || vote.weight > 0)
+              (vote.percent > 0)
           )
         : false
     },
@@ -255,18 +258,18 @@ export default {
         ? !!this.post.active_votes.find(
             vote =>
               vote.voter === this.account.username &&
-              (vote.percent < 0 || vote.weight < 0)
+              (vote.percent < 0)
           )
         : false
     },
     likeVotes() {
       return this.post.active_votes.filter(
-        vote => +vote.weight > 0 || +vote.percent > 0
+        vote => +vote.percent > 0
       ).length
     },
     dislikeVotes() {
       return this.post.active_votes.filter(
-        vote => +vote.weight < 0 || +vote.percent < 0
+        vote => +vote.percent < 0
       ).length
     },
     isComment() {

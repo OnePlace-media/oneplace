@@ -51,7 +51,8 @@ class Converter {
     if (isLiner) {
       const allPayout = +post.pending_payout + +post.total_payout
       const sumRshares = active_votes.reduce((sum, _vote) => sum += +_vote.rshares, 0)
-      const q = ((reward_balance * base) / recent_claims) * CURRENCY_Q
+      // const q = ((reward_balance * base) / recent_claims) * CURRENCY_Q
+      const q = allPayout / sumRshares
       if (append)
         result = lastPayout ? +post.payout : (+post.payout + vote.rshares * q).toFixed(2)
       else

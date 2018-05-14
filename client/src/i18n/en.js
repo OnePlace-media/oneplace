@@ -6,7 +6,8 @@ module.exports = {
     STEEMIT_MAX_VOTE_CHANGES: 'You have used the maximum number of vote changes on this comment',
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds',
     NET_PROBLEM: 'A network error has occurred, check your connection and try again',
-    STEEMIT_MIN_ROOT_COMMENT_INTERVAL: 'You may only post once every 5 minutes'
+    STEEMIT_MIN_ROOT_COMMENT_INTERVAL: 'You may only post once every 5 minutes',
+    BAD_TAG:'Excluded tag'
   },
   common: {
     cancel: 'Cancel',

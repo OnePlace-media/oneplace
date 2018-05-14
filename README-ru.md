@@ -62,7 +62,8 @@ cp ./server/datasources.sample.json ./server/datasources.json
     "steemDomain": "URL ноды STEEM с HTTP JSON-RPC протоколом",
     "golosDomain": "URL ноды GOLOS с HTTP JSON-RPC протоколом",
     "WIF": "Приватный постинг ключ аккаунта приложения в блокчейнах STEEM и GOLOS",
-    "username": "Имя аккаунта приложения в блокчейнах STEEM и GOLOS (без @)"
+    "username": "Имя аккаунта приложения в блокчейнах STEEM и GOLOS (без @)",
+    "beneficiarie" : "Имя аккаунта приложения в блокчейнах STEEM и GOLOS для функционала beneficiarie"
   }
 }
 ```

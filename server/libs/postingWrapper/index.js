@@ -1,7 +1,7 @@
 const {BLOCKCHAIN} = require('@oneplace/constants')
 
 class PostingWrapper {
-  constructor({steemDomain, golosDomain, WIF, username}) {
+  constructor({steemDomain, golosDomain, WIF, username, beneficiarie}) {
     const clients = {
       [BLOCKCHAIN.SOURCE.STEEM]: require('steem')
     }
@@ -20,8 +20,9 @@ class PostingWrapper {
     this.clients = clients
     this.WIF = WIF
     this.CLIENT_ID = username
+    this.beneficiarie = beneficiarie
   }
-  comment(chain, {parentAuthor, parentPermlink, author, permlink, body, title, tags = [], rewardsOpts = '50', isUpdate = false}) {
+  comment(chain, {account, parentAuthor, parentPermlink, author, permlink, body, title, tags = [], rewardsOpts = '50', isUpdate = false}) {
     rewardsOpts = +rewardsOpts
     const percent_steem_dollars = rewardsOpts === 100 ? 0 : 10000
     const max_accepted_payout = `${rewardsOpts ? '1000000.000' : '0.000'} ${chain === BLOCKCHAIN.SOURCE.STEEM ? 'SBD' : 'GBG'}`
@@ -57,6 +58,10 @@ class PostingWrapper {
       ]
       rewardsOpts = +rewardsOpts
       if (!isUpdate) {
+        const extensions = []
+        if(!account.inWhiteList && !~account.witness_votes.indexOf('oneplace'))
+          extensions.push([0, {beneficiaries: [{account: this.beneficiarie, weight: 500}]}])
+
         const options = {
           author,
           permlink,
@@ -64,13 +69,7 @@ class PostingWrapper {
           percent_steem_dollars,
           allow_votes: true,
           allow_curation_rewards: true,
-          extensions: [
-            [0, {
-              beneficiaries: [
-                {account: this.CLIENT_ID, weight: isPost ? 500 : 1000}
-              ]
-            }]
-          ]
+          extensions
         }
         operations.push(['comment_options', options])
       }

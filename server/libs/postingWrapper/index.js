@@ -1,7 +1,7 @@
 const {BLOCKCHAIN} = require('@oneplace/constants')
 
 class PostingWrapper {
-  constructor({steemDomain, golosDomain, WIF, username}) {
+  constructor({steemDomain, golosDomain, WIF, username, beneficiarie}) {
     const clients = {
       [BLOCKCHAIN.SOURCE.STEEM]: require('steem')
     }
@@ -20,6 +20,7 @@ class PostingWrapper {
     this.clients = clients
     this.WIF = WIF
     this.CLIENT_ID = username
+    this.beneficiarie = beneficiarie
   }
   comment(chain, {account, parentAuthor, parentPermlink, author, permlink, body, title, tags = [], rewardsOpts = '50', isUpdate = false}) {
     rewardsOpts = +rewardsOpts
@@ -59,7 +60,7 @@ class PostingWrapper {
       if (!isUpdate) {
         const extensions = []
         if(!account.inWhiteList && !~account.witness_votes.indexOf('oneplace'))
-          extensions.push([0, {beneficiaries: [{account: this.CLIENT_ID, weight: isPost ? 500 : 1000}]}])
+          extensions.push([0, {beneficiaries: [{account: this.beneficiarie, weight: 500}]}])
 
         const options = {
           author,

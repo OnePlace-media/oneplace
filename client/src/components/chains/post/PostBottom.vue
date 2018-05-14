@@ -281,12 +281,14 @@ export default {
     isPost() {
       return this.type === 'post'
     },
+    locale(){
+      return this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ? 'en' : 'ru'
+    },
     payoutValue() {
-      const locale =
-        this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM ? 'en' : 'ru'
+      
       return this.showPayoutWithVote
         ? this.diffPayouts
-        : this.$n(this.post.payout, 'currency', locale).replace(/( ₽)|\$/, '')
+        : this.$n(this.post.payout, 'currency', this.locale).replace(/( ₽)|\$/, '')
     },
     showPayoutWithVote() {
       return (
@@ -309,8 +311,9 @@ export default {
     },
     diffPayouts() {
       let diff = (this.payoutWithVote - this.post.payout).toFixed(2)
-      if (diff > 0) diff = '+' + diff
-      return diff
+      let diffLabel = this.$n(diff, 'currency', this.locale).replace(/( ₽)|\$/, '')
+      if (diff > 0) diffLabel = '+' + diffLabel
+      return diffLabel
     },
     payoutWithVote() {
       const params = this.$store.state.core.params[this.chain]

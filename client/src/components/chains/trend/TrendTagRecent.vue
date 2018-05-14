@@ -6,7 +6,7 @@
     <section class="tag-block__recent-body">
       <div class="tag-block__recent-post" v-for="post in posts" :key="post.id">
         <h4 class="h4 tag-block__recent-post-title">
-          <a @click.prevent="show()" :href="$helper.makePathForPost(post, chain)" class="link" :title="post.title">{{post.title}}</a>
+          <a @click.prevent="show(post)" :href="$helper.makePathForPost(post, chain)" class="link" :title="post.title">{{post.title}}</a>
         </h4>
         <div class="tag-block__post-other tag-block__recent-post-other">
           <i18n path="common.timeAgoWithAuthor" tag="p">
@@ -20,9 +20,6 @@
               class="tag-block__post-author link">
               {{post.author}}
             </router-link>
-            <!-- <a :href="`/${$route.params.chain}/@${post.author}`" place="author" class="tag-block__post-author link">
-              {{post.author}}
-            </a> -->
           </i18n>
         </div>
       </div>
@@ -46,9 +43,9 @@ export default {
     }
   },
   methods: {
-    show() {
+    show(post) {
       EventBus.$emit('POST:MODAL:SHOW', {
-        post: this.post,
+        post: post,
         chain: this.chain
       })
     }

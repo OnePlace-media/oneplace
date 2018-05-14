@@ -116,6 +116,9 @@ export default {
     },
     processing() {
       return this.$store.state.publish.form.processing
+    },
+    blackTagList(){
+      return this.$store.state.publish.tags.blackList
     }
   },
   mounted() {
@@ -147,6 +150,7 @@ export default {
         .validateAll()
         .then(() => {
           if (this.errors.any()) throw new Error('INVALID_FORM')
+          if(~this.blackTagList.findIndex(_tag => tag === _tag.text)) throw new Error('BAD_TAG')
           if (this.chain === CONSTANTS.BLOCKCHAIN.SOURCE.GOLOS)
             tag = golosTag(tag)
 
@@ -156,6 +160,8 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          if(err.message === 'BAD_TAG')
+            this.$toast.bottom(this.$t(`errors.BAD_TAG`))
         })
     },
     submitForm() {

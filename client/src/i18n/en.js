@@ -6,8 +6,7 @@ module.exports = {
     STEEMIT_MAX_VOTE_CHANGES: 'You have used the maximum number of vote changes on this comment',
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'You can only vote once every 3 seconds',
     NET_PROBLEM: 'A network error has occurred, check your connection and try again',
-    STEEMIT_MIN_ROOT_COMMENT_INTERVAL: 'You may only post once every 5 minutes',
-    BAD_TAG:'Excluded tag'
+    STEEMIT_MIN_ROOT_COMMENT_INTERVAL: 'You may only post once every 5 minutes'
   },
   common: {
     cancel: 'Cancel',
@@ -40,7 +39,8 @@ module.exports = {
       tagMax: 'Max length 64',
       firstIsLetter: 'Must begin with a letter',
       lastIsLetterOrDigit: 'Must end with a letter or a digit',
-      usernameMissingPermission: 'Missing posting permission for this account'
+      usernameMissingPermission: 'Missing posting permission for this account',
+      tagBad:'Excluded tag'
     },
     timeAgoWithAuthor: '{timeago} by {author}',
     headers: {

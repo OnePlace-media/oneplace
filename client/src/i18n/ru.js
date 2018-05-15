@@ -6,8 +6,7 @@ module.exports = {
     STEEMIT_MAX_VOTE_CHANGES: 'Вы использовали максимальное число изменений голоса для данной записи',
     STEEMIT_MIN_VOTE_INTERVAL_SEC: 'Вы можете голосовать за записи не чаще одного раза в 3 секунды',
     NET_PROBLEM: 'Произошла сетевая ошибка, проверьте ваше подключение и попробуйте снова',
-    STEEMIT_MIN_ROOT_COMMENT_INTERVAL: 'Вы можете создавать посты не чаще одного раза в 5 минут',
-    BAD_TAG: 'Исключенный тег'
+    STEEMIT_MIN_ROOT_COMMENT_INTERVAL: 'Вы можете создавать посты не чаще одного раза в 5 минут'
   },
   common: {
     cancel: 'Отмена',
@@ -40,7 +39,8 @@ module.exports = {
       tagMax: 'Максимальная длина 64',
       firstIsLetter: 'Тег должен начинаться с буквы',
       lastIsLetterOrDigit: 'Тег должен заканчиваться буквой или цифрой',
-      usernameMissingPermission: 'Отсутствует авторизация постинга для данного аккаунта'
+      usernameMissingPermission: 'Отсутствует авторизация постинга для данного аккаунта',
+      tagBad:'Исключенный тег'
     },
     timeAgoWithAuthor: '{timeago} {author}',
     headers: {

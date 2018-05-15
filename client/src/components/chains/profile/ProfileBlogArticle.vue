@@ -13,7 +13,7 @@
           {{$t('chains.imageIsHidden')}}
         </div>
       </a>
-      <div class="feed__post-content">
+      <div class="feed__post-content feed__post-content--blog">
         
         <div class="feed__post-reposted" v-if="isRepost">{{$t('profile.repostedFrom')}}
           <span class="blog__repost-avatar" :style="`background-image: url('${post.avatar}');`"></span>

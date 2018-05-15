@@ -39,7 +39,8 @@ module.exports = {
       tagMax: 'Max length 64',
       firstIsLetter: 'Must begin with a letter',
       lastIsLetterOrDigit: 'Must end with a letter or a digit',
-      usernameMissingPermission: 'Missing posting permission for this account'
+      usernameMissingPermission: 'Missing posting permission for this account',
+      tagBad:'Excluded tag'
     },
     timeAgoWithAuthor: '{timeago} by {author}',
     headers: {

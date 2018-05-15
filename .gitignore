@@ -27,6 +27,6 @@ server/data/docker
 server/datasources.json
 server/config.json
 server/storage/*
+server/data/mysql/wb-model.mwb.bak
 client/dist
 test.js
-docs/*

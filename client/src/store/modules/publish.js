@@ -11,6 +11,7 @@ const TYPES = {
   SET_FORM_OBJECT: 'SET_FORM_OBJECT',
   SET_DRAFTS_OBJECT: 'SET_DRAFTS_OBJECT',
   SET_EDITOR_OBJECT: 'SET_EDITOR_OBJECT',
+  SET_TAGS_BLACK_LIST: 'SET_TAGS_BLACK_LIST',
 }
 
 const generatePermLink = (chain, data, prefix = '') => {
@@ -37,6 +38,9 @@ export default () => {
   const initState = () => {
     return {
       processing: true,
+      tags:{
+        blackList:[]
+      },
       editor: {
         showModalImage: false,
         showModalLink: false,
@@ -82,6 +86,9 @@ export default () => {
     },
     [TYPES.SET_EDITOR_OBJECT](state, params) {
       state.editor = Object.assign(state.editor, params)
+    },
+    [TYPES.SET_TAGS_BLACK_LIST](state, collection){
+      state.tags.blackList = collection
     }
   }
 
@@ -89,15 +96,20 @@ export default () => {
     init({commit}, {chain, permlink, username}) {
       commit(TYPES.SET_PROCESSING, true)
       commit(TYPES.INIT)
-      if (permlink && username) {
-        return Api.getContent(chain, username, permlink)
-          .then(response => {
+      
+      const promises = [Api.getTags(chain, true)]
+      if (permlink && username) promises.push(Api.getContent(chain, username, permlink))
+
+      Promise.all(promises)
+        .then(([resTags, resPost])=>{
+          if(resPost){
             const {
               permlink,
               tags,
               title,
               body_orig
-            } = response.data
+            } = resPost.data
+    
             commit(TYPES.SET_FORM_OBJECT, {
               isNewRecord: false,
               permlink,
@@ -105,15 +117,11 @@ export default () => {
               title,
               body: body_orig
             })
-            commit(TYPES.SET_PROCESSING, false)
-          })
-          .catch(e => {
-            console.log(e)
-          })
-      } else {
-        commit(TYPES.SET_PROCESSING, false)
-        return Promise.resolve()
-      }
+          }
+
+          commit(TYPES.SET_TAGS_BLACK_LIST, resTags.data)
+          commit(TYPES.SET_PROCESSING, false)
+        })
     },
     initDrafts({commit, state}, {userId}) {
       commit(TYPES.SET_DRAFTS_OBJECT, {collection: [], processing: true})

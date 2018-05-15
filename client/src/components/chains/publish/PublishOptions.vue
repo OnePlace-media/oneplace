@@ -9,14 +9,14 @@
           type="text" 
           class="publish__tags-input input" 
           :placeholder="$t('publish.typeTagsHere')" 
-          v-validate="'firstIsLetter|lastIsLetterOrDigit|validTag|max:64'"
+          v-validate="'firstIsLetter|lastIsLetterOrDigit|validTag|notExcludeTag|max:64'"
           name="tag" 
           v-show="tags.length < 5"
           @keydown.enter.prevent="addTag($event.target)"
         >
         <div class="publish__tags-wrapper">
-          <span class="tags-list__item" v-for="(tag, index) in tags" :key="tag">
-            {{tag | unGolosTag | toLowerCase}} 
+          <span class="tags-list__item tags-list__item--publish" v-for="(tag, index) in tags" :key="tag">
+            <span>{{tag | unGolosTag | toLowerCase}}</span>
             <span class="tags-list__remove-item" @click="removeTag(tag)" v-if="isNewRecord || index"></span>
           </span> 
         </div>
@@ -25,6 +25,7 @@
           <div v-if="errors.firstByRule('tag', 'lastIsLetterOrDigit')">{{$t('common.validate.lastIsLetterOrDigit')}}</div>
           <div v-if="errors.firstByRule('tag', 'validTag')">{{$t('common.validate.tagFormat')}}</div>
           <div v-if="errors.firstByRule('tag', 'max')">{{$t('common.validate.tagMax')}}</div>
+          <div v-if="errors.firstByRule('tag', 'notExcludeTag')">{{$t('common.validate.tagBad')}}</div>
         </span>
       </div>
       <div class="publish__setup-payout" v-if="isNewRecord">
@@ -69,6 +70,14 @@ const CONSTANTS = require('@oneplace/constants')
 
 const PUBLISH_HEADER_VISIBLE = 'PUBLISH_HEADER_VISIBLE'
 const COMPONENT_NAME = 'PublishOptions'
+import { Validator } from 'vee-validate'
+
+
+let excludeTags = []
+Validator.extend('notExcludeTag', {
+  getMessage: field => 'Use only letters, digits and one dash',
+  validate: value => !~excludeTags.indexOf(value)
+})
 
 const stateModel = name => {
   return {
@@ -116,6 +125,9 @@ export default {
     },
     processing() {
       return this.$store.state.publish.form.processing
+    },
+    blackTagList(){
+      return this.$store.state.publish.tags.blackList
     }
   },
   mounted() {
@@ -143,6 +155,10 @@ export default {
     },
     addTag(input) {
       let tag = input.value.toLowerCase()
+      
+      // set for check validation
+      excludeTags = this.$store.state.publish.tags.blackList.map(tag => tag.text)
+
       this.$validator
         .validateAll()
         .then(() => {
@@ -156,6 +172,8 @@ export default {
         })
         .catch(err => {
           console.log(err)
+          if(err.message === 'BAD_TAG')
+            this.$toast.bottom(this.$t(`errors.BAD_TAG`))
         })
     },
     submitForm() {

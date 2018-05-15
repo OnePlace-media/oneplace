@@ -1,0 +1,35 @@
+{
+    "origin": "http://127.0.0.1:3000",
+    "baseApiPath": "http://127.0.0.1:3001/api/",
+    "originApi": "http://127.0.0.1:3001",
+    "restApiRoot": "/api",
+    "host": "0.0.0.0",
+    "port": 3001,
+    "remoting": {
+      "context": false,
+      "rest": {
+        "handleErrors": false,
+        "normalizeHttpPath": false,
+        "xml": false
+      },
+      "json": {
+        "strict": false,
+        "limit": "100kb"
+      },
+      "urlencoded": {
+        "extended": true,
+        "limit": "100kb"
+      },
+      "cors": false
+    },
+    "redis": {
+      "host": "0.0.0.0",
+      "port": 6382
+    },
+    "postingWrapper": {
+      "steemDomain": "",
+      "golosDomain": "",
+      "WIF": "",
+      "username": ""
+    }
+  }

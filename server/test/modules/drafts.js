@@ -14,11 +14,10 @@ module.exports = STORAGE => {
           .set('authorization', STORAGE.tokens.first)
           .end((err, res) => {
             res.should.have.status(422);
-            res.body.error.details.codes.should.have.property('title');
-            res.body.error.details.codes.should.have.property('body');
-            done();
-          });
-      });
+            res.body.error.details.codes.should.have.property('body')
+            done()
+          })
+      })
 
       it('Create draft, return draft object, status 201, have basic property', function(done) {
         const data = {title: 'Test draft', body: 'some body'}
@@ -83,7 +82,7 @@ module.exports = STORAGE => {
           .put(`/users/${STORAGE.data.users.first.id}/drafts/${draftId}`)
           .set('Accept', 'application/json')
           .set('authorization', STORAGE.tokens.first)
-          .send({title: ''})
+          .send({body: ''})
           .end((err, res) => {
             res.should.have.status(422);
             done();

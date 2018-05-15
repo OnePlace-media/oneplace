@@ -23,7 +23,14 @@ module.exports = localVue => {
       localVue,
       router,
       store,
-      i18n
+      i18n,
+      mocks: {
+        $locale: {
+          current() {
+            return 'en'
+          }
+        }
+      }
     })
 
     it('should render correct contents, email and password input exists', () => {
@@ -40,7 +47,7 @@ module.exports = localVue => {
         input.element.value = ''
         input.trigger('input')
       })
-      wrapper.vm.onSubmit()
+      await wrapper.vm.onSubmit()
       await wrapper.vm.$nextTick()
       _fields.forEach(field => {
         expect(wrapper.vm.$el.querySelector(`#vError-${field}-required`)).to.not.equal(null)
@@ -52,7 +59,7 @@ module.exports = localVue => {
       const input = wrapper.find('#email-input')
       input.element.value = 'invalid-email'
       input.trigger('input')
-      wrapper.vm.onSubmit()
+      await wrapper.vm.onSubmit()
       await wrapper.vm.$nextTick()
       expect(wrapper.vm.$el.querySelector('#vError-email-format')).to.not.equal(null)
     })
@@ -66,7 +73,7 @@ module.exports = localVue => {
       inputRepeat.element.value = 'password-diff'
       inputRepeat.trigger('input')
       inputRepeat.trigger('keyup')
-      wrapper.vm.onSubmit()
+      await wrapper.vm.onSubmit()
       await wrapper.vm.$nextTick()
       expect(wrapper.vm.$el.querySelector('#vError-password-repeat')).to.not.equal(null)
     })
@@ -83,7 +90,8 @@ module.exports = localVue => {
         formSuccessSubmitted: false,
         processing: false
       })
-      mock.onPost(`users?redirect=${encodeURIComponent(window.location.origin)}`).replyOnce(422, {
+      const url = `users?redirect=${encodeURIComponent(window.location.origin)}`
+      mock.onPost(url).replyOnce(422, {
         error: {
           statusCode: 422,
           name: 'ValidationError',
@@ -98,13 +106,13 @@ module.exports = localVue => {
           }
         }
       })
-      wrapper.vm.onSubmit()
+      await wrapper.vm.onSubmit()
       await wrapper.vm.$nextTick()
       expect(wrapper.vm.$el.querySelector('#vError-email-uniqueness')).to.not.equal(null)
     })
 
     it('should render message after success registration', async function() {
-      wrapper.vm.errors.clear()
+      wrapper.vm.errors.remove('email', 'uniqueness')
       await wrapper.vm.$nextTick()
       wrapper.setData({
         model: {
@@ -116,11 +124,12 @@ module.exports = localVue => {
         formSuccessSubmitted: false,
         processing: false
       })
-      mock.onPost(`users?redirect=${encodeURIComponent(window.location.origin)}`).replyOnce(201, {
+      const url = `users?redirect=${encodeURIComponent(window.location.origin)}`
+      mock.onPost(url).replyOnce(201, {
         id: 'some-id',
         email: 'test@mail.com'
       })
-      wrapper.vm.onSubmit()
+      await wrapper.vm.onSubmit()
       await wrapper.vm.$nextTick()
       expect(wrapper.vm.formSubmitted).to.equal(true)
       expect(wrapper.vm.$el.querySelector('#success-registration-header')).to.not.equal(null)

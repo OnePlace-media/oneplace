@@ -3,7 +3,7 @@
       @click.stop="add(tag)"
       class="tags-list__item tags-list__item--filter" 
       :class="{'tags-list__item--selected': isInclude, 'tags-list__item--removed': isExclude}">
-      {{tag.text | unGolosTag | toLowerCase}}
+      <span>{{tag.text | unGolosTag | toLowerCase}}</span>
       <span class="tags-list__remove-item" @click.stop="remove(tag)" :alt="$t('profile.removeTag')"></span>
     </span>
 </template>

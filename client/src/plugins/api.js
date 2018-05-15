@@ -59,6 +59,9 @@ export default {
     data.append('image', image)
     return Vue.axios.post('/images/upload', data, config)
   },
+  getTags(chain, inBlackList = false){
+    return Vue.axios.get('/tags', {params:{filter:{where:{chain, inBlackList}}}})
+  },
   // GET BLOCKCHAINS PROXY OPERATIONS
   getContent(chain, username, permlink) {
     return Vue.axios.get(`/blockchains/${chain}/getContent`, {params: {username, permlink}})

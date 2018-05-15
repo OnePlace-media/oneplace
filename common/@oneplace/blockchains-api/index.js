@@ -100,6 +100,10 @@ class BlockChainApi {
       })
   }
 
+  static getAccounts(chain, usernames, noCache = false) {
+    return _call(chain, 'database_api', 'get_accounts', [usernames], noCache)
+  }
+
   static getDiscussionsByTrending(chain, params) {
     return _call(chain, 'social_network', 'get_discussions_by_trending', [params])
   }
@@ -196,7 +200,13 @@ class BlockChainApi {
     return _call(chain, 'follow', 'get_feed_entries', [username, start, end])
   }
 
-  
+  static getWitnessByAccount(chain, {username}) {
+    return _call(chain, 'database_api', 'get_witness_by_account', [username])
+  }
+
+  static getWitness(chain, {witnessid}) {
+    return _call(chain, 'database_api', 'get_witnesses', [witnessid])
+  }
 }
 
 module.exports = BlockChainApi

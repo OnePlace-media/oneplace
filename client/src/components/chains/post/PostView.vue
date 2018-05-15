@@ -24,7 +24,7 @@
               class="link link--op">
               {{post.author}}
             </a>
-            <span class="post-view__post-author-rep">{{post.author_rep}}</span><br>&nbsp;{{$t('common.in')}}&nbsp;<span class="hashtag">#{{post.category | unGolosTag | toLowerCase}}</span>
+            <br>{{$t('common.in')}}&nbsp;<span class="hashtag">#{{post.category | unGolosTag | toLowerCase}}</span>
           </span>
           <span class="post-view__post-posted">
             <time-ago :time="post.created"></time-ago>
@@ -57,7 +57,6 @@
           <h2 class="h2 post-view__block-title">{{$t('common.author')}}</h2>
           <div class="post-view__avatar-wrapper">
             <div class="post-view__author-avatar avatar" :style="`background-image: url('${post.avatar || DEFAULT_AVATAR}');`"></div>
-            <span class="post-view__author-rep">{{post.author_rep}}</span>
           </div>
           <div class="post-view__author-info">
             <!-- <router-link tag="a" :to="{name:'chain-account-view', params:{chain:$route.params.chain,username:post.author}}" class="link link--op">
@@ -83,7 +82,7 @@
         <div class="post-view__tags-wrapper">
           <h2 class="h2 post-view__block-title">{{$t('common.tags')}}</h2>
           <div class="tags-list__wrapper">
-            <span class="tags-list__item" v-for="(category, index) in post.tags" :key="index">{{category | unGolosTag | toLowerCase}}</span>
+            <span class="tags-list__item" v-for="(category, index) in post.tags" :key="index"><span>{{category | unGolosTag | toLowerCase}}</span></span>
           </div>
         </div>
       </section>

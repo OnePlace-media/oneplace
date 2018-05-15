@@ -1,11 +1,22 @@
 <script>
-const MAX_COUNT_VOTES = 20
-const NEED_COUNT_VOTES = 10
-const sortByRshares = (a, b) => +b.rshares - +a.rshares
-const sortByFiat = (a, b) => b.fiat.number - a.fiat.number
-
+import moment from 'moment'
 import Converter from '@oneplace/blockchains-api/converter'
 const CONSTANTS = require('@oneplace/constants')
+
+const MAX_COUNT_VOTES = 20
+const NEED_COUNT_VOTES = 10
+
+const sortByRshares = isDislike => {
+  return (a, b) => isDislike 
+    ? +a.rshares - +b.rshares
+    : +b.rshares - +a.rshares
+}
+
+const sortByFiat = isDislike => {
+  return (a, b) => isDislike 
+    ? a.fiat.number - b.fiat.number
+    : b.fiat.number - a.fiat.number
+}
 
 export default {
   name: 'DropdownVotes',
@@ -19,6 +30,10 @@ export default {
       default() {
         return this.$router.params.chain
       }
+    },
+    isDislike:{
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -46,6 +61,7 @@ export default {
       }
 
       return {
+        isZero: !!prefix || payout == 0,
         number: +payout,
         string:
           prefix +
@@ -57,9 +73,11 @@ export default {
   computed: {
     activeVotesLike() {
       const active_votes = this.post.active_votes.filter(
-        vote => vote.weight > 0 || vote.percent > 0
+        vote => this.isDislike 
+          ? vote.weight < 0 || vote.percent < 0
+          : vote.weight > 0 || vote.percent > 0
       )
-      active_votes.sort(sortByRshares)
+      active_votes.sort(sortByRshares(this.isDislike))
       return active_votes
     },
     sortAndSliceVotes() {
@@ -70,11 +88,21 @@ export default {
         vote.fiat = this.calcFiat(vote)
         return vote
       })
-      sortAndSliceVotes.sort(sortByFiat)
+      sortAndSliceVotes.sort(sortByFiat(this.isDislike))
       return sortAndSliceVotes.slice(0, NEED_COUNT_VOTES)
+    },
+    sum(){
+      const sortAndSliceVotes = [...this.activeVotesLike].map(vote => {
+        vote.fiat = this.calcFiat(vote)
+        return vote
+      })
+      return sortAndSliceVotes.reduce((sum, vote)=> {sum += vote.fiat.number; return sum}, 0)
     },
     count() {
       return this.activeVotesLike.length - NEED_COUNT_VOTES
+    },
+    hideFiat(){
+      return this.post.mode === 'archived' && moment(this.post.last_payout).unix() < moment('2018-04-01', 'YYYY-MM-DD').unix()
     }
   }
 }
@@ -85,13 +113,10 @@ export default {
     <div class="dropdown post-view__voters">
       <ul class="post-view__voter-list">
         <li class="post-view__voter" v-for="vote in votesWithFiatAndResort" :key="vote.voter">
-          <router-link tag="a" :to="{name:'chain-account-view', params:{chain, username:vote.voter}}" class="link">
+          <router-link tag="a" :to="{name:'chain-account-view', params:{chain, username:vote.voter}}" class="post-view__voter-name link">
             {{vote.voter}}
           </router-link>
-          <!-- <a tag="a" :href="`/@${chain}/${vote.voter}`" class="link">
-            {{vote.voter}}
-          </a> -->
-          <span class="post-view__voter-amount currency">{{vote.fiat.string}}</span>
+          <span class="post-view__voter-amount currency" v-if="!isDislike && !hideFiat && !vote.fiat.isZero">{{vote.fiat.string}}</span>
         </li>
       </ul>
       <span class="post-view__voters-all" v-if="count > 0">{{$t('chains.andMore', {count})}}</span>

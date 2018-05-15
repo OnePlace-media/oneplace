@@ -46,9 +46,12 @@ module.exports = localVue => {
         input.element.value = ''
         input.trigger('input')
       })
-      wrapper.vm.onSubmit()
+
+      await wrapper.vm.onSubmit()
       await wrapper.vm.$nextTick()
+
       fields.forEach(field => {
+        const input = wrapper.find(`#${field}-input`)
         expect(wrapper.vm.$el.querySelector(`#vError-${field}-required`)).to.not.equal(null)
       })
     })
@@ -57,7 +60,7 @@ module.exports = localVue => {
       const input = wrapper.find('#email-input')
       input.element.value = 'invalid-email'
       input.trigger('input')
-      wrapper.vm.onSubmit()
+      await wrapper.vm.onSubmit()
       await wrapper.vm.$nextTick()
       expect(wrapper.vm.$el.querySelector('#vError-email-format')).to.not.equal(null)
     })
@@ -72,7 +75,7 @@ module.exports = localVue => {
         processing: false,
         wrongCredentials: false
       })
-      wrapper.vm.onSubmit()
+      await wrapper.vm.onSubmit()
       await wrapper.vm.$nextTick()
       expect(wrapper.vm.formSubmitted).to.equal(true)
       expect(wrapper.vm.wrongCredentials).to.equal(true)
@@ -88,7 +91,7 @@ module.exports = localVue => {
         processing: false,
         wrongCredentials: false
       })
-      wrapper.vm.onSubmit()
+      await wrapper.vm.onSubmit()
       await wrapper.vm.$nextTick()
       expect(wrapper.vm.formSubmitted).to.equal(true)
       expect(router.history.current.name).to.eql('chain-trend')

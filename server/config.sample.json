@@ -29,6 +29,7 @@
     "steemDomain": "...",
     "golosDomain": "...",
     "WIF": "APPLICATION POSTING_KEY",
-    "username": "APPLICATION USERNAME"
+    "username": "APPLICATION USERNAME",
+    "beneficiarie": "BENEFICIARIE USERNAME"
   }
 }

@@ -46,17 +46,15 @@ export default {
             this.checkRepeatPass()
             if (this.errors.any()) throw new Error('INVALID_FORM')
             this.formSubmitted = true
+            const url = `users?redirect=${encodeURIComponent(
+              window.location.origin
+            )}`
             this.error = {
-              url: `users?redirect=${encodeURIComponent(
-                window.location.origin
-              )}`,
+              url,
               model: this.model
             }
             this.model.lang = this.$locale.current()
-            return this.axios.post(
-              `users?redirect=${encodeURIComponent(window.location.origin)}`,
-              this.model
-            )
+            return this.axios.post(url, this.model)
           })
           .then(response => {
             this.processing = false

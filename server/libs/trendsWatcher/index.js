@@ -133,7 +133,7 @@ async function _preparePosts(chain, posts, full = false, replie = false) {
         if (profile) {
           _post.author_about = profile.about
         }
-        _post.author_rep = chainParser.convertReputation(post.author_reputation)
+        // _post.author_rep = chainParser.convertReputation(post.author_reputation)
         const prepareHTML = chainParser.prepareHTML(chain, post.body, post.json_metadata)
         _post.body = prepareHTML.html
 

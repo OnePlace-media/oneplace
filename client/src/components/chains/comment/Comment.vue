@@ -13,7 +13,7 @@
           class="link link--op">
             {{item.author}}
         </a>
-        <span class="post-view__post-author-rep">{{item.author_rep}}</span> · <time-ago :time="item.created"></time-ago>
+        · <time-ago :time="item.created"></time-ago>
       </div>
       <div class="comment__body" >
         <div class="markdown markdown--small" v-html="item.body" v-if="!editCommentShow"></div>

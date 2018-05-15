@@ -160,7 +160,7 @@ export default {
         : '/static/img/header.jpg'
     },
     avatar() {
-      return this.profile.profile_image || CONSTANTS.DEFAULT.AVATAR_IMAGE
+      return `https://steemitimages.com/0x0/` + this.profile.profile_image || CONSTANTS.DEFAULT.AVATAR_IMAGE
     },
     website() {
       return this.profile.website

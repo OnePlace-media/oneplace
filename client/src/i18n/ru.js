@@ -39,7 +39,8 @@ module.exports = {
       tagMax: 'Максимальная длина 64',
       firstIsLetter: 'Тег должен начинаться с буквы',
       lastIsLetterOrDigit: 'Тег должен заканчиваться буквой или цифрой',
-      usernameMissingPermission: 'Отсутствует авторизация постинга для данного аккаунта'
+      usernameMissingPermission: 'Отсутствует авторизация постинга для данного аккаунта',
+      tagBad:'Исключенный тег'
     },
     timeAgoWithAuthor: '{timeago} {author}',
     headers: {

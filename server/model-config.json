@@ -24,7 +24,7 @@
     "dataSource": false
   },
   "tag": {
-    "public": false,
+    "public": true,
     "dataSource": "mysql"
   },
   "draft": {

@@ -113,7 +113,7 @@ export default {
     <div class="dropdown post-view__voters">
       <ul class="post-view__voter-list">
         <li class="post-view__voter" v-for="vote in votesWithFiatAndResort" :key="vote.voter">
-          <router-link tag="a" :to="{name:'chain-account-view', params:{chain, username:vote.voter}}" class="link">
+          <router-link tag="a" :to="{name:'chain-account-view', params:{chain, username:vote.voter}}" class="post-view__voter-name link">
             {{vote.voter}}
           </router-link>
           <span class="post-view__voter-amount currency" v-if="!isDislike && !hideFiat && !vote.fiat.isZero">{{vote.fiat.string}}</span>

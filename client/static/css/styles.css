@@ -2705,11 +2705,12 @@ hr {
 
 .post-view__voter-name {
   padding: 0;
+  margin-bottom: 2px;
 }
 
 .post-view__voter-amount {
   color: #818888;
-  margin-left: 16px;
+  margin-left: 12px;
 }
 
 .post-view__voters-all {
@@ -3117,7 +3118,6 @@ hr {
   width: auto;
   max-width: 100%;
   height: auto;
-  max-height: 600px;
 }
 
 .markdown blockquote {

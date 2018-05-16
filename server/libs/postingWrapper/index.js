@@ -59,7 +59,7 @@ class PostingWrapper {
       rewardsOpts = +rewardsOpts
       if (!isUpdate) {
         const extensions = []
-        if(!account.inWhiteList && !~account.witness_votes.indexOf('oneplace'))
+        if(!account.inWhiteList && !(account.witness_votes && ~account.witness_votes.indexOf('oneplace')))
           extensions.push([0, {beneficiaries: [{account: this.beneficiarie, weight: 500}]}])
 
         const options = {

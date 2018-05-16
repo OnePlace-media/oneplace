@@ -5,7 +5,7 @@ module.exports = Model => {
   Model.checkByBlackList = (chain, tags) => {
     const mysql = Model.dataSource.connector
     return new Promise((resolve, reject) => {
-      if (tags.length) {
+      if (tags && tags.length) {
         const sql = 'SELECT COUNT(*) as cnt FROM `tags` WHERE text IN (?) AND chain=? AND inBlackList=1'
         const data = [tags, chain]
         mysql.execute(sql, data, (err, result) => {

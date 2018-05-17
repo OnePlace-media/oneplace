@@ -20,7 +20,7 @@ export default {
     goToNext() {
       const target = this.$route.query.reset
         ? { name: 'chain-trend', params: { chain: 's' } }
-        : { name: 'welcome' }
+        : { name: 'welcome-steps' }
 
       if (this.$auth.ready()) {
         this.$router.push(target)

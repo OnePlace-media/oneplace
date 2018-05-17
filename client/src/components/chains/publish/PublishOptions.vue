@@ -15,7 +15,7 @@
           @keydown.enter.prevent="addTag($event.target)"
         >
         <div class="publish__tags-wrapper">
-          <span class="tags-list__item tags-list__item--publish" v-for="(tag, index) in tags" :key="tag">
+          <span class="tags-list__item tags-list__item--removable" v-for="(tag, index) in tags" :key="tag">
             <span>{{tag | unGolosTag | toLowerCase}}</span>
             <span class="tags-list__remove-item" @click="removeTag(tag)" v-if="isNewRecord || index"></span>
           </span> 

@@ -999,6 +999,9 @@ hr {
   position: absolute;
   top: 42px;
   left: 16px;
+  max-height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 12px;
   color: #db4c2a;
 }
@@ -1336,6 +1339,10 @@ hr {
 
 .tags-list__item:hover {
   cursor: auto;
+}
+
+.tags-list__item--removable {
+  padding-right: 24px;
 }
 
 .tags-list__remove-item {
@@ -3813,9 +3820,7 @@ hr {
 }
 
 .feed__post-content {
-  -webkit-flex-basis: auto;
-  flex-basis: auto;
-  width: 100%;
+  width: 437px;
   position: relative;
   padding-bottom: 44px;
 }
@@ -5358,6 +5363,10 @@ hr {
 
   .feed__posts {
     width: 720px;
+  }
+
+  .feed__post-content {
+    width: 397px;
   }
 
   .editor-toolbar {

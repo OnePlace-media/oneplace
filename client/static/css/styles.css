@@ -2095,7 +2095,6 @@ hr {
   margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -2106,7 +2105,6 @@ hr {
   max-height: 38px;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: break-word;
   margin-bottom: 4px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -2121,7 +2119,6 @@ hr {
   margin-bottom: 24px;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -3396,7 +3393,6 @@ hr {
   color: #818888;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: break-word;
   margin-bottom: 16px;
 }
 
@@ -3861,7 +3857,6 @@ hr {
   margin-top: -2px;
   margin-bottom: 8px;
   overflow: hidden;
-  word-break: break-word;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -3873,8 +3868,8 @@ hr {
   color: #818888;
   margin-bottom: 16px;
   overflow: hidden;
-  word-break: break-word;
   text-overflow: ellipsis;
+  word-break: break-all;
   display: -webkit-box;
   line-height: 21px;
   max-height: 63px;

@@ -2095,6 +2095,7 @@ hr {
   margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-break: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -2105,6 +2106,7 @@ hr {
   max-height: 38px;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-break: break-word;
   margin-bottom: 4px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -2119,6 +2121,7 @@ hr {
   margin-bottom: 24px;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-break: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -3393,7 +3396,7 @@ hr {
   color: #818888;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-wrap: break-word;
+  word-break: break-word;
   margin-bottom: 16px;
 }
 
@@ -3820,7 +3823,7 @@ hr {
 }
 
 .feed__post-content {
-  width: 437px;
+  width: 100%;
   position: relative;
   padding-bottom: 44px;
 }
@@ -3858,6 +3861,7 @@ hr {
   margin-top: -2px;
   margin-bottom: 8px;
   overflow: hidden;
+  word-break: break-word;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -3869,6 +3873,7 @@ hr {
   color: #818888;
   margin-bottom: 16px;
   overflow: hidden;
+  word-break: break-word;
   text-overflow: ellipsis;
   display: -webkit-box;
   line-height: 21px;
@@ -4208,10 +4213,6 @@ hr {
   font-size: 13px;
   line-height: 24px;
   margin-bottom: 8px;
-}
-
-.tags-list__item--publish {
-  padding-right: 24px;
 }
 
 .publish__setup-payout {
@@ -5363,10 +5364,6 @@ hr {
 
   .feed__posts {
     width: 720px;
-  }
-
-  .feed__post-content {
-    width: 397px;
   }
 
   .editor-toolbar {

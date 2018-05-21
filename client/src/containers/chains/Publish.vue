@@ -31,6 +31,7 @@ import PublishModalLink from '../../components/chains/publish/PublishModalLink.v
 import PublishModalImage from '../../components/chains/publish/PublishModalImage.vue'
 
 import FooterMini from '../../components/common/FooterMini.vue'
+import Vue from 'vue';
 
 const CONSTANTS = require('@oneplace/constants')
 const stateModel = name => {
@@ -75,6 +76,10 @@ export default {
           }
           this.$store.dispatch('publish/init', this.$route.params).then(() => {
             this.onUpdate()
+            setTimeout(()=>{
+              this.onUpdate()
+              this.updateTitleHeight()
+            }, 0)
           })
         }
       } catch (e) {
@@ -95,16 +100,20 @@ export default {
   methods: {
     onUpdate() {
       this.$refs.editor.onUpdate()
+    },
+    updateTitleHeight(value){
+      value = value || this.title
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+      context.font = "bold 32px 'Noto Sans', sans-serif"
+      const metrics = context.measureText(value)
+      const q = Math.floor(metrics.width / 830) + 1
+      this.$refs.title.style.height = q * 48 + 'px'
     }
   },
   watch: {
     title(to, from) {
-      const canvas = document.createElement('canvas')
-      const context = canvas.getContext('2d')
-      context.font = "bold 32px 'Noto Sans', sans-serif"
-      const metrics = context.measureText(to)
-      const q = Math.floor(metrics.width / 830) + 1
-      this.$refs.title.style.height = q * 48 + 'px'
+      this.updateTitleHeight(to)
     }
   },
   computed: {

@@ -100,7 +100,7 @@ export default () => {
       const promises = [Api.getTags(chain, true)]
       if (permlink && username) promises.push(Api.getContent(chain, username, permlink))
 
-      Promise.all(promises)
+      return Promise.all(promises)
         .then(([resTags, resPost])=>{
           if(resPost){
             const {

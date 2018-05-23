@@ -3819,9 +3819,13 @@ hr {
 }
 
 .feed__post-content {
-  width: 100%;
+  width: calc(100% - 291px);
   position: relative;
   padding-bottom: 44px;
+}
+
+.feed__post-content:first-child {
+  width: 100%;
 }
 
 .feed__post-content--blog {
@@ -3858,6 +3862,8 @@ hr {
   margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -3869,7 +3875,8 @@ hr {
   margin-bottom: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: break-all;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
   display: -webkit-box;
   line-height: 21px;
   max-height: 63px;

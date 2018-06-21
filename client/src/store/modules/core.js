@@ -76,13 +76,27 @@ export default () => {
       )
 
       tasks.push(new Promise((resolve, reject) => {
-        $chains.client.api.getCurrentMedianHistoryPrice((err, result) => {
-          if (err) reject(err)
-          else {
-            params.feedPrice = result
+        if(chain === 'g'){
+          fetch('https://g.oneplace.media', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"jsonrpc":"2.0","id":1,"method":"call","params":["witness_api","get_current_median_history_price",[]]})
+          }).then(response=>response.json).then(result=>{
+            params.feedPrice = result.result
             resolve()
-          }
-        })
+          })
+        } else {
+          $chains.client.api.getCurrentMedianHistoryPrice((err, result) => {
+            if (err) reject(err)
+            else {
+              params.feedPrice = result
+              resolve()
+            }
+          })
+        }
       }))
 
       if (chain === CONSTANTS.BLOCKCHAIN.SOURCE.STEEM) {
